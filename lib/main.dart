@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'utils/util.dart';
-import 'utils/theme.dart';
+import 'constants/app_font.dart';
+import 'constants/app_theme.dart';
+import 'presentation/splash/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,9 +18,13 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    TextTheme textTheme = createTextTheme(context, "Roboto", "Roboto");
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.immersiveSticky,
+    );
 
-    MaterialTheme theme = MaterialTheme(textTheme);
+    TextTheme textTheme = AppFont.createTextTheme(context, "Roboto", "Roboto");
+    AppTheme theme = AppTheme(textTheme);
+
     return ScreenUtilInit(
       designSize: const Size(360, 800),
       minTextAdapt: true,
@@ -31,25 +36,11 @@ class MyApp extends StatelessWidget {
           themeMode: ThemeMode.system,
           theme: theme.light(),
           darkTheme: theme.dark(),
+          highContrastTheme: theme.lightHighContrast(),
+          highContrastDarkTheme: theme.darkHighContrast(),
           home: const SplashScreen(),
         );
       },
-    );
-  }
-}
-
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(),
     );
   }
 }
