@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'utils/util.dart';
+import 'utils/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,23 +13,43 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'HUBT Social',
-      home: MyHomePage(),
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    TextTheme textTheme = createTextTheme(context, "Roboto", "Roboto");
+
+    MaterialTheme theme = MaterialTheme(textTheme);
+    return ScreenUtilInit(
+      designSize: const Size(360, 800),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp(
+          // navigatorKey: Routes.navigatorKey,
+          debugShowCheckedModeBanner: false,
+          themeMode: ThemeMode.system,
+          theme: theme.light(),
+          darkTheme: theme.dark(),
+          home: const SplashScreen(),
+        );
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return const Scaffold(
+      body: Center(),
+    );
   }
 }
