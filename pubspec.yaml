@@ -36,8 +36,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.0
   flutter_screenutil: ^5.9.3
+  flutter_localizations:
+      sdk: flutter
+  intl: any
+  go_router: ^14.2.7
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +59,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
   uses-material-design: true
 
   assets:
@@ -63,53 +68,6 @@ flutter:
   # - .env.development
   # - .env.production
   # - .env
-
-  # fonts:
-  #   - family: Roboto
-  #     fonts:
-  #       - asset: assets/fonts/Roboto/Roboto-Thin.ttf
-  #         # weight: 100
-  #         # style: Thin
-
-  #       - asset: assets/fonts/Roboto/Roboto-ThinItalic.ttf
-  #         # weight: 100
-  #         # style: hinItalic
-
-  #       - asset: assets/fonts/Roboto/Roboto-Light.ttf
-  #         # weight: 300
-  #         # style: Light
-
-  #       - asset: assets/fonts/Roboto/Roboto-LightItalic.ttf
-  #         # weight: 200
-  #         # style: LightItalic
-
-  #       - asset: assets/fonts/Roboto/Roboto-Regular.ttf
-  #         # weight: 400
-  #         # style: Regular
-
-  #       - asset: assets/fonts/Roboto/Roboto-Medium.ttf
-  #         # weight: 500
-  #         # style: Medium
-
-  #       - asset: assets/fonts/Roboto/Roboto-MediumItalic.ttf
-  #         # weight: 500
-  #         # style: MediumItalic
-
-  #       - asset: assets/fonts/Roboto/Roboto-Bold.ttf
-  #         # weight: 700
-  #         # style: Bold
-
-  #       - asset: assets/fonts/Roboto/Roboto-BoldItalic.ttf
-  #         # weight: 700
-  #         # style: BoldItalic
-
-  #       - asset: assets/fonts/Roboto/Roboto-Black.ttf
-  #         # weight: 900
-  #         # style: Black
-
-  #       - asset: assets/fonts/Roboto/Roboto-BlackItalic.ttf
-  #         # weight: 700
-  #         # style: BlackItalic
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'constants/app_font.dart';
-import 'constants/app_theme.dart';
-import 'presentation/splash/splash_screen.dart';
+import 'src/constants/app_font.dart';
+import 'src/constants/app_theme.dart';
+import 'src/features/splash/presentation/splash_screen.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,6 +34,17 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           // navigatorKey: Routes.navigatorKey,
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          localeResolutionCallback: (locale, supportedLocales) {
+            for (var supportedLocale in supportedLocales) {
+              if (supportedLocale.languageCode == locale?.languageCode) {
+                return supportedLocale;
+              }
+            }
+            return supportedLocales.first;
+          },
+          // locale: L10n.en,
           debugShowCheckedModeBanner: false,
           themeMode: ThemeMode.system,
           theme: theme.light(),
