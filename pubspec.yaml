@@ -42,6 +42,8 @@ dependencies:
       sdk: flutter
   intl: any
   go_router: ^14.2.7
+  dio: ^5.7.0
+  mobx: ^2.3.3+2
 
 dev_dependencies:
   flutter_test:
