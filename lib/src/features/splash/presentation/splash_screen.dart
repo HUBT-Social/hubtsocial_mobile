@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../constants/assets.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -28,7 +30,18 @@ class _SplashScreenState extends State<SplashScreen> {
                   Assets.appIcon,
                   width: 120.r,
                   height: 120.r,
-                ),
+                )
+                    .animate()
+                    .scale(
+                        duration: const Duration(milliseconds: 500),
+                        begin: const Offset(10, 10),
+                        end: const Offset(1, 1))
+                    .fadeIn(duration: const Duration(milliseconds: 500)),
+                FilledButton(
+                    onPressed: () {
+                      context.go('/home');
+                    },
+                    child: const Text("data"))
               ],
             ),
             Column(

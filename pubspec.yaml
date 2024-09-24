@@ -36,14 +36,18 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
-  flutter_launcher_icons: ^0.14.0
+  flutter_launcher_icons: ^0.14.1
   flutter_screenutil: ^5.9.3
   flutter_localizations:
       sdk: flutter
   intl: any
   go_router: ^14.2.7
   dio: ^5.7.0
-  mobx: ^2.3.3+2
+  flutter_bloc: ^8.1.6
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  flutter_animate: ^4.5.0
+  curved_navigation_bar: ^1.0.6
 
 dev_dependencies:
   flutter_test:
