@@ -8,10 +8,7 @@ import 'src/constants/app_theme.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-void main() {
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.amberAccent,
-      statusBarIconBrightness: Brightness.light));
+void main() async {
   runApp(const MyApp());
 }
 

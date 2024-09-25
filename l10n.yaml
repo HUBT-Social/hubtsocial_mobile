@@ -3,3 +3,4 @@ English-arb-file: app_en.arb
 Vietnamese-arb-file: app_vi.arb
 output-localization-file: app_localization.dart
 use-escaping: true
+nullable-getter: false

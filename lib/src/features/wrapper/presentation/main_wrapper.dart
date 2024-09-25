@@ -1,8 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_launcher_icons/constants.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hubtsocial_mobile/src/features/wrapper/presentation/widgets/navigation_item.dart';
+import 'package:hubtsocial_mobile/src/utils/extensions/theme_extension.dart';
 
 class MainWrapper extends StatefulWidget {
   const MainWrapper({
@@ -27,24 +27,24 @@ class _MainWrapperState extends State<MainWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
       body: SizedBox(
         width: double.infinity,
         height: double.infinity,
-        child: SafeArea(child: widget.navigationShell),
+        child: widget.navigationShell,
       ),
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
+        height: 60,
         index: 0,
         items: const [
           NavigationItem(icon: Icons.home_filled),
-          // NavigationItem(icon: Icons.calendar_month_sharp),
           NavigationItem(icon: Icons.notifications),
           NavigationItem(icon: Icons.person),
-          // NavigationItem(icon: Icons.menu),
         ],
-        color: Theme.of(context).colorScheme.primary,
-        buttonBackgroundColor: Theme.of(context).colorScheme.primary,
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        color: context.colorScheme.surface,
+        backgroundColor: Colors.transparent,
         animationCurve: Curves.easeOutQuint,
         animationDuration: const Duration(milliseconds: 600),
         onTap: (index) {
@@ -54,24 +54,6 @@ class _MainWrapperState extends State<MainWrapper> {
         },
         letIndexChange: (index) => true,
       ),
-    );
-  }
-}
-
-class NavigationItem extends StatelessWidget {
-  final IconData icon;
-
-  const NavigationItem({
-    super.key,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Icon(
-      icon,
-      size: 28.r,
-      color: Theme.of(context).colorScheme.surface,
     );
   }
 }

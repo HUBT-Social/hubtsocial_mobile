@@ -3,9 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hubtsocial_mobile/src/utils/extensions/localization_extension.dart';
+import 'package:hubtsocial_mobile/src/utils/extensions/theme_extension.dart';
 
 import '../../../constants/assets.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -51,21 +52,21 @@ class _SplashScreenState extends State<SplashScreen> {
                   padding: EdgeInsets.only(top: 82.h),
                   child: Text(
                     textAlign: TextAlign.center,
-                    AppLocalizations.of(context)!.department,
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.w900,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
+                    context.loc.department,
+                    style: context.textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.w900,
+                      color: context.colorScheme.onSurface,
+                    ),
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 24.h),
                   child: Text(
                     textAlign: TextAlign.center,
-                    AppLocalizations.of(context)!.university_name,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    context.loc.university_name,
+                    style: context.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: Theme.of(context).colorScheme.onSurface),
+                        color: context.colorScheme.onSurface),
                   ),
                 ),
               ],
