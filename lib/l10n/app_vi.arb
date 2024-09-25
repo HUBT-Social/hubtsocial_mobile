@@ -9,5 +9,7 @@
     "department": "Khoa Công Nghệ Thông Tin",
     "@department": {},
     "home": "Trang chủ",
-    "@home": {}
+    "@home": {},
+    "profile": "Hồ sơ",
+    "@profile": {}
 }

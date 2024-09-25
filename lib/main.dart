@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hubtsocial_mobile/l10n/l10n.dart';
 import 'package:hubtsocial_mobile/src/utils/router/app_router.dart';
 import 'src/constants/app_font.dart';
 import 'src/constants/app_theme.dart';
@@ -8,6 +9,9 @@ import 'src/constants/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.amberAccent,
+      statusBarIconBrightness: Brightness.light));
   runApp(const MyApp());
 }
 
@@ -43,6 +47,7 @@ class MyApp extends StatelessWidget {
             }
             return supportedLocales.first;
           },
+          locale: L10n.vi,
           debugShowCheckedModeBanner: false,
           themeMode: ThemeMode.system,
           theme: theme.light(),

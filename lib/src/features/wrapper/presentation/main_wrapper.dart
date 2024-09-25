@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_launcher_icons/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,18 +30,20 @@ class _MainWrapperState extends State<MainWrapper> {
       body: SizedBox(
         width: double.infinity,
         height: double.infinity,
-        child: widget.navigationShell,
+        child: SafeArea(child: widget.navigationShell),
       ),
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
         index: 0,
         items: const [
           NavigationItem(icon: Icons.home_filled),
+          // NavigationItem(icon: Icons.calendar_month_sharp),
           NavigationItem(icon: Icons.notifications),
           NavigationItem(icon: Icons.person),
+          // NavigationItem(icon: Icons.menu),
         ],
-        color: Theme.of(context).colorScheme.tertiaryContainer,
-        buttonBackgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
+        color: Theme.of(context).colorScheme.primary,
+        buttonBackgroundColor: Theme.of(context).colorScheme.primary,
         backgroundColor: Theme.of(context).colorScheme.surface,
         animationCurve: Curves.easeOutQuint,
         animationDuration: const Duration(milliseconds: 600),
@@ -68,7 +71,7 @@ class NavigationItem extends StatelessWidget {
     return Icon(
       icon,
       size: 28.r,
-      color: Theme.of(context).colorScheme.onPrimary,
+      color: Theme.of(context).colorScheme.surface,
     );
   }
 }
