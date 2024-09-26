@@ -10,6 +10,8 @@
     "@department": {},
     "home": "Trang chủ",
     "@home": {},
+    "notifications": "Thông báo",
+    "@notifications": {},
     "profile": "Hồ sơ",
     "@profile": {}
 }

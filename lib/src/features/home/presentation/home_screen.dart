@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hubtsocial_mobile/src/features/wrapper/presentation/widgets/main_app_bar.dart';
 import 'package:hubtsocial_mobile/src/utils/extensions/localization_extension.dart';
 import 'package:hubtsocial_mobile/src/utils/extensions/theme_extension.dart';
 
@@ -19,24 +20,24 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxIsScrolled) => [
-        SliverAppBar(
-          backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(192),
-          floating: true,
-          snap: true,
-          flexibleSpace: ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                color: Colors.transparent,
+        MainAppBar(
+          title: context.loc.home,
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.search_outlined,
+                size: 16.sp,
               ),
             ),
-          ),
-          title: Text(
-            context.loc.home,
-            style: context.textTheme.headlineSmall?.copyWith(
-                color: context.colorScheme.onSurface,
-                fontWeight: FontWeight.w900),
-          ),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.message_rounded,
+                size: 16.sp,
+              ),
+            ),
+          ],
         )
       ],
       body: ListView(
@@ -53,19 +54,20 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 120.r,
           ),
           Container(
-            height: 500,
-            width: 100,
+            height: 200.h,
             color: Colors.amber,
           ),
           Container(
-            height: 500,
-            width: 100,
+            height: 500.h,
             color: Colors.red,
           ),
           Container(
-            height: 500,
-            width: 100,
+            height: 800.h,
             color: Colors.blue,
+          ),
+          Container(
+            height: 400.h,
+            color: Colors.green,
           ),
         ],
       ),

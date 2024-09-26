@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/features/wrapper/presentation/widgets/navigation_item.dart';
 import 'package:hubtsocial_mobile/src/utils/extensions/theme_extension.dart';
@@ -36,17 +37,19 @@ class _MainWrapperState extends State<MainWrapper> {
       ),
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
-        height: 60,
+        // height: 75,
         index: 0,
         items: const [
           NavigationItem(icon: Icons.home_filled),
+          NavigationItem(icon: Icons.newspaper),
+          NavigationItem(icon: Icons.calendar_month),
           NavigationItem(icon: Icons.notifications),
-          NavigationItem(icon: Icons.person),
+          NavigationItem(icon: Icons.menu),
         ],
         color: context.colorScheme.surface,
         backgroundColor: Colors.transparent,
         animationCurve: Curves.easeOutQuint,
-        animationDuration: const Duration(milliseconds: 600),
+        animationDuration: const Duration(seconds: 10),
         onTap: (index) {
           setState(() {
             _goBranch(index);

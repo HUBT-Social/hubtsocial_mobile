@@ -18,6 +18,18 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
+  void initState() {
+    super.initState();
+    startApplication();
+  }
+
+  startApplication() async {
+    // final applicationManager = ApplicationManager();
+    // await applicationManager.startApplication();
+    // context.go('/home');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -32,17 +44,16 @@ class _SplashScreenState extends State<SplashScreen> {
                   width: 120.r,
                   height: 120.r,
                 )
-                    .animate()
+                    .animate(delay: const Duration(seconds: 2))
                     .scale(
                         duration: const Duration(milliseconds: 500),
                         begin: const Offset(10, 10),
                         end: const Offset(1, 1))
-                    .fadeIn(duration: const Duration(milliseconds: 500)),
-                FilledButton(
-                    onPressed: () {
-                      context.go('/home');
-                    },
-                    child: const Text("data"))
+                    .fadeIn(duration: const Duration(milliseconds: 500))
+                    .callback(
+                      delay: const Duration(seconds: 2),
+                      callback: (value) => context.go('/home'),
+                    ),
               ],
             ),
             Column(

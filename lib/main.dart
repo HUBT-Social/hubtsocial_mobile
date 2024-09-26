@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hubtsocial_mobile/l10n/l10n.dart';
 import 'package:hubtsocial_mobile/src/utils/router/app_router.dart';
+import 'l10n/l10n.dart';
 import 'src/constants/app_font.dart';
 import 'src/constants/app_theme.dart';
 
@@ -25,15 +25,16 @@ class MyApp extends StatelessWidget {
       SystemUiMode.immersiveSticky,
     );
 
-    TextTheme textTheme = AppFont.createTextTheme(context, "Roboto", "Roboto");
-    AppTheme theme = AppTheme(textTheme);
-
     return ScreenUtilInit(
       designSize: const Size(360, 800),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
+        TextTheme textTheme =
+            AppFont.createTextTheme(context, "Roboto", "Roboto");
+        AppTheme theme = AppTheme(textTheme);
         return MaterialApp.router(
+          debugShowCheckedModeBanner: false,
           supportedLocales: AppLocalizations.supportedLocales,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           localeResolutionCallback: (locale, supportedLocales) {
@@ -45,7 +46,6 @@ class MyApp extends StatelessWidget {
             return supportedLocales.first;
           },
           locale: L10n.vi,
-          debugShowCheckedModeBanner: false,
           themeMode: ThemeMode.system,
           theme: theme.light(),
           darkTheme: theme.dark(),

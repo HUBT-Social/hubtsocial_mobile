@@ -10,6 +10,8 @@
     "@department": {},
     "home": "Home",
     "@home": {},
+    "notifications": "Notifications",
+    "@notifications": {},
     "profile": "Profile",
     "@profile": {}
 }
