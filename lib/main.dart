@@ -12,8 +12,6 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 void main() async {
   await dotenv.load(fileName: Environment.fileName);
-
-  print(Environment.getApiUrl);
   runApp(const MyApp());
 }
 
