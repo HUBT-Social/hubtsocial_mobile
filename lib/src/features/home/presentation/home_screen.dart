@@ -6,7 +6,7 @@ import 'package:hubtsocial_mobile/src/features/wrapper/presentation/widgets/main
 import 'package:hubtsocial_mobile/src/utils/extensions/localization_extension.dart';
 import 'package:hubtsocial_mobile/src/utils/extensions/theme_extension.dart';
 
-import '../../../constants/assets.dart';
+import '../../../config/assets.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -27,14 +27,14 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {},
               icon: Icon(
                 Icons.search_outlined,
-                size: 16.sp,
+                size: 18.sp,
               ),
             ),
             IconButton(
               onPressed: () {},
               icon: Icon(
                 Icons.message_rounded,
-                size: 16.sp,
+                size: 18.sp,
               ),
             ),
           ],

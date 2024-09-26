@@ -5,8 +5,8 @@ import 'package:hubtsocial_mobile/src/features/notifications/presentation/notifi
 import 'package:hubtsocial_mobile/src/features/profile/presentation/profile_screen.dart';
 import 'package:hubtsocial_mobile/src/features/splash/presentation/splash_screen.dart';
 
-import '../../features/wrapper/presentation/main_wrapper.dart';
-import 'router_utils.dart';
+import '../features/wrapper/presentation/main_wrapper.dart';
+import 'router_config.dart';
 
 class AppRouter {
   AppRouter._();

@@ -7,7 +7,7 @@ enum Screen {
   error,
 }
 
-extension RouterUtils on Screen {
+extension RouterConfig on Screen {
   String get screenPath {
     switch (this) {
       case Screen.splash:

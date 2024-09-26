@@ -49,7 +49,7 @@ class _MainWrapperState extends State<MainWrapper> {
         color: context.colorScheme.surface,
         backgroundColor: Colors.transparent,
         animationCurve: Curves.easeOutQuint,
-        animationDuration: const Duration(seconds: 10),
+        animationDuration: const Duration(milliseconds: 600),
         onTap: (index) {
           setState(() {
             _goBranch(index);

@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/utils/extensions/localization_extension.dart';
 import 'package:hubtsocial_mobile/src/utils/extensions/theme_extension.dart';
 
-import '../../../constants/assets.dart';
+import '../../../config/assets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   width: 120.r,
                   height: 120.r,
                 )
-                    .animate(delay: const Duration(seconds: 2))
+                    .animate()
                     .scale(
                         duration: const Duration(milliseconds: 500),
                         begin: const Offset(10, 10),

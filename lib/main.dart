@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hubtsocial_mobile/src/utils/router/app_router.dart';
+import 'package:hubtsocial_mobile/src/config/environment.dart';
+import 'package:hubtsocial_mobile/src/router/app_router.dart';
 import 'l10n/l10n.dart';
 import 'src/constants/app_font.dart';
 import 'src/constants/app_theme.dart';
@@ -9,6 +11,9 @@ import 'src/constants/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 void main() async {
+  await dotenv.load(fileName: Environment.fileName);
+
+  print(Environment.getApiUrl);
   runApp(const MyApp());
 }
 

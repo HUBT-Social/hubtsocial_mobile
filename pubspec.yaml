@@ -48,6 +48,7 @@ dependencies:
   hive_flutter: ^1.1.0
   flutter_animate: ^4.5.0
   curved_navigation_bar: ^1.0.6
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -71,8 +72,8 @@ flutter:
   assets:
   - assets/images/
   - assets/icons/
-  # - .env.development
-  # - .env.production
+  - .env.development
+  - .env.production
   # - .env
 
   # The following line ensures that the Material Icons font is
