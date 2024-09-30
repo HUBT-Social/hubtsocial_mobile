@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/utils/extensions/localization_extension.dart';
 
-import '../../../config/assets.dart';
+import '../../../configs/assets.dart';
 import '../../wrapper/presentation/widgets/main_app_bar.dart';
 
 class NotificationsScreen extends StatefulWidget {
