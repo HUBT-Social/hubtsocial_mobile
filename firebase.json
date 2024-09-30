@@ -1,0 +1,22 @@
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "hubt-social",
+                    "appId": "1:302940804498:android:35804968f0e449d7431d4b",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "hubt-social",
+                    "configurations": {
+                        "android": "1:302940804498:android:35804968f0e449d7431d4b",
+                        "ios": "1:302940804498:ios:f240f7ccfa90e278431d4b"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hubtsocial_mobile/src/utils/extensions/localization_extension.dart';
 import 'package:hubtsocial_mobile/src/utils/extensions/theme_extension.dart';
 
 class MainAppBar extends StatelessWidget {

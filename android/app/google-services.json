@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "302940804498",
+    "project_id": "hubt-social",
+    "storage_bucket": "hubt-social.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:302940804498:android:35804968f0e449d7431d4b",
+        "android_client_info": {
+          "package_name": "com.hubt.social"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTBV6qFIchaeCvMsGZv_muJYK39iHEfaY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

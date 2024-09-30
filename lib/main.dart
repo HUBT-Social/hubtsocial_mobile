@@ -1,7 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hubtsocial_mobile/firebase_options.dart';
 import 'package:hubtsocial_mobile/src/config/environment.dart';
 import 'package:hubtsocial_mobile/src/router/app_router.dart';
 import 'l10n/l10n.dart';
@@ -12,6 +16,19 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 void main() async {
   await dotenv.load(fileName: Environment.fileName);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack);
+    return true;
+  };
+
   runApp(const MyApp());
 }
 

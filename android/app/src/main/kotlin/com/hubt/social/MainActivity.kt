@@ -1,4 +1,4 @@
-package com.example.hubtsocial_mobile
+package com.hubt.social
 
 import io.flutter.embedding.android.FlutterActivity
 
