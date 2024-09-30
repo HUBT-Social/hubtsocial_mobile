@@ -6,9 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/firebase_options.dart';
-import 'package:hubtsocial_mobile/src/config/environment.dart';
+import 'package:hubtsocial_mobile/src/configs/environment.dart';
 import 'package:hubtsocial_mobile/src/router/app_router.dart';
-import 'l10n/l10n.dart';
 import 'src/constants/app_font.dart';
 import 'src/constants/app_theme.dart';
 
@@ -65,7 +64,7 @@ class MyApp extends StatelessWidget {
             }
             return supportedLocales.first;
           },
-          locale: L10n.vi,
+          // locale: L10n.vi,
           themeMode: ThemeMode.system,
           theme: theme.light(),
           darkTheme: theme.dark(),
