@@ -166,3 +166,6 @@ app.*.symbols
 *.env
 .env.development
 .env.production
+firebase.json
+firebase_options.dart
+android/app/google-services.json
