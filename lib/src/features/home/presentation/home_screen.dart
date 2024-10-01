@@ -45,6 +45,12 @@ class _HomeScreenState extends State<HomeScreen> {
           const Text("aaaaaaa"),
           const Text("aaaaaaa"),
           const Text("aaaaaaa"),
+          TextButton(
+            onPressed: () {
+              throw new Exception();
+            },
+            child: Text("data"),
+          ),
           Image.asset(
             Assets.appIcon,
             width: 120.r,

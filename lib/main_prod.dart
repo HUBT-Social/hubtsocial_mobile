@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hubtsocial_mobile/firebase_options.dart';
 import 'package:hubtsocial_mobile/src/configs/environment.dart';
 import 'package:hubtsocial_mobile/src/router/app_router.dart';
 import 'src/constants/app_font.dart';
@@ -13,22 +13,30 @@ import 'src/constants/app_theme.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
+//prod
+import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_prod.dart'
+    as firebaseProd;
+
 void main() async {
   await dotenv.load(fileName: Environment.fileName);
+
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: firebaseProd.DefaultFirebaseOptions.currentPlatform,
   );
 
-  //FirebaseCrashlytics
-  if (kReleaseMode) {
-    FlutterError.onError = (errorDetails) {
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-    };
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
 
-    PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack);
-      return true;
-    };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack);
+    return true;
+  };
+
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+
+  if (kDebugMode) {
+    print("fcmmmmToken : ${fcmToken}");
   }
 
   runApp(const MyApp());

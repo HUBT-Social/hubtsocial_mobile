@@ -47,3 +47,27 @@ In Visual Studio Code, navigate to `Preferences` -> `Settings` and search for `F
 open project
 **Step3**
 reopen xcode and follow Xcode -> Product -> Clean Build Folder
+
+
+## Set up FireBase 
+```
+flutterfire configure \ --project="hubt-social-dev" \ --platforms="ios,android" \ --out=lib/core/firebase/firebase_options_dev.dart \ --ios-bundle-id="com.hubt.social.dev" \ --android-package-name="com.hubt.social.dev" \ --overwrite-firebase-options \ --yes
+```
+di chuyển (android/app/google-services.json) vào (android/app/src/dev/google-services.json)
+```
+flutterfire configure \ --project="hubt-social" \ --platforms="ios,android" \ --out=lib/core/firebase/firebase_options_prod.dart \ --ios-bundle-id="com.hubt.social" \ --android-package-name="com.hubt.social" \ --overwrite-firebase-options \ --yes
+```
+di chuyển (android/app/google-services.json) vào (android/app/src/prod/google-services.json)
+
+
+## flutter run 
+môi trường dev
+```
+flutter run --flavor dev lib/main_dev.dart
+```
+
+môi trường prod
+```
+flutter run --flavor prod lib/main_prod.dart
+```
+
