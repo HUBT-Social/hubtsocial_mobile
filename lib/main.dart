@@ -13,6 +13,9 @@ import 'src/constants/app_theme.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
+//dev
+import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_dev.dart'
+    as firebaseDev;
 //prod
 import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_prod.dart'
     as firebaseProd;
@@ -20,9 +23,21 @@ import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_prod.dart'
 void main() async {
   await dotenv.load(fileName: Environment.fileName);
 
-  await Firebase.initializeApp(
-    options: firebaseProd.DefaultFirebaseOptions.currentPlatform,
-  );
+  await firebaseSetup();
+
+  runApp(const MyApp());
+}
+
+Future<void> firebaseSetup() async {
+  if (kReleaseMode) {
+    await Firebase.initializeApp(
+      options: firebaseProd.DefaultFirebaseOptions.currentPlatform,
+    );
+  } else {
+    await Firebase.initializeApp(
+      options: firebaseDev.DefaultFirebaseOptions.currentPlatform,
+    );
+  }
 
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -36,10 +51,8 @@ void main() async {
   final fcmToken = await FirebaseMessaging.instance.getToken();
 
   if (kDebugMode) {
-    print("fcmmmmToken : ${fcmToken}");
+    print("fcmToken : $fcmToken");
   }
-
-  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

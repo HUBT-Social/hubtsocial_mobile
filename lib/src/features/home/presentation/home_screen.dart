@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hubtsocial_mobile/src/features/wrapper/presentation/widgets/main_app_bar.dart';
 import 'package:hubtsocial_mobile/src/utils/extensions/localization_extension.dart';
 
 import '../../../configs/assets.dart';
+import '../../main_wrapper/presentation/widgets/main_app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const Text("aaaaaaa"),
           TextButton(
             onPressed: () {
-              throw new Exception();
+              throw Exception();
             },
             child: Text("data"),
           ),

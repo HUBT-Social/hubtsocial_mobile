@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/features/home/presentation/home_screen.dart';
 import 'package:hubtsocial_mobile/src/features/notifications/presentation/notifications_screen.dart';
 import 'package:hubtsocial_mobile/src/features/profile/presentation/profile_screen.dart';
 import 'package:hubtsocial_mobile/src/features/splash/presentation/splash_screen.dart';
 
-import '../features/wrapper/presentation/main_wrapper.dart';
+import '../features/main_wrapper/presentation/main_wrapper.dart';
 import 'router_config.dart';
 
 class AppRouter {
@@ -29,7 +30,7 @@ class AppRouter {
       GoRoute(
         path: Screen.splash.screenPath,
         builder: (context, state) {
-          return const SplashScreen();
+          return SplashScreen();
         },
       ),
 
