@@ -3,10 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hubtsocial_mobile/src/utils/extensions/localization_extension.dart';
-import 'package:hubtsocial_mobile/src/utils/extensions/theme_extension.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
-import '../../../configs/assets.dart';
+import '../../../core/configs/assets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class SplashScreen extends StatefulWidget {

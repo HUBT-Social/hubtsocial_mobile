@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hubtsocial_mobile/src/features/home/presentation/home_screen.dart';
+import 'package:hubtsocial_mobile/src/features/home/ui/page/home_page.dart';
 import 'package:hubtsocial_mobile/src/features/notifications/presentation/notifications_screen.dart';
 import 'package:hubtsocial_mobile/src/features/profile/presentation/profile_screen.dart';
 import 'package:hubtsocial_mobile/src/features/splash/presentation/splash_screen.dart';
 
-import '../features/main_wrapper/presentation/main_wrapper.dart';
+import '../../features/main_wrapper/presentation/main_wrapper.dart';
 import 'router_config.dart';
 
 class AppRouter {
@@ -49,13 +48,13 @@ class AppRouter {
               GoRoute(
                 path: Screen.home.screenPath,
                 builder: (BuildContext context, GoRouterState state) =>
-                    const HomeScreen(),
+                    const HomePage(),
                 routes: [
                   GoRoute(
                     path: 'subHome',
                     pageBuilder: (context, state) => CustomTransitionPage<void>(
                       key: state.pageKey,
-                      child: const HomeScreen(),
+                      child: const HomePage(),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) =>
                               FadeTransition(opacity: animation, child: child),

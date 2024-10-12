@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hubtsocial_mobile/src/utils/extensions/localization_extension.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
-import '../../../configs/assets.dart';
-import '../../main_wrapper/presentation/widgets/main_app_bar.dart';
+import '../../../../core/configs/assets.dart';
+import '../../../main_wrapper/presentation/widgets/main_app_bar.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
