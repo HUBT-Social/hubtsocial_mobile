@@ -16,6 +16,7 @@ import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_prod.dart'
     as firebaseProd;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: Environment.fileName);
   await _initLoggy();
 
@@ -30,7 +31,7 @@ Future<void> _initLoggy() async {
       LogLevel.all,
       stackTraceLevel: LogLevel.warning,
     ),
-    logPrinter: const PrettyPrinter(),
+    logPrinter: const PrettyPrinter(showColors: true),
   );
 }
 
@@ -56,7 +57,5 @@ Future<void> _initFirebase() async {
 
   final fcmToken = await FirebaseMessaging.instance.getToken();
 
-  if (kDebugMode) {
-    print("fcmToken : $fcmToken");
-  }
+  logDebug("fcmToken : $fcmToken");
 }

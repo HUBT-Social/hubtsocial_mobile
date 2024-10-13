@@ -4,8 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/style/app_font.dart';
 import 'package:hubtsocial_mobile/src/core/style/app_theme.dart';
-import 'package:hubtsocial_mobile/src/core/router/app_router.dart';
 
+import '../navigation/router.dart';
 import 'di.dart';
 
 class MyApp extends StatelessWidget {
@@ -13,24 +13,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setPreferredOrientations([
-    //   DeviceOrientation.portraitUp,
-    //   DeviceOrientation.portraitDown,
-    // ]);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.immersiveSticky,
     );
 
-    return ScreenUtilInit(
-      designSize: const Size(360, 800),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: (context, child) {
-        TextTheme textTheme =
-            AppFont.createTextTheme(context, "Roboto", "Roboto");
-        AppTheme theme = AppTheme(textTheme);
-        return DI(
-          child: MaterialApp.router(
+    return DI(
+      child: ScreenUtilInit(
+        designSize: const Size(360, 800),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context, child) {
+          TextTheme textTheme =
+              AppFont.createTextTheme(context, "Roboto", "Roboto");
+          AppTheme theme = AppTheme(textTheme);
+          return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             supportedLocales: AppLocalizations.supportedLocales,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -48,10 +48,10 @@ class MyApp extends StatelessWidget {
             darkTheme: theme.dark(),
             highContrastTheme: theme.lightHighContrast(),
             highContrastDarkTheme: theme.darkHighContrast(),
-            routerConfig: AppRouter.router,
-          ),
-        );
-      },
+            routerConfig: router,
+          );
+        },
+      ),
     );
   }
 }

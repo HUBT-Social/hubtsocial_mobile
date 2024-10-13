@@ -6,7 +6,6 @@ import '../../../../core/navigation/route.dart';
 import '../../../../core/ui/input/input_field.dart';
 import '../../../../core/ui/widget/labeled_text_button.dart';
 import '../../../../core/ui/widget/loading_overlay.dart';
-import '../../../../core/ui/widget/responsive.dart';
 import '../../bloc/auth_cubit.dart';
 
 class AuthPage extends StatefulWidget {
@@ -32,48 +31,46 @@ class _AuthPageState extends State<AuthPage> {
           loading: state is AuthLoading,
           child: Scaffold(
             appBar: AppBar(),
-            body: ConstrainedWidth.mobile(
-              child: Form(
-                key: _formKey,
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const Spacer(),
-                        Text(
-                          _isSignUp
-                              ? 'Sign up to continue'
-                              : 'Sign in to continue',
-                          style: context.textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 16),
-                        InputField.email(
-                          controller: _emailController,
-                        ),
-                        const SizedBox(height: 16),
-                        InputField.password(
-                          controller: _passwordController,
-                          textInputAction: TextInputAction.done,
-                          onFieldSubmitted: (_) => _submit(),
-                        ),
-                        const SizedBox(height: 32),
-                        ElevatedButton(
-                          onPressed: _submit,
-                          child: Text(_isSignUp ? 'Sign Up' : 'Sign In'),
-                        ),
-                        const SizedBox(height: 8),
-                        LabeledTextButton(
-                          label: _isSignUp
-                              ? 'Already have an account?'
-                              : 'Don’t have an account?',
-                          action: _isSignUp ? 'Sign in' : 'Sign up',
-                          onTap: () => setState(() => _isSignUp = !_isSignUp),
-                        ),
-                        const Spacer(),
-                      ],
-                    ),
+            body: Form(
+              key: _formKey,
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Spacer(),
+                      Text(
+                        _isSignUp
+                            ? 'Sign up to continue'
+                            : 'Sign in to continue',
+                        style: context.textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 16),
+                      InputField.email(
+                        controller: _emailController,
+                      ),
+                      const SizedBox(height: 16),
+                      InputField.password(
+                        controller: _passwordController,
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (_) => _submit(),
+                      ),
+                      const SizedBox(height: 32),
+                      ElevatedButton(
+                        onPressed: _submit,
+                        child: Text(_isSignUp ? 'Sign Up' : 'Sign In'),
+                      ),
+                      const SizedBox(height: 8),
+                      LabeledTextButton(
+                        label: _isSignUp
+                            ? 'Already have an account?'
+                            : 'Don’t have an account?',
+                        action: _isSignUp ? 'Sign in' : 'Sign up',
+                        onTap: () => setState(() => _isSignUp = !_isSignUp),
+                      ),
+                      const Spacer(),
+                    ],
                   ),
                 ),
               ),

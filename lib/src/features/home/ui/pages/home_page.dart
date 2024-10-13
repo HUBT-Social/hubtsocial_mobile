@@ -2,29 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
-import '../../../core/configs/assets.dart';
-import '../../main_wrapper/presentation/widgets/main_app_bar.dart';
+import '../../../../core/configs/assets.dart';
+import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 
-class NotificationsScreen extends StatefulWidget {
-  const NotificationsScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<NotificationsScreen> createState() => NotificationsScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class NotificationsScreenState extends State<NotificationsScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxIsScrolled) => [
         MainAppBar(
-          title: context.loc.notifications,
+          title: context.loc.home,
           actions: [
             IconButton(
               onPressed: () {},
               icon: Icon(
+                Icons.search_outlined,
+                size: 18.sp,
+              ),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
                 Icons.message_rounded,
-                size: 16.sp,
+                size: 18.sp,
               ),
             ),
           ],
@@ -38,6 +45,12 @@ class NotificationsScreenState extends State<NotificationsScreen> {
           const Text("aaaaaaa"),
           const Text("aaaaaaa"),
           const Text("aaaaaaa"),
+          TextButton(
+            onPressed: () {
+              throw Exception();
+            },
+            child: Text("data"),
+          ),
           Image.asset(
             Assets.appIcon,
             width: 120.r,

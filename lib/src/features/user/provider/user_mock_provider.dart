@@ -2,11 +2,11 @@ import 'dart:async';
 import '../model/user.dart';
 
 User get _mockUser => User(
-      id: 'john-doe',
-      name: 'John Doe',
-      email: 'john@test.com',
+      id: 'gondraz',
+      name: 'gondraz',
+      email: 'gondraz@test.com',
       imageUrl:
-          'https://images.unsplash.com/photo-1528892952291-009c663ce843?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80',
+          'https://cdn.discordapp.com/attachments/1276556647732609066/1282204877249974343/Artboard_1.png?ex=670b54d8&is=670a0358&hm=d352e4ef44e5532a5bf02fa900ad9e2be558a83ec306c3e1002158b77b6ef65a&',
       createdAt: DateTime.now(),
     );
 

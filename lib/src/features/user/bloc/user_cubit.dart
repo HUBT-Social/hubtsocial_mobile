@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 
 import '../../../core/logger/loggy_types.dart';
 import '../model/user.dart';
@@ -35,7 +36,7 @@ class UserCubit extends Cubit<UserState> with BlocLoggy {
   }
 
   void _onUser(User? user) {
-    loggy.info('new user: ${user?.id}');
+    logInfo('new user: ${user?.id}');
     emit(UserLoaded(user: user));
   }
 }

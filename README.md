@@ -63,11 +63,11 @@ di chuyển (android/app/google-services.json) vào (android/app/src/prod/google
 ## flutter run 
 môi trường dev
 ```
-flutter run --flavor dev lib/main_dev.dart
+flutter run --flavor dev lib/main.dart
 ```
 
 môi trường prod
 ```
-flutter run --flavor prod lib/main_prod.dart
+flutter run --flavor prod lib/main.dart
 ```
 

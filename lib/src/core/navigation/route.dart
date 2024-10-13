@@ -3,9 +3,13 @@ import 'package:go_router/go_router.dart';
 
 enum AppRoute {
   splash('/'),
+  auth('/auth'),
+  login('/auth'),
   home('/home'),
   settings('/settings'),
-  auth('/auth'),
+  notifications('/notifications'),
+  profile('/profile'),
+  error('/error'),
   ;
 
   const AppRoute(this.path);
