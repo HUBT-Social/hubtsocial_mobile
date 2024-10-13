@@ -10,6 +10,7 @@ class Assets {
   // static const String noInternet = imagesPart + "no_internet.png";
   // static const String logo = imagesPart + "logo.png";
   static const String appIcon = "assets/icons/app_icon.png";
+  static const String startedBg = "assets/images/started_bg.jpg";
 }
 
 class AppIcons {

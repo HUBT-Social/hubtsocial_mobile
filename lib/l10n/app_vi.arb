@@ -13,5 +13,11 @@
     "notifications": "Thông báo",
     "@notifications": {},
     "profile": "Hồ sơ",
-    "@profile": {}
+    "@profile": {},
+    "welcome": "Xin chào !",
+    "@welcome": {},
+    "welcome_info": "Hãy trải nghiệm những điều thú vị cùng với HUBT SOCIAL.",
+    "@welcome_info": {},
+    "sign_in": "Đăng Nhập",
+    "@sign_in": {}
 }

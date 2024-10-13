@@ -13,5 +13,11 @@
     "notifications": "Notifications",
     "@notifications": {},
     "profile": "Profile",
-    "@profile": {}
+    "@profile": {},
+    "welcome": "Welcome !",
+    "@welcome": {},
+    "welcome_info": "Experience interesting things with HUBT SOCIAL.",
+    "@welcome_info": {},
+    "sign_in": "Sign In",
+    "@sign_in": {}
 }

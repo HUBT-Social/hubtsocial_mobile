@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
+import 'package:hubtsocial_mobile/src/features/auth/ui/pages/get_started_page.dart';
+import 'package:hubtsocial_mobile/src/features/auth/ui/pages/sign_in_page.dart';
 import 'package:hubtsocial_mobile/src/features/home/ui/pages/home_page.dart';
 
 import '../../features/auth/bloc/auth_cubit.dart';
@@ -25,6 +27,16 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: AppRoute.splash.path,
       builder: (context, state) => const SplashPage(),
+    ),
+
+    GoRoute(
+      path: AppRoute.getStarted.path,
+      builder: (context, state) => const GetStartedPage(),
+    ),
+
+    GoRoute(
+      path: AppRoute.signIn.path,
+      builder: (context, state) => const SignInPage(),
     ),
 
     /// MainWrapper
@@ -102,6 +114,7 @@ final GoRouter router = GoRouter(
         ),
       ],
     ),
+
     GoRoute(
       path: AppRoute.auth.path,
       builder: (context, state) {

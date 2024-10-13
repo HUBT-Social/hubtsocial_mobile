@@ -75,6 +75,6 @@ class SplashPage extends StatelessWidget {
       return;
     }
 
-    AppRoute.home.go(context);
+    AppRoute.getStarted.go(context);
   }
 }
