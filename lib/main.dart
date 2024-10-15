@@ -57,5 +57,5 @@ Future<void> _initFirebase() async {
 
   final fcmToken = await FirebaseMessaging.instance.getToken();
 
-  logDebug("fcmToken : $fcmToken");
+  // logDebug("fcmToken : $fcmToken");
 }
