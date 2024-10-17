@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 import '../../../../core/configs/assets.dart';
@@ -25,8 +24,8 @@ class SplashPage extends StatelessWidget {
                 children: [
                   Image.asset(
                     Assets.appIcon,
-                    width: 120.r,
-                    height: 120.r,
+                    width: 120,
+                    height: 120,
                   )
                       .animate()
                       .scale(
@@ -40,7 +39,7 @@ class SplashPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 82.h),
+                    padding: EdgeInsets.only(top: 82),
                     child: Text(
                       textAlign: TextAlign.center,
                       context.loc.department,
@@ -51,7 +50,7 @@ class SplashPage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(bottom: 24.h),
+                    padding: EdgeInsets.only(bottom: 24),
                     child: Text(
                       textAlign: TextAlign.center,
                       context.loc.university_name,

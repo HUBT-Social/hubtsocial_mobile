@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/configs/assets.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
@@ -35,7 +34,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
             children: [
               SizedBox(),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 60.w),
+                padding: EdgeInsets.symmetric(horizontal: 60),
                 child: Text(
                   context.loc.app_name,
                   textAlign: TextAlign.center,
@@ -53,7 +52,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
                 ),
               ),
               Container(
-                height: 220.h,
+                height: 220,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: context.colorScheme.surface,
@@ -69,8 +68,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
                   ],
                 ),
                 child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 36.h, vertical: 24.h),
+                  padding: EdgeInsets.symmetric(horizontal: 36, vertical: 24),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -110,18 +108,20 @@ class _GetStartedPageState extends State<GetStartedPage> {
             ],
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-              child: Column(
-                children: [
-                  ButtonChangeLocalization(),
-                ],
+        SafeArea(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                child: Column(
+                  children: [
+                    ButtonChangeLocalization(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     ));

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/localization/utils/change_language_bottom_sheet.dart';
 
@@ -12,12 +11,12 @@ class ButtonChangeLocalization extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40.h,
-      width: 60.w,
+      height: 35,
+      width: 60,
       child: OutlinedButton(
         onPressed: () => LocalizatioUtils.showLanguageBottomSheet(context),
         style: OutlinedButton.styleFrom(
-          padding: EdgeInsets.all(8.r),
+          padding: EdgeInsets.symmetric(horizontal: 6),
           backgroundColor: context.colorScheme.surface,
           foregroundColor: context.colorScheme.onSurface,
           shape: RoundedRectangleBorder(

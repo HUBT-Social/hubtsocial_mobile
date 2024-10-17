@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 class NavigationItem extends StatelessWidget {
@@ -14,7 +13,7 @@ class NavigationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Icon(
       icon,
-      size: 18.sp,
+      size: 18,
       color: context.colorScheme.onSurface,
     );
   }

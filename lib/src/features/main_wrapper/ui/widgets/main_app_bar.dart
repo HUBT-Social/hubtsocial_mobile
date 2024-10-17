@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 class MainAppBar extends StatelessWidget {
@@ -16,7 +15,7 @@ class MainAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      toolbarHeight: 42.h,
+      toolbarHeight: 42,
       backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(192),
       floating: true,
       snap: true,

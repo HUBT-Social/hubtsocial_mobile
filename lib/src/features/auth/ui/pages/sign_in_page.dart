@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/ui/input/input_field.dart';
 
@@ -42,7 +41,7 @@ class _SignInPageState extends State<SignInPage> {
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             child: Container(
-              width: 320.h,
+              width: 320,
               decoration: BoxDecoration(
                 color: context.colorScheme.surface,
                 borderRadius: BorderRadiusDirectional.all(Radius.circular(24)),
@@ -54,7 +53,7 @@ class _SignInPageState extends State<SignInPage> {
                 ],
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 48.h, vertical: 24.h),
+                padding: EdgeInsets.symmetric(horizontal: 48, vertical: 24),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -98,7 +97,7 @@ class _SignInPageState extends State<SignInPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               child: Column(
                 children: [
                   ButtonChangeLocalization(),

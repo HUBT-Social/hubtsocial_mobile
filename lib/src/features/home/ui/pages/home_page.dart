@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 import '../../../../core/configs/assets.dart';
@@ -24,14 +23,14 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {},
               icon: Icon(
                 Icons.search_outlined,
-                size: 18.sp,
+                size: 18,
               ),
             ),
             IconButton(
               onPressed: () {},
               icon: Icon(
                 Icons.message_rounded,
-                size: 18.sp,
+                size: 18,
               ),
             ),
           ],
@@ -53,23 +52,23 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Image.asset(
             Assets.appIcon,
-            width: 120.r,
-            height: 120.r,
+            width: 120,
+            height: 120,
           ),
           Container(
-            height: 200.h,
+            height: 200,
             color: Colors.amber,
           ),
           Container(
-            height: 500.h,
+            height: 500,
             color: Colors.red,
           ),
           Container(
-            height: 800.h,
+            height: 800,
             color: Colors.blue,
           ),
           Container(
-            height: 400.h,
+            height: 400,
             color: Colors.green,
           ),
         ],

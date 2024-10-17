@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
@@ -21,7 +20,7 @@ final class LocalizatioUtils {
       ),
       builder: (context) {
         return Padding(
-          padding: EdgeInsets.all(16.h),
+          padding: EdgeInsets.all(16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -33,7 +32,7 @@ final class LocalizatioUtils {
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 16),
               BlocBuilder<LocalizationBloc, AppLocalizationState>(
                 builder: (context, state) {
                   return ListView.separated(
@@ -49,7 +48,7 @@ final class LocalizatioUtils {
                         },
                         leading: Image.asset(
                           Language.values[index].image,
-                          height: 32.h,
+                          height: 32,
                           fit: BoxFit.contain,
                         ),
                         title: Text(Language.values[index].text),
@@ -64,8 +63,7 @@ final class LocalizatioUtils {
                           borderRadius: BorderRadius.circular(10),
                           side: Language.values[index] == state.selectedLanguage
                               ? BorderSide(
-                                  color: context.colorScheme.primary,
-                                  width: 1.w)
+                                  color: context.colorScheme.primary, width: 1)
                               : BorderSide(color: Colors.grey[300]!),
                         ),
                         tileColor:
@@ -75,7 +73,7 @@ final class LocalizatioUtils {
                       );
                     },
                     separatorBuilder: (context, index) {
-                      return SizedBox(height: 16.h);
+                      return SizedBox(height: 16);
                     },
                   );
                 },
