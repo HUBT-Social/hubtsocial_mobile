@@ -6,6 +6,7 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/ui/input/input_field.dart';
 
 import '../../../../core/configs/assets.dart';
+import '../../../../core/localization/ui/widget/button_change_localization.dart';
 import '../../../../core/navigation/route.dart';
 
 class SignInPage extends StatefulWidget {
@@ -93,6 +94,19 @@ class _SignInPageState extends State<SignInPage> {
           ),
         ),
         BackButton(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+              child: Column(
+                children: [
+                  ButtonChangeLocalization(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ],
     ));
   }

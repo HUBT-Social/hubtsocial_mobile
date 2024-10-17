@@ -2,6 +2,8 @@
     "@@locale": "en",
     "language": "English",
     "@language": {},
+    "chooseLanguage": "Select Your Preferred Language",
+    "@chooseLanguage": {},
     "app_name": "HUBT Social",
     "@app_name": {},
     "university_name": "HaNoi University of Business and Technology",

@@ -11,6 +11,9 @@ class Assets {
   // static const String logo = imagesPart + "logo.png";
   static const String appIcon = "assets/icons/app_icon.png";
   static const String startedBg = "assets/images/started_bg.jpg";
+
+  static const String localizationVi = "assets/icons/localization_vi.png";
+  static const String localizationEn = "assets/icons/localization_en.png";
 }
 
 class AppIcons {

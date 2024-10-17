@@ -4,6 +4,8 @@ import 'package:hubtsocial_mobile/src/core/configs/assets.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 
+import '../../../../core/localization/ui/widget/button_change_localization.dart';
+
 class GetStartedPage extends StatefulWidget {
   const GetStartedPage({super.key});
 
@@ -107,6 +109,19 @@ class _GetStartedPageState extends State<GetStartedPage> {
               )
             ],
           ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+              child: Column(
+                children: [
+                  ButtonChangeLocalization(),
+                ],
+              ),
+            ),
+          ],
         ),
       ],
     ));
