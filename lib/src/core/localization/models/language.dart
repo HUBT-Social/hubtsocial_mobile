@@ -5,12 +5,12 @@ import '../../configs/assets.dart';
 
 enum Language {
   english(
-    Locale('en', 'US'),
+    Locale('en'),
     Assets.localizationEn,
     'English',
   ),
   vi(
-    Locale('vi', 'VI'),
+    Locale('vi'),
     Assets.localizationVi,
     'Tiếng Việt',
   );

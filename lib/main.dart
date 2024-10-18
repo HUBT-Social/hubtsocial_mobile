@@ -7,6 +7,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hubtsocial_mobile/src/core/app/my_app.dart';
 import 'package:hubtsocial_mobile/src/core/configs/environment.dart';
 import 'package:loggy/loggy.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
 //dev
 import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_dev.dart'
@@ -15,14 +17,25 @@ import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_dev.dart'
 import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_prod.dart'
     as firebaseProd;
 
+import 'src/core/local_storage/local_storage_key.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: Environment.fileName);
+
   await _initLoggy();
 
   await _initFirebase();
 
+  await __initLocalStorage();
+
   runApp(const MyApp());
+}
+
+Future<void> __initLocalStorage() async {
+  final appDocumentDirectory = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
+  await Hive.openBox(LocalStorageKey.localStorage);
 }
 
 Future<void> _initLoggy() async {
@@ -46,16 +59,16 @@ Future<void> _initFirebase() async {
     );
   }
 
-  // FlutterError.onError = (errorDetails) {
-  //   FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-  // };
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
 
-  // PlatformDispatcher.instance.onError = (error, stack) {
-  //   FirebaseCrashlytics.instance.recordError(error, stack);
-  //   return true;
-  // };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack);
+    return true;
+  };
 
   final fcmToken = await FirebaseMessaging.instance.getToken();
 
-  // logDebug("fcmToken : $fcmToken");
+  logDebug("fcmToken : $fcmToken");
 }

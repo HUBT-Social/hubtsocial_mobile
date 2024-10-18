@@ -1,6 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
+import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_key.dart';
+import 'package:language_code/language_code.dart';
+import 'package:loggy/loggy.dart';
 
 import '../models/language.dart';
 
@@ -17,23 +20,29 @@ class LocalizationBloc extends Bloc<LocalizationEvent, AppLocalizationState> {
 
   onChangeLanguage(
       ChangeLanguage event, Emitter<AppLocalizationState> emit) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-      languagePrefsKey,
-      event.selectedLanguage.value.languageCode,
-    );
+    AppLocalStorage.update(LocalStorageKey.languagePrefs,
+        event.selectedLanguage.value.languageCode);
     emit(state.copyWith(selectedLanguage: event.selectedLanguage));
   }
 
   onGetLanguage(GetLanguage event, Emitter<AppLocalizationState> emit) async {
-    final prefs = await SharedPreferences.getInstance();
-    final selectedLanguage = prefs.getString(languagePrefsKey);
+    final languageCode = AppLocalStorage.get(LocalStorageKey.languagePrefs);
     emit(state.copyWith(
-      selectedLanguage: selectedLanguage != null
-          ? Language.values
-              .where((item) => item.value.languageCode == selectedLanguage)
-              .first
-          : Language.english,
+      selectedLanguage: languageCode != null
+          ? Language.values.firstWhere(
+              (item) => item.value.languageCode == languageCode,
+              orElse: () => _selectedDefaultLanguage())
+          : _selectedDefaultLanguage(),
     ));
+  }
+
+  Language _selectedDefaultLanguage() {
+    Language language = Language.values.firstWhere(
+        (item) =>
+            item.value.languageCode == LanguageCode.code.locale.languageCode,
+        orElse: () => Language.english);
+    AppLocalStorage.update(
+        LocalStorageKey.languagePrefs, language.value.languageCode);
+    return language;
   }
 }
