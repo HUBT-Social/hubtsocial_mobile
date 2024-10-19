@@ -27,12 +27,12 @@ void main() async {
 
   await _initFirebase();
 
-  await __initLocalStorage();
+  await _initLocalStorage();
 
   runApp(const MyApp());
 }
 
-Future<void> __initLocalStorage() async {
+Future<void> _initLocalStorage() async {
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
   await Hive.openBox(LocalStorageKey.localStorage);
