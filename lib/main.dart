@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hubtsocial_mobile/src/core/app/di.dart';
 import 'package:hubtsocial_mobile/src/core/app/my_app.dart';
 import 'package:hubtsocial_mobile/src/core/configs/environment.dart';
 import 'package:loggy/loggy.dart';
@@ -22,13 +23,10 @@ import 'src/core/local_storage/local_storage_key.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: Environment.fileName);
-
   await _initLoggy();
-
   await _initFirebase();
-
+  DinotificationServices();
   await __initLocalStorage();
-
   runApp(const MyApp());
 }
 
@@ -69,6 +67,5 @@ Future<void> _initFirebase() async {
   };
 
   final fcmToken = await FirebaseMessaging.instance.getToken();
-
   logDebug("fcmToken : $fcmToken");
 }

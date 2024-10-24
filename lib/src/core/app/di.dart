@@ -4,13 +4,12 @@ import '../../features/auth/repository/auth_repository.dart';
 import '../../features/user/bloc/user_cubit.dart';
 import '../../features/user/provider/user_mock_provider.dart';
 import '../../features/user/repository/user_repository.dart';
+import '../services/firebase_notifications/NotificationService/NotificationService.dart';
+import '../services/firebase_notifications/firebase/firebase_messaging_service.dart';
+import '../services/firebase_notifications/local/awesome_notification_service.dart';
 
 class DI extends StatelessWidget {
-  const DI({
-    required this.child,
-    super.key,
-  });
-
+  const DI({required this.child, super.key});
   final Widget child;
 
   @override
@@ -27,7 +26,6 @@ class DI extends StatelessWidget {
 
 class _ProviderDI extends StatelessWidget {
   const _ProviderDI({required this.child});
-
   final Widget child;
 
   @override
@@ -45,7 +43,6 @@ class _ProviderDI extends StatelessWidget {
 
 class _RepositoryDI extends StatelessWidget {
   const _RepositoryDI({required this.child});
-
   final Widget child;
 
   @override
@@ -70,7 +67,6 @@ class _RepositoryDI extends StatelessWidget {
 
 class _BlocDI extends StatelessWidget {
   const _BlocDI({required this.child});
-
   final Widget child;
 
   @override
@@ -86,4 +82,10 @@ class _BlocDI extends StatelessWidget {
       child: child,
     );
   }
+}
+
+void DinotificationServices() {
+  //FirebaseMessagingService().initialize();
+  // AwesomeNotificationService.initialize();
+  NotificationService.initialize();
 }
