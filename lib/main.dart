@@ -4,7 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:hubtsocial_mobile/src/core/app/di.dart';
 import 'package:hubtsocial_mobile/src/core/app/my_app.dart';
 import 'package:hubtsocial_mobile/src/core/configs/environment.dart';
 import 'package:loggy/loggy.dart';
@@ -19,20 +18,21 @@ import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_prod.dart'
     as firebaseProd;
 
 import 'src/core/local_storage/local_storage_key.dart';
+import 'src/core/notification/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await dotenv.load(fileName: Environment.fileName);
+
   await _initLoggy();
+
   await _initFirebase();
-<<<<<<< HEAD
-  DinotificationServices();
-  await __initLocalStorage();
-=======
+
+  await _initNotification();
 
   await _initLocalStorage();
 
->>>>>>> fb0d315c4d8f8d2bb2be58af52a5112a80e394ef
   runApp(const MyApp());
 }
 
@@ -74,4 +74,10 @@ Future<void> _initFirebase() async {
 
   final fcmToken = await FirebaseMessaging.instance.getToken();
   logDebug("fcmToken : $fcmToken");
+}
+
+Future<void> _initNotification() async {
+  //FirebaseMessagingService().initialize();
+  // AwesomeNotificationService.initialize();
+  NotificationService.initialize();
 }

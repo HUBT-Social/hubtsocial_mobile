@@ -30,13 +30,6 @@ class _SignInPageState extends State<SignInPage> {
             fit: BoxFit.cover,
           ),
         ),
-        BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          blendMode: BlendMode.srcOver,
-          child: Container(
-            color: Colors.transparent,
-          ),
-        ),
         Center(
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
@@ -46,10 +39,10 @@ class _SignInPageState extends State<SignInPage> {
                 color: context.colorScheme.surface,
                 borderRadius: BorderRadiusDirectional.all(Radius.circular(24)),
                 boxShadow: [
-                  BoxShadow(
-                    color: context.colorScheme.shadow.withAlpha(192),
-                    blurRadius: 24,
-                  ),
+                  // BoxShadow(
+                  //   color: context.colorScheme.shadow.withAlpha(192),
+                  //   blurRadius: 24,
+                  // ),
                 ],
               ),
               child: Padding(

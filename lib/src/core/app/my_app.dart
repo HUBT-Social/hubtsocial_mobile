@@ -8,7 +8,6 @@ import 'package:hubtsocial_mobile/src/core/style/app_theme.dart';
 
 import '../localization/bloc/localization_bloc.dart';
 import '../navigation/router.dart';
-import 'di.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

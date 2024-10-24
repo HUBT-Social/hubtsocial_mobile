@@ -21,7 +21,7 @@ final GoRouter router = GoRouter(
   routes: [
     GoRoute(
       path: AppRoute.splash.path,
-      builder: (context, state) => const SplashPage(),
+      builder: (context, state) => const GetStartedPage(),
     ),
 
     GoRoute(
