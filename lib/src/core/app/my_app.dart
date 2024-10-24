@@ -35,26 +35,23 @@ class MyApp extends StatelessWidget {
           create: (context) => LocalizationBloc()..add(GetLanguage()),
           child: BlocBuilder<LocalizationBloc, AppLocalizationState>(
             builder: (context, state) {
-              return DI(
-                child: MaterialApp.router(
-                  debugShowCheckedModeBanner: false,
-                  //Theme
-                  themeMode: ThemeMode.system,
-                  theme: theme.light(),
-                  darkTheme: theme.dark(),
-                  highContrastTheme: theme.lightHighContrast(),
-                  highContrastDarkTheme: theme.darkHighContrast(),
-                  //Localizations
-                  supportedLocales: AppLocalizations.supportedLocales,
-                  localizationsDelegates:
-                      AppLocalizations.localizationsDelegates,
-                  locale: state.selectedLanguage.value,
-                  //Router
-                  routerConfig: router,
-                  // routerDelegate: router.routerDelegate,
-                  // routeInformationParser: router.routeInformationParser,
-                  // routeInformationProvider: router.routeInformationProvider,
-                ),
+              return MaterialApp.router(
+                debugShowCheckedModeBanner: false,
+                //Theme
+                themeMode: ThemeMode.system,
+                theme: theme.light(),
+                darkTheme: theme.dark(),
+                highContrastTheme: theme.lightHighContrast(),
+                highContrastDarkTheme: theme.darkHighContrast(),
+                //Localizations
+                supportedLocales: AppLocalizations.supportedLocales,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                locale: state.selectedLanguage.value,
+                //Router
+                routerConfig: router,
+                // routerDelegate: router.routerDelegate,
+                // routeInformationParser: router.routeInformationParser,
+                // routeInformationProvider: router.routeInformationProvider,
               );
             },
           ),

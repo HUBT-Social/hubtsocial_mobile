@@ -51,11 +51,11 @@ reopen xcode and follow Xcode -> Product -> Clean Build Folder
 
 ## Set up FireBase 
 ```
-flutterfire configure \ --project="hubt-social-dev" \ --platforms="ios,android" \ --out=lib/core/firebase/firebase_options_dev.dart \ --ios-bundle-id="com.hubt.social.dev" \ --android-package-name="com.hubt.social.dev" \ --overwrite-firebase-options \ --yes
+flutterfire configure \ --project="hubt-social-dev" \ --platforms="ios,android" \ --out=lib/src/core/firebase/firebase_options_dev.dart \ --ios-bundle-id="com.hubt.social.dev" \ --android-package-name="com.hubt.social.dev" \ --overwrite-firebase-options \ --yes
 ```
 di chuyển (android/app/google-services.json) vào (android/app/src/dev/google-services.json)
 ```
-flutterfire configure \ --project="hubt-social" \ --platforms="ios,android" \ --out=lib/core/firebase/firebase_options_prod.dart \ --ios-bundle-id="com.hubt.social" \ --android-package-name="com.hubt.social" \ --overwrite-firebase-options \ --yes
+flutterfire configure \ --project="hubt-social" \ --platforms="ios,android" \ --out=lib/src/core/firebase/firebase_options_prod.dart \ --ios-bundle-id="com.hubt.social" \ --android-package-name="com.hubt.social" \ --overwrite-firebase-options \ --yes
 ```
 di chuyển (android/app/google-services.json) vào (android/app/src/prod/google-services.json)
 

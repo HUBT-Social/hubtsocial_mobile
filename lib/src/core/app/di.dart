@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/auth/repository/auth_repository.dart';
 import '../../features/user/bloc/user_cubit.dart';
@@ -89,3 +90,5 @@ void DinotificationServices() {
   // AwesomeNotificationService.initialize();
   NotificationService.initialize();
 }
+=======
+>>>>>>> fb0d315c4d8f8d2bb2be58af52a5112a80e394ef

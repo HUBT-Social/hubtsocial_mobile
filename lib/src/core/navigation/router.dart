@@ -5,15 +5,10 @@ import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/pages/get_started_page.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/pages/sign_in_page.dart';
 import 'package:hubtsocial_mobile/src/features/home/ui/pages/home_page.dart';
-
-import '../../features/auth/bloc/auth_cubit.dart';
-import '../../features/auth/repository/auth_repository.dart';
-import '../../features/auth/ui/pages/auth_page.dart';
 import '../../features/auth/ui/pages/splash_page.dart';
 import '../../features/main_wrapper/ui/main_wrapper.dart';
 import '../../features/notifications/ui/pages/notifications_page.dart';
 import '../../features/profile/ui/pages/profile_screen.dart';
-import '../../features/user/repository/user_repository.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorHome = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
@@ -113,19 +108,6 @@ final GoRouter router = GoRouter(
           ],
         ),
       ],
-    ),
-
-    GoRoute(
-      path: AppRoute.auth.path,
-      builder: (context, state) {
-        return BlocProvider(
-          create: (context) => AuthCubit(
-            userRepository: context.read<UserRepository>(),
-            authRepository: context.read<AuthRepository>(),
-          ),
-          child: const AuthPage(),
-        );
-      },
     ),
   ],
 );

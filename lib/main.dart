@@ -25,12 +25,18 @@ void main() async {
   await dotenv.load(fileName: Environment.fileName);
   await _initLoggy();
   await _initFirebase();
+<<<<<<< HEAD
   DinotificationServices();
   await __initLocalStorage();
+=======
+
+  await _initLocalStorage();
+
+>>>>>>> fb0d315c4d8f8d2bb2be58af52a5112a80e394ef
   runApp(const MyApp());
 }
 
-Future<void> __initLocalStorage() async {
+Future<void> _initLocalStorage() async {
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
   await Hive.openBox(LocalStorageKey.localStorage);
