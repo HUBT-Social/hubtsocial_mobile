@@ -1,6 +1,8 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hubtsocial_mobile/src/core/style/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:io';
@@ -12,13 +14,13 @@ class NotificationService {
         channelKey: 'basic_channel',
         channelName: 'Basic notifications',
         channelDescription: 'Channel for basic notifications',
-        defaultColor: const Color(0xFF9D50DD),
-        ledColor: Colors.white,
+        defaultColor: AppTheme.lightScheme().surface,
+        ledColor: AppTheme.lightScheme().primary,
         importance: NotificationImportance.High,
       );
 
       await AwesomeNotifications().initialize(
-        'resource://drawable/app_icon',
+        'resource://drawable/ic_notification',
         [channel],
       );
 
@@ -32,9 +34,9 @@ class NotificationService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? notificationsEnabled = prefs.getBool('notifications_enabled');
 
-    if (notificationsEnabled == null || !notificationsEnabled) {
-      _showNotificationPermissionDialog();
-    }
+    // if (notificationsEnabled == null || !notificationsEnabled) {
+    //   _showNotificationPermissionDialog();
+    // }
 
     // Đăng ký nhận thông báo từ Firebase
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -73,34 +75,34 @@ class NotificationService {
     );
   }
 
-  // Hiển thị hộp thoại yêu cầu quyền thông báo
-  static void _showNotificationPermissionDialog() {
-    showDialog(
-      context: navigatorKey.currentContext!,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Bật thông báo"),
-          content: Text("Bạn có muốn nhận thông báo từ ứng dụng không?"),
-          actions: [
-            TextButton(
-              child: Text("Không"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text("Có"),
-              onPressed: () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                await prefs.setBool('notifications_enabled', true);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // // Hiển thị hộp thoại yêu cầu quyền thông báo
+  // static void _showNotificationPermissionDialog() {
+  //   showDialog(
+  //     context: navigatorKey.currentContext!,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         title: Text("Bật thông báo"),
+  //         content: Text("Bạn có muốn nhận thông báo từ ứng dụng không?"),
+  //         actions: [
+  //           TextButton(
+  //             child: Text("Không"),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //           TextButton(
+  //             child: Text("Có"),
+  //             onPressed: () async {
+  //               SharedPreferences prefs = await SharedPreferences.getInstance();
+  //               await prefs.setBool('notifications_enabled', true);
+  //               context.pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
