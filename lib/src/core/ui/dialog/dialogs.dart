@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/ui/dialog/confirmation_dialog.dart';
 
+import '../../../features/user/bloc/user_cubit.dart';
 import '../../navigation/route.dart';
 
 sealed class Dialogs {
@@ -37,6 +39,7 @@ sealed class Dialogs {
     );
 
     if (confirmed && context.mounted) {
+      context.read<UserCubit>().logOut();
       AppRoute.home.go(context);
     }
   }

@@ -10,7 +10,6 @@ import '../../features/main_wrapper/ui/main_wrapper.dart';
 import '../../features/notifications/ui/pages/notifications_page.dart';
 import '../../features/profile/ui/pages/profile_screen.dart';
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorHome = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
 final _shellNavigatorSettings =
     GlobalKey<NavigatorState>(debugLabel: 'shellSettings');
@@ -21,7 +20,7 @@ final GoRouter router = GoRouter(
   routes: [
     GoRoute(
       path: AppRoute.splash.path,
-      builder: (context, state) => const GetStartedPage(),
+      builder: (context, state) => const SplashPage(),
     ),
 
     GoRoute(

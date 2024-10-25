@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hubtsocial_mobile/src/core/app/di.dart';
 import 'package:hubtsocial_mobile/src/core/style/app_font.dart';
 import 'package:hubtsocial_mobile/src/core/style/app_theme.dart';
 
@@ -30,8 +31,7 @@ class MyApp extends StatelessWidget {
         TextTheme textTheme =
             AppFont.createTextTheme(context, "Roboto", "Roboto");
         AppTheme theme = AppTheme(textTheme);
-        return BlocProvider(
-          create: (context) => LocalizationBloc()..add(GetLanguage()),
+        return DI(
           child: BlocBuilder<LocalizationBloc, AppLocalizationState>(
             builder: (context, state) {
               return MaterialApp.router(
