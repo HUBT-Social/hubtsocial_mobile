@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import '../../utils/validators.dart';
 
 class InputField extends StatefulWidget {
   const InputField({
     required this.controller,
-    required this.label,
     required this.textInputAction,
     this.keyboardType = TextInputType.text,
+    this.errorText,
+    this.hintText,
+    this.prefixIcon,
     this.autofillHints,
     this.validator,
     this.onFieldSubmitted,
@@ -15,55 +18,69 @@ class InputField extends StatefulWidget {
 
   const InputField.name({
     required TextEditingController controller,
-    String label = 'Name',
+    String? errorText,
+    String hintText = 'Name',
+    Widget? prefixIcon,
     TextInputAction textInputAction = TextInputAction.next,
     Key? key,
   }) : this(
           key: key,
           controller: controller,
-          label: label,
           textInputAction: textInputAction,
           keyboardType: TextInputType.name,
+          errorText: errorText,
+          hintText: hintText,
+          prefixIcon: prefixIcon,
           autofillHints: const [AutofillHints.name],
           validator: Validators.required,
         );
 
   const InputField.email({
     required TextEditingController controller,
-    String label = 'Email',
+    String? errorText,
+    String hintText = 'Email',
+    Widget? prefixIcon,
     TextInputAction textInputAction = TextInputAction.next,
     Key? key,
   }) : this(
           key: key,
           controller: controller,
-          label: label,
           textInputAction: textInputAction,
           keyboardType: TextInputType.emailAddress,
+          errorText: errorText,
+          hintText: hintText,
+          prefixIcon: prefixIcon,
           autofillHints: const [AutofillHints.email],
           validator: Validators.email,
         );
 
   const InputField.password({
     required TextEditingController controller,
-    String label = 'Password',
+    String? errorText,
+    String hintText = 'Password',
+    Widget? prefixIcon,
     TextInputAction textInputAction = TextInputAction.next,
     ValueChanged<String>? onFieldSubmitted,
     Key? key,
   }) : this(
           key: key,
           controller: controller,
-          label: label,
           textInputAction: textInputAction,
           keyboardType: TextInputType.visiblePassword,
           autofillHints: const [AutofillHints.password],
+          errorText: errorText,
+          hintText: hintText,
+          prefixIcon: prefixIcon,
           validator: Validators.password,
           onFieldSubmitted: onFieldSubmitted,
         );
 
   final TextEditingController controller;
-  final String label;
   final TextInputAction textInputAction;
   final TextInputType keyboardType;
+  final String? errorText;
+  final String? hintText;
+  final Widget? prefixIcon;
   final List<String>? autofillHints;
   final FormFieldValidator<String>? validator;
   final ValueChanged<String>? onFieldSubmitted;
@@ -106,7 +123,24 @@ class _InputFieldState extends State<InputField> {
       autofillHints: widget.autofillHints,
       onFieldSubmitted: widget.onFieldSubmitted,
       decoration: InputDecoration(
-        labelText: widget.label,
+        border: OutlineInputBorder(
+          gapPadding: 0,
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          borderSide: BorderSide(color: context.colorScheme.outline),
+        ),
+        counterStyle: context.textTheme.bodyLarge
+            ?.copyWith(color: context.colorScheme.onSurface),
+        hintStyle: context.textTheme.bodyLarge
+            ?.copyWith(color: context.colorScheme.outline),
+        errorText: widget.errorText,
+        hintText: widget.hintText,
+        prefixIcon: widget.prefixIcon,
+        prefixIconColor: widget.errorText == null
+            ? context.colorScheme.primary
+            : context.colorScheme.error,
+        suffixIconColor: widget.errorText == null
+            ? context.colorScheme.primary
+            : context.colorScheme.error,
         suffixIcon: _isPassword
             ? IconButton(
                 onPressed: () => setState(() => _obscureText = !_obscureText),

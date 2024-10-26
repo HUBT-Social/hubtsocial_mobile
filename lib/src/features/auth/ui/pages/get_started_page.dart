@@ -40,7 +40,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
                   textAlign: TextAlign.center,
                   style: context.textTheme.displayLarge?.copyWith(
                     fontWeight: FontWeight.w900,
-                    color: context.colorScheme.tertiary,
+                    color: context.colorScheme.surface,
                     shadows: [
                       Shadow(
                         color: context.colorScheme.shadow.withAlpha(92),

@@ -20,6 +20,14 @@
     "@welcome": {},
     "welcome_info": "Experience interesting things with HUBT SOCIAL.",
     "@welcome_info": {},
-    "sign_in": "Sign In",
-    "@sign_in": {}
+    "sign_in": "Sign in",
+    "@sign_in": {},
+    "student_code": "Student code",
+    "@student_code": {},
+    "do_not_have_an_account": "Don’t have an account?",
+    "@do_not_have_an_account": {},
+    "remember_me": "Remember me",
+    "@remember_me": {},
+    "forgot_password_question_mark": "Forgot password?",
+    "@forgot_password_question_mark": {}
 }

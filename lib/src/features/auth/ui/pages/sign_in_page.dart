@@ -17,6 +17,7 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final _studentCodeController = TextEditingController();
+  final _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,35 +35,88 @@ class _SignInPageState extends State<SignInPage> {
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             child: Container(
-              width: 320,
+              width: 380,
               decoration: BoxDecoration(
                 color: context.colorScheme.surface,
                 borderRadius: BorderRadiusDirectional.all(Radius.circular(24)),
                 boxShadow: [
-                  // BoxShadow(
-                  //   color: context.colorScheme.shadow.withAlpha(192),
-                  //   blurRadius: 24,
-                  // ),
+                  BoxShadow(
+                    color: context.colorScheme.shadow.withAlpha(128),
+                    blurRadius: 4,
+                    offset: Offset(0, 4),
+                  ),
                 ],
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 48, vertical: 24),
+                padding:
+                    EdgeInsets.only(right: 12, left: 12, top: 24, bottom: 12),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Text(
+                      context.loc.sign_in,
+                      style: context.textTheme.displaySmall?.copyWith(
+                        color: context.colorScheme.onSurface,
+                      ),
+                    ),
                     Column(
                       children: [
-                        Text(
-                          context.loc.sign_in,
-                          style: context.textTheme.displaySmall?.copyWith(
-                              color: context.colorScheme.tertiary,
-                              fontWeight: FontWeight.w800),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: InputField(
+                            controller: _studentCodeController,
+                            textInputAction: TextInputAction.next,
+                            hintText: context.loc.student_code,
+                            prefixIcon: Align(
+                              widthFactor: 1.0,
+                              heightFactor: 1.0,
+                              child: Icon(
+                                Icons.person,
+                              ),
+                            ),
+                          ),
                         ),
-                        InputField(
-                          controller: _studentCodeController,
-                          label: "label",
+                        InputField.password(
+                          controller: _passwordController,
                           textInputAction: TextInputAction.next,
+                          hintText: "••••••••••",
+                          prefixIcon: Align(
+                            widthFactor: 1.0,
+                            heightFactor: 1.0,
+                            child: Icon(
+                              Icons.lock_rounded,
+                            ),
+                          ),
                         ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Checkbox(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  value: true,
+                                  onChanged: (value) {},
+                                ),
+                                Text(
+                                  context.loc.remember_me,
+                                  style: context.textTheme.labelLarge,
+                                ),
+                              ],
+                            ),
+                            InkWell(
+                              child: Text(
+                                context.loc.forgot_password_question_mark,
+                                style: context.textTheme.labelLarge?.copyWith(
+                                  color: context.colorScheme.surfaceTint,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                     FilledButton(
@@ -79,6 +133,17 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    InkWell(
+                      child: Text(
+                        context.loc.do_not_have_an_account,
+                        style: context.textTheme.labelLarge?.copyWith(
+                          color: context.colorScheme.surfaceTint,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -86,18 +151,20 @@ class _SignInPageState extends State<SignInPage> {
           ),
         ),
         BackButton(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              child: Column(
-                children: [
-                  ButtonChangeLocalization(),
-                ],
+        SafeArea(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                child: Column(
+                  children: [
+                    ButtonChangeLocalization(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     ));

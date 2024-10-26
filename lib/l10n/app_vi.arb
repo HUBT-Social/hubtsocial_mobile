@@ -21,5 +21,13 @@
     "welcome_info": "Hãy trải nghiệm những điều thú vị cùng với HUBT SOCIAL.",
     "@welcome_info": {},
     "sign_in": "Đăng Nhập",
-    "@sign_in": {}
+    "@sign_in": {},
+    "student_code": "Mã sinh viên",
+    "@student_code": {},
+    "do_not_have_an_account": "Bạn không có tài khoản?",
+    "@do_not_have_an_account": {},
+    "remember_me": "Lưu tài khoản",
+    "@remember_me": {},
+    "forgot_password_question_mark": "Quên mật khẩu?",
+    "@forgot_password_question_mark": {}
 }

@@ -8,8 +8,8 @@ class AppTheme {
   static ColorScheme lightScheme() {
     return const ColorScheme(
       brightness: Brightness.light,
-      primary: Color(0xff4DB251),
-      surfaceTint: Color(0xff3b6939),
+      primary: Color(0xff5BC05D),
+      surfaceTint: Color(0xff1F892E),
       onPrimary: Color(0xffffffff),
       primaryContainer: Color(0xffbcf0b4),
       onPrimaryContainer: Color(0xff002204),
@@ -21,7 +21,7 @@ class AppTheme {
       onTertiary: Color(0xffffffff),
       tertiaryContainer: Color(0xffbcebf0),
       onTertiaryContainer: Color(0xff002023),
-      error: Color(0xffba1a1a),
+      error: Color(0xffBA1A1A),
       onError: Color(0xffffffff),
       errorContainer: Color(0xffffdad6),
       onErrorContainer: Color(0xff410002),
