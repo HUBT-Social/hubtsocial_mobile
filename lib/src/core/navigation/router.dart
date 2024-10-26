@@ -5,6 +5,7 @@ import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/pages/get_started_page.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/pages/sign_in_page.dart';
 import 'package:hubtsocial_mobile/src/features/home/ui/pages/home_page.dart';
+import '../../features/auth/ui/pages/sign_up_page.dart';
 import '../../features/auth/ui/pages/splash_page.dart';
 import '../../features/main_wrapper/ui/main_wrapper.dart';
 import '../../features/notifications/ui/pages/notifications_page.dart';
@@ -31,6 +32,11 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: AppRoute.signIn.path,
       builder: (context, state) => const SignInPage(),
+    ),
+
+    GoRoute(
+      path: AppRoute.signUp.path,
+      builder: (context, state) => const SignUpPage(),
     ),
 
     /// MainWrapper

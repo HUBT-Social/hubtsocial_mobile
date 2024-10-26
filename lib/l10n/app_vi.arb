@@ -16,11 +16,11 @@
     "@notifications": {},
     "profile": "Hồ sơ",
     "@profile": {},
-    "welcome": "Xin chào !",
+    "welcome": "Xin chào!",
     "@welcome": {},
     "welcome_info": "Hãy trải nghiệm những điều thú vị cùng với HUBT SOCIAL.",
     "@welcome_info": {},
-    "sign_in": "Đăng Nhập",
+    "sign_in": "Đăng nhập",
     "@sign_in": {},
     "student_code": "Mã sinh viên",
     "@student_code": {},
@@ -29,5 +29,7 @@
     "remember_me": "Lưu tài khoản",
     "@remember_me": {},
     "forgot_password_question_mark": "Quên mật khẩu?",
-    "@forgot_password_question_mark": {}
+    "@forgot_password_question_mark": {},
+    "sign_up": "Đăng ký",
+    "@sign_up": {}
 }

@@ -8,14 +8,14 @@ import '../../../../core/configs/assets.dart';
 import '../../../../core/localization/ui/widget/button_change_localization.dart';
 import '../../../../core/navigation/route.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final _studentCodeController = TextEditingController();
   final _passwordController = TextEditingController();
   @override
@@ -54,7 +54,7 @@ class _SignInPageState extends State<SignInPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      context.loc.sign_in,
+                      context.loc.sign_up,
                       style: context.textTheme.displaySmall?.copyWith(
                         color: context.colorScheme.onSurface,
                       ),
@@ -72,6 +72,66 @@ class _SignInPageState extends State<SignInPage> {
                               heightFactor: 1.0,
                               child: Icon(
                                 Icons.person,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: InputField.email(
+                            controller: _studentCodeController,
+                            textInputAction: TextInputAction.next,
+                            // hintText: Em,
+                            prefixIcon: Align(
+                              widthFactor: 1.0,
+                              heightFactor: 1.0,
+                              child: Icon(
+                                Icons.email,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: InputField(
+                            controller: _studentCodeController,
+                            textInputAction: TextInputAction.next,
+                            hintText: context.loc.student_code,
+                            prefixIcon: Align(
+                              widthFactor: 1.0,
+                              heightFactor: 1.0,
+                              child: Icon(
+                                Icons.person,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: InputField(
+                            controller: _studentCodeController,
+                            textInputAction: TextInputAction.next,
+                            hintText: context.loc.student_code,
+                            prefixIcon: Align(
+                              widthFactor: 1.0,
+                              heightFactor: 1.0,
+                              child: Icon(
+                                Icons.person,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: InputField.password(
+                            controller: _passwordController,
+                            textInputAction: TextInputAction.next,
+                            hintText: "••••••••••",
+                            prefixIcon: Align(
+                              widthFactor: 1.0,
+                              heightFactor: 1.0,
+                              child: Icon(
+                                Icons.lock_rounded,
                               ),
                             ),
                           ),
@@ -140,9 +200,6 @@ class _SignInPageState extends State<SignInPage> {
                       height: 50,
                     ),
                     InkWell(
-                      onTap: () {
-                        AppRoute.signUp.push(context);
-                      },
                       child: Text(
                         context.loc.do_not_have_an_account,
                         style: context.textTheme.labelLarge?.copyWith(

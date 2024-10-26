@@ -2,7 +2,7 @@
     "@@locale": "en",
     "language": "English",
     "@language": {},
-    "chooseLanguage": "Select Your Preferred Language",
+    "chooseLanguage": "Select your preferred language",
     "@chooseLanguage": {},
     "app_name": "HUBT Social",
     "@app_name": {},
@@ -16,7 +16,7 @@
     "@notifications": {},
     "profile": "Profile",
     "@profile": {},
-    "welcome": "Welcome !",
+    "welcome": "Welcome!",
     "@welcome": {},
     "welcome_info": "Experience interesting things with HUBT SOCIAL.",
     "@welcome_info": {},
@@ -29,5 +29,7 @@
     "remember_me": "Remember me",
     "@remember_me": {},
     "forgot_password_question_mark": "Forgot password?",
-    "@forgot_password_question_mark": {}
+    "@forgot_password_question_mark": {},
+    "sign_up": "Sign up",
+    "@sign_up": {}
 }

@@ -25,8 +25,10 @@ class MyApp extends StatelessWidget {
 
     return ScreenUtilInit(
       designSize: const Size(360, 800),
-      minTextAdapt: true,
       splitScreenMode: true,
+      minTextAdapt: true,
+      useInheritedMediaQuery: true,
+      ensureScreenSize: true,
       builder: (context, child) {
         TextTheme textTheme =
             AppFont.createTextTheme(context, "Roboto", "Roboto");
