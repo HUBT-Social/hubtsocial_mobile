@@ -35,6 +35,44 @@ class InputField extends StatefulWidget {
           validator: Validators.required,
         );
 
+  const InputField.number({
+    required TextEditingController controller,
+    String? errorText,
+    String hintText = 'Number',
+    Widget? prefixIcon,
+    TextInputAction textInputAction = TextInputAction.next,
+    Key? key,
+  }) : this(
+          key: key,
+          controller: controller,
+          textInputAction: textInputAction,
+          keyboardType: TextInputType.number,
+          errorText: errorText,
+          hintText: hintText,
+          prefixIcon: prefixIcon,
+          autofillHints: const [AutofillHints.name],
+          validator: Validators.required,
+        );
+
+  const InputField.phone({
+    required TextEditingController controller,
+    String? errorText,
+    String hintText = 'Number',
+    Widget? prefixIcon,
+    TextInputAction textInputAction = TextInputAction.next,
+    Key? key,
+  }) : this(
+          key: key,
+          controller: controller,
+          textInputAction: textInputAction,
+          keyboardType: TextInputType.phone,
+          errorText: errorText,
+          hintText: hintText,
+          prefixIcon: prefixIcon,
+          autofillHints: const [AutofillHints.name],
+          validator: Validators.required,
+        );
+
   const InputField.email({
     required TextEditingController controller,
     String? errorText,

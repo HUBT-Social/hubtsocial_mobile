@@ -26,10 +26,18 @@
     "@student_code": {},
     "do_not_have_an_account": "Don’t have an account?",
     "@do_not_have_an_account": {},
+    "already_have_an_account": "Already have an account?",
+    "@already_have_an_account": {},
     "remember_me": "Remember me",
     "@remember_me": {},
     "forgot_password_question_mark": "Forgot password?",
     "@forgot_password_question_mark": {},
     "sign_up": "Sign up",
-    "@sign_up": {}
+    "@sign_up": {},
+    "password": "Password",
+    "@password": {},
+    "confirm_password": "Confirm password",
+    "@confirm_password": {},
+    "continue_text": "Continue",
+    "@continue_text": {}
 }

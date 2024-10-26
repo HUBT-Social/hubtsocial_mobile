@@ -26,10 +26,18 @@
     "@student_code": {},
     "do_not_have_an_account": "Bạn không có tài khoản?",
     "@do_not_have_an_account": {},
+    "already_have_an_account": "Bạn đã có một tài khoản?",
+    "@already_have_an_account": {},
     "remember_me": "Lưu tài khoản",
     "@remember_me": {},
     "forgot_password_question_mark": "Quên mật khẩu?",
     "@forgot_password_question_mark": {},
     "sign_up": "Đăng ký",
-    "@sign_up": {}
+    "@sign_up": {},
+    "password": "Mật khẩu",
+    "@password": {},
+    "confirm_password": "Lặp lại mật khẩu",
+    "@confirm_password": {},
+    "continue_text": "Tiếp tục",
+    "@continue_text": {}
 }

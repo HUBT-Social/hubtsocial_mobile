@@ -17,7 +17,9 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _studentCodeController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,22 +36,23 @@ class _SignUpPageState extends State<SignUpPage> {
         Center(
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
-            child: Container(
-              width: 380,
-              decoration: BoxDecoration(
-                color: context.colorScheme.surface,
-                borderRadius: BorderRadiusDirectional.all(Radius.circular(24)),
-                boxShadow: [
-                  BoxShadow(
-                    color: context.colorScheme.shadow.withAlpha(128),
-                    blurRadius: 4,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Padding(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Container(
                 padding:
                     EdgeInsets.only(right: 12, left: 12, top: 24, bottom: 12),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.surface,
+                  borderRadius:
+                      BorderRadiusDirectional.all(Radius.circular(24)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: context.colorScheme.shadow.withAlpha(128),
+                      blurRadius: 4,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -59,14 +62,15 @@ class _SignUpPageState extends State<SignUpPage> {
                         color: context.colorScheme.onSurface,
                       ),
                     ),
+                    SizedBox(height: 6),
                     Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: InputField(
+                          child: InputField.number(
+                            hintText: context.loc.student_code,
                             controller: _studentCodeController,
                             textInputAction: TextInputAction.next,
-                            hintText: context.loc.student_code,
                             prefixIcon: Align(
                               widthFactor: 1.0,
                               heightFactor: 1.0,
@@ -79,9 +83,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6),
                           child: InputField.email(
-                            controller: _studentCodeController,
+                            controller: _emailController,
                             textInputAction: TextInputAction.next,
-                            // hintText: Em,
                             prefixIcon: Align(
                               widthFactor: 1.0,
                               heightFactor: 1.0,
@@ -93,93 +96,34 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: InputField(
-                            controller: _studentCodeController,
-                            textInputAction: TextInputAction.next,
-                            hintText: context.loc.student_code,
-                            prefixIcon: Align(
-                              widthFactor: 1.0,
-                              heightFactor: 1.0,
-                              child: Icon(
-                                Icons.person,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: InputField(
-                            controller: _studentCodeController,
-                            textInputAction: TextInputAction.next,
-                            hintText: context.loc.student_code,
-                            prefixIcon: Align(
-                              widthFactor: 1.0,
-                              heightFactor: 1.0,
-                              child: Icon(
-                                Icons.person,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: InputField.password(
+                          child: InputField.email(
+                            hintText: context.loc.password,
                             controller: _passwordController,
                             textInputAction: TextInputAction.next,
-                            hintText: "••••••••••",
                             prefixIcon: Align(
                               widthFactor: 1.0,
                               heightFactor: 1.0,
                               child: Icon(
-                                Icons.lock_rounded,
+                                Icons.lock,
                               ),
                             ),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: InputField.password(
-                            controller: _passwordController,
+                          child: InputField.email(
+                            hintText: context.loc.confirm_password,
+                            controller: _confirmPasswordController,
                             textInputAction: TextInputAction.next,
-                            hintText: "••••••••••",
                             prefixIcon: Align(
                               widthFactor: 1.0,
                               heightFactor: 1.0,
                               child: Icon(
-                                Icons.lock_rounded,
+                                Icons.lock,
                               ),
                             ),
                           ),
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Checkbox(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  value: true,
-                                  onChanged: (value) {},
-                                ),
-                                Text(
-                                  context.loc.remember_me,
-                                  style: context.textTheme.labelLarge,
-                                ),
-                              ],
-                            ),
-                            InkWell(
-                              child: Text(
-                                context.loc.forgot_password_question_mark,
-                                style: context.textTheme.labelLarge?.copyWith(
-                                  color: context.colorScheme.surfaceTint,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
                       ],
                     ),
                     FilledButton(
@@ -189,7 +133,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: SizedBox(
                         width: double.infinity,
                         child: Text(
-                          context.loc.sign_in,
+                          context.loc.continue_text,
                           style: context.textTheme.bodyLarge
                               ?.copyWith(color: context.colorScheme.onPrimary),
                           textAlign: TextAlign.center,
@@ -200,8 +144,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       height: 50,
                     ),
                     InkWell(
+                      onTap: () {
+                        AppRoute.signIn.push(context);
+                      },
                       child: Text(
-                        context.loc.do_not_have_an_account,
+                        context.loc.already_have_an_account,
                         style: context.textTheme.labelLarge?.copyWith(
                           color: context.colorScheme.surfaceTint,
                         ),
