@@ -173,7 +173,7 @@ class AppTheme {
   static ColorScheme darkScheme() {
     return const ColorScheme(
       brightness: Brightness.dark,
-      primary: Color(0xffa1d39a),
+      primary: Color(0xff5BC05D),
       surfaceTint: Color(0xffa1d39a),
       onPrimary: Color(0xff0a390f),
       primaryContainer: Color(0xff235024),

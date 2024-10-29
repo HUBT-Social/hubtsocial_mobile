@@ -1,12 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/ui/input/input_field.dart';
+import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/system_setting.dart';
 
 import '../../../../core/configs/assets.dart';
-import '../../../../core/localization/ui/widget/button_change_localization.dart';
 import '../../../../core/navigation/route.dart';
 
 class SignInPage extends StatefulWidget {
@@ -164,14 +161,7 @@ class _SignInPageState extends State<SignInPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                child: Column(
-                  children: [
-                    ButtonChangeLocalization(),
-                  ],
-                ),
-              ),
+              SystemSetting(),
             ],
           ),
         ),

@@ -14,6 +14,10 @@ class Assets {
 
   static const String localizationVi = "assets/icons/localization_vi.png";
   static const String localizationEn = "assets/icons/localization_en.png";
+
+  static const String themeSystem = "assets/icons/theme_system.svg";
+  static const String themeLight = "assets/icons/theme_light.svg";
+  static const String themeDark = "assets/icons/theme_dark.svg";
 }
 
 class AppIcons {

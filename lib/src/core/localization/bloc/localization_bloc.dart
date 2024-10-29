@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_key.dart';
 import 'package:language_code/language_code.dart';
-import 'package:loggy/loggy.dart';
 
 import '../models/language.dart';
 

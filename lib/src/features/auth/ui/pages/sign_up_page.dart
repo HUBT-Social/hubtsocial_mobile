@@ -1,12 +1,10 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/ui/input/input_field.dart';
 
 import '../../../../core/configs/assets.dart';
-import '../../../../core/localization/ui/widget/button_change_localization.dart';
 import '../../../../core/navigation/route.dart';
+import '../widgets/system_setting.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -165,14 +163,7 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                child: Column(
-                  children: [
-                    ButtonChangeLocalization(),
-                  ],
-                ),
-              ),
+              SystemSetting(),
             ],
           ),
         ),

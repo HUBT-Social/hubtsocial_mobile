@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hubtsocial_mobile/src/core/theme/bloc/theme_bloc.dart';
 import '../../features/auth/repository/auth_repository.dart';
 import '../../features/user/bloc/user_cubit.dart';
 import '../../features/user/provider/user_mock_provider.dart';
@@ -85,6 +86,9 @@ class _BlocDI extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => LocalizationBloc()..add(GetLanguage()),
+        ),
+        BlocProvider(
+          create: (context) => ThemeBloc()..add(GetTheme()),
         ),
       ],
       child: child,

@@ -9,6 +9,7 @@ import 'package:hubtsocial_mobile/src/core/style/app_theme.dart';
 
 import '../localization/bloc/localization_bloc.dart';
 import '../navigation/router.dart';
+import '../theme/bloc/theme_bloc.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -35,24 +36,29 @@ class MyApp extends StatelessWidget {
         AppTheme theme = AppTheme(textTheme);
         return DI(
           child: BlocBuilder<LocalizationBloc, AppLocalizationState>(
-            builder: (context, state) {
-              return MaterialApp.router(
-                debugShowCheckedModeBanner: false,
-                //Theme
-                themeMode: ThemeMode.system,
-                theme: theme.light(),
-                darkTheme: theme.dark(),
-                highContrastTheme: theme.lightHighContrast(),
-                highContrastDarkTheme: theme.darkHighContrast(),
-                //Localizations
-                supportedLocales: AppLocalizations.supportedLocales,
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
-                locale: state.selectedLanguage.value,
-                //Router
-                routerConfig: router,
-                // routerDelegate: router.routerDelegate,
-                // routeInformationParser: router.routeInformationParser,
-                // routeInformationProvider: router.routeInformationProvider,
+            builder: (context, stateLocalization) {
+              return BlocBuilder<ThemeBloc, AppThemeState>(
+                builder: (context, stateTheme) {
+                  return MaterialApp.router(
+                    debugShowCheckedModeBanner: false,
+                    //Theme
+                    themeMode: stateTheme.selectedTheme.value,
+                    theme: theme.light(),
+                    darkTheme: theme.dark(),
+                    highContrastTheme: theme.lightHighContrast(),
+                    highContrastDarkTheme: theme.darkHighContrast(),
+                    //Localizations
+                    supportedLocales: AppLocalizations.supportedLocales,
+                    localizationsDelegates:
+                        AppLocalizations.localizationsDelegates,
+                    locale: stateLocalization.selectedLanguage.value,
+                    //Router
+                    routerConfig: router,
+                    // routerDelegate: router.routerDelegate,
+                    // routeInformationParser: router.routeInformationParser,
+                    // routeInformationProvider: router.routeInformationProvider,
+                  );
+                },
               );
             },
           ),

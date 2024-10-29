@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/configs/assets.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
-
-import '../../../../core/localization/ui/widget/button_change_localization.dart';
+import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/system_setting.dart';
 
 class GetStartedPage extends StatefulWidget {
   const GetStartedPage({super.key});
@@ -112,14 +111,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                child: Column(
-                  children: [
-                    ButtonChangeLocalization(),
-                  ],
-                ),
-              ),
+              SystemSetting(),
             ],
           ),
         ),
