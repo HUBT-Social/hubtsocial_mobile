@@ -26,6 +26,8 @@
     "@sign_in": {},
     "student_code": "Student code",
     "@student_code": {},
+    "user_name": "User name",
+    "@user_name": {},
     "do_not_have_an_account": "Don’t have an account?",
     "@do_not_have_an_account": {},
     "already_have_an_account": "Already have an account?",

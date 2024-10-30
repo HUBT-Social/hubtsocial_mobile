@@ -6,6 +6,7 @@ enum AppRoute {
   getStarted('/getStarted'),
   signIn('/signIn'),
   signUp('/signUp'),
+  information('/information'),
   home('/home'),
   settings('/settings'),
   notifications('/notifications'),

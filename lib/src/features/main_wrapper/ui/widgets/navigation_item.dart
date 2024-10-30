@@ -13,7 +13,7 @@ class NavigationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Icon(
       icon,
-      size: 18,
+      size: 24,
       color: context.colorScheme.onSurface,
     );
   }

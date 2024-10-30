@@ -65,8 +65,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: InputField.number(
-                            hintText: context.loc.student_code,
+                          child: InputField.name(
+                            hintText: context.loc.user_name,
                             controller: _studentCodeController,
                             textInputAction: TextInputAction.next,
                             prefixIcon: Align(
@@ -94,7 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: InputField.email(
+                          child: InputField.password(
                             hintText: context.loc.password,
                             controller: _passwordController,
                             textInputAction: TextInputAction.next,
@@ -109,10 +109,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: InputField.email(
+                          child: InputField.password(
                             hintText: context.loc.confirm_password,
                             controller: _confirmPasswordController,
-                            textInputAction: TextInputAction.next,
+                            textInputAction: TextInputAction.done,
                             prefixIcon: Align(
                               widthFactor: 1.0,
                               heightFactor: 1.0,
@@ -124,9 +124,46 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ],
                     ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          value: true,
+                          onChanged: (value) {},
+                        ),
+                        Text(
+                          "I Agree with",
+                          style: context.textTheme.labelLarge,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Center(
+                                    child: Container(
+                                      height: 300,
+                                      width: 300,
+                                      color: context.colorScheme.surface,
+                                      child: Text("data"),
+                                    ),
+                                  );
+                                });
+                          },
+                          child: Text(
+                            " privacy and policy",
+                            style: context.textTheme.labelLarge?.copyWith(
+                              color: context.colorScheme.surfaceTint,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     FilledButton(
                       onPressed: () {
-                        AppRoute.home.go(context);
+                        AppRoute.information.go(context);
                       },
                       child: SizedBox(
                         width: double.infinity,
@@ -139,7 +176,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     SizedBox(
-                      height: 50,
+                      height: 12,
                     ),
                     InkWell(
                       onTap: () {
@@ -151,6 +188,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           color: context.colorScheme.surfaceTint,
                         ),
                       ),
+                    ),
+                    SizedBox(
+                      height: 24,
                     ),
                   ],
                 ),

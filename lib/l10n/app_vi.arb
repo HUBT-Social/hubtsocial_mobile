@@ -26,6 +26,8 @@
     "@sign_in": {},
     "student_code": "Mã sinh viên",
     "@student_code": {},
+    "user_name": "Tên người dùng",
+    "@user_name": {},
     "do_not_have_an_account": "Bạn không có tài khoản?",
     "@do_not_have_an_account": {},
     "already_have_an_account": "Bạn đã có một tài khoản?",

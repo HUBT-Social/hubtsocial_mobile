@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/ui/input/input_field.dart';
-import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/system_setting.dart';
 
 import '../../../../core/configs/assets.dart';
 import '../../../../core/navigation/route.dart';
+import '../widgets/system_setting.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class InformationPage extends StatefulWidget {
+  const InformationPage({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<InformationPage> createState() => _InformationPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _InformationPageState extends State<InformationPage> {
   final _studentCodeController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +55,7 @@ class _SignInPageState extends State<SignInPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      context.loc.sign_in,
+                      "Information",
                       style: context.textTheme.displaySmall?.copyWith(
                         color: context.colorScheme.onSurface,
                       ),
@@ -64,9 +66,9 @@ class _SignInPageState extends State<SignInPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6),
                           child: InputField.name(
+                            hintText: context.loc.user_name,
                             controller: _studentCodeController,
                             textInputAction: TextInputAction.next,
-                            hintText: context.loc.user_name,
                             prefixIcon: Align(
                               widthFactor: 1.0,
                               heightFactor: 1.0,
@@ -78,48 +80,85 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: InputField.password(
-                            controller: _passwordController,
+                          child: InputField.email(
+                            controller: _emailController,
                             textInputAction: TextInputAction.next,
-                            hintText: context.loc.password,
                             prefixIcon: Align(
                               widthFactor: 1.0,
                               heightFactor: 1.0,
                               child: Icon(
-                                Icons.lock_rounded,
+                                Icons.email,
                               ),
                             ),
                           ),
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Checkbox(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  value: true,
-                                  onChanged: (value) {},
-                                ),
-                                Text(
-                                  context.loc.remember_me,
-                                  style: context.textTheme.labelLarge,
-                                ),
-                              ],
-                            ),
-                            InkWell(
-                              child: Text(
-                                context.loc.forgot_password_question_mark,
-                                style: context.textTheme.labelLarge?.copyWith(
-                                  color: context.colorScheme.surfaceTint,
-                                ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: InputField.password(
+                            hintText: context.loc.password,
+                            controller: _passwordController,
+                            textInputAction: TextInputAction.next,
+                            prefixIcon: Align(
+                              widthFactor: 1.0,
+                              heightFactor: 1.0,
+                              child: Icon(
+                                Icons.lock,
                               ),
                             ),
-                          ],
-                        )
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: InputField.password(
+                            hintText: context.loc.confirm_password,
+                            controller: _confirmPasswordController,
+                            textInputAction: TextInputAction.done,
+                            prefixIcon: Align(
+                              widthFactor: 1.0,
+                              heightFactor: 1.0,
+                              child: Icon(
+                                Icons.lock,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          value: true,
+                          onChanged: (value) {},
+                        ),
+                        Text(
+                          "I Agree with",
+                          style: context.textTheme.labelLarge,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Center(
+                                    child: Container(
+                                      height: 300,
+                                      width: 300,
+                                      color: context.colorScheme.surface,
+                                      child: Text("data"),
+                                    ),
+                                  );
+                                });
+                          },
+                          child: Text(
+                            " privacy and policy",
+                            style: context.textTheme.labelLarge?.copyWith(
+                              color: context.colorScheme.surfaceTint,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     FilledButton(
@@ -129,7 +168,7 @@ class _SignInPageState extends State<SignInPage> {
                       child: SizedBox(
                         width: double.infinity,
                         child: Text(
-                          context.loc.sign_in,
+                          context.loc.continue_text,
                           style: context.textTheme.bodyLarge
                               ?.copyWith(color: context.colorScheme.onPrimary),
                           textAlign: TextAlign.center,
@@ -141,10 +180,10 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     InkWell(
                       onTap: () {
-                        AppRoute.signUp.push(context);
+                        AppRoute.signIn.push(context);
                       },
                       child: Text(
-                        context.loc.do_not_have_an_account,
+                        context.loc.already_have_an_account,
                         style: context.textTheme.labelLarge?.copyWith(
                           color: context.colorScheme.surfaceTint,
                         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/pages/get_started_page.dart';
+import 'package:hubtsocial_mobile/src/features/auth/ui/pages/information_page.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/pages/sign_in_page.dart';
 import 'package:hubtsocial_mobile/src/features/home/ui/pages/home_page.dart';
 import '../../features/auth/ui/pages/sign_up_page.dart';
@@ -36,6 +37,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: AppRoute.signUp.path,
       builder: (context, state) => const SignUpPage(),
+    ),
+    GoRoute(
+      path: AppRoute.information.path,
+      builder: (context, state) => const InformationPage(),
     ),
 
     /// MainWrapper
