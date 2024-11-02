@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/pages/get_started_page.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/pages/information_page.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/pages/sign_in_page.dart';
 import 'package:hubtsocial_mobile/src/features/home/ui/pages/home_page.dart';
+import '../../features/auth/bloc/auth_cubit.dart';
+import '../../features/auth/repository/auth_repository.dart';
 import '../../features/auth/ui/pages/sign_up_page.dart';
 import '../../features/auth/ui/pages/splash_page.dart';
 import '../../features/main_wrapper/ui/main_wrapper.dart';
 import '../../features/notifications/ui/pages/notifications_page.dart';
 import '../../features/profile/ui/pages/profile_screen.dart';
+import '../../features/user/repository/user_repository.dart';
 
 final _shellNavigatorHome = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
 final _shellNavigatorSettings =
@@ -31,7 +35,13 @@ final GoRouter router = GoRouter(
 
     GoRoute(
       path: AppRoute.signIn.path,
-      builder: (context, state) => const SignInPage(),
+      builder: (context, state) => BlocProvider(
+        create: (context) => AuthCubit(
+          userRepository: context.read<UserRepository>(),
+          authRepository: context.read<AuthRepository>(),
+        ),
+        child: const SignInPage(),
+      ),
     ),
 
     GoRoute(

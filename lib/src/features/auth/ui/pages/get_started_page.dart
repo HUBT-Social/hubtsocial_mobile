@@ -4,6 +4,8 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/system_setting.dart';
 
+import '../widgets/background.dart';
+
 class GetStartedPage extends StatefulWidget {
   const GetStartedPage({super.key});
 
@@ -17,14 +19,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
     return Scaffold(
         body: Stack(
       children: [
-        SizedBox(
-          height: double.infinity,
-          width: double.infinity,
-          child: Image.asset(
-            Assets.startedBg,
-            fit: BoxFit.cover,
-          ),
-        ),
+        Background(),
         SizedBox(
           height: double.infinity,
           width: double.infinity,

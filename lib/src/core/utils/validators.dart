@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/string.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 abstract class Validators {
   Validators._();
 
   static FormFieldValidator<String>? getValidator(TextInputType? keyboardType) {
     return switch (keyboardType) {
+      TextInputType.name => Validators.name,
       TextInputType.emailAddress => Validators.email,
       TextInputType.number => Validators.number,
+      TextInputType.phone => Validators.number,
       _ => null,
     };
   }
@@ -23,6 +26,18 @@ abstract class Validators {
   static String? requiredTyped<T>(T? input) {
     if (input == null) {
       return 'Required';
+    }
+
+    return null;
+  }
+
+  static String? name(String? name) {
+    if (name == null || name.isEmpty) {
+      return 'Required';
+    }
+
+    if (!name.isValidEmail()) {
+      return 'Enter valid email';
     }
 
     return null;

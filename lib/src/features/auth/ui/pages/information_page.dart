@@ -4,6 +4,7 @@ import 'package:hubtsocial_mobile/src/core/ui/input/input_field.dart';
 
 import '../../../../core/configs/assets.dart';
 import '../../../../core/navigation/route.dart';
+import '../widgets/background.dart';
 import '../widgets/system_setting.dart';
 
 class InformationPage extends StatefulWidget {
@@ -23,14 +24,7 @@ class _InformationPageState extends State<InformationPage> {
     return Scaffold(
         body: Stack(
       children: [
-        SizedBox(
-          height: double.infinity,
-          width: double.infinity,
-          child: Image.asset(
-            Assets.startedBg,
-            fit: BoxFit.cover,
-          ),
-        ),
+        Background(),
         Center(
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
