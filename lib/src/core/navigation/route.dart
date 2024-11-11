@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hubtsocial_mobile/src/core/navigation/router.dart';
 
 enum AppRoute {
-  splash('/'),
-  getStarted('/getStarted'),
-  signIn('/signIn'),
-  signUp('/signUp'),
-  information('/information'),
-  home('/home'),
-  settings('/settings'),
-  notifications('/notifications'),
-  profile('/profile'),
-  error('/error'),
+  // none(''),
+  splash('splash'),
+  getStarted('getStarted'),
+  staging('staging'),
+  signIn('signIn'),
+  signUp('signUp'),
+  information('information'),
+  home('home'),
+  settings('settings'),
+  notifications('notifications'),
+  profile('profile'),
+  error('error'),
   ;
 
   const AppRoute(this.path);
@@ -20,7 +23,19 @@ enum AppRoute {
 }
 
 extension AppRouteNavigation on AppRoute {
-  void go(BuildContext context) => context.go(path);
+  void go(BuildContext context) {
+    context.go(
+      parseRoute(
+        route: '/$path',
+      ),
+    );
+  }
 
-  void push(BuildContext context) => context.push(path);
+  void push(BuildContext context) {
+    context.push(
+      parseRoute(
+        route: '/$path',
+      ),
+    );
+  }
 }

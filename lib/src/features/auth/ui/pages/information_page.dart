@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/ui/input/input_field.dart';
 
-import '../../../../core/configs/assets.dart';
 import '../../../../core/navigation/route.dart';
 import '../widgets/background.dart';
 import '../widgets/system_setting.dart';

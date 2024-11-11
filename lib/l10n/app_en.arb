@@ -28,6 +28,8 @@
     "@student_code": {},
     "user_name": "User name",
     "@user_name": {},
+    "username_or_email": "Username or Email",
+    "@username_or_email": {},
     "do_not_have_an_account": "Don’t have an account?",
     "@do_not_have_an_account": {},
     "already_have_an_account": "Already have an account?",

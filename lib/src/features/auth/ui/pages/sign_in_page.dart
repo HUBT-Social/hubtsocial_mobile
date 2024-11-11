@@ -6,8 +6,9 @@ import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/background.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/system_setting.dart';
 
 import '../../../../core/navigation/route.dart';
+import '../../../../core/navigation/router.dart';
 import '../../../../core/ui/widget/loading_overlay.dart';
-import '../../bloc/auth_cubit.dart';
+import '../bloc/auth_bloc.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -17,13 +18,13 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  final _userNameController = TextEditingController();
+  final _usernameOrEmailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthCubit, AuthState>(
+    return BlocConsumer<AuthBloc, AuthState>(
       listener: _onAuthState,
       builder: (context, state) {
         return LoadingOverlay(
@@ -69,10 +70,10 @@ class _SignInPageState extends State<SignInPage> {
                                   Padding(
                                     padding:
                                         const EdgeInsets.symmetric(vertical: 6),
-                                    child: InputField.name(
-                                      controller: _userNameController,
+                                    child: InputField(
+                                      controller: _usernameOrEmailController,
                                       textInputAction: TextInputAction.next,
-                                      hintText: context.loc.user_name,
+                                      hintText: context.loc.username_or_email,
                                       prefixIcon: Align(
                                         widthFactor: 1.0,
                                         heightFactor: 1.0,
@@ -193,16 +194,15 @@ class _SignInPageState extends State<SignInPage> {
   void _onAuthState(BuildContext context, AuthState state) {
     if (state is AuthFailure) {
       context.showSnackBarMessage(
-        state.errorMessage,
+        "state.errorMessage",
         isError: true,
       );
       return;
     }
 
     if (state is AuthSuccess) {
-      if (state.user != null) {
-        AppRoute.home.go(context);
-      }
+      AppRoute.home.go(context);
+      router.go(AppRoute.home.path);
     }
   }
 
@@ -213,12 +213,9 @@ class _SignInPageState extends State<SignInPage> {
 
     context.closeKeyboard();
 
-    final userName = _userNameController.text.trim();
-    final password = _passwordController.text.trim();
-
-    context.read<AuthCubit>().signInWithEmailAndPassword(
-          email: userName,
-          password: password,
-        );
+    context.read<AuthBloc>().add(SignInEvent(
+          phoneNumber: _usernameOrEmailController.text.trim(),
+          password: _passwordController.text.trim(),
+        ));
   }
 }
