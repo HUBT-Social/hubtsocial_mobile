@@ -1,11 +1,11 @@
 import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
-import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_token.dart';
+import '../entities/sign_in_response.dart';
 
 abstract class AuthRepo {
   const AuthRepo();
 
-  ResultFuture<UserToken> signIn({
-    required String phoneNumber,
+  ResultFuture<SignInResponse> signIn({
+    required String usernameOrEmail,
     required String password,
   });
 

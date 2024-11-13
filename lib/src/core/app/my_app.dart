@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:hubtsocial_mobile/src/core/app/di.dart';
 import 'package:hubtsocial_mobile/src/core/style/app_font.dart';
 import 'package:hubtsocial_mobile/src/core/style/app_theme.dart';
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
                     // routerDelegate: router.routerDelegate,
                     // routeInformationParser: router.routeInformationParser,
                     // routeInformationProvider: router.routeInformationProvider,
+                    builder: FlutterSmartDialog.init(),
                   );
                 },
               );

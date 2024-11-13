@@ -4,10 +4,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../domain/entities/user_token.dart';
+import '../../domain/entities/sign_in_response.dart';
 import '../../domain/usecases/reset_password.dart';
 import '../../domain/usecases/sent_otp_verification.dart';
-import '../../domain/usecases/sign_in.dart';
+import '../../domain/usecases/sign_in_usercase.dart';
 import '../../domain/usecases/sign_out.dart';
 import '../../domain/usecases/sign_up.dart';
 import '../../domain/usecases/verify_phone_number.dart';
@@ -19,7 +19,7 @@ part 'auth_state.dart';
 @Injectable()
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
-    required SignIn signIn,
+    required SignInUserCase signIn,
     required SignUp signUp,
     required VerifyPhoneNumber verifyPhoneNumber,
     required SentOTPVerification sentOTPVerification,
@@ -37,13 +37,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
     on<SignInEvent>(_signInHandler);
     on<SignUpEvent>(_signUpHandler);
-    on<VerifyPhoneNumberEvent>(_verifyPhoneNumberHandler);
+    on<VerifyTwoFactorEvent>(_verifyTwoFactorHandler);
     on<SentOTPVerificationEvent>(_sentOTPVerificationHandler);
     on<ResetPasswordEvent>(_resetPasswordHandler);
     on<SignOutEvent>(_signOutHandler);
   }
 
-  final SignIn _signIn;
+  final SignInUserCase _signIn;
   final SignUp _signUp;
   final VerifyPhoneNumber _verifyPhoneNumber;
   final SentOTPVerification _sentOTPVerification;
@@ -56,7 +56,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     final result = await _signIn(
       SignInParams(
-        phoneNumber: event.phoneNumber,
+        usernameOrEmail: event.usernameOrEmail,
         password: event.password,
       ),
     );
@@ -71,7 +71,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             break;
         }
       },
-      (token) => emit(SignedIn(token)),
+      (response) {
+        if (response.requiresTwoFactor) {
+          emit(SignedIn(response));
+        } else {
+          emit(SignedIn(response));
+        }
+      },
     );
   }
 
@@ -102,14 +108,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  Future<void> _verifyPhoneNumberHandler(
-    VerifyPhoneNumberEvent event,
+  Future<void> _verifyTwoFactorHandler(
+    VerifyTwoFactorEvent event,
     Emitter<AuthState> emit,
   ) async {
     final result = await _verifyPhoneNumber(event.phoneNumber);
     result.fold(
-      (failure) => emit(VerifyError("serverError")),
-      (_) => emit(const Verifying()),
+      (failure) => emit(VerifyTwoFactorError("serverError")),
+      (_) => emit(const VerifyingTwoFactor()),
     );
   }
 
@@ -127,7 +133,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (failure) {
         switch (int.parse(failure.statusCode)) {
           case 401:
-            emit(VerifyError("verifyError"));
+            emit(VerifyTwoFactorError("verifyError"));
             break;
           default:
             emit(AuthError("serverError"));

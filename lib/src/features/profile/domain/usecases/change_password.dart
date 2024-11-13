@@ -4,7 +4,7 @@ import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
 import 'package:hubtsocial_mobile/src/features/profile/domain/repos/user_profile_repo.dart';
 
 @lazySingleton
-class ChangePassword extends UsecaseWithParams<void, ChangePasswordParams> {
+class ChangePassword extends UseCaseWithParams<void, ChangePasswordParams> {
   final UserRepo _repo;
 
   ChangePassword(this._repo);

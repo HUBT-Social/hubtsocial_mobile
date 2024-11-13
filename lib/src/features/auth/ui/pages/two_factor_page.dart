@@ -11,14 +11,14 @@ import '../../../../core/ui/dialog/dialogs.dart';
 import '../../../../core/ui/widget/loading_overlay.dart';
 import '../bloc/auth_bloc.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class TwoFactorPage extends StatefulWidget {
+  const TwoFactorPage({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<TwoFactorPage> createState() => _TwoFactorPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _TwoFactorPageState extends State<TwoFactorPage> {
   final _usernameOrEmailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();

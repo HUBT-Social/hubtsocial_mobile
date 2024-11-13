@@ -4,8 +4,9 @@ import 'package:hubtsocial_mobile/src/core/errors/failure.dart';
 import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
 import 'package:injectable/injectable.dart';
 import 'package:hubtsocial_mobile/src/features/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_token.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/repos/auth_repo.dart';
+
+import '../../domain/entities/sign_in_response.dart';
 
 @LazySingleton(
   as: AuthRepo,
@@ -16,13 +17,13 @@ class AuthRepoImpl implements AuthRepo {
   final AuthRemoteDataSource _remoteDataSource;
 
   @override
-  ResultFuture<UserToken> signIn({
-    required String phoneNumber,
+  ResultFuture<SignInResponse> signIn({
+    required String usernameOrEmail,
     required String password,
   }) async {
     try {
       final result = await _remoteDataSource.signIn(
-        userName: phoneNumber,
+        userName: usernameOrEmail,
         password: password,
       );
 

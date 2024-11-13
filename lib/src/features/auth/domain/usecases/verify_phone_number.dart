@@ -4,7 +4,7 @@ import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/repos/auth_repo.dart';
 
 @LazySingleton()
-class VerifyPhoneNumber extends UsecaseWithParams<void, String> {
+class VerifyPhoneNumber extends UseCaseWithParams<void, String> {
   const VerifyPhoneNumber(this._repo);
 
   final AuthRepo _repo;

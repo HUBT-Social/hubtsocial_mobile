@@ -45,7 +45,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
                 ),
               ),
               Container(
-                height: 220,
+                // height: 220.h,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: context.colorScheme.surface,
@@ -65,6 +65,9 @@ class _GetStartedPageState extends State<GetStartedPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      SizedBox(
+                        height: 24,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -80,6 +83,9 @@ class _GetStartedPageState extends State<GetStartedPage> {
                                 ?.copyWith(color: context.colorScheme.tertiary),
                           ),
                         ],
+                      ),
+                      SizedBox(
+                        height: 24,
                       ),
                       FilledButton(
                           onPressed: () {

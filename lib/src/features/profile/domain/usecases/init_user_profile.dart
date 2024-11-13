@@ -5,7 +5,7 @@ import 'package:hubtsocial_mobile/src/features/profile/domain/entities/user.dart
 import 'package:hubtsocial_mobile/src/features/profile/domain/repos/user_profile_repo.dart';
 
 @LazySingleton()
-class InitUserProfile extends UsecaseWithoutParams<LocalUser> {
+class InitUserProfile extends UseCaseWithoutParams<LocalUser> {
   const InitUserProfile(this._repo);
 
   final UserRepo _repo;

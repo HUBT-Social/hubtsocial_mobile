@@ -39,7 +39,7 @@ sealed class Dialogs {
           return Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.blueAccent,
+              color: context.colorScheme.surface,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
@@ -116,11 +116,11 @@ sealed class Dialogs {
     });
   }
 
-  static Widget sucessMessage(String message) {
+  static Widget sucessMessage(String message, BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.blueAccent,
+        color: context.colorScheme.surface,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -148,11 +148,11 @@ sealed class Dialogs {
     );
   }
 
-  static Widget errorMessage(String message) {
+  static Widget errorMessage(String message, BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.blueAccent,
+        color: context.colorScheme.surface,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(

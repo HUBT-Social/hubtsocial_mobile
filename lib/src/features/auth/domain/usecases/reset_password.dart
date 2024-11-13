@@ -5,7 +5,7 @@ import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/repos/auth_repo.dart';
 
 @LazySingleton()
-class ResetPassword extends UsecaseWithParams<void, ResetPasswordParams> {
+class ResetPassword extends UseCaseWithParams<void, ResetPasswordParams> {
   const ResetPassword(this._repo);
 
   final AuthRepo _repo;

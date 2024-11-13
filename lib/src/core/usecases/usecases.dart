@@ -1,11 +1,11 @@
 import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
 
-abstract class UsecaseWithParams<T, Params> {
-  const UsecaseWithParams();
+abstract class UseCaseWithParams<T, Params> {
+  const UseCaseWithParams();
   ResultFuture<T> call(Params param);
 }
 
-abstract class UsecaseWithoutParams<T> {
-  const UsecaseWithoutParams();
+abstract class UseCaseWithoutParams<T> {
+  const UseCaseWithoutParams();
   ResultFuture<T> call();
 }

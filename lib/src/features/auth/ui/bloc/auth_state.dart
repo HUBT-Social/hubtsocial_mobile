@@ -23,17 +23,17 @@ class AuthSuccess extends AuthState {
   const AuthSuccess();
 }
 
-class Verifying extends AuthState {
-  const Verifying();
+class VerifyingTwoFactor extends AuthState {
+  const VerifyingTwoFactor();
 }
 
 class SignedIn extends AuthState {
-  const SignedIn(this.token);
+  const SignedIn(this.response);
 
-  final UserToken token;
+  final SignInResponse response;
 
   @override
-  List<Object> get props => [token];
+  List<Object> get props => [response];
 }
 
 class SignedUp extends AuthState {
@@ -62,8 +62,8 @@ class AuthError extends AuthState {
   List<String> get props => [message];
 }
 
-class VerifyError extends AuthState {
-  const VerifyError(this.message);
+class VerifyTwoFactorError extends AuthState {
+  const VerifyTwoFactorError(this.message);
 
   final String message;
 

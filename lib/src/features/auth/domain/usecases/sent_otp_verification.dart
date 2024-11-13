@@ -6,7 +6,7 @@ import 'package:hubtsocial_mobile/src/features/auth/domain/repos/auth_repo.dart'
 
 @LazySingleton()
 class SentOTPVerification
-    extends UsecaseWithParams<String, SentOTPVerificationParams> {
+    extends UseCaseWithParams<String, SentOTPVerificationParams> {
   const SentOTPVerification(this._repo);
 
   final AuthRepo _repo;

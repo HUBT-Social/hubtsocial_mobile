@@ -22,8 +22,8 @@ import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/reset_passwo
     as _i492;
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/sent_otp_verification.dart'
     as _i46;
-import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/sign_in.dart'
-    as _i584;
+import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/sign_in_usercase.dart'
+    as _i1065;
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/sign_out.dart'
     as _i488;
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/sign_up.dart'
@@ -80,13 +80,14 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i492.ResetPassword(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i46.SentOTPVerification>(
         () => _i46.SentOTPVerification(gh<_i936.AuthRepo>()));
-    gh.lazySingleton<_i584.SignIn>(() => _i584.SignIn(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i488.SignOut>(() => _i488.SignOut(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i426.SignUp>(() => _i426.SignUp(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i629.VerifyPhoneNumber>(
         () => _i629.VerifyPhoneNumber(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i1065.SignInUserCase>(
+        () => _i1065.SignInUserCase(gh<_i936.AuthRepo>()));
     gh.factory<_i765.AuthBloc>(() => _i765.AuthBloc(
-          signIn: gh<_i584.SignIn>(),
+          signIn: gh<_i1065.SignInUserCase>(),
           signUp: gh<_i426.SignUp>(),
           verifyPhoneNumber: gh<_i629.VerifyPhoneNumber>(),
           sentOTPVerification: gh<_i46.SentOTPVerification>(),

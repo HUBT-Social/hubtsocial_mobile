@@ -5,7 +5,7 @@ import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/repos/auth_repo.dart';
 
 @LazySingleton()
-class SignUp extends UsecaseWithParams<void, SignUpParams> {
+class SignUp extends UseCaseWithParams<void, SignUpParams> {
   const SignUp(this._repo);
 
   final AuthRepo _repo;

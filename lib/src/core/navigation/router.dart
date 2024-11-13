@@ -48,9 +48,9 @@ final GoRouter router = GoRouter(
   initialLocation: '/',
   redirect: (context, state) {
     if (state.fullPath != '/') {
-      if (state.fullPath!.contains('verifying') ||
-          state.fullPath!.contains('sign-in') ||
-          state.fullPath!.contains('sign-up') ||
+      if (state.fullPath!.contains(AppRoute.getStarted.path) ||
+          state.fullPath!.contains(AppRoute.signIn.path) ||
+          state.fullPath!.contains(AppRoute.signUp.path) ||
           state.fullPath!.contains('reset-password') ||
           state.fullPath!.contains('enter-phone')) {
         return null;
@@ -58,7 +58,7 @@ final GoRouter router = GoRouter(
       LocalUser? user = context.read<UserProvider>().user;
       var tokenBox = Hive.box('token');
       if (tokenBox.isEmpty || !tokenBox.containsKey('userToken')) {
-        return joinRoute(['', AppRoute.signIn.path]);
+        return joinRoute(['', AppRoute.getStarted.path]);
       }
       if (user == null) {
         if (state.fullPath != null) {
@@ -67,7 +67,7 @@ final GoRouter router = GoRouter(
           param.putIfAbsent(
               'forwardRoute', () => state.fullPath!.replaceAll('/', ''));
           return parseRoute(
-              route: '/${AppRoute.staging.path}', queryParameters: param);
+              route: '/${AppRoute.splash.path}', queryParameters: param);
         }
         return '/';
       }

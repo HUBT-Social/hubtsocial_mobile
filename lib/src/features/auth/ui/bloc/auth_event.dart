@@ -6,15 +6,15 @@ abstract class AuthEvent extends Equatable {
 
 class SignInEvent extends AuthEvent {
   const SignInEvent({
-    required this.phoneNumber,
+    required this.usernameOrEmail,
     required this.password,
   });
 
-  final String phoneNumber;
+  final String usernameOrEmail;
   final String password;
 
   @override
-  List<String> get props => [phoneNumber, password];
+  List<String> get props => [usernameOrEmail, password];
 }
 
 class SignUpEvent extends AuthEvent {
@@ -43,8 +43,8 @@ class ForgotPasswordEvent extends AuthEvent {
   List<String> get props => [phoneNumber];
 }
 
-class VerifyPhoneNumberEvent extends AuthEvent {
-  const VerifyPhoneNumberEvent({required this.phoneNumber});
+class VerifyTwoFactorEvent extends AuthEvent {
+  const VerifyTwoFactorEvent({required this.phoneNumber});
 
   final String phoneNumber;
 

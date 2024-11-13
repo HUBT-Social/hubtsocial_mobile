@@ -12,10 +12,12 @@ import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
 import 'package:hubtsocial_mobile/src/features/auth/data/models/user_token_model.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_token.dart';
 
+import '../models/sign_in_response_model.dart';
+
 abstract class AuthRemoteDataSource {
   const AuthRemoteDataSource();
 
-  Future<UserTokenModel> signIn({
+  Future<SignInResponseModel> signIn({
     required String userName,
     required String password,
   });
@@ -53,7 +55,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirebaseMessaging _messaging;
 
   @override
-  Future<UserTokenModel> signIn({
+  Future<SignInResponseModel> signIn({
     required String userName,
     required String password,
   }) async {
@@ -67,53 +69,55 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        print('Could not finalize api due to: ${response.body.toString()}');
+        logError('Could not finalize api due to: ${response.body.toString()}');
         throw ServerException(
           message: response.body.toString(),
           statusCode: response.statusCode.toString(),
         );
       }
-      var token = UserTokenModel.fromJson(response.body);
+      var responseData = SignInResponseModel.fromJson(response.body);
 
-      if (!await _hiveAuth.boxExists('token')) {
-        await _hiveAuth.openBox('token');
-      }
-      if (!_hiveAuth.isBoxOpen('token')) {
-        await _hiveAuth.openBox('token');
-      }
-
-      var tokenBox = _hiveAuth.box('token');
-
-      if (tokenBox.containsKey('fcmToken')) {
-        String fcmToken = tokenBox.get('fcmToken');
-        final response = await APIRequest.post(
-          // url: ApiConstants.devicesEndpoint,
-          url: EndPoint.apiUrl,
-          body: {
-            'token': fcmToken,
-          },
-          token: token.accessToken,
-        );
-
-        logInfo('Devices response : $response');
-      } else {
-        _messaging.getToken().then((value) async {
-          await tokenBox.put('fcmToken', value);
-          await APIRequest.post(
-            // url: ApiConstants.devicesEndpoint,
-            url: EndPoint.apiUrl,
-
-            body: {
-              'token': value,
-            },
-            token: token.accessToken,
-          );
-        });
+      if (responseData.requiresTwoFactor && responseData.userToken != null) {
+        if (!await _hiveAuth.boxExists('token')) {
+          await _hiveAuth.openBox('token');
+        }
+        if (!_hiveAuth.isBoxOpen('token')) {
+          await _hiveAuth.openBox('token');
+        }
+        var token = responseData.userToken;
+        var tokenBox = _hiveAuth.box('token');
+        await tokenBox.put('userToken', token);
+        logInfo('Sign in token : $token');
       }
 
-      await tokenBox.put('userToken', token);
-      logInfo('Sign in token : $token');
-      return token;
+      // if (tokenBox.containsKey('fcmToken')) {
+      //   String fcmToken = tokenBox.get('fcmToken');
+      //   final response = await APIRequest.post(
+      //     // url: ApiConstants.devicesEndpoint,
+      //     url: EndPoint.apiUrl,
+      //     body: {
+      //       'token': fcmToken,
+      //     },
+      //     token: token.accessToken,
+      //   );
+
+      //   logInfo('Devices response : $response');
+      // } else {
+      //   _messaging.getToken().then((value) async {
+      //     await tokenBox.put('fcmToken', value);
+      //     await APIRequest.post(
+      //       // url: ApiConstants.devicesEndpoint,
+      //       url: EndPoint.apiUrl,
+
+      //       body: {
+      //         'token': value,
+      //       },
+      //       token: token.accessToken,
+      //     );
+      //   });
+      // }
+
+      return responseData;
     } on ServerException {
       rethrow;
     } catch (e, s) {
