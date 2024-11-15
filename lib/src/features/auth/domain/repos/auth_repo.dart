@@ -8,6 +8,9 @@ abstract class AuthRepo {
     required String usernameOrEmail,
     required String password,
   });
+  ResultFuture<SignInResponse> twoFactor({
+    required String postcode,
+  });
 
   ResultFuture<void> signUp({
     required String phoneNumber,

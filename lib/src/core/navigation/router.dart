@@ -7,6 +7,7 @@ import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/pages/get_started_page.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/pages/information_page.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/pages/sign_in_page.dart';
+import 'package:hubtsocial_mobile/src/features/auth/ui/pages/two_factor_page.dart';
 import 'package:hubtsocial_mobile/src/features/home/ui/pages/home_page.dart';
 import 'package:jwt_decode_full/jwt_decode_full.dart';
 import '../../features/auth/domain/entities/user_token.dart';
@@ -50,6 +51,7 @@ final GoRouter router = GoRouter(
     if (state.fullPath != '/') {
       if (state.fullPath!.contains(AppRoute.getStarted.path) ||
           state.fullPath!.contains(AppRoute.signIn.path) ||
+          state.fullPath!.contains(AppRoute.twoFactor.path) ||
           state.fullPath!.contains(AppRoute.signUp.path) ||
           state.fullPath!.contains('reset-password') ||
           state.fullPath!.contains('enter-phone')) {
@@ -67,7 +69,7 @@ final GoRouter router = GoRouter(
           param.putIfAbsent(
               'forwardRoute', () => state.fullPath!.replaceAll('/', ''));
           return parseRoute(
-              route: '/${AppRoute.splash.path}', queryParameters: param);
+              route: '/${AppRoute.home.path}', queryParameters: param);
         }
         return '/';
       }
@@ -110,6 +112,13 @@ final GoRouter router = GoRouter(
           builder: (context, state) => BlocProvider(
             create: (context) => getIt<AuthBloc>(),
             child: SignInPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoute.twoFactor.path,
+          builder: (context, state) => BlocProvider(
+            create: (context) => getIt<AuthBloc>(),
+            child: TwoFactorPage(),
           ),
         ),
 

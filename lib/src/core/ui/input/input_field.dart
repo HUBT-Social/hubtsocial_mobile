@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import '../../utils/validators.dart';
 
@@ -13,6 +14,9 @@ class InputField extends StatefulWidget {
     this.autofillHints,
     this.validator,
     this.onFieldSubmitted,
+    this.textAlign = TextAlign.start,
+    this.inputFormatters,
+    this.onChanged,
     super.key,
   });
 
@@ -113,6 +117,40 @@ class InputField extends StatefulWidget {
           onFieldSubmitted: onFieldSubmitted,
         );
 
+  InputField.otp({
+    required BuildContext context,
+    required TextEditingController controller,
+    String? errorText,
+    String hintText = '',
+    Widget? prefixIcon,
+    TextInputAction textInputAction = TextInputAction.next,
+    ValueChanged<String>? onFieldSubmitted,
+    Key? key,
+  }) : this(
+          key: key,
+          controller: controller,
+          textInputAction: textInputAction,
+          keyboardType: TextInputType.number,
+          // autofillHints: const [AutofillHints.password],
+          errorText: errorText,
+          hintText: hintText,
+          prefixIcon: prefixIcon,
+          validator: Validators.otp,
+          textAlign: TextAlign.center,
+          onFieldSubmitted: onFieldSubmitted,
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(1),
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          onChanged: (value) {
+            if (value.length == 1) {
+              FocusScope.of(context).nextFocus();
+            } else {
+              FocusScope.of(context).previousFocus();
+            }
+          },
+        );
+
   final TextEditingController controller;
   final TextInputAction textInputAction;
   final TextInputType keyboardType;
@@ -122,6 +160,9 @@ class InputField extends StatefulWidget {
   final List<String>? autofillHints;
   final FormFieldValidator<String>? validator;
   final ValueChanged<String>? onFieldSubmitted;
+  final TextAlign textAlign;
+  final List<TextInputFormatter>? inputFormatters;
+  final ValueChanged<String>? onChanged;
 
   @override
   State<InputField> createState() => _InputFieldState();
@@ -154,8 +195,11 @@ class _InputFieldState extends State<InputField> {
 
     return TextFormField(
       controller: widget.controller,
+      onChanged: widget.onChanged,
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
+      textAlign: widget.textAlign,
+      inputFormatters: widget.inputFormatters,
       obscureText: _obscureText,
       validator: validator,
       autofillHints: widget.autofillHints,

@@ -18,6 +18,15 @@ class Assets {
   static const String themeSystem = "assets/icons/theme_system.svg";
   static const String themeLight = "assets/icons/theme_light.svg";
   static const String themeDark = "assets/icons/theme_dark.svg";
+
+  static const pageUnderConstruction =
+      'assets/lottie/page_under_construction.json';
+  static const verificationWaiting = 'assets/lottie/verification.json';
+  static const success = 'assets/lottie/success.json';
+  static const wrongInput = 'assets/lottie/wrong.json';
+  static const writeInput = 'assets/lottie/write_form.json';
+  static const paidSuccess = 'assets/lottie/wallet_paid_success.json';
+  static const paidFailed = 'assets/lottie/wallet_paid_failed.json';
 }
 
 class AppIcons {

@@ -54,6 +54,13 @@ abstract class Validators {
     return null;
   }
 
+  static String? otp(String? code) {
+    if (code == null || code.isEmpty) {
+      return null;
+    }
+    return null;
+  }
+
   static String? password(String? password) {
     if (password == null || password.isEmpty) {
       return 'Required';

@@ -8,23 +8,23 @@ part 'user_token_model.g.dart';
 @HiveType(typeId: 1)
 class UserTokenModel extends UserToken {
   UserTokenModel({
-    required super.tokenType,
     required super.accessToken,
-    required super.expiresIn,
     required super.refreshToken,
+    required super.expiresIn,
+    required super.tokenType,
   });
 
   UserTokenModel copyWith({
-    String? tokenType,
     String? accessToken,
-    int? expiresIn,
     String? refreshToken,
+    int? expiresIn,
+    String? tokenType,
   }) {
     return UserTokenModel(
-      tokenType: tokenType ?? this.tokenType,
       accessToken: accessToken ?? this.accessToken,
-      expiresIn: expiresIn ?? this.expiresIn,
       refreshToken: refreshToken ?? this.refreshToken,
+      expiresIn: expiresIn ?? this.expiresIn,
+      tokenType: tokenType ?? this.tokenType,
     );
   }
 
@@ -39,10 +39,10 @@ class UserTokenModel extends UserToken {
 
   factory UserTokenModel.fromMap(Map<String, dynamic> map) {
     return UserTokenModel(
-      tokenType: map['tokenType'] as String,
-      accessToken: map['accessToken'] as String,
-      expiresIn: map['expiresIn'] as int,
-      refreshToken: map['refreshToken'] as String,
+      accessToken: map["accessToken"],
+      refreshToken: map["refreshToken"],
+      expiresIn: map["expiresIn"],
+      tokenType: map["tokenType"],
     );
   }
 

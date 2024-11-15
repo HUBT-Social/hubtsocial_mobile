@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 import '../../../../core/configs/assets.dart';
-import '../../../../core/navigation/route.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});

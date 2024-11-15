@@ -3,6 +3,8 @@ import 'package:hive/hive.dart';
 import 'local_storage_key.dart';
 
 class AppLocalStorage {
+  static final languageCode =
+      AppLocalStorage.get(LocalStorageKey.languagePrefs);
   static final localBox = Hive.box(LocalStorageKey.localStorage);
 
   static create(Map data) {

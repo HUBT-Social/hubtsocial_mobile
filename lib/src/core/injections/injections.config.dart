@@ -28,6 +28,8 @@ import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/sign_out.dar
     as _i488;
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/sign_up.dart'
     as _i426;
+import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/two_factor_usercase.dart'
+    as _i524;
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/verify_phone_number.dart'
     as _i629;
 import 'package:hubtsocial_mobile/src/features/auth/ui/bloc/auth_bloc.dart'
@@ -86,8 +88,11 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i629.VerifyPhoneNumber(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i1065.SignInUserCase>(
         () => _i1065.SignInUserCase(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i524.TwoFactorUserCase>(
+        () => _i524.TwoFactorUserCase(gh<_i936.AuthRepo>()));
     gh.factory<_i765.AuthBloc>(() => _i765.AuthBloc(
           signIn: gh<_i1065.SignInUserCase>(),
+          twoFactor: gh<_i524.TwoFactorUserCase>(),
           signUp: gh<_i426.SignUp>(),
           verifyPhoneNumber: gh<_i629.VerifyPhoneNumber>(),
           sentOTPVerification: gh<_i46.SentOTPVerification>(),

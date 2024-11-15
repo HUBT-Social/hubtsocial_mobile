@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 
-import '../../ui/dialog/dialogs.dart';
+import '../../ui/dialog/app_dialog.dart';
 
 class HiveProvider {
   static Future<Box> openNotiBox() async {
@@ -63,12 +63,12 @@ class HiveProvider {
 
   static void clearToken(VoidCallback callback) {
     var tokenBox = Hive.box('token');
-    Dialogs.showLoadingDialog(message: 'Logging out');
+    AppDialog.showLoadingDialog(message: 'Logging out');
     tokenBox.clear().then((_) {
       Timer(
         const Duration(seconds: 2),
         () {
-          Dialogs.closeDialog();
+          AppDialog.closeDialog();
           callback();
         },
       );

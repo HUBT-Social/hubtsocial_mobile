@@ -17,6 +17,17 @@ class SignInEvent extends AuthEvent {
   List<String> get props => [usernameOrEmail, password];
 }
 
+class TwoFactorEvent extends AuthEvent {
+  const TwoFactorEvent({
+    required this.postcode,
+  });
+
+  final String postcode;
+
+  @override
+  List<String> get props => [postcode];
+}
+
 class SignUpEvent extends AuthEvent {
   const SignUpEvent({
     required this.phoneNumber,

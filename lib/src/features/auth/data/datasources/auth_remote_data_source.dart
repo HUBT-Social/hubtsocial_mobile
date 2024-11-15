@@ -9,7 +9,6 @@ import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hubtsocial_mobile/src/core/errors/exceptions.dart';
 import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
-import 'package:hubtsocial_mobile/src/features/auth/data/models/user_token_model.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_token.dart';
 
 import '../models/sign_in_response_model.dart';
@@ -38,6 +37,8 @@ abstract class AuthRemoteDataSource {
     required String token,
   });
   Future<void> signOut();
+
+  Future<SignInResponseModel> twoFactor({required String postcode});
 }
 
 @LazySingleton(
@@ -68,16 +69,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         },
       );
 
+      var responseData = SignInResponseModel.fromJson(response.body);
       if (response.statusCode != 200) {
         logError('Could not finalize api due to: ${response.body.toString()}');
         throw ServerException(
-          message: response.body.toString(),
+          message: responseData.message.toString(),
           statusCode: response.statusCode.toString(),
         );
       }
-      var responseData = SignInResponseModel.fromJson(response.body);
 
-      if (responseData.requiresTwoFactor && responseData.userToken != null) {
+      if (!responseData.requiresTwoFactor! && responseData.userToken != null) {
         if (!await _hiveAuth.boxExists('token')) {
           await _hiveAuth.openBox('token');
         }
@@ -88,34 +89,34 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         var tokenBox = _hiveAuth.box('token');
         await tokenBox.put('userToken', token);
         logInfo('Sign in token : $token');
+
+        // if (tokenBox.containsKey('fcmToken')) {
+        //   String fcmToken = tokenBox.get('fcmToken');
+        //   final response = await APIRequest.post(
+        //     // url: ApiConstants.devicesEndpoint,
+        //     url: EndPoint.apiUrl,
+        //     body: {
+        //       'token': fcmToken,
+        //     },
+        //     token: token.accessToken,
+        //   );
+
+        //   logInfo('Devices response : $response');
+        // } else {
+        //   _messaging.getToken().then((value) async {
+        //     await tokenBox.put('fcmToken', value);
+        //     await APIRequest.post(
+        //       // url: ApiConstants.devicesEndpoint,
+        //       url: EndPoint.apiUrl,
+
+        //       body: {
+        //         'token': value,
+        //       },
+        //       token: token.accessToken,
+        //     );
+        //   });
+        // }
       }
-
-      // if (tokenBox.containsKey('fcmToken')) {
-      //   String fcmToken = tokenBox.get('fcmToken');
-      //   final response = await APIRequest.post(
-      //     // url: ApiConstants.devicesEndpoint,
-      //     url: EndPoint.apiUrl,
-      //     body: {
-      //       'token': fcmToken,
-      //     },
-      //     token: token.accessToken,
-      //   );
-
-      //   logInfo('Devices response : $response');
-      // } else {
-      //   _messaging.getToken().then((value) async {
-      //     await tokenBox.put('fcmToken', value);
-      //     await APIRequest.post(
-      //       // url: ApiConstants.devicesEndpoint,
-      //       url: EndPoint.apiUrl,
-
-      //       body: {
-      //         'token': value,
-      //       },
-      //       token: token.accessToken,
-      //     );
-      //   });
-      // }
 
       return responseData;
     } on ServerException {
@@ -286,6 +287,78 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrintStack(stackTrace: s);
       throw const ServerException(
         message: 'Issue with the server',
+        statusCode: '505',
+      );
+    }
+  }
+
+  @override
+  Future<SignInResponseModel> twoFactor({required String postcode}) async {
+    try {
+      final response = await APIRequest.post(
+        url: EndPoint.authSignInTwoFactor,
+        body: {
+          'postcode': postcode,
+        },
+      );
+
+      var responseData = SignInResponseModel.fromJson(response.body);
+      if (response.statusCode != 200) {
+        logError('Could not finalize api due to: ${response.body.toString()}');
+        throw ServerException(
+          message: responseData.message.toString(),
+          statusCode: response.statusCode.toString(),
+        );
+      }
+
+      if (responseData.requiresTwoFactor! && responseData.userToken != null) {
+        if (!await _hiveAuth.boxExists('token')) {
+          await _hiveAuth.openBox('token');
+        }
+        if (!_hiveAuth.isBoxOpen('token')) {
+          await _hiveAuth.openBox('token');
+        }
+        var token = responseData.userToken;
+        var tokenBox = _hiveAuth.box('token');
+        await tokenBox.put('userToken', token);
+        logInfo('Sign in token : $token');
+      }
+
+      // if (tokenBox.containsKey('fcmToken')) {
+      //   String fcmToken = tokenBox.get('fcmToken');
+      //   final response = await APIRequest.post(
+      //     // url: ApiConstants.devicesEndpoint,
+      //     url: EndPoint.apiUrl,
+      //     body: {
+      //       'token': fcmToken,
+      //     },
+      //     token: token.accessToken,
+      //   );
+
+      //   logInfo('Devices response : $response');
+      // } else {
+      //   _messaging.getToken().then((value) async {
+      //     await tokenBox.put('fcmToken', value);
+      //     await APIRequest.post(
+      //       // url: ApiConstants.devicesEndpoint,
+      //       url: EndPoint.apiUrl,
+
+      //       body: {
+      //         'token': value,
+      //       },
+      //       token: token.accessToken,
+      //     );
+      //   });
+      // }
+
+      return responseData;
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      logError(e.toString());
+      debugPrintStack(stackTrace: s);
+      throw const ServerException(
+        message: 'Please try again later',
         statusCode: '505',
       );
     }

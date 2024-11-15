@@ -25,11 +25,10 @@ class LocalizationBloc extends Bloc<LocalizationEvent, AppLocalizationState> {
   }
 
   onGetLanguage(GetLanguage event, Emitter<AppLocalizationState> emit) async {
-    final languageCode = AppLocalStorage.get(LocalStorageKey.languagePrefs);
     emit(state.copyWith(
-      selectedLanguage: languageCode != null
+      selectedLanguage: AppLocalStorage.languageCode != null
           ? Language.values.firstWhere(
-              (item) => item.value.languageCode == languageCode,
+              (item) => item.value.languageCode == AppLocalStorage.languageCode,
               orElse: () => _selectedDefaultLanguage())
           : _selectedDefaultLanguage(),
     ));

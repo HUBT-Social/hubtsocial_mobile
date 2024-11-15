@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hubtsocial_mobile/src/core/configs/assets.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/ui/dialog/confirmation_dialog.dart';
 import 'dart:async';
 
-import 'package:date_picker_plus/date_picker_plus.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:lottie/lottie.dart';
-import '../../navigation/route.dart';
 
-sealed class Dialogs {
-  const Dialogs._();
+sealed class AppDialog {
+  const AppDialog._();
   static void showMessageDialog(Widget message, {int closeTime = 0}) {
-    Dialogs.closeDialog();
+    AppDialog.closeDialog();
     SmartDialog.show(builder: (context) {
       return message;
     });
@@ -22,7 +19,7 @@ sealed class Dialogs {
       Timer(
         Duration(seconds: closeTime),
         () {
-          Dialogs.closeDialog();
+          AppDialog.closeDialog();
         },
       );
     }
@@ -32,7 +29,7 @@ sealed class Dialogs {
     if (message != null) {
       logDebug('Loading message: $message');
     }
-    Dialogs.closeDialog();
+    AppDialog.closeDialog();
     SmartDialog.show(
         clickMaskDismiss: false,
         builder: (context) {
@@ -61,7 +58,7 @@ sealed class Dialogs {
     required VoidCallback onCancel,
     required VoidCallback onSuccess,
   }) {
-    Dialogs.closeDialog();
+    AppDialog.closeDialog();
     SmartDialog.show(builder: (context) {
       return Container(
         padding: const EdgeInsets.all(20),
@@ -131,17 +128,16 @@ sealed class Dialogs {
           SizedBox(
             height: 100,
             width: 100,
-            // child: Lottie.asset(MediaRes.success),
+            child: Lottie.asset(Assets.success),
           ),
           const SizedBox(height: 10),
           SizedBox(
             width: 200,
-            // child: BaseText(
-            //   value: message,
-            //   textAlign: TextAlign.center,
-            //   color: Colours.successColour,
-            //   maxLine: 3,
-            // ),
+            child: Text(
+              message,
+              style: context.textTheme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
           ),
         ],
       ),
@@ -163,17 +159,17 @@ sealed class Dialogs {
           SizedBox(
             height: 100,
             width: 100,
-            // child: Lottie.asset(MediaRes.wrongInput),
+            child: Lottie.asset(Assets.wrongInput),
           ),
           const SizedBox(height: 10),
           SizedBox(
             width: 200,
-            // child: BaseText(
-            //   value: message,
-            //   overflow: TextOverflow.ellipsis,
-            //   textAlign: TextAlign.center,
-            //   maxLine: 3,
-            // ),
+            child: Text(
+              message,
+              // overflow: TextOverflow.ellipsis,
+              style: context.textTheme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
           ),
         ],
       ),

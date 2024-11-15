@@ -5,19 +5,19 @@ part 'user_token.g.dart';
 @HiveType(typeId: 0)
 class UserToken extends HiveObject {
   @HiveField(0)
-  final String tokenType;
-  @HiveField(1)
   final String accessToken;
+  @HiveField(1)
+  final String refreshToken;
   @HiveField(2)
   final int expiresIn;
   @HiveField(3)
-  final String refreshToken;
+  final String tokenType;
 
   UserToken({
-    required this.tokenType,
     required this.accessToken,
-    required this.expiresIn,
     required this.refreshToken,
+    required this.expiresIn,
+    required this.tokenType,
   });
 
   @override

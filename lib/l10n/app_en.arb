@@ -24,6 +24,8 @@
     "@welcome_info": {},
     "sign_in": "Sign in",
     "@sign_in": {},
+    "enter_code": "Enter Code",
+    "@enter_code": {},
     "student_code": "Student code",
     "@student_code": {},
     "user_name": "User name",

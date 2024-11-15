@@ -100,4 +100,17 @@ class AuthRepoImpl implements AuthRepo {
       return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
     }
   }
+
+  @override
+  ResultFuture<SignInResponse> twoFactor({required String postcode}) async {
+    try {
+      final result = await _remoteDataSource.twoFactor(
+        postcode: postcode,
+      );
+
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
 }

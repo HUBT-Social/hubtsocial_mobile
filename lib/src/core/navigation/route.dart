@@ -8,6 +8,7 @@ enum AppRoute {
   getStarted('getStarted'),
   staging('staging'),
   signIn('sign-in'),
+  twoFactor('two-factor'),
   signUp('sign-up'),
   information('information'),
   home('home'),

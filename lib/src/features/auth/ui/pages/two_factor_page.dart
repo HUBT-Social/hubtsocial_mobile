@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/core/ui/input/input_field.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/background.dart';
+import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/input_two_factor.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/system_setting.dart';
-
-import '../../../../core/navigation/route.dart';
-import '../../../../core/navigation/router.dart';
-import '../../../../core/ui/dialog/dialogs.dart';
-import '../../../../core/ui/widget/loading_overlay.dart';
+import '../../../../core/ui/dialog/app_dialog.dart';
 import '../bloc/auth_bloc.dart';
 
 class TwoFactorPage extends StatefulWidget {
@@ -19,7 +15,12 @@ class TwoFactorPage extends StatefulWidget {
 }
 
 class _TwoFactorPageState extends State<TwoFactorPage> {
-  final _usernameOrEmailController = TextEditingController();
+  final otp1Controller = TextEditingController();
+  final otp2Controller = TextEditingController();
+  final otp3Controller = TextEditingController();
+  final otp4Controller = TextEditingController();
+  final otp5Controller = TextEditingController();
+  final otp6Controller = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -30,20 +31,19 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
         listener: (_, state) async {
           if (state is AuthError) {
             // AuthError when the user is not found
-            Dialogs.showMessageDialog(
-                Dialogs.errorMessage(state.message, context));
+            AppDialog.showMessageDialog(
+                AppDialog.errorMessage(state.message, context));
           } else if (state is SignedIn) {
             // SignedIn and move to Dashboard
-            Dialogs.showMessageDialog(
-                Dialogs.sucessMessage('wellcomeBack', context));
+            AppDialog.showMessageDialog(
+                AppDialog.sucessMessage('wellcomeBack', context));
             // AppNavigator.pauseAndPushNewScreenWithoutBack(
             //     context: context, routname: Dashboard.routeName, delayTime: 2);
           } else if (state is AuthLoading) {
             // Shown Loading Dialog
             // SmartDialog.showLoading();
-            Dialogs.showLoadingDialog(message: 'signing');
+            AppDialog.showLoadingDialog(message: 'đang xác thực');
           } else if (state is VerifyingTwoFactor) {
-            Dialogs.showLoadingDialog(message: 'signing');
             // Phone number is valid and move to Verification Screen
             // AppNavigator.pauseAndPushScreen(
             //   context: context,
@@ -53,6 +53,8 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
             //     'phoneNumber': phoneNumberController.text.trim(),
             //   },
             // );
+          } else {
+            AppDialog.closeDialog();
           }
         },
         builder: (context, state) {
@@ -83,7 +85,7 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            context.loc.sign_in,
+                            context.loc.enter_code,
                             style: context.textTheme.displaySmall?.copyWith(
                               color: context.colorScheme.onSurface,
                             ),
@@ -96,75 +98,31 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                                 Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 6),
-                                  child: InputField(
-                                    controller: _usernameOrEmailController,
-                                    textInputAction: TextInputAction.next,
-                                    hintText: context.loc.username_or_email,
-                                    prefixIcon: Align(
-                                      widthFactor: 1.0,
-                                      heightFactor: 1.0,
-                                      child: Icon(
-                                        Icons.person,
-                                      ),
-                                    ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      InputAuthOTP(
+                                          otpController: otp1Controller),
+                                      InputAuthOTP(
+                                          otpController: otp2Controller),
+                                      InputAuthOTP(
+                                          otpController: otp3Controller),
+                                      InputAuthOTP(
+                                          otpController: otp4Controller),
+                                      InputAuthOTP(
+                                          otpController: otp5Controller),
+                                      InputAuthOTP(
+                                          otpController: otp6Controller),
+                                    ],
                                   ),
                                 ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 6),
-                                  child: InputField.password(
-                                    controller: _passwordController,
-                                    textInputAction: TextInputAction.done,
-                                    hintText: context.loc.password,
-                                    prefixIcon: Align(
-                                      widthFactor: 1.0,
-                                      heightFactor: 1.0,
-                                      child: Icon(
-                                        Icons.lock_rounded,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Checkbox(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          value: true,
-                                          onChanged: (value) {},
-                                        ),
-                                        Text(
-                                          context.loc.remember_me,
-                                          style: context.textTheme.labelLarge,
-                                        ),
-                                      ],
-                                    ),
-                                    InkWell(
-                                      child: Text(
-                                        context
-                                            .loc.forgot_password_question_mark,
-                                        style: context.textTheme.labelLarge
-                                            ?.copyWith(
-                                          color:
-                                              context.colorScheme.surfaceTint,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
                               ],
                             ),
                           ),
                           FilledButton(
                             onPressed: () {
-                              _onLoginButtonClicked();
+                              _onTwoFactorButtonClicked();
                             },
                             child: SizedBox(
                               width: double.infinity,
@@ -173,20 +131,6 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                                 style: context.textTheme.bodyLarge?.copyWith(
                                     color: context.colorScheme.onPrimary),
                                 textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              AppRoute.signUp.push(context);
-                            },
-                            child: Text(
-                              context.loc.do_not_have_an_account,
-                              style: context.textTheme.labelLarge?.copyWith(
-                                color: context.colorScheme.surfaceTint,
                               ),
                             ),
                           ),
@@ -215,16 +159,30 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
     );
   }
 
-  void _onLoginButtonClicked() {
+  void _onTwoFactorButtonClicked() {
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
     context.closeKeyboard();
-
-    context.read<AuthBloc>().add(SignInEvent(
-          usernameOrEmail: _usernameOrEmailController.text.trim(),
-          password: _passwordController.text.trim(),
-        ));
+    String code = "";
+    code += otp1Controller.text.trim();
+    code += otp2Controller.text.trim();
+    code += otp3Controller.text.trim();
+    code += otp4Controller.text.trim();
+    code += otp5Controller.text.trim();
+    code += otp6Controller.text.trim();
+    if (code.length == 6) {
+      context.read<AuthBloc>().add(TwoFactorEvent(
+            postcode: code,
+          ));
+    } else {
+      // otp1Controller.clear();
+      // otp2Controller.clear();
+      // otp3Controller.clear();
+      // otp4Controller.clear();
+      // otp5Controller.clear();
+      // otp6Controller.clear();
+    }
   }
 }

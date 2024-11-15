@@ -5,10 +5,9 @@ import 'package:hubtsocial_mobile/src/core/ui/input/input_field.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/background.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/system_setting.dart';
 
+import '../../../../core/navigation/app_navigator.dart';
 import '../../../../core/navigation/route.dart';
-import '../../../../core/navigation/router.dart';
-import '../../../../core/ui/dialog/dialogs.dart';
-import '../../../../core/ui/widget/loading_overlay.dart';
+import '../../../../core/ui/dialog/app_dialog.dart';
 import '../bloc/auth_bloc.dart';
 
 class SignInPage extends StatefulWidget {
@@ -30,29 +29,24 @@ class _SignInPageState extends State<SignInPage> {
         listener: (_, state) async {
           if (state is AuthError) {
             // AuthError when the user is not found
-            Dialogs.showMessageDialog(
-                Dialogs.errorMessage(state.message, context));
+            AppDialog.showMessageDialog(
+                AppDialog.errorMessage(state.message, context));
           } else if (state is SignedIn) {
             // SignedIn and move to Dashboard
-            Dialogs.showMessageDialog(
-                Dialogs.sucessMessage('wellcomeBack', context));
-            // AppNavigator.pauseAndPushNewScreenWithoutBack(
-            //     context: context, routname: Dashboard.routeName, delayTime: 2);
+            AppDialog.showMessageDialog(
+                AppDialog.sucessMessage('wellcomeBack', context));
+            AppNavigator.pauseAndPushNewScreenWithoutBack(
+                context: context, routname: AppRoute.home.path, delayTime: 2);
           } else if (state is AuthLoading) {
             // Shown Loading Dialog
-            // SmartDialog.showLoading();
-            Dialogs.showLoadingDialog(message: 'signing');
+            AppDialog.showLoadingDialog(message: 'signing');
           } else if (state is VerifyingTwoFactor) {
-            Dialogs.showLoadingDialog(message: 'signing');
-            // Phone number is valid and move to Verification Screen
-            // AppNavigator.pauseAndPushScreen(
-            //   context: context,
-            //   routname: VerificationScreen.routeName,
-            //   delayTime: 0,
-            //   arguments: {
-            //     'phoneNumber': phoneNumberController.text.trim(),
-            //   },
-            // );
+            //Phone number is valid and move to Verification Screen
+            AppNavigator.pauseAndPushScreen(
+              context: context,
+              routeName: AppRoute.twoFactor.path,
+              delayTime: 0,
+            );
           }
         },
         builder: (context, state) {
@@ -164,7 +158,7 @@ class _SignInPageState extends State<SignInPage> {
                           ),
                           FilledButton(
                             onPressed: () {
-                              _onLoginButtonClicked();
+                              _onSignInButtonClicked();
                             },
                             child: SizedBox(
                               width: double.infinity,
@@ -215,7 +209,7 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  void _onLoginButtonClicked() {
+  void _onSignInButtonClicked() {
     if (!_formKey.currentState!.validate()) {
       return;
     }

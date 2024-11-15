@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/two_factor_usercase.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../domain/entities/sign_in_response.dart';
@@ -20,12 +21,14 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
     required SignInUserCase signIn,
+    required TwoFactorUserCase twoFactor,
     required SignUp signUp,
     required VerifyPhoneNumber verifyPhoneNumber,
     required SentOTPVerification sentOTPVerification,
     required ResetPassword resetPassword,
     required SignOut signOut,
   })  : _signIn = signIn,
+        _twoFactor = twoFactor,
         _signUp = signUp,
         _verifyPhoneNumber = verifyPhoneNumber,
         _sentOTPVerification = sentOTPVerification,
@@ -36,6 +39,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(const AuthLoading());
     });
     on<SignInEvent>(_signInHandler);
+    on<TwoFactorEvent>(_twoFactorHandler);
     on<SignUpEvent>(_signUpHandler);
     on<VerifyTwoFactorEvent>(_verifyTwoFactorHandler);
     on<SentOTPVerificationEvent>(_sentOTPVerificationHandler);
@@ -44,6 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   final SignInUserCase _signIn;
+  final TwoFactorUserCase _twoFactor;
   final SignUp _signUp;
   final VerifyPhoneNumber _verifyPhoneNumber;
   final SentOTPVerification _sentOTPVerification;
@@ -64,16 +69,46 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (failure) {
         switch (int.parse(failure.statusCode)) {
           case 401:
-            emit(AuthError("unauthorized"));
+            emit(AuthError(failure.message));
             break;
           default:
-            emit(AuthError("serverError"));
+            emit(AuthError(failure.message));
             break;
         }
       },
       (response) {
-        if (response.requiresTwoFactor) {
+        if (response.requiresTwoFactor!) {
+          emit(VerifyingTwoFactor());
+        } else {
           emit(SignedIn(response));
+        }
+      },
+    );
+  }
+
+  Future<void> _twoFactorHandler(
+    TwoFactorEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    final result = await _twoFactor(
+      TwoFactorParams(
+        postcode: event.postcode,
+      ),
+    );
+    result.fold(
+      (failure) {
+        switch (int.parse(failure.statusCode)) {
+          case 401:
+            emit(AuthError(failure.message));
+            break;
+          default:
+            emit(AuthError(failure.message));
+            break;
+        }
+      },
+      (response) {
+        if (response.requiresTwoFactor!) {
+          emit(VerifyingTwoFactor());
         } else {
           emit(SignedIn(response));
         }

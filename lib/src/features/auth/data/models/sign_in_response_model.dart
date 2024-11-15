@@ -18,13 +18,13 @@ class SignInResponseModel extends SignInResponse {
     };
   }
 
-  factory SignInResponseModel.fromMap(Map<String, dynamic> map) {
+  factory SignInResponseModel.fromMap(Map<String, dynamic> json) {
     return SignInResponseModel(
-      userToken: map["userToken"] == null
+      userToken: json["userToken"] == null
           ? null
-          : UserTokenModel.fromJson(map["userToken"]),
-      message: map["message"],
-      requiresTwoFactor: map["requiresTwoFactor"],
+          : UserTokenModel.fromMap(json["userToken"]),
+      message: json["message"],
+      requiresTwoFactor: json["requiresTwoFactor"],
     );
   }
 

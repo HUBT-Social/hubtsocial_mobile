@@ -24,6 +24,8 @@
     "@welcome_info": {},
     "sign_in": "Đăng nhập",
     "@sign_in": {},
+    "enter_code": "Điền mã",
+    "@enter_code": {},
     "student_code": "Mã sinh viên",
     "@student_code": {},
     "user_name": "Tên người dùng",
