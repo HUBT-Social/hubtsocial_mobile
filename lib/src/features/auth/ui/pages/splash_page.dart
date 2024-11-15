@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 
 import '../../../../core/configs/assets.dart';
+import '../../../../core/navigation/app_navigator.dart';
 
-class SplashPage extends StatelessWidget {
+class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
+
+  @override
+  State<SplashPage> createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> {
+  @override
+  void initState() {
+    super.initState();
+    AppNavigator.pauseAndPushNewScreenWithoutBack(
+        context: context, routname: AppRoute.home.path, delayTime: 2);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,13 +76,4 @@ class SplashPage extends StatelessWidget {
       ),
     );
   }
-
-  // void _onUserState(BuildContext context, UserState userState) {
-  //   if (userState is! UserLoaded) {
-  //     // User not loaded yet
-  //     return;
-  //   }
-
-  //   AppRoute.getStarted.go(context);
-  // }
 }

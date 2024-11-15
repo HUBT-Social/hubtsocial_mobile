@@ -62,17 +62,17 @@ final GoRouter router = GoRouter(
       if (tokenBox.isEmpty || !tokenBox.containsKey('userToken')) {
         return joinRoute(['', AppRoute.getStarted.path]);
       }
-      if (user == null) {
-        if (state.fullPath != null) {
-          var param = Map<String, String>.from(state.uri.queryParameters);
-          logInfo('Param $param');
-          param.putIfAbsent(
-              'forwardRoute', () => state.fullPath!.replaceAll('/', ''));
-          return parseRoute(
-              route: '/${AppRoute.home.path}', queryParameters: param);
-        }
-        return '/';
-      }
+      // if (user == null) {
+      // if (state.fullPath != null) {
+      //   var param = Map<String, String>.from(state.uri.queryParameters);
+      //   logInfo('Param $param');
+      //   param.putIfAbsent(
+      //       'forwardRoute', () => state.fullPath!.replaceAll('/', ''));
+      //   return parseRoute(
+      //       route: '/${AppRoute.home.path}', queryParameters: param);
+      // }
+      // return '/';
+      // }
     }
     return null;
   },
@@ -87,7 +87,7 @@ final GoRouter router = GoRouter(
           // Check if token is expired
           var currentTimestamp = DateTime.now().millisecondsSinceEpoch;
           if (currentTimestamp ~/ 1000 < payload['exp']) {
-            return const HomeScreen();
+            return const SplashPage();
           }
         }
         // Move to sign in screen if no token found
