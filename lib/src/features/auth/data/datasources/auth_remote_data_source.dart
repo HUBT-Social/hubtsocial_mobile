@@ -311,18 +311,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
-      if (responseData.requiresTwoFactor! && responseData.userToken != null) {
-        if (!await _hiveAuth.boxExists('token')) {
-          await _hiveAuth.openBox('token');
-        }
-        if (!_hiveAuth.isBoxOpen('token')) {
-          await _hiveAuth.openBox('token');
-        }
-        var token = responseData.userToken;
-        var tokenBox = _hiveAuth.box('token');
-        await tokenBox.put('userToken', token);
-        logInfo('Sign in token : $token');
+      if (!await _hiveAuth.boxExists('token')) {
+        await _hiveAuth.openBox('token');
       }
+      if (!_hiveAuth.isBoxOpen('token')) {
+        await _hiveAuth.openBox('token');
+      }
+      var token = responseData.userToken;
+      var tokenBox = _hiveAuth.box('token');
+      await tokenBox.put('userToken', token);
+      logInfo('Sign in token : $token');
 
       // if (tokenBox.containsKey('fcmToken')) {
       //   String fcmToken = tokenBox.get('fcmToken');

@@ -98,11 +98,6 @@ final GoRouter router = GoRouter(
       },
       routes: [
         GoRoute(
-          path: AppRoute.splash.path,
-          builder: (context, state) => const SplashPage(),
-        ),
-
-        GoRoute(
           path: AppRoute.getStarted.path,
           builder: (context, state) => const GetStartedPage(),
         ),

@@ -36,7 +36,7 @@ class _SignInPageState extends State<SignInPage> {
             AppDialog.showMessageDialog(
                 AppDialog.sucessMessage('wellcomeBack', context));
             AppNavigator.pauseAndPushNewScreenWithoutBack(
-                context: context, routname: AppRoute.home.path, delayTime: 2);
+                context: context, routname: AppRoute.splash.path, delayTime: 2);
           } else if (state is AuthLoading) {
             // Shown Loading Dialog
             AppDialog.showLoadingDialog(message: 'signing');

@@ -4,6 +4,8 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/background.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/input_two_factor.dart';
 import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/system_setting.dart';
+import '../../../../core/navigation/app_navigator.dart';
+import '../../../../core/navigation/route.dart';
 import '../../../../core/ui/dialog/app_dialog.dart';
 import '../bloc/auth_bloc.dart';
 
@@ -30,29 +32,15 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (_, state) async {
           if (state is AuthError) {
-            // AuthError when the user is not found
             AppDialog.showMessageDialog(
                 AppDialog.errorMessage(state.message, context));
           } else if (state is SignedIn) {
-            // SignedIn and move to Dashboard
             AppDialog.showMessageDialog(
                 AppDialog.sucessMessage('wellcomeBack', context));
-            // AppNavigator.pauseAndPushNewScreenWithoutBack(
-            //     context: context, routname: Dashboard.routeName, delayTime: 2);
+            AppNavigator.pauseAndPushNewScreenWithoutBack(
+                context: context, routname: AppRoute.splash.path, delayTime: 2);
           } else if (state is AuthLoading) {
-            // Shown Loading Dialog
-            // SmartDialog.showLoading();
-            AppDialog.showLoadingDialog(message: 'đang xác thực');
-          } else if (state is VerifyingTwoFactor) {
-            // Phone number is valid and move to Verification Screen
-            // AppNavigator.pauseAndPushScreen(
-            //   context: context,
-            //   routname: VerificationScreen.routeName,
-            //   delayTime: 0,
-            //   arguments: {
-            //     'phoneNumber': phoneNumberController.text.trim(),
-            //   },
-            // );
+            AppDialog.showLoadingDialog(message: 'signing');
           } else {
             AppDialog.closeDialog();
           }

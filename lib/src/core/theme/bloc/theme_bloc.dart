@@ -33,7 +33,7 @@ class ThemeBloc extends Bloc<ThemeEvent, AppThemeState> {
 
   ThemeModel _selectedDefaultTheme() {
     ThemeModel theme = ThemeModel.system;
-    AppLocalStorage.update(LocalStorageKey.themePrefs, theme.value);
+    AppLocalStorage.update(LocalStorageKey.themePrefs, theme.value.toString());
     return theme;
   }
 }

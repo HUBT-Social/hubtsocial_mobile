@@ -1,10 +1,9 @@
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import 'local_storage_key.dart';
 
 class AppLocalStorage {
-  static final languageCode =
-      AppLocalStorage.get(LocalStorageKey.languagePrefs);
+  static String currentLanguageCode = "";
   static final localBox = Hive.box(LocalStorageKey.localStorage);
 
   static create(Map data) {

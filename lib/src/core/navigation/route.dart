@@ -4,7 +4,7 @@ import 'package:hubtsocial_mobile/src/core/navigation/router.dart';
 
 enum AppRoute {
   // none(''),
-  splash('splash'),
+  splash('/'),
   getStarted('getStarted'),
   staging('staging'),
   signIn('sign-in'),

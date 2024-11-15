@@ -18,9 +18,10 @@ class APIRequest {
       String? token}) async {
     debugPrint(jsonEncode(body).toString());
 
+    var a = AppLocalStorage.currentLanguageCode;
     final response = await http.post(
       Uri.parse(
-        "$url?culture=${AppLocalStorage.languageCode}",
+        "$url?culture=${AppLocalStorage.currentLanguageCode}",
       ),
       headers: {
         'Content-Type': 'application/json',
@@ -39,7 +40,7 @@ class APIRequest {
     debugPrint(jsonEncode(body).toString());
     final response = await http.patch(
       Uri.parse(
-        "$url?culture=${AppLocalStorage.languageCode}",
+        "$url?culture=${AppLocalStorage.currentLanguageCode}",
       ),
       headers: {
         'Content-Type': 'application/json',
@@ -59,7 +60,7 @@ class APIRequest {
   }) async {
     final response = await http.put(
       Uri.parse(
-        "$url?culture=${AppLocalStorage.languageCode}",
+        "$url?culture=${AppLocalStorage.currentLanguageCode}",
       ),
       headers: {
         'Content-Type': 'application/json',
@@ -79,7 +80,7 @@ class APIRequest {
   }) async {
     final response = await http.get(
       Uri.parse(
-        "$url?culture=${AppLocalStorage.languageCode}",
+        "$url?culture=${AppLocalStorage.currentLanguageCode}",
       ),
       headers: {
         'Content-Type': 'application/json',
@@ -98,7 +99,7 @@ class APIRequest {
   }) async {
     final response = await http.delete(
       Uri.parse(
-        "$url?culture=${AppLocalStorage.languageCode}",
+        "$url?culture=${AppLocalStorage.currentLanguageCode}",
       ),
       headers: {
         'Content-Type': 'application/json',

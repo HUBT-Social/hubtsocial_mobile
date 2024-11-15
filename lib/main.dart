@@ -16,6 +16,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/app/my_app.dart';
 import 'package:hubtsocial_mobile/src/core/configs/environment.dart';
 import 'package:loggy/loggy.dart';
+import 'package:path_provider/path_provider.dart';
 import 'src/core/injections/injections.dart';
 import 'src/core/local_storage/local_storage_key.dart';
 import 'src/core/notification/notification_service.dart';
@@ -46,6 +47,8 @@ void registerAdapters() {
 
 Future<void> _initLocalStorage() async {
   await Hive.initFlutter();
+  final appDocumentDirectory = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
   registerAdapters();
 
   await Hive.openBox(LocalStorageKey.localStorage);
