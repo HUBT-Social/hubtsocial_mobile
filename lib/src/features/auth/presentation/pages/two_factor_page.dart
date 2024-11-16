@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/background.dart';
-import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/input_two_factor.dart';
-import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/system_setting.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/background.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_two_factor.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
+
 import '../../../../core/navigation/app_navigator.dart';
 import '../../../../core/navigation/route.dart';
 import '../../../../core/ui/dialog/app_dialog.dart';
@@ -74,11 +75,11 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                         children: [
                           Text(
                             context.loc.enter_code,
-                            style: context.textTheme.displaySmall?.copyWith(
+                            style: context.textTheme.headlineMedium?.copyWith(
                               color: context.colorScheme.onSurface,
                             ),
                           ),
-                          SizedBox(height: 6),
+                          SizedBox(height: 12),
                           Form(
                             key: _formKey,
                             child: Column(
@@ -107,6 +108,9 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                                 ),
                               ],
                             ),
+                          ),
+                          SizedBox(
+                            height: 12,
                           ),
                           FilledButton(
                             onPressed: () {

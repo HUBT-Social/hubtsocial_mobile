@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+import 'package:hubtsocial_mobile/src/core/errors/exceptions.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
-import 'package:jwt_decode_full/jwt_decode_full.dart';
-import 'package:hubtsocial_mobile/src/core/errors/exceptions.dart';
 import 'package:hubtsocial_mobile/src/features/auth/data/models/user_token_model.dart';
+import 'package:jwt_decode_full/jwt_decode_full.dart';
 
 import '../configs/end_point.dart';
 
@@ -18,7 +18,6 @@ class APIRequest {
       String? token}) async {
     debugPrint(jsonEncode(body).toString());
 
-    var a = AppLocalStorage.currentLanguageCode;
     final response = await http.post(
       Uri.parse(
         "$url?culture=${AppLocalStorage.currentLanguageCode}",

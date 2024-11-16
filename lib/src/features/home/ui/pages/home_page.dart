@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:lottie/lottie.dart';
+
 import '../../../../core/configs/assets.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 
@@ -57,6 +59,41 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             height: 200,
             color: Colors.amber,
+          ),
+          SizedBox(
+            height: 700,
+            width: 500,
+            child: Lottie.asset(Assets.pageUnderConstruction),
+          ),
+          SizedBox(
+            height: 700,
+            width: 500,
+            child: Lottie.asset(Assets.verificationWaiting),
+          ),
+          SizedBox(
+            height: 700,
+            width: 500,
+            child: Lottie.asset(Assets.success),
+          ),
+          SizedBox(
+            height: 700,
+            width: 500,
+            child: Lottie.asset(Assets.wrongInput),
+          ),
+          SizedBox(
+            height: 700,
+            width: 500,
+            child: Lottie.asset(Assets.writeInput),
+          ),
+          SizedBox(
+            height: 700,
+            width: 500,
+            child: Lottie.asset(Assets.paidSuccess),
+          ),
+          SizedBox(
+            height: 700,
+            width: 500,
+            child: Lottie.asset(Assets.paidFailed),
           ),
           Container(
             height: 500,

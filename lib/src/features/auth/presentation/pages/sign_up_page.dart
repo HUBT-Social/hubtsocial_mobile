@@ -49,11 +49,11 @@ class _SignUpPageState extends State<SignUpPage> {
                   children: [
                     Text(
                       context.loc.sign_up,
-                      style: context.textTheme.displaySmall?.copyWith(
+                      style: context.textTheme.headlineMedium?.copyWith(
                         color: context.colorScheme.onSurface,
                       ),
                     ),
-                    SizedBox(height: 6),
+                    SizedBox(height: 12),
                     Column(
                       children: [
                         Padding(
@@ -154,9 +154,14 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ],
                     ),
+                    SizedBox(
+                      height: 12,
+                    ),
                     FilledButton(
                       onPressed: () {
-                        AppRoute.information.go(context);
+
+
+
                       },
                       child: SizedBox(
                         width: double.infinity,

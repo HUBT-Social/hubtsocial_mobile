@@ -4,7 +4,7 @@ import 'package:hubtsocial_mobile/src/features/auth/data/models/user_token_model
 import 'package:hubtsocial_mobile/src/features/auth/domain/entities/sign_in_response.dart';
 
 class SignInResponseModel extends SignInResponse {
-  SignInResponseModel({
+  const SignInResponseModel({
     required super.userToken,
     required super.message,
     required super.requiresTwoFactor,

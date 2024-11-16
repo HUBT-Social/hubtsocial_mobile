@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
-import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/system_setting.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
 
 import '../widgets/background.dart';
 

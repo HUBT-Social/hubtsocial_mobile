@@ -14,7 +14,6 @@ import '../../domain/usecases/sign_up.dart';
 import '../../domain/usecases/verify_phone_number.dart';
 
 part 'auth_event.dart';
-
 part 'auth_state.dart';
 
 @Injectable()

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/ui/input/input_field.dart';
-import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/background.dart';
-import 'package:hubtsocial_mobile/src/features/auth/ui/widgets/system_setting.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/background.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
 
 import '../../../../core/navigation/app_navigator.dart';
 import '../../../../core/navigation/route.dart';
@@ -78,11 +78,11 @@ class _SignInPageState extends State<SignInPage> {
                         children: [
                           Text(
                             context.loc.sign_in,
-                            style: context.textTheme.displaySmall?.copyWith(
+                            style: context.textTheme.headlineMedium?.copyWith(
                               color: context.colorScheme.onSurface,
                             ),
                           ),
-                          SizedBox(height: 6),
+                          SizedBox(height: 12),
                           Form(
                             key: _formKey,
                             child: Column(
@@ -121,25 +121,8 @@ class _SignInPageState extends State<SignInPage> {
                                 ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Row(
-                                      children: [
-                                        Checkbox(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          value: true,
-                                          onChanged: (value) {},
-                                        ),
-                                        Text(
-                                          context.loc.remember_me,
-                                          style: context.textTheme.labelLarge,
-                                        ),
-                                      ],
-                                    ),
                                     InkWell(
                                       child: Text(
                                         context
@@ -155,6 +138,9 @@ class _SignInPageState extends State<SignInPage> {
                                 )
                               ],
                             ),
+                          ),
+                          SizedBox(
+                            height: 12,
                           ),
                           FilledButton(
                             onPressed: () {
