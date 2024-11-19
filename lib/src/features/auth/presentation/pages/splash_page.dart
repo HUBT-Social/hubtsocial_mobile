@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 
 import '../../../../core/configs/assets.dart';
-import '../../../../core/navigation/app_navigator.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -17,8 +17,6 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    AppNavigator.pauseAndPushNewScreenWithoutBack(
-        context: context, routname: AppRoute.home.path, delayTime: 2);
   }
 
   @override
@@ -42,6 +40,15 @@ class _SplashPageState extends State<SplashPage> {
                         begin: const Offset(10, 10),
                         end: const Offset(1, 1))
                     .fadeIn(duration: const Duration(milliseconds: 500))
+                    .callback(
+                      delay: const Duration(seconds: 2),
+                      callback: (value) {
+                        while (context.canPop()) {
+                          context.pop();
+                        }
+                        AppRoute.home.pushReplacement(context);
+                      },
+                    ),
               ],
             ),
             Column(

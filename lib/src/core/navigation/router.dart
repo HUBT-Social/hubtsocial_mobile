@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/pages/email_verify_page.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/pages/get_started_page.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/pages/information_page.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/pages/sign_in_page.dart';
@@ -53,6 +54,7 @@ final GoRouter router = GoRouter(
           state.fullPath!.contains(AppRoute.signIn.path) ||
           state.fullPath!.contains(AppRoute.twoFactor.path) ||
           state.fullPath!.contains(AppRoute.signUp.path) ||
+          state.fullPath!.contains(AppRoute.emailVerify.path) ||
           state.fullPath!.contains('reset-password') ||
           state.fullPath!.contains('enter-phone')) {
         return null;
@@ -119,7 +121,17 @@ final GoRouter router = GoRouter(
 
         GoRoute(
           path: AppRoute.signUp.path,
-          builder: (context, state) => const SignUpPage(),
+          builder: (context, state) => BlocProvider(
+            create: (context) => getIt<AuthBloc>(),
+            child: const SignUpPage(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoute.emailVerify.path,
+          builder: (context, state) => BlocProvider(
+            create: (context) => getIt<AuthBloc>(),
+            child: EmailVerifyPage(),
+          ),
         ),
         GoRoute(
           path: AppRoute.information.path,

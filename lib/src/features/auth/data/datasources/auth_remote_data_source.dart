@@ -22,16 +22,12 @@ abstract class AuthRemoteDataSource {
   });
 
   Future<void> signUp({
-    required String phoneNumber,
-    required String fullName,
+    required String userName,
+    required String email,
     required String password,
-    required String token,
+    required String confirmPassword,
   });
 
-  Future<void> verifyPhoneNumber({required String phoneNumber});
-
-  Future<String> sentOTPVerification(
-      {required String phoneNumber, required String otp});
   Future<void> resetPassword({
     required String newPassword,
     required String token,
@@ -39,6 +35,8 @@ abstract class AuthRemoteDataSource {
   Future<void> signOut();
 
   Future<SignInResponseModel> twoFactor({required String postcode});
+
+  Future<SignInResponseModel> verifyEmail({required String postcode});
 }
 
 @LazySingleton(
@@ -132,83 +130,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<String> sentOTPVerification(
-      {required String phoneNumber, required String otp}) async {
-    try {
-      final response = await APIRequest.post(
-        url: '${EndPoint.apiUrl}/verify-otp',
-        body: {
-          'phoneNumber': phoneNumber,
-          'otp': otp,
-        },
-      );
-      if (response.statusCode != 200) {
-        logError('Could not finalize api due to: ${response.body.toString()}');
-        throw ServerException(
-          message: response.body.toString(),
-          statusCode: response.statusCode.toString(),
-        );
-      }
-      var payload = jsonDecode(response.body);
-      return payload['accessToken'];
-    } on ServerException {
-      rethrow;
-    } catch (e, s) {
-      logError(e.toString());
-      debugPrintStack(stackTrace: s);
-      throw const ServerException(
-        message: 'Issue with the server',
-        statusCode: '505',
-      );
-    }
-  }
-
-  @override
-  Future<void> verifyPhoneNumber({required String phoneNumber}) async {
-    try {
-      final response = await APIRequest.post(
-        url: '${EndPoint.apiUrl}/send-otp',
-        body: {
-          'phoneNumber': phoneNumber,
-        },
-      );
-      logInfo(
-          ' code ${response.statusCode.toString()} message ${jsonDecode(response.body).toString()}');
-      if (response.statusCode != 200) {
-        logError('Could not finalize api due to: ${response.body.toString()}');
-        throw ServerException(
-          message: response.body.toString(),
-          statusCode: response.statusCode.toString(),
-        );
-      }
-    } on ServerException {
-      rethrow;
-    } catch (e, s) {
-      logError(e.toString());
-      debugPrintStack(stackTrace: s);
-      throw const ServerException(
-        message: 'Issue with the server',
-        statusCode: '505',
-      );
-    }
-  }
-
-  @override
   Future<void> signUp({
-    required String phoneNumber,
-    required String fullName,
+    required String userName,
+    required String email,
     required String password,
-    required String token,
+    required String confirmPassword,
   }) async {
-    logInfo('phone number :$phoneNumber, name: $fullName, password: $password');
+    logInfo('phone number :$userName, name: $email, password: $password');
     try {
-      final response = await APIRequest.patch(
-        url: '${EndPoint.apiUrl}/set-password',
+      final response = await APIRequest.post(
+        url: EndPoint.authSignUp,
         body: {
-          'fullName': fullName,
-          'newPassword': password,
+          "userName": userName,
+          "email": email,
+          "password": password,
+          "confirmPassword": confirmPassword,
         },
-        token: token,
       );
 
       if (response.statusCode != 200) {
@@ -218,9 +155,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           statusCode: response.statusCode.toString(),
         );
       }
+
+      return;
+    } on ServerException {
+      rethrow;
     } catch (e, s) {
       logError(e.toString());
-      debugPrintStack(stackTrace: s);
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Issue with the server',
         statusCode: '505',
@@ -297,6 +238,76 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final response = await APIRequest.post(
         url: EndPoint.authSignInTwoFactor,
+        body: {
+          'postcode': postcode,
+        },
+      );
+
+      var responseData = SignInResponseModel.fromJson(response.body);
+      if (response.statusCode != 200) {
+        logError('Could not finalize api due to: ${response.body.toString()}');
+        throw ServerException(
+          message: responseData.message.toString(),
+          statusCode: response.statusCode.toString(),
+        );
+      }
+
+      if (!await _hiveAuth.boxExists('token')) {
+        await _hiveAuth.openBox('token');
+      }
+      if (!_hiveAuth.isBoxOpen('token')) {
+        await _hiveAuth.openBox('token');
+      }
+      var token = responseData.userToken;
+      var tokenBox = _hiveAuth.box('token');
+      await tokenBox.put('userToken', token);
+      logInfo('Sign in token : $token');
+
+      // if (tokenBox.containsKey('fcmToken')) {
+      //   String fcmToken = tokenBox.get('fcmToken');
+      //   final response = await APIRequest.post(
+      //     // url: ApiConstants.devicesEndpoint,
+      //     url: EndPoint.apiUrl,
+      //     body: {
+      //       'token': fcmToken,
+      //     },
+      //     token: token.accessToken,
+      //   );
+
+      //   logInfo('Devices response : $response');
+      // } else {
+      //   _messaging.getToken().then((value) async {
+      //     await tokenBox.put('fcmToken', value);
+      //     await APIRequest.post(
+      //       // url: ApiConstants.devicesEndpoint,
+      //       url: EndPoint.apiUrl,
+
+      //       body: {
+      //         'token': value,
+      //       },
+      //       token: token.accessToken,
+      //     );
+      //   });
+      // }
+
+      return responseData;
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      logError(e.toString());
+      debugPrintStack(stackTrace: s);
+      throw const ServerException(
+        message: 'Please try again later',
+        statusCode: '505',
+      );
+    }
+  }
+
+  @override
+  Future<SignInResponseModel> verifyEmail({required String postcode}) async {
+    try {
+      final response = await APIRequest.post(
+        url: EndPoint.authSignUpVerifyEmail,
         body: {
           'postcode': postcode,
         },

@@ -5,7 +5,6 @@ import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/backgro
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_two_factor.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
 
-import '../../../../core/navigation/app_navigator.dart';
 import '../../../../core/navigation/route.dart';
 import '../../../../core/ui/dialog/app_dialog.dart';
 import '../bloc/auth_bloc.dart';
@@ -24,7 +23,6 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
   final otp4Controller = TextEditingController();
   final otp5Controller = TextEditingController();
   final otp6Controller = TextEditingController();
-  final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -38,8 +36,8 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
           } else if (state is SignedIn) {
             AppDialog.showMessageDialog(
                 AppDialog.sucessMessage('wellcomeBack', context));
-            AppNavigator.pauseAndPushNewScreenWithoutBack(
-                context: context, routname: AppRoute.splash.path, delayTime: 2);
+            AppDialog.closeDialog();
+            AppRoute.splash.go(context);
           } else if (state is AuthLoading) {
             AppDialog.showLoadingDialog(message: 'signing');
           } else {

@@ -5,36 +5,33 @@ import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/repos/auth_repo.dart';
 
 @LazySingleton()
-class SignUp extends UseCaseWithParams<void, SignUpParams> {
-  const SignUp(this._repo);
+class SignUpUserCase extends UseCaseWithParams<void, SignUpParams> {
+  const SignUpUserCase(this._repo);
 
   final AuthRepo _repo;
 
   @override
   ResultFuture<void> call(SignUpParams param) => _repo.signUp(
-        phoneNumber: param.phoneNumber,
+        userName: param.userName,
+        email: param.email,
         password: param.password,
-        fullName: param.fullName,
-        token: param.token,
+        confirmPassword: param.confirmPassword,
       );
 }
 
 class SignUpParams extends Equatable {
   const SignUpParams({
-    required this.phoneNumber,
+    required this.userName,
+    required this.email,
     required this.password,
-    required this.fullName,
-    required this.token,
+    required this.confirmPassword,
   });
 
-  // const SignUpParams.empty()
-  //     : this(phoneNumber: '', password: '', fullName: '');
-
-  final String phoneNumber;
+  final String userName;
+  final String email;
   final String password;
-  final String fullName;
-  final String token;
+  final String confirmPassword;
 
   @override
-  List<String> get props => [phoneNumber, password, fullName];
+  List<String> get props => [userName, email, password, confirmPassword];
 }

@@ -1,31 +1,27 @@
 import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
-import '../entities/sign_in_response.dart';
+import '../entities/user_response.dart';
 
 abstract class AuthRepo {
   const AuthRepo();
 
-  ResultFuture<SignInResponse> signIn({
+  ResultFuture<UserResponse> signIn({
     required String usernameOrEmail,
     required String password,
   });
-  ResultFuture<SignInResponse> twoFactor({
+
+  ResultFuture<UserResponse> twoFactor({
     required String postcode,
   });
 
   ResultFuture<void> signUp({
-    required String phoneNumber,
+    required String userName,
+    required String email,
     required String password,
-    required String fullName,
-    required String token,
+    required String confirmPassword,
   });
 
-  ResultFuture<void> verifyPhoneNumber({
-    required String phoneNumber,
-  });
-
-  ResultFuture<String> sentOTPVerification({
-    required String phoneNumber,
-    required String otp,
+  ResultFuture<UserResponse> verifyEmail({
+    required String postcode,
   });
 
   ResultFuture<void> resetPassword({

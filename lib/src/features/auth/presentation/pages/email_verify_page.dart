@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/core/ui/input/input_field.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/background.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_two_factor.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
 import '../../../../core/navigation/route.dart';
 import '../../../../core/ui/dialog/app_dialog.dart';
 import '../bloc/auth_bloc.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class EmailVerifyPage extends StatefulWidget {
+  const EmailVerifyPage({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<EmailVerifyPage> createState() => _EmailVerifyPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
-  final _usernameOrEmailController = TextEditingController();
-  final _passwordController = TextEditingController();
+class _EmailVerifyPageState extends State<EmailVerifyPage> {
+  final otp1Controller = TextEditingController();
+  final otp2Controller = TextEditingController();
+  final otp3Controller = TextEditingController();
+  final otp4Controller = TextEditingController();
+  final otp5Controller = TextEditingController();
+  final otp6Controller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -26,22 +30,17 @@ class _SignInPageState extends State<SignInPage> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (_, state) async {
           if (state is AuthError) {
-            // AuthError when the user is not found
             AppDialog.showMessageDialog(
                 AppDialog.errorMessage(state.message, context));
-          } else if (state is SignedIn) {
-            // SignedIn and move to Dashboard
+          } else if (state is SignedUp) {
             AppDialog.showMessageDialog(
                 AppDialog.sucessMessage('wellcomeBack', context));
             AppDialog.closeDialog();
             AppRoute.splash.go(context);
           } else if (state is AuthLoading) {
-            // Shown Loading Dialog
-            AppDialog.showLoadingDialog(message: 'signing');
-          } else if (state is VerifyTwoFactor) {
-            //Phone number is valid and move to Verification Screen
+            AppDialog.showLoadingDialog(message: 'Verify');
+          } else {
             AppDialog.closeDialog();
-            AppRoute.twoFactor.push(context);
           }
         },
         builder: (context, state) {
@@ -72,7 +71,7 @@ class _SignInPageState extends State<SignInPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            context.loc.sign_in,
+                            context.loc.enter_code,
                             style: context.textTheme.headlineMedium?.copyWith(
                               color: context.colorScheme.onSurface,
                             ),
@@ -85,52 +84,25 @@ class _SignInPageState extends State<SignInPage> {
                                 Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 6),
-                                  child: InputField(
-                                    controller: _usernameOrEmailController,
-                                    textInputAction: TextInputAction.next,
-                                    hintText: context.loc.username_or_email,
-                                    prefixIcon: Align(
-                                      widthFactor: 1.0,
-                                      heightFactor: 1.0,
-                                      child: Icon(
-                                        Icons.person,
-                                      ),
-                                    ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      InputAuthOTP(
+                                          otpController: otp1Controller),
+                                      InputAuthOTP(
+                                          otpController: otp2Controller),
+                                      InputAuthOTP(
+                                          otpController: otp3Controller),
+                                      InputAuthOTP(
+                                          otpController: otp4Controller),
+                                      InputAuthOTP(
+                                          otpController: otp5Controller),
+                                      InputAuthOTP(
+                                          otpController: otp6Controller),
+                                    ],
                                   ),
                                 ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 6),
-                                  child: InputField.password(
-                                    controller: _passwordController,
-                                    textInputAction: TextInputAction.done,
-                                    hintText: context.loc.password,
-                                    prefixIcon: Align(
-                                      widthFactor: 1.0,
-                                      heightFactor: 1.0,
-                                      child: Icon(
-                                        Icons.lock_rounded,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    InkWell(
-                                      child: Text(
-                                        context
-                                            .loc.forgot_password_question_mark,
-                                        style: context.textTheme.labelLarge
-                                            ?.copyWith(
-                                          color:
-                                              context.colorScheme.surfaceTint,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
                               ],
                             ),
                           ),
@@ -139,7 +111,7 @@ class _SignInPageState extends State<SignInPage> {
                           ),
                           FilledButton(
                             onPressed: () {
-                              _onSignInButtonClicked();
+                              _onVerifyButtonClicked();
                             },
                             child: SizedBox(
                               width: double.infinity,
@@ -148,20 +120,6 @@ class _SignInPageState extends State<SignInPage> {
                                 style: context.textTheme.bodyLarge?.copyWith(
                                     color: context.colorScheme.onPrimary),
                                 textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              AppRoute.signUp.push(context);
-                            },
-                            child: Text(
-                              context.loc.do_not_have_an_account,
-                              style: context.textTheme.labelLarge?.copyWith(
-                                color: context.colorScheme.surfaceTint,
                               ),
                             ),
                           ),
@@ -190,16 +148,30 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  void _onSignInButtonClicked() {
+  void _onVerifyButtonClicked() {
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
     context.closeKeyboard();
-
-    context.read<AuthBloc>().add(SignInEvent(
-          usernameOrEmail: _usernameOrEmailController.text.trim(),
-          password: _passwordController.text.trim(),
-        ));
+    String code = "";
+    code += otp1Controller.text.trim();
+    code += otp2Controller.text.trim();
+    code += otp3Controller.text.trim();
+    code += otp4Controller.text.trim();
+    code += otp5Controller.text.trim();
+    code += otp6Controller.text.trim();
+    if (code.length == 6) {
+      context.read<AuthBloc>().add(VerifyEmailEvent(
+            postcode: code,
+          ));
+    } else {
+      // otp1Controller.clear();
+      // otp2Controller.clear();
+      // otp3Controller.clear();
+      // otp4Controller.clear();
+      // otp5Controller.clear();
+      // otp6Controller.clear();
+    }
   }
 }

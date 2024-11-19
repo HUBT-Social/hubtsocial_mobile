@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:hubtsocial_mobile/src/features/auth/data/models/user_token_model.dart';
-import 'package:hubtsocial_mobile/src/features/auth/domain/entities/sign_in_response.dart';
+import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_response.dart';
 
-class SignInResponseModel extends SignInResponse {
+class SignInResponseModel extends UserResponse {
   const SignInResponseModel({
     required super.userToken,
     required super.message,

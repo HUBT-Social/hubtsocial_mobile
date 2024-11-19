@@ -18,20 +18,16 @@ import 'package:hubtsocial_mobile/src/features/auth/data/repos/auth_repo_impl.da
     as _i457;
 import 'package:hubtsocial_mobile/src/features/auth/domain/repos/auth_repo.dart'
     as _i936;
+import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/otp_user_case.dart'
+    as _i245;
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/reset_password.dart'
     as _i492;
-import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/sent_otp_verification.dart'
-    as _i46;
-import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/sign_in_usercase.dart'
-    as _i1065;
+import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/sign_in_user_case.dart'
+    as _i627;
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/sign_out.dart'
     as _i488;
-import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/sign_up.dart'
-    as _i426;
-import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/two_factor_usercase.dart'
-    as _i524;
-import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/verify_phone_number.dart'
-    as _i629;
+import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/sign_up_user_case.dart'
+    as _i287;
 import 'package:hubtsocial_mobile/src/features/auth/presentation/bloc/auth_bloc.dart'
     as _i715;
 import 'package:hubtsocial_mobile/src/features/profile/domain/repos/user_profile_repo.dart'
@@ -80,22 +76,20 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i457.AuthRepoImpl(gh<_i953.AuthRemoteDataSource>()));
     gh.lazySingleton<_i492.ResetPassword>(
         () => _i492.ResetPassword(gh<_i936.AuthRepo>()));
-    gh.lazySingleton<_i46.SentOTPVerification>(
-        () => _i46.SentOTPVerification(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i488.SignOut>(() => _i488.SignOut(gh<_i936.AuthRepo>()));
-    gh.lazySingleton<_i426.SignUp>(() => _i426.SignUp(gh<_i936.AuthRepo>()));
-    gh.lazySingleton<_i629.VerifyPhoneNumber>(
-        () => _i629.VerifyPhoneNumber(gh<_i936.AuthRepo>()));
-    gh.lazySingleton<_i1065.SignInUserCase>(
-        () => _i1065.SignInUserCase(gh<_i936.AuthRepo>()));
-    gh.lazySingleton<_i524.TwoFactorUserCase>(
-        () => _i524.TwoFactorUserCase(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i627.SignInUserCase>(
+        () => _i627.SignInUserCase(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i287.SignUpUserCase>(
+        () => _i287.SignUpUserCase(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i245.TwoFactorUserCase>(
+        () => _i245.TwoFactorUserCase(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i245.VerifyEmailUserCase>(
+        () => _i245.VerifyEmailUserCase(gh<_i936.AuthRepo>()));
     gh.factory<_i715.AuthBloc>(() => _i715.AuthBloc(
-          signIn: gh<_i1065.SignInUserCase>(),
-          twoFactor: gh<_i524.TwoFactorUserCase>(),
-          signUp: gh<_i426.SignUp>(),
-          verifyPhoneNumber: gh<_i629.VerifyPhoneNumber>(),
-          sentOTPVerification: gh<_i46.SentOTPVerification>(),
+          signIn: gh<_i627.SignInUserCase>(),
+          twoFactor: gh<_i245.TwoFactorUserCase>(),
+          verifyEmail: gh<_i245.VerifyEmailUserCase>(),
+          signUp: gh<_i287.SignUpUserCase>(),
           resetPassword: gh<_i492.ResetPassword>(),
           signOut: gh<_i488.SignOut>(),
         ));

@@ -16,7 +16,7 @@ class APIRequest {
       {required String url,
       required Map<String, dynamic>? body,
       String? token}) async {
-    debugPrint(jsonEncode(body).toString());
+    logDebug(jsonEncode(body).toString());
 
     final response = await http.post(
       Uri.parse(
@@ -36,7 +36,7 @@ class APIRequest {
 
   static Future<http.Response> patch(
       {required String url, Map<String, dynamic>? body, String? token}) async {
-    debugPrint(jsonEncode(body).toString());
+    logDebug(jsonEncode(body).toString());
     final response = await http.patch(
       Uri.parse(
         "$url?culture=${AppLocalStorage.currentLanguageCode}",

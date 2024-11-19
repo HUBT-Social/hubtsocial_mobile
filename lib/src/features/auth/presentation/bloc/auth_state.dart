@@ -23,47 +23,24 @@ class AuthSuccess extends AuthState {
   const AuthSuccess();
 }
 
-class VerifyingTwoFactor extends AuthState {
-  const VerifyingTwoFactor();
+class VerifyTwoFactor extends AuthState {
+  const VerifyTwoFactor();
 }
 
 class SignedIn extends AuthState {
-  const SignedIn(this.response);
-
-  final SignInResponse response;
-
-  @override
-  List<Object> get props => [response];
+  const SignedIn();
 }
 
 class SignedUp extends AuthState {
   const SignedUp();
 }
 
-class VerifiedPhoneNumber extends AuthState {
-  const VerifiedPhoneNumber(this.tempToken);
-
-  final String tempToken;
-
-  @override
-  List<Object> get props => [tempToken];
-}
-
-class ForgotPasswordSent extends AuthState {
-  const ForgotPasswordSent();
+class VerifyEmail extends AuthState {
+  const VerifyEmail();
 }
 
 class AuthError extends AuthState {
   const AuthError(this.message);
-
-  final String message;
-
-  @override
-  List<String> get props => [message];
-}
-
-class VerifyTwoFactorError extends AuthState {
-  const VerifyTwoFactorError(this.message);
 
   final String message;
 
@@ -78,10 +55,6 @@ class ExpiredToken extends AuthState {
 
   @override
   List<String> get props => [message];
-}
-
-class PasswordReset extends AuthState {
-  const PasswordReset();
 }
 
 class SignedOut extends AuthState {

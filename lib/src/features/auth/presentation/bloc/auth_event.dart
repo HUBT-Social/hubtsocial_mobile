@@ -28,63 +28,32 @@ class TwoFactorEvent extends AuthEvent {
   List<String> get props => [postcode];
 }
 
+class VerifyEmailEvent extends AuthEvent {
+  const VerifyEmailEvent({
+    required this.postcode,
+  });
+
+  final String postcode;
+
+  @override
+  List<String> get props => [postcode];
+}
+
 class SignUpEvent extends AuthEvent {
   const SignUpEvent({
-    required this.phoneNumber,
+    required this.userName,
+    required this.email,
     required this.password,
-    required this.name,
-    required this.token,
+    required this.confirmPassword,
   });
 
-  final String phoneNumber;
+  final String userName;
+  final String email;
   final String password;
-  final String name;
-  final String token;
+  final String confirmPassword;
 
   @override
-  List<String> get props => [phoneNumber, password, name, token];
-}
-
-class ForgotPasswordEvent extends AuthEvent {
-  const ForgotPasswordEvent(this.phoneNumber);
-
-  final String phoneNumber;
-
-  @override
-  List<String> get props => [phoneNumber];
-}
-
-class VerifyTwoFactorEvent extends AuthEvent {
-  const VerifyTwoFactorEvent({required this.phoneNumber});
-
-  final String phoneNumber;
-
-  @override
-  List<String> get props => [phoneNumber];
-}
-
-class SentOTPVerificationEvent extends AuthEvent {
-  const SentOTPVerificationEvent(
-      {required this.phoneNumber, required this.otp});
-
-  final String phoneNumber;
-  final String otp;
-
-  @override
-  List<String> get props => [phoneNumber, otp];
-}
-
-class ResetPasswordEvent extends AuthEvent {
-  const ResetPasswordEvent({
-    required this.newPassword,
-    required this.token,
-  });
-
-  final String newPassword;
-  final String token;
-
-  @override
-  List<String> get props => [newPassword, token];
+  List<String> get props => [userName, email, password, confirmPassword];
 }
 
 class SignOutEvent extends AuthEvent {

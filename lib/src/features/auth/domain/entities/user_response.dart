@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:hubtsocial_mobile/src/features/auth/data/models/user_token_model.dart';
 
-class SignInResponse extends Equatable {
-  const SignInResponse({
+class UserResponse extends Equatable {
+  const UserResponse({
     required this.userToken,
     required this.message,
     required this.requiresTwoFactor,
@@ -12,20 +12,20 @@ class SignInResponse extends Equatable {
   final String? message;
   final bool? requiresTwoFactor;
 
-  SignInResponse copyWith({
+  UserResponse copyWith({
     UserTokenModel? userToken,
     String? message,
     bool? requiresTwoFactor,
   }) {
-    return SignInResponse(
+    return UserResponse(
       userToken: userToken ?? this.userToken,
       message: message ?? this.message,
       requiresTwoFactor: requiresTwoFactor,
     );
   }
 
-  factory SignInResponse.fromJson(Map<String, dynamic> json) {
-    return SignInResponse(
+  factory UserResponse.fromJson(Map<String, dynamic> json) {
+    return UserResponse(
       userToken: json["userToken"] == null
           ? null
           : UserTokenModel.fromJson(json["userToken"]),

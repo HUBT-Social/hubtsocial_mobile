@@ -9,6 +9,7 @@ enum AppRoute {
   staging('staging'),
   signIn('sign-in'),
   twoFactor('two-factor'),
+  emailVerify('email-verify'),
   signUp('sign-up'),
   information('information'),
   home('home'),
@@ -34,6 +35,14 @@ extension AppRouteNavigation on AppRoute {
 
   void push(BuildContext context) {
     context.push(
+      parseRoute(
+        route: '/$path',
+      ),
+    );
+  }
+
+  void pushReplacement(BuildContext context) {
+    context.pushReplacement(
       parseRoute(
         route: '/$path',
       ),

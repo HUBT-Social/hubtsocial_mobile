@@ -2,16 +2,13 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/two_factor_usercase.dart';
+import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/otp_user_case.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../domain/entities/sign_in_response.dart';
 import '../../domain/usecases/reset_password.dart';
-import '../../domain/usecases/sent_otp_verification.dart';
-import '../../domain/usecases/sign_in_usercase.dart';
+import '../../domain/usecases/sign_in_user_case.dart';
 import '../../domain/usecases/sign_out.dart';
-import '../../domain/usecases/sign_up.dart';
-import '../../domain/usecases/verify_phone_number.dart';
+import '../../domain/usecases/sign_up_user_case.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -21,16 +18,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
     required SignInUserCase signIn,
     required TwoFactorUserCase twoFactor,
-    required SignUp signUp,
-    required VerifyPhoneNumber verifyPhoneNumber,
-    required SentOTPVerification sentOTPVerification,
+    required VerifyEmailUserCase verifyEmail,
+    required SignUpUserCase signUp,
     required ResetPassword resetPassword,
     required SignOut signOut,
   })  : _signIn = signIn,
         _twoFactor = twoFactor,
+        _verifyEmail = verifyEmail,
         _signUp = signUp,
-        _verifyPhoneNumber = verifyPhoneNumber,
-        _sentOTPVerification = sentOTPVerification,
         _resetPassword = resetPassword,
         _signOut = signOut,
         super(const AuthInitial()) {
@@ -39,18 +34,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
     on<SignInEvent>(_signInHandler);
     on<TwoFactorEvent>(_twoFactorHandler);
+    on<VerifyEmailEvent>(_verifyEmailHandler);
     on<SignUpEvent>(_signUpHandler);
-    on<VerifyTwoFactorEvent>(_verifyTwoFactorHandler);
-    on<SentOTPVerificationEvent>(_sentOTPVerificationHandler);
-    on<ResetPasswordEvent>(_resetPasswordHandler);
     on<SignOutEvent>(_signOutHandler);
   }
 
   final SignInUserCase _signIn;
   final TwoFactorUserCase _twoFactor;
-  final SignUp _signUp;
-  final VerifyPhoneNumber _verifyPhoneNumber;
-  final SentOTPVerification _sentOTPVerification;
+  final VerifyEmailUserCase _verifyEmail;
+  final SignUpUserCase _signUp;
   final ResetPassword _resetPassword;
   final SignOut _signOut;
 
@@ -77,9 +69,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       },
       (response) {
         if (response.requiresTwoFactor!) {
-          emit(VerifyingTwoFactor());
+          emit(VerifyTwoFactor());
         } else {
-          emit(SignedIn(response));
+          emit(SignedIn());
         }
       },
     );
@@ -90,7 +82,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     final result = await _twoFactor(
-      TwoFactorParams(
+      OtpParams(
         postcode: event.postcode,
       ),
     );
@@ -106,7 +98,33 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       },
       (response) {
-        emit(SignedIn(response));
+        emit(SignedIn());
+      },
+    );
+  }
+
+  Future<void> _verifyEmailHandler(
+    VerifyEmailEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    final result = await _verifyEmail(
+      OtpParams(
+        postcode: event.postcode,
+      ),
+    );
+    result.fold(
+      (failure) {
+        switch (int.parse(failure.statusCode)) {
+          case 401:
+            emit(AuthError(failure.message));
+            break;
+          default:
+            emit(AuthError(failure.message));
+            break;
+        }
+      },
+      (response) {
+        emit(SignedUp());
       },
     );
   }
@@ -117,85 +135,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     final result = await _signUp(
       SignUpParams(
-        phoneNumber: event.phoneNumber,
-        fullName: event.name,
+        userName: event.userName,
+        email: event.email,
         password: event.password,
-        token: event.token,
+        confirmPassword: event.confirmPassword,
       ),
     );
     result.fold(
       (failure) {
         switch (int.parse(failure.statusCode)) {
           case 401:
-            emit(ExpiredToken("expiredToken"));
+            emit(ExpiredToken(failure.message));
             break;
           default:
-            emit(AuthError("serverError"));
+            emit(AuthError(failure.message));
             break;
         }
       },
-      (_) => emit(const SignedUp()),
-    );
-  }
-
-  Future<void> _verifyTwoFactorHandler(
-    VerifyTwoFactorEvent event,
-    Emitter<AuthState> emit,
-  ) async {
-    final result = await _verifyPhoneNumber(event.phoneNumber);
-    result.fold(
-      (failure) => emit(VerifyTwoFactorError("serverError")),
-      (_) => emit(const VerifyingTwoFactor()),
-    );
-  }
-
-  Future<void> _sentOTPVerificationHandler(
-    SentOTPVerificationEvent event,
-    Emitter<AuthState> emit,
-  ) async {
-    final result = await _sentOTPVerification(
-      SentOTPVerificationParams(
-        phoneNumber: event.phoneNumber,
-        otp: event.otp,
-      ),
-    );
-    result.fold(
-      (failure) {
-        switch (int.parse(failure.statusCode)) {
-          case 401:
-            emit(VerifyTwoFactorError("verifyError"));
-            break;
-          default:
-            emit(AuthError("serverError"));
-            break;
-        }
-      },
-      (token) => emit(VerifiedPhoneNumber(token)),
-    );
-  }
-
-  Future<void> _resetPasswordHandler(
-    ResetPasswordEvent event,
-    Emitter<AuthState> emit,
-  ) async {
-    final result = await _resetPassword(
-      ResetPasswordParams(
-        newPassword: event.newPassword,
-        token: event.token,
-      ),
-    );
-    result.fold(
-      (failure) {
-        switch (int.parse(failure.statusCode)) {
-          case 401:
-            emit(ExpiredToken("expiredToken"));
-            break;
-          default:
-            emit(AuthError("serverError"));
-            break;
-        }
-      },
-      (token) => emit(const PasswordReset()),
+      (_) => emit(const VerifyEmail()),
     );
   }
 

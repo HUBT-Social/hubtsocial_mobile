@@ -1,19 +1,20 @@
 import 'package:equatable/equatable.dart';
-import 'package:hubtsocial_mobile/src/features/auth/domain/entities/sign_in_response.dart';
+import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_response.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/usecases/usecases.dart';
 import '../../../../core/utils/typedefs.dart';
+import '../entities/user_response.dart';
 import '../repos/auth_repo.dart';
 
 @LazySingleton()
-class SignInUserCase extends UseCaseWithParams<SignInResponse, SignInParams> {
+class SignInUserCase extends UseCaseWithParams<UserResponse, SignInParams> {
   const SignInUserCase(this._repo);
 
   final AuthRepo _repo;
 
   @override
-  ResultFuture<SignInResponse> call(SignInParams param) => _repo.signIn(
+  ResultFuture<UserResponse> call(SignInParams param) => _repo.signIn(
         usernameOrEmail: param.usernameOrEmail,
         password: param.password,
       );

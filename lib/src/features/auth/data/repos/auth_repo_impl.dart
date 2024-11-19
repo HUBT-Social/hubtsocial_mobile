@@ -6,7 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:hubtsocial_mobile/src/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/repos/auth_repo.dart';
 
-import '../../domain/entities/sign_in_response.dart';
+import '../../domain/entities/user_response.dart';
 
 @LazySingleton(
   as: AuthRepo,
@@ -17,7 +17,7 @@ class AuthRepoImpl implements AuthRepo {
   final AuthRemoteDataSource _remoteDataSource;
 
   @override
-  ResultFuture<SignInResponse> signIn({
+  ResultFuture<UserResponse> signIn({
     required String usernameOrEmail,
     required String password,
   }) async {
@@ -35,41 +35,19 @@ class AuthRepoImpl implements AuthRepo {
 
   @override
   ResultFuture<void> signUp({
-    required String phoneNumber,
-    required String fullName,
+    required String userName,
+    required String email,
     required String password,
-    required String token,
+    required String confirmPassword,
   }) async {
     try {
       await _remoteDataSource.signUp(
-        phoneNumber: phoneNumber,
-        fullName: fullName,
+        userName: userName,
+        email: email,
         password: password,
-        token: token,
+        confirmPassword: confirmPassword,
       );
       return const Right(null);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
-    }
-  }
-
-  @override
-  ResultFuture<void> verifyPhoneNumber({required String phoneNumber}) async {
-    try {
-      await _remoteDataSource.verifyPhoneNumber(phoneNumber: phoneNumber);
-      return const Right(null);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
-    }
-  }
-
-  @override
-  ResultFuture<String> sentOTPVerification(
-      {required String phoneNumber, required String otp}) async {
-    try {
-      final result = await _remoteDataSource.sentOTPVerification(
-          phoneNumber: phoneNumber, otp: otp);
-      return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
     }
@@ -102,9 +80,22 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  ResultFuture<SignInResponse> twoFactor({required String postcode}) async {
+  ResultFuture<UserResponse> twoFactor({required String postcode}) async {
     try {
       final result = await _remoteDataSource.twoFactor(
+        postcode: postcode,
+      );
+
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
+
+  @override
+  ResultFuture<UserResponse> verifyEmail({required String postcode}) async {
+    try {
+      final result = await _remoteDataSource.verifyEmail(
         postcode: postcode,
       );
 
