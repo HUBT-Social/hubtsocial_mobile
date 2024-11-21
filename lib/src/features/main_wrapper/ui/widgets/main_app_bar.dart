@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
@@ -16,18 +15,20 @@ class MainAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       toolbarHeight: 42,
-      backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(192),
+      backgroundColor:
+          // Theme.of(context).colorScheme.surfaceContainerHighest.withAlpha(192),
+          Theme.of(context).colorScheme.surfaceContainerHighest,
       floating: true,
       snap: true,
-      flexibleSpace: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          blendMode: BlendMode.srcOver,
-          child: Container(
-            color: Colors.transparent,
-          ),
-        ),
-      ),
+      // flexibleSpace: ClipRRect(
+      //   child: BackdropFilter(
+      //     filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+      //     blendMode: BlendMode.srcOver,
+      //     child: Container(
+      //       color: Colors.transparent,
+      //     ),
+      //   ),
+      // ),
       title: Text(
         title,
         style: context.textTheme.headlineSmall?.copyWith(

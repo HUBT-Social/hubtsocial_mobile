@@ -14,7 +14,7 @@ class NavigationItem extends StatelessWidget {
     return Icon(
       icon,
       size: 24,
-      color: context.colorScheme.onSurface,
+      color: context.colorScheme.onSurfaceVariant,
     );
   }
 }

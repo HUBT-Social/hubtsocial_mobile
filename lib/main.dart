@@ -22,6 +22,10 @@ import 'src/core/local_storage/local_storage_key.dart';
 import 'src/core/notification/notification_service.dart';
 import 'src/features/auth/data/models/user_token_model.dart';
 
+class NavigationService {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoRouter.optionURLReflectsImperativeAPIs = true;

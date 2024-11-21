@@ -3,6 +3,7 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../../core/configs/assets.dart';
+import '../../../../core/theme/ui/widget/button_change_theme.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -60,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 200,
             color: Colors.amber,
           ),
+          ButtonChangeTheme(),
           SizedBox(
             height: 700,
             width: 500,

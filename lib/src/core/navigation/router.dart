@@ -22,11 +22,12 @@ import '../../features/profile/ui/pages/profile_screen.dart';
 import '../app/providers/user_provider.dart';
 import '../injections/injections.dart';
 
-final _shellNavigatorHome = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
-final _shellNavigatorSettings =
-    GlobalKey<NavigatorState>(debugLabel: 'shellSettings');
-final _shellNavigatorNotifications =
-    GlobalKey<NavigatorState>(debugLabel: 'shellNotifications');
+// final _shellNavigatorHome = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
+// final _shellNavigatorSettings =
+//     GlobalKey<NavigatorState>(debugLabel: 'shellSettings');
+// final _shellNavigatorNotifications =
+//     GlobalKey<NavigatorState>(debugLabel: 'shellNotifications');
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 String parseRoute({
   required String route,
@@ -42,6 +43,7 @@ String joinRoute(List<String> routes) {
 }
 
 final GoRouter router = GoRouter(
+  navigatorKey: navigatorKey,
   // errorBuilder: (context, state) {
   //   logError(state.uri.path);
   //   return const PageUnderConstruction();
@@ -148,7 +150,7 @@ final GoRouter router = GoRouter(
           branches: <StatefulShellBranch>[
             /// Brach Home
             StatefulShellBranch(
-              navigatorKey: _shellNavigatorHome,
+              // navigatorKey: _shellNavigatorHome,
               routes: <RouteBase>[
                 GoRoute(
                   path: AppRoute.home.path,
@@ -173,7 +175,7 @@ final GoRouter router = GoRouter(
 
             /// Brach Profile
             StatefulShellBranch(
-              navigatorKey: _shellNavigatorNotifications,
+              // navigatorKey: _shellNavigatorNotifications,
               routes: <RouteBase>[
                 GoRoute(
                   path: AppRoute.notifications.path,
@@ -185,7 +187,7 @@ final GoRouter router = GoRouter(
 
             /// Brach Profile
             StatefulShellBranch(
-              navigatorKey: _shellNavigatorSettings,
+              // navigatorKey: _shellNavigatorSettings,
               routes: <RouteBase>[
                 GoRoute(
                   path: AppRoute.profile.path,

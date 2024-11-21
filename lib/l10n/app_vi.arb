@@ -47,5 +47,23 @@
     "confirm_password": "Lặp lại mật khẩu",
     "@confirm_password": {},
     "continue_text": "Tiếp tục",
-    "@continue_text": {}
+    "@continue_text": {},
+    "required": "Cần thiết",
+    "@required": {},
+    "enter_valid_email": "Vui lòng nhập email",
+    "@enter_valid_email": {},
+    "password_must_be_at_least": "Mật khẩu phải dài ít nhất {value} ký tự",
+    "@password_must_be_at_least": {
+        "placeholders": {
+            "value": {}
+        }
+    },
+    "password_must_contain_at_least_one_capital_letter": "Mật khẩu phải chứa ít nhất một chữ in hoa",
+    "@password_must_contain_at_least_one_capital_letter": {},
+    "theme_system": "Hệ thống",
+    "@theme_system": {},
+    "theme_light": "Sáng",
+    "@theme_light": {},
+    "theme_dark": "Tối",
+    "@theme_dark": {}
 }

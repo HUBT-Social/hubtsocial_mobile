@@ -4,7 +4,6 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../core/usecases/usecases.dart';
 import '../../../../core/utils/typedefs.dart';
-import '../entities/user_response.dart';
 import '../repos/auth_repo.dart';
 
 @LazySingleton()

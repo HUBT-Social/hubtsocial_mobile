@@ -4,7 +4,6 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/ui/input/input_field.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../../../../core/navigation/route.dart';
 import '../../../../core/ui/dialog/app_dialog.dart';
 import '../widgets/background.dart';

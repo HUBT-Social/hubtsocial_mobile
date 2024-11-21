@@ -47,5 +47,23 @@
     "confirm_password": "Confirm password",
     "@confirm_password": {},
     "continue_text": "Continue",
-    "@continue_text": {}
+    "@continue_text": {},
+    "required": "required",
+    "@required": {},
+    "enter_valid_email": "Enter valid email",
+    "@enter_valid_email": {},
+    "password_must_be_at_least": "Password must be at least {value} characters long",
+    "@password_must_be_at_least": {
+        "placeholders": {
+            "value": {}
+        }
+    },
+    "password_must_contain_at_least_one_capital_letter": "Password must contain at least one capital letter",
+    "@password_must_contain_at_least_one_capital_letter": {},
+    "theme_system": "System",
+    "@theme_system": {},
+    "theme_light": "Light",
+    "@theme_light": {},
+    "theme_dark": "Dark",
+    "@theme_dark": {}
 }

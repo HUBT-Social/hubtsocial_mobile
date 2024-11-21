@@ -85,7 +85,7 @@ class _SignInPageState extends State<SignInPage> {
                                 Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 6),
-                                  child: InputField(
+                                  child: InputField.name(
                                     controller: _usernameOrEmailController,
                                     textInputAction: TextInputAction.next,
                                     hintText: context.loc.username_or_email,

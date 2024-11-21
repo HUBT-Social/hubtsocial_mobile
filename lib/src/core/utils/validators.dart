@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/string.dart';
+
+import '../navigation/router.dart';
 
 abstract class Validators {
   Validators._();
@@ -16,7 +19,7 @@ abstract class Validators {
 
   static String? required(String? input) {
     if (input?.trim().isEmpty ?? true) {
-      return 'Required';
+      return navigatorKey.currentContext?.loc.required;
     }
 
     return null;
@@ -24,7 +27,7 @@ abstract class Validators {
 
   static String? requiredTyped<T>(T? input) {
     if (input == null) {
-      return 'Required';
+      return navigatorKey.currentContext?.loc.required;
     }
 
     return null;
@@ -32,23 +35,18 @@ abstract class Validators {
 
   static String? name(String? name) {
     if (name == null || name.isEmpty) {
-      return 'Required';
+      return navigatorKey.currentContext?.loc.required;
     }
-
-    if (!name.isValidEmail()) {
-      return 'Enter valid email';
-    }
-
     return null;
   }
 
   static String? email(String? email) {
     if (email == null || email.isEmpty) {
-      return 'Required';
+      return navigatorKey.currentContext?.loc.required;
     }
 
     if (!email.isValidEmail()) {
-      return 'Enter valid email';
+      return navigatorKey.currentContext?.loc.enter_valid_email;
     }
 
     return null;
@@ -63,15 +61,16 @@ abstract class Validators {
 
   static String? password(String? password) {
     if (password == null || password.isEmpty) {
-      return 'Required';
+      return navigatorKey.currentContext?.loc.required;
     }
 
-    if (password.length < 6) {
-      return 'Password must be at least 6 characters long';
+    if (password.length < 8) {
+      return navigatorKey.currentContext?.loc.password_must_be_at_least(8);
     }
 
     if (!password.contains(RegExp('[A-Z]'))) {
-      return 'Password must contain at least one capital letter';
+      return navigatorKey.currentContext?.loc
+          .password_must_contain_at_least_one_capital_letter;
     }
 
     return null;
@@ -79,7 +78,7 @@ abstract class Validators {
 
   static String? number(String? input) {
     if (input == null) {
-      return 'Required';
+      return navigatorKey.currentContext?.loc.required;
     }
 
     final number = num.tryParse(input);
@@ -92,7 +91,7 @@ abstract class Validators {
 
   static String? positiveInteger(String? input) {
     if (input == null) {
-      return 'Required';
+      return navigatorKey.currentContext?.loc.required;
     }
 
     final integer = int.tryParse(input);
