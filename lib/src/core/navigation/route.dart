@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hubtsocial_mobile/src/core/navigation/router.dart';
+
+import 'router.import.dart';
 
 enum AppRoute {
   // none(''),

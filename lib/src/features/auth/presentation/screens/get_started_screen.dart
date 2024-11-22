@@ -5,14 +5,14 @@ import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_
 
 import '../widgets/background.dart';
 
-class GetStartedPage extends StatefulWidget {
-  const GetStartedPage({super.key});
+class GetStartedScreen extends StatefulWidget {
+  const GetStartedScreen({super.key});
 
   @override
-  State<GetStartedPage> createState() => _GetStartedPageState();
+  State<GetStartedScreen> createState() => _GetStartedScreenState();
 }
 
-class _GetStartedPageState extends State<GetStartedPage> {
+class _GetStartedScreenState extends State<GetStartedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

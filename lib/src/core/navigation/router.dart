@@ -1,26 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hive/hive.dart';
-import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/pages/email_verify_page.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/pages/get_started_page.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/pages/information_page.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/pages/sign_in_page.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/pages/two_factor_page.dart';
-import 'package:hubtsocial_mobile/src/features/home/ui/pages/home_page.dart';
-import 'package:jwt_decode_full/jwt_decode_full.dart';
-
-import '../../features/auth/domain/entities/user_token.dart';
-import '../../features/auth/presentation/bloc/auth_bloc.dart';
-import '../../features/auth/presentation/pages/sign_up_page.dart';
-import '../../features/auth/presentation/pages/splash_page.dart';
-import '../../features/main_wrapper/ui/main_wrapper.dart';
-import '../../features/notifications/ui/pages/notifications_page.dart';
-import '../../features/profile/domain/entities/user.dart';
-import '../../features/profile/ui/pages/profile_screen.dart';
-import '../app/providers/user_provider.dart';
-import '../injections/injections.dart';
+part of 'router.import.dart';
 
 // final _shellNavigatorHome = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
 // final _shellNavigatorSettings =
@@ -44,12 +22,12 @@ String joinRoute(List<String> routes) {
 
 final GoRouter router = GoRouter(
   navigatorKey: navigatorKey,
-  // errorBuilder: (context, state) {
-  //   logError(state.uri.path);
-  //   return const PageUnderConstruction();
-  // },
+  errorBuilder: (context, state) {
+    logError(state.uri.path);
+    return const NotFoundScreen();
+  },
   debugLogDiagnostics: true,
-  initialLocation: '/',
+  initialLocation: '/${AppRoute.home.path}',
   redirect: (context, state) {
     if (state.fullPath != '/') {
       if (state.fullPath!.contains(AppRoute.getStarted.path) ||
@@ -91,26 +69,26 @@ final GoRouter router = GoRouter(
           // Check if token is expired
           var currentTimestamp = DateTime.now().millisecondsSinceEpoch;
           if (currentTimestamp ~/ 1000 < payload['exp']) {
-            return const SplashPage();
+            return const SplashScreen();
           }
         }
         // Move to sign in screen if no token found
         return BlocProvider(
           create: (_) => getIt<AuthBloc>(),
-          child: const GetStartedPage(),
+          child: const GetStartedScreen(),
         );
       },
       routes: [
         GoRoute(
           path: AppRoute.getStarted.path,
-          builder: (context, state) => const GetStartedPage(),
+          builder: (context, state) => const GetStartedScreen(),
         ),
 
         GoRoute(
           path: AppRoute.signIn.path,
           builder: (context, state) => BlocProvider(
             create: (context) => getIt<AuthBloc>(),
-            child: SignInPage(),
+            child: SignInScreen(),
           ),
         ),
         GoRoute(
@@ -125,19 +103,19 @@ final GoRouter router = GoRouter(
           path: AppRoute.signUp.path,
           builder: (context, state) => BlocProvider(
             create: (context) => getIt<AuthBloc>(),
-            child: const SignUpPage(),
+            child: const SignUpScreen(),
           ),
         ),
         GoRoute(
           path: AppRoute.emailVerify.path,
           builder: (context, state) => BlocProvider(
             create: (context) => getIt<AuthBloc>(),
-            child: EmailVerifyPage(),
+            child: EmailVerifyScreen(),
           ),
         ),
         GoRoute(
           path: AppRoute.information.path,
-          builder: (context, state) => const InformationPage(),
+          builder: (context, state) => const InformationScreen(),
         ),
 
         /// MainWrapper

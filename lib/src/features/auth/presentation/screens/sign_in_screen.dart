@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/core/ui/input/input_field.dart';
+import 'package:hubtsocial_mobile/src/core/presentation/input/input_field.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/background.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
 import '../../../../core/navigation/route.dart';
-import '../../../../core/ui/dialog/app_dialog.dart';
+import '../../../../core/presentation/dialog/app_dialog.dart';
 import '../bloc/auth_bloc.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignInScreenState extends State<SignInScreen> {
   final _usernameOrEmailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();

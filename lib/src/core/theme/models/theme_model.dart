@@ -7,22 +7,18 @@ enum ThemeModel {
   system(
     ThemeMode.system,
     Assets.themeSystem,
-    'System',
   ),
   light(
     ThemeMode.light,
     Assets.themeLight,
-    'Light',
   ),
   dark(
     ThemeMode.dark,
     Assets.themeDark,
-    'Dark',
   );
 
-  const ThemeModel(this.value, this.image, this.text);
+  const ThemeModel(this.value, this.image);
 
   final ThemeMode value;
   final String image;
-  final String text;
 }

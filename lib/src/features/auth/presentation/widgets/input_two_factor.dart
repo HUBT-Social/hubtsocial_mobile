@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hubtsocial_mobile/src/core/ui/input/input_field.dart';
+import 'package:hubtsocial_mobile/src/core/presentation/input/input_field.dart';
 
 class InputAuthOTP extends StatelessWidget {
   const InputAuthOTP({

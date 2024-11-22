@@ -71,3 +71,7 @@ môi trường prod
 flutter run --flavor prod lib/main.dart
 ```
 
+## flutter build
+```
+flutter build apk --debug --flavor dev
+```

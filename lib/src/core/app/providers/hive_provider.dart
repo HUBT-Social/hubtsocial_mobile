@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 
-import '../../ui/dialog/app_dialog.dart';
+import '../../presentation/dialog/app_dialog.dart';
 
 class HiveProvider {
   static Future<Box> openNotiBox() async {

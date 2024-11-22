@@ -9,7 +9,7 @@ import 'package:hubtsocial_mobile/src/core/style/app_font.dart';
 import 'package:hubtsocial_mobile/src/core/style/app_theme.dart';
 
 import '../localization/bloc/localization_bloc.dart';
-import '../navigation/router.dart';
+import '../navigation/router.import.dart';
 import '../theme/bloc/theme_bloc.dart';
 
 class MyApp extends StatelessWidget {

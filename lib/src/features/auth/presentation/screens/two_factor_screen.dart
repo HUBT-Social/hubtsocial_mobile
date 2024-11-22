@@ -4,18 +4,19 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/background.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_two_factor.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
+
 import '../../../../core/navigation/route.dart';
-import '../../../../core/ui/dialog/app_dialog.dart';
+import '../../../../core/presentation/dialog/app_dialog.dart';
 import '../bloc/auth_bloc.dart';
 
-class EmailVerifyPage extends StatefulWidget {
-  const EmailVerifyPage({super.key});
+class TwoFactorPage extends StatefulWidget {
+  const TwoFactorPage({super.key});
 
   @override
-  State<EmailVerifyPage> createState() => _EmailVerifyPageState();
+  State<TwoFactorPage> createState() => _TwoFactorPageState();
 }
 
-class _EmailVerifyPageState extends State<EmailVerifyPage> {
+class _TwoFactorPageState extends State<TwoFactorPage> {
   final otp1Controller = TextEditingController();
   final otp2Controller = TextEditingController();
   final otp3Controller = TextEditingController();
@@ -32,13 +33,13 @@ class _EmailVerifyPageState extends State<EmailVerifyPage> {
           if (state is AuthError) {
             AppDialog.showMessageDialog(
                 AppDialog.errorMessage(state.message, context));
-          } else if (state is SignedUp) {
+          } else if (state is SignedIn) {
             AppDialog.showMessageDialog(
                 AppDialog.sucessMessage('wellcomeBack', context));
             AppDialog.closeDialog();
             AppRoute.splash.go(context);
           } else if (state is AuthLoading) {
-            AppDialog.showLoadingDialog(message: 'Verify');
+            AppDialog.showLoadingDialog(message: 'signing');
           } else {
             AppDialog.closeDialog();
           }
@@ -111,7 +112,7 @@ class _EmailVerifyPageState extends State<EmailVerifyPage> {
                           ),
                           FilledButton(
                             onPressed: () {
-                              _onVerifyButtonClicked();
+                              _onTwoFactorButtonClicked();
                             },
                             child: SizedBox(
                               width: double.infinity,
@@ -148,7 +149,7 @@ class _EmailVerifyPageState extends State<EmailVerifyPage> {
     );
   }
 
-  void _onVerifyButtonClicked() {
+  void _onTwoFactorButtonClicked() {
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -162,7 +163,7 @@ class _EmailVerifyPageState extends State<EmailVerifyPage> {
     code += otp5Controller.text.trim();
     code += otp6Controller.text.trim();
     if (code.length == 6) {
-      context.read<AuthBloc>().add(VerifyEmailEvent(
+      context.read<AuthBloc>().add(TwoFactorEvent(
             postcode: code,
           ));
     } else {

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/core/navigation/router.import.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../../core/configs/assets.dart';
-import '../../../../core/theme/ui/widget/button_change_theme.dart';
+import '../../../../core/theme/presentation/widget/button_change_theme.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -52,6 +54,18 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: Text("data"),
           ),
+          TextButton(
+            onPressed: () {
+              context.push("/location");
+            },
+            child: Text("aaaaaaaa"),
+          ),
+          TextButton(
+            onPressed: () {
+              context.pushReplacement("/location");
+            },
+            child: Text("aaaaaaaa"),
+          ),
           Image.asset(
             Assets.appIcon,
             width: 120,
@@ -65,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 700,
             width: 500,
-            child: Lottie.asset(Assets.pageUnderConstruction),
+            child: Lottie.asset(Assets.pageNotFound),
           ),
           SizedBox(
             height: 700,

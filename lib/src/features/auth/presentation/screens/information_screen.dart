@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/core/ui/input/input_field.dart';
+import 'package:hubtsocial_mobile/src/core/presentation/input/input_field.dart';
 
 import '../../../../core/navigation/route.dart';
 import '../widgets/background.dart';
 import '../widgets/system_setting.dart';
 
-class InformationPage extends StatefulWidget {
-  const InformationPage({super.key});
+class InformationScreen extends StatefulWidget {
+  const InformationScreen({super.key});
 
   @override
-  State<InformationPage> createState() => _InformationPageState();
+  State<InformationScreen> createState() => _InformationScreenState();
 }
 
-class _InformationPageState extends State<InformationPage> {
+class _InformationScreenState extends State<InformationScreen> {
   final _studentCodeController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();

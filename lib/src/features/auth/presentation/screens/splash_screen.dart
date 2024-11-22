@@ -6,14 +6,14 @@ import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 
 import '../../../../core/configs/assets.dart';
 
-class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
-  State<SplashPage> createState() => _SplashPageState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashPageState extends State<SplashPage> {
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
@@ -43,10 +43,7 @@ class _SplashPageState extends State<SplashPage> {
                     .callback(
                       delay: const Duration(seconds: 2),
                       callback: (value) {
-                        while (context.canPop()) {
-                          context.pop();
-                        }
-                        AppRoute.home.pushReplacement(context);
+                        AppRoute.home.go(context);
                       },
                     ),
               ],

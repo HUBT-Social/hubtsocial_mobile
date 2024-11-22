@@ -59,7 +59,11 @@ final class ThemeUtils {
                             fit: BoxFit.contain,
                           ),
                           title: Text(
-                            ThemeModel.values[index].text,
+                            switch (ThemeModel.values[index]) {
+                              ThemeModel.system => context.loc.theme_system,
+                              ThemeModel.light => context.loc.theme_light,
+                              ThemeModel.dark => context.loc.theme_dark,
+                            },
                             style: context.textTheme.titleMedium?.copyWith(
                               color: ThemeModel.values[index] ==
                                       state.selectedTheme

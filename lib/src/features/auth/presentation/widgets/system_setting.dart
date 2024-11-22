@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/localization/ui/widget/button_change_localization.dart';
-import 'package:hubtsocial_mobile/src/core/theme/ui/widget/button_change_theme.dart';
+import 'package:hubtsocial_mobile/src/core/theme/presentation/widget/button_change_theme.dart';
 
 class SystemSetting extends StatelessWidget {
   const SystemSetting({
