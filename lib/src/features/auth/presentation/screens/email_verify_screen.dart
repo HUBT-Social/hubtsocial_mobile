@@ -31,7 +31,7 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
             AppDialog.showMessageDialog(
                 AppDialog.sucessMessage('wellcomeBack', context));
             AppDialog.closeDialog();
-            AppRoute.splash.go(context);
+            AppRoute.home.go(context);
           } else if (state is AuthLoading) {
             AppDialog.showLoadingDialog(message: 'Verify');
           } else {

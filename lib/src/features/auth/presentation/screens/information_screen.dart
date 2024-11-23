@@ -156,7 +156,7 @@ class _InformationScreenState extends State<InformationScreen> {
                     ),
                     FilledButton(
                       onPressed: () {
-                        AppRoute.home.go(context);
+                        AppRoute.home.pushReplacement(context);
                       },
                       child: SizedBox(
                         width: double.infinity,

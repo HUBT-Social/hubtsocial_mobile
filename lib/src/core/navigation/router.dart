@@ -7,16 +7,8 @@ part of 'router.import.dart';
 //     GlobalKey<NavigatorState>(debugLabel: 'shellNotifications');
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-String parseRoute({
-  required String route,
-  Map<String, dynamic>? queryParameters,
-}) {
-  var uri = Uri(path: route, queryParameters: queryParameters);
-  return uri.toString();
-}
-
 String joinRoute(List<String> routes) {
-  var route = routes.join('/');
+  var route = routes.join('');
   return route;
 }
 
@@ -24,172 +16,155 @@ final GoRouter router = GoRouter(
   navigatorKey: navigatorKey,
   errorBuilder: (context, state) {
     logError(state.uri.path);
-    return const NotFoundScreen();
+    return NotFoundScreen(url: state.uri.path);
   },
   debugLogDiagnostics: true,
-  initialLocation: '/${AppRoute.home.path}',
+  initialLocation: AppRoute.home.path,
   redirect: (context, state) {
-    if (state.fullPath != '/') {
-      if (state.fullPath!.contains(AppRoute.getStarted.path) ||
-          state.fullPath!.contains(AppRoute.signIn.path) ||
-          state.fullPath!.contains(AppRoute.twoFactor.path) ||
-          state.fullPath!.contains(AppRoute.signUp.path) ||
-          state.fullPath!.contains(AppRoute.emailVerify.path) ||
-          state.fullPath!.contains('reset-password') ||
-          state.fullPath!.contains('enter-phone')) {
+    if (state.fullPath!.contains(AppRoute.getStarted.path) ||
+        state.fullPath!.contains(AppRoute.signIn.path) ||
+        state.fullPath!.contains(AppRoute.twoFactor.path) ||
+        state.fullPath!.contains(AppRoute.signUp.path) ||
+        state.fullPath!.contains(AppRoute.emailVerify.path)) {
+      return null;
+    }
+    // LocalUser? user = context.read<UserProvider>().user;
+    var tokenBox = Hive.box('token');
+    if (tokenBox.isEmpty || !tokenBox.containsKey('userToken')) {
+      return joinRoute(['', AppRoute.getStarted.path]);
+    } else if (tokenBox.isNotEmpty && tokenBox.containsKey('userToken')) {
+      UserToken token = tokenBox.get('userToken');
+      var payload = jwtDecode(token.refreshToken).payload;
+      // Check if token is expired
+      var currentTimestamp = DateTime.now().millisecondsSinceEpoch;
+      if (currentTimestamp ~/ 1000 < payload['exp']) {
         return null;
       }
-      LocalUser? user = context.read<UserProvider>().user;
-      var tokenBox = Hive.box('token');
-      if (tokenBox.isEmpty || !tokenBox.containsKey('userToken')) {
-        return joinRoute(['', AppRoute.getStarted.path]);
-      }
-      // if (user == null) {
-      // if (state.fullPath != null) {
-      //   var param = Map<String, String>.from(state.uri.queryParameters);
-      //   logInfo('Param $param');
-      //   param.putIfAbsent(
-      //       'forwardRoute', () => state.fullPath!.replaceAll('/', ''));
-      //   return parseRoute(
-      //       route: '/${AppRoute.home.path}', queryParameters: param);
-      // }
-      // return '/';
-      // }
+      // Move to sign in screen if no token found
+      return joinRoute(['', AppRoute.signIn.path]);
     }
+    // if (user == null) {
+    // if (state.fullPath != null) {
+    //   var param = Map<String, String>.from(state.uri.queryParameters);
+    //   logInfo('Param $param');
+    //   param.putIfAbsent(
+    //       'forwardRoute', () => state.fullPath!.replaceAll('/', ''));
+    //   return parseRoute(
+    //       route: '/${AppRoute.home.path}', queryParameters: param);
+    // }
+    // return '/';
+    // }
+
     return null;
   },
   routes: [
     GoRoute(
-      path: '/',
-      builder: (context, state) {
-        var tokenBox = Hive.box('token');
-        if (tokenBox.isNotEmpty && tokenBox.containsKey('userToken')) {
-          UserToken token = tokenBox.get('userToken');
-          logInfo("aaaaaaa:" + token.accessToken);
-          var payload = jwtDecode(token.refreshToken).payload;
-          // Check if token is expired
-          var currentTimestamp = DateTime.now().millisecondsSinceEpoch;
-          if (currentTimestamp ~/ 1000 < payload['exp']) {
-            return const SplashScreen();
-          }
-        }
-        // Move to sign in screen if no token found
-        return BlocProvider(
-          create: (_) => getIt<AuthBloc>(),
-          child: const GetStartedScreen(),
+      path: AppRoute.getStarted.path,
+      builder: (context, state) => const GetStartedScreen(),
+    ),
+
+    GoRoute(
+      path: AppRoute.signIn.path,
+      builder: (context, state) => BlocProvider(
+        create: (context) => getIt<AuthBloc>(),
+        child: SignInScreen(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoute.twoFactor.path,
+      builder: (context, state) => BlocProvider(
+        create: (context) => getIt<AuthBloc>(),
+        child: TwoFactorPage(),
+      ),
+    ),
+
+    GoRoute(
+      path: AppRoute.signUp.path,
+      builder: (context, state) => BlocProvider(
+        create: (context) => getIt<AuthBloc>(),
+        child: const SignUpScreen(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoute.emailVerify.path,
+      builder: (context, state) => BlocProvider(
+        create: (context) => getIt<AuthBloc>(),
+        child: EmailVerifyScreen(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoute.information.path,
+      builder: (context, state) => const InformationScreen(),
+    ),
+
+    /// MainWrapper
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) {
+        return MainWrapper(
+          navigationShell: navigationShell,
         );
       },
-      routes: [
-        GoRoute(
-          path: AppRoute.getStarted.path,
-          builder: (context, state) => const GetStartedScreen(),
-        ),
-
-        GoRoute(
-          path: AppRoute.signIn.path,
-          builder: (context, state) => BlocProvider(
-            create: (context) => getIt<AuthBloc>(),
-            child: SignInScreen(),
-          ),
-        ),
-        GoRoute(
-          path: AppRoute.twoFactor.path,
-          builder: (context, state) => BlocProvider(
-            create: (context) => getIt<AuthBloc>(),
-            child: TwoFactorPage(),
-          ),
-        ),
-
-        GoRoute(
-          path: AppRoute.signUp.path,
-          builder: (context, state) => BlocProvider(
-            create: (context) => getIt<AuthBloc>(),
-            child: const SignUpScreen(),
-          ),
-        ),
-        GoRoute(
-          path: AppRoute.emailVerify.path,
-          builder: (context, state) => BlocProvider(
-            create: (context) => getIt<AuthBloc>(),
-            child: EmailVerifyScreen(),
-          ),
-        ),
-        GoRoute(
-          path: AppRoute.information.path,
-          builder: (context, state) => const InformationScreen(),
-        ),
-
-        /// MainWrapper
-        StatefulShellRoute.indexedStack(
-          builder: (context, state, navigationShell) {
-            return MainWrapper(
-              navigationShell: navigationShell,
-            );
-          },
-          branches: <StatefulShellBranch>[
-            /// Brach Home
-            StatefulShellBranch(
-              // navigatorKey: _shellNavigatorHome,
-              routes: <RouteBase>[
+      branches: <StatefulShellBranch>[
+        /// Brach Home
+        StatefulShellBranch(
+          // navigatorKey: _shellNavigatorHome,
+          routes: <RouteBase>[
+            GoRoute(
+              path: AppRoute.home.path,
+              builder: (BuildContext context, GoRouterState state) =>
+                  const HomeScreen(),
+              routes: [
                 GoRoute(
-                  path: AppRoute.home.path,
-                  builder: (BuildContext context, GoRouterState state) =>
-                      const HomeScreen(),
-                  routes: [
-                    GoRoute(
-                      path: 'subHome',
-                      pageBuilder: (context, state) =>
-                          CustomTransitionPage<void>(
-                        key: state.pageKey,
-                        child: const HomeScreen(),
-                        transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) =>
+                  path: 'subHome',
+                  pageBuilder: (context, state) => CustomTransitionPage<void>(
+                    key: state.pageKey,
+                    child: const HomeScreen(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) =>
                             FadeTransition(opacity: animation, child: child),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
+          ],
+        ),
 
-            /// Brach Profile
-            StatefulShellBranch(
-              // navigatorKey: _shellNavigatorNotifications,
-              routes: <RouteBase>[
-                GoRoute(
-                  path: AppRoute.notifications.path,
-                  builder: (BuildContext context, GoRouterState state) =>
-                      const NotificationsPage(),
-                ),
-              ],
+        /// Brach Profile
+        StatefulShellBranch(
+          // navigatorKey: _shellNavigatorNotifications,
+          routes: <RouteBase>[
+            GoRoute(
+              path: AppRoute.notifications.path,
+              builder: (BuildContext context, GoRouterState state) =>
+                  const NotificationsPage(),
             ),
+          ],
+        ),
 
-            /// Brach Profile
-            StatefulShellBranch(
-              // navigatorKey: _shellNavigatorSettings,
-              routes: <RouteBase>[
+        /// Brach Profile
+        StatefulShellBranch(
+          // navigatorKey: _shellNavigatorSettings,
+          routes: <RouteBase>[
+            GoRoute(
+              path: AppRoute.profile.path,
+              builder: (BuildContext context, GoRouterState state) =>
+                  const ProfileScreen(),
+              routes: [
                 GoRoute(
-                  path: AppRoute.profile.path,
-                  builder: (BuildContext context, GoRouterState state) =>
-                      const ProfileScreen(),
-                  routes: [
-                    GoRoute(
-                      path: "subSetting",
-                      pageBuilder: (context, state) {
-                        return CustomTransitionPage<void>(
-                          key: state.pageKey,
-                          child: const ProfileScreen(),
-                          transitionsBuilder: (
-                            context,
-                            animation,
-                            secondaryAnimation,
-                            child,
-                          ) =>
-                              FadeTransition(opacity: animation, child: child),
-                        );
-                      },
-                    ),
-                  ],
+                  path: "subSetting",
+                  pageBuilder: (context, state) {
+                    return CustomTransitionPage<void>(
+                      key: state.pageKey,
+                      child: const ProfileScreen(),
+                      transitionsBuilder: (
+                        context,
+                        animation,
+                        secondaryAnimation,
+                        child,
+                      ) =>
+                          FadeTransition(opacity: animation, child: child),
+                    );
+                  },
                 ),
               ],
             ),

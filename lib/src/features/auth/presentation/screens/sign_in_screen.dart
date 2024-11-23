@@ -34,7 +34,7 @@ class _SignInScreenState extends State<SignInScreen> {
             AppDialog.showMessageDialog(
                 AppDialog.sucessMessage('wellcomeBack', context));
             AppDialog.closeDialog();
-            AppRoute.splash.go(context);
+            AppRoute.home.go(context);
           } else if (state is AuthLoading) {
             // Shown Loading Dialog
             AppDialog.showLoadingDialog(message: 'signing');

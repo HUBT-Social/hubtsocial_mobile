@@ -5,19 +5,18 @@ import 'router.import.dart';
 
 enum AppRoute {
   // none(''),
-  splash('/'),
-  getStarted('getStarted'),
-  staging('staging'),
-  signIn('sign-in'),
-  twoFactor('two-factor'),
-  emailVerify('email-verify'),
-  signUp('sign-up'),
-  information('information'),
-  home('home'),
-  settings('settings'),
-  notifications('notifications'),
-  profile('profile'),
-  error('error'),
+  getStarted('/getStarted'),
+  staging('/staging'),
+  signIn('/sign-in'),
+  twoFactor('/two-factor'),
+  emailVerify('/email-verify'),
+  signUp('/sign-up'),
+  information('/information'),
+  home('/'),
+  settings('/settings'),
+  notifications('/notifications'),
+  profile('/profile'),
+  error('/error'),
   ;
 
   const AppRoute(this.path);
@@ -27,26 +26,14 @@ enum AppRoute {
 
 extension AppRouteNavigation on AppRoute {
   void go(BuildContext context) {
-    context.go(
-      parseRoute(
-        route: '/$path',
-      ),
-    );
+    context.go(path);
   }
 
   void push(BuildContext context) {
-    context.push(
-      parseRoute(
-        route: '/$path',
-      ),
-    );
+    context.push(path);
   }
 
   void pushReplacement(BuildContext context) {
-    context.pushReplacement(
-      parseRoute(
-        route: '/$path',
-      ),
-    );
+    context.pushReplacement(path);
   }
 }

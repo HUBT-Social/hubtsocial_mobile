@@ -33,7 +33,7 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
             AppDialog.showMessageDialog(
                 AppDialog.sucessMessage('wellcomeBack', context));
             AppDialog.closeDialog();
-            AppRoute.splash.go(context);
+            AppRoute.home.go(context);
           } else if (state is AuthLoading) {
             AppDialog.showLoadingDialog(message: 'signing');
           } else {

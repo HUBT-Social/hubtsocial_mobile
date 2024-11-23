@@ -6,8 +6,9 @@ import 'package:lottie/lottie.dart';
 import '../../configs/assets.dart';
 
 class NotFoundScreen extends StatefulWidget {
-  const NotFoundScreen({super.key});
+  const NotFoundScreen({super.key, required this.url});
 
+  final String? url;
   @override
   State<NotFoundScreen> createState() => _NotFoundScreenState();
 }
@@ -39,10 +40,18 @@ class _NotFoundScreenState extends State<NotFoundScreen> {
             style: context.textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
+          Text(
+            widget.url ?? '',
+            style: context.textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
           SizedBox(height: 24),
+          BackButton(),
           FilledButton(
               onPressed: () {
-                context.pop();
+                if (context.canPop()) {
+                  context.pop();
+                }
               },
               child: Text("Go Home"))
         ],

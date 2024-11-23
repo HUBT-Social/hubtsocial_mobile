@@ -15,12 +15,9 @@ import 'package:jwt_decode_full/jwt_decode_full.dart';
 import '../../features/auth/domain/entities/user_token.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/auth/presentation/screens/sign_up_screen.dart';
-import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/main_wrapper/ui/main_wrapper.dart';
 import '../../features/notifications/ui/pages/notifications_page.dart';
-import '../../features/profile/domain/entities/user.dart';
 import '../../features/profile/ui/pages/profile_screen.dart';
-import '../app/providers/user_provider.dart';
 import '../injections/injections.dart';
 import '../logger/logger.dart';
 
