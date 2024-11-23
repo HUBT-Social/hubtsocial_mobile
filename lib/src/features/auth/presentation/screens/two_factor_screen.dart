@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/background.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_two_factor.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_auth_otp.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
 
 import '../../../../core/navigation/route.dart';
@@ -17,12 +17,8 @@ class TwoFactorPage extends StatefulWidget {
 }
 
 class _TwoFactorPageState extends State<TwoFactorPage> {
-  final otp1Controller = TextEditingController();
-  final otp2Controller = TextEditingController();
-  final otp3Controller = TextEditingController();
-  final otp4Controller = TextEditingController();
-  final otp5Controller = TextEditingController();
-  final otp6Controller = TextEditingController();
+  final otpController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -85,23 +81,11 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                                 Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 6),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      InputAuthOTP(
-                                          otpController: otp1Controller),
-                                      InputAuthOTP(
-                                          otpController: otp2Controller),
-                                      InputAuthOTP(
-                                          otpController: otp3Controller),
-                                      InputAuthOTP(
-                                          otpController: otp4Controller),
-                                      InputAuthOTP(
-                                          otpController: otp5Controller),
-                                      InputAuthOTP(
-                                          otpController: otp6Controller),
-                                    ],
+                                  child: InputAuthOTP(
+                                    controller: otpController,
+                                    onCompleted: (value) {
+                                      _onTwoFactorButtonClicked();
+                                    },
                                   ),
                                 ),
                               ],
@@ -155,24 +139,11 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
     }
 
     context.closeKeyboard();
-    String code = "";
-    code += otp1Controller.text.trim();
-    code += otp2Controller.text.trim();
-    code += otp3Controller.text.trim();
-    code += otp4Controller.text.trim();
-    code += otp5Controller.text.trim();
-    code += otp6Controller.text.trim();
-    if (code.length == 6) {
-      context.read<AuthBloc>().add(TwoFactorEvent(
-            postcode: code,
-          ));
-    } else {
-      // otp1Controller.clear();
-      // otp2Controller.clear();
-      // otp3Controller.clear();
-      // otp4Controller.clear();
-      // otp5Controller.clear();
-      // otp6Controller.clear();
-    }
+
+    context.read<AuthBloc>().add(
+          TwoFactorEvent(
+            postcode: otpController.text.trim(),
+          ),
+        );
   }
 }

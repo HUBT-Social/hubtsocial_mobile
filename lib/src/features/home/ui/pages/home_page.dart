@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/core/navigation/router.import.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../../core/configs/assets.dart';
@@ -79,7 +78,12 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 700,
             width: 500,
-            child: Lottie.asset(Assets.pageNotFound),
+            child: Lottie.asset(Assets.screenNotFound),
+          ),
+          SizedBox(
+            height: 700,
+            width: 500,
+            child: Lottie.asset(Assets.passwordSuccessful),
           ),
           SizedBox(
             height: 700,

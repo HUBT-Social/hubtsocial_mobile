@@ -74,17 +74,17 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i62.UpdateUserProfile(gh<_i81.UserRepo>()));
     gh.lazySingleton<_i936.AuthRepo>(
         () => _i457.AuthRepoImpl(gh<_i953.AuthRemoteDataSource>()));
-    gh.lazySingleton<_i492.ResetPassword>(
-        () => _i492.ResetPassword(gh<_i936.AuthRepo>()));
-    gh.lazySingleton<_i488.SignOut>(() => _i488.SignOut(gh<_i936.AuthRepo>()));
-    gh.lazySingleton<_i627.SignInUserCase>(
-        () => _i627.SignInUserCase(gh<_i936.AuthRepo>()));
-    gh.lazySingleton<_i287.SignUpUserCase>(
-        () => _i287.SignUpUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i245.TwoFactorUserCase>(
         () => _i245.TwoFactorUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i245.VerifyEmailUserCase>(
         () => _i245.VerifyEmailUserCase(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i492.ResetPassword>(
+        () => _i492.ResetPassword(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i627.SignInUserCase>(
+        () => _i627.SignInUserCase(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i488.SignOut>(() => _i488.SignOut(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i287.SignUpUserCase>(
+        () => _i287.SignUpUserCase(gh<_i936.AuthRepo>()));
     gh.factory<_i715.AuthBloc>(() => _i715.AuthBloc(
           signIn: gh<_i627.SignInUserCase>(),
           twoFactor: gh<_i245.TwoFactorUserCase>(),

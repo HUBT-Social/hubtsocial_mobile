@@ -54,8 +54,13 @@ abstract class Validators {
 
   static String? otp(String? code) {
     if (code == null || code.isEmpty) {
-      return null;
+      return " navigatorKey.currentContext?.loc.required";
     }
+
+    if (code.length != 6) {
+      return navigatorKey.currentContext?.loc.required;
+    }
+
     return null;
   }
 

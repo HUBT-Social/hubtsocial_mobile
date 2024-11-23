@@ -65,7 +65,8 @@ final GoRouter router = GoRouter(
         var tokenBox = Hive.box('token');
         if (tokenBox.isNotEmpty && tokenBox.containsKey('userToken')) {
           UserToken token = tokenBox.get('userToken');
-          var payload = jwtDecode(token.accessToken).payload;
+          logInfo("aaaaaaa:" + token.accessToken);
+          var payload = jwtDecode(token.refreshToken).payload;
           // Check if token is expired
           var currentTimestamp = DateTime.now().millisecondsSinceEpoch;
           if (currentTimestamp ~/ 1000 < payload['exp']) {

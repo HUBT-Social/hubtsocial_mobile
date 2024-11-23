@@ -19,7 +19,8 @@ class Assets {
   static const String themeLight = "assets/icons/theme_light.svg";
   static const String themeDark = "assets/icons/theme_dark.svg";
 
-  static const pageNotFound = 'assets/lottie/page_not_found.json';
+  static const screenNotFound = 'assets/lottie/screen_not_found.json';
+  static const passwordSuccessful = 'assets/lottie/password_successful.json';
   static const verificationWaiting = 'assets/lottie/verification.json';
   static const success = 'assets/lottie/success.json';
   static const wrongInput = 'assets/lottie/wrong.json';
