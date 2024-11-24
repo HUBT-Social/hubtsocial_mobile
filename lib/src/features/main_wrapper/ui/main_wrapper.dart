@@ -17,7 +17,8 @@ class MainWrapper extends StatefulWidget {
 }
 
 class _MainWrapperState extends State<MainWrapper> {
-  final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+  final GlobalKey<CurvedNavigationBarState> bottomNavigationKey = GlobalKey();
+
   void changeNavigation(int index) {
     widget.navigationShell.goBranch(
       index,
@@ -28,13 +29,12 @@ class _MainWrapperState extends State<MainWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: false,
-      extendBody: false,
+      extendBodyBehindAppBar: true,
+      extendBody: true,
       body: widget.navigationShell,
       bottomNavigationBar: CurvedNavigationBar(
-        key: _bottomNavigationKey,
-        // height: 75,
-        index: 0,
+        key: bottomNavigationKey,
+        index: widget.navigationShell.currentIndex,
         items: const [
           NavigationItem(icon: Icons.home_filled),
           NavigationItem(icon: Icons.chat),
@@ -47,9 +47,7 @@ class _MainWrapperState extends State<MainWrapper> {
         animationCurve: Curves.easeOutQuint,
         animationDuration: const Duration(milliseconds: 600),
         onTap: (index) {
-          setState(() {
-            changeNavigation(index);
-          });
+          changeNavigation(index);
         },
         letIndexChange: (index) => true,
       ),

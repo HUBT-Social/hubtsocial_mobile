@@ -40,7 +40,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           FilledButton(
               onPressed: () {
-                AppRoute.profile.push(context);
+                AppRoute.profile.go(context);
+              },
+              child: Text("data")),
+          FilledButton(
+              onPressed: () {
+                AppRoute.menu.go(context);
               },
               child: Text("data")),
           TextButton(

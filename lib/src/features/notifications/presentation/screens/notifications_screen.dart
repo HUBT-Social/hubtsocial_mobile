@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
-import '../../../../core/configs/assets.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 
 class NotificationsScreen extends StatefulWidget {
