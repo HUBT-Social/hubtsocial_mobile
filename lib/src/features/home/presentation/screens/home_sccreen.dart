@@ -28,26 +28,16 @@ class _HomeScreenState extends State<HomeScreen> {
         // controller: scrollController,
         physics: const BouncingScrollPhysics(),
         children: [
-          const Text("aaaaaaa"),
-          const Text("aaaaaaa"),
-          const Text("aaaaaaa"),
-          const Text("aaaaaaa"),
-          TextButton(
-            onPressed: () {
-              throw Exception();
-            },
-            child: Text("data"),
-          ),
           FilledButton(
               onPressed: () {
                 AppRoute.profile.go(context);
               },
-              child: Text("data")),
+              child: Text("go profile")),
           FilledButton(
               onPressed: () {
                 AppRoute.menu.go(context);
               },
-              child: Text("data")),
+              child: Text("go menu")),
           TextButton(
             onPressed: () {
               context.push("/location");
@@ -69,7 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 200,
             color: Colors.amber,
           ),
-          ButtonChangeTheme(),
           SizedBox(
             height: 700,
             width: 500,

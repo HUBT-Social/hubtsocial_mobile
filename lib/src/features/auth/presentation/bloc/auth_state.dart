@@ -31,10 +31,6 @@ class SignedIn extends AuthState {
   const SignedIn();
 }
 
-class SignedUp extends AuthState {
-  const SignedUp();
-}
-
 class VerifyEmail extends AuthState {
   const VerifyEmail();
 }

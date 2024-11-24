@@ -124,7 +124,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       },
       (response) {
-        emit(SignedUp());
+        emit(SignedIn());
       },
     );
   }

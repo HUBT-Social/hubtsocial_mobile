@@ -36,7 +36,7 @@ final GoRouter router = GoRouter(
         return null;
       }
       // Move to sign in screen if no token found
-      return joinRoute(['', AppRoute.signIn.path]);
+      return joinRoute(['', AppRoute.getStarted.path]);
     }
     // if (user == null) {
     // if (state.fullPath != null) {

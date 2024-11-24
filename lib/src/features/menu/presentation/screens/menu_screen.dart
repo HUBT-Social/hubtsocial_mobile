@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/core/localization/ui/widget/button_change_localization.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 
+import '../../../../core/theme/presentation/widget/button_change_theme.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -24,6 +26,8 @@ class _MenuScreenState extends State<MenuScreen> {
         // controller: scrollController,
         physics: const BouncingScrollPhysics(),
         children: [
+          ButtonChangeTheme(),
+          ButtonChangeLocalization(),
           FilledButton(
               onPressed: () {
                 AppRoute.profile.push(context);
