@@ -8,16 +8,15 @@ import '../../../../core/navigation/route.dart';
 import '../../../../core/presentation/dialog/app_dialog.dart';
 import '../bloc/auth_bloc.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _usernameOrEmailController = TextEditingController();
-  final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -29,19 +28,13 @@ class _SignInScreenState extends State<SignInScreen> {
             // AuthError when the user is not found
             AppDialog.showMessageDialog(
                 AppDialog.errorMessage(state.message, context));
-          } else if (state is SignedIn) {
-            // SignedIn and move to Dashboard
-            AppDialog.showMessageDialog(
-                AppDialog.sucessMessage('wellcomeBack', context));
-            AppDialog.closeDialog();
-            AppRoute.home.go(context);
           } else if (state is AuthLoading) {
             // Shown Loading Dialog
-            AppDialog.showLoadingDialog(message: 'signing');
-          } else if (state is VerifyTwoFactor) {
+            AppDialog.showLoadingDialog(message: context.loc.forgot_password);
+          } else if (state is VerifyForgotPassword) {
             //Phone number is valid and move to Verification Screen
             AppDialog.closeDialog();
-            AppRoute.twoFactor.push(context);
+            // AppRoute.twoFactor.push(context);
           }
         },
         builder: (context, state) {
@@ -72,7 +65,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            context.loc.sign_in,
+                            context.loc.forgot_password,
                             style: context.textTheme.headlineMedium?.copyWith(
                               color: context.colorScheme.onSurface,
                             ),
@@ -98,42 +91,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 6),
-                                  child: InputField.password(
-                                    controller: _passwordController,
-                                    textInputAction: TextInputAction.done,
-                                    hintText: context.loc.password,
-                                    prefixIcon: Align(
-                                      widthFactor: 1.0,
-                                      heightFactor: 1.0,
-                                      child: Icon(
-                                        Icons.lock_rounded,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        AppRoute.forgotPassword.push(context);
-                                      },
-                                      child: Text(
-                                        context
-                                            .loc.forgot_password_question_mark,
-                                        style: context.textTheme.labelLarge
-                                            ?.copyWith(
-                                          color:
-                                              context.colorScheme.surfaceTint,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
                               ],
                             ),
                           ),
@@ -147,7 +104,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             child: SizedBox(
                               width: double.infinity,
                               child: Text(
-                                context.loc.sign_in,
+                                context.loc.continue_text,
                                 style: context.textTheme.bodyLarge?.copyWith(
                                     color: context.colorScheme.onPrimary),
                                 textAlign: TextAlign.center,
@@ -156,17 +113,6 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           SizedBox(
                             height: 12,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              AppRoute.signUp.push(context);
-                            },
-                            child: Text(
-                              context.loc.do_not_have_an_account,
-                              style: context.textTheme.labelLarge?.copyWith(
-                                color: context.colorScheme.surfaceTint,
-                              ),
-                            ),
                           ),
                           SizedBox(
                             height: 24,
@@ -200,9 +146,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
     context.closeKeyboard();
 
-    context.read<AuthBloc>().add(SignInEvent(
+    context.read<AuthBloc>().add(ForgotPasswordEvent(
           usernameOrEmail: _usernameOrEmailController.text.trim(),
-          password: _passwordController.text.trim(),
         ));
   }
 }

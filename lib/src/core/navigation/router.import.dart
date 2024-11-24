@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/screens/not_found_screen.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/screens/email_verify_screen.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/screens/get_started_screen.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/screens/information_screen.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/screens/sign_in_screen.dart';

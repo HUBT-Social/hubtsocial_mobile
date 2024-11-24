@@ -24,6 +24,10 @@ abstract class AuthRepo {
     required String postcode,
   });
 
+  ResultFuture<void> forgotPassword({
+    required String usernameOrEmail,
+  });
+
   ResultFuture<void> resetPassword({
     required String newPassword,
     required String token,

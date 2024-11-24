@@ -27,6 +27,10 @@ class VerifyTwoFactor extends AuthState {
   const VerifyTwoFactor();
 }
 
+class VerifyForgotPassword extends AuthState {
+  const VerifyForgotPassword();
+}
+
 class SignedIn extends AuthState {
   const SignedIn();
 }

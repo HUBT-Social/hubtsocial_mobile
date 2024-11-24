@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/forgot_password_user_case.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/otp_user_case.dart';
 import 'package:injectable/injectable.dart';
 
@@ -18,12 +19,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
     required SignInUserCase signIn,
     required TwoFactorUserCase twoFactor,
+    required ForgotPasswordUserCase forgotPassword,
     required VerifyEmailUserCase verifyEmail,
     required SignUpUserCase signUp,
     required ResetPassword resetPassword,
     required SignOut signOut,
   })  : _signIn = signIn,
         _twoFactor = twoFactor,
+        _forgotPassword = forgotPassword,
         _verifyEmail = verifyEmail,
         _signUp = signUp,
         _resetPassword = resetPassword,
@@ -34,6 +37,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
     on<SignInEvent>(_signInHandler);
     on<TwoFactorEvent>(_twoFactorHandler);
+    on<ForgotPasswordEvent>(_forgotPasswordHandler);
     on<VerifyEmailEvent>(_verifyEmailHandler);
     on<SignUpEvent>(_signUpHandler);
     on<SignOutEvent>(_signOutHandler);
@@ -41,6 +45,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   final SignInUserCase _signIn;
   final TwoFactorUserCase _twoFactor;
+  final ForgotPasswordUserCase _forgotPassword;
   final VerifyEmailUserCase _verifyEmail;
   final SignUpUserCase _signUp;
   final ResetPassword _resetPassword;
@@ -164,6 +169,30 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthError("serverError")),
       (token) => emit(const SignedOut()),
+    );
+  }
+
+  Future<void> _forgotPasswordHandler(
+      ForgotPasswordEvent event, Emitter<AuthState> emit) async {
+    final result = await _forgotPassword(
+      ForgotPasswordParams(
+        usernameOrEmail: event.usernameOrEmail,
+      ),
+    );
+    result.fold(
+      (failure) {
+        switch (int.parse(failure.statusCode)) {
+          case 401:
+            emit(AuthError(failure.message));
+            break;
+          default:
+            emit(AuthError(failure.message));
+            break;
+        }
+      },
+      (response) {
+        emit(VerifyForgotPassword());
+      },
     );
   }
 }

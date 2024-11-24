@@ -104,4 +104,17 @@ class AuthRepoImpl implements AuthRepo {
       return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
     }
   }
+
+  @override
+  ResultFuture<void> forgotPassword({required String usernameOrEmail}) async {
+    try {
+      final result = await _remoteDataSource.forgotPassword(
+        usernameOrEmail: usernameOrEmail,
+      );
+
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
 }

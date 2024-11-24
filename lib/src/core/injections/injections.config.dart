@@ -18,6 +18,8 @@ import 'package:hubtsocial_mobile/src/features/auth/data/repos/auth_repo_impl.da
     as _i457;
 import 'package:hubtsocial_mobile/src/features/auth/domain/repos/auth_repo.dart'
     as _i936;
+import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/forgot_password_user_case.dart'
+    as _i411;
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/otp_user_case.dart'
     as _i245;
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/reset_password.dart'
@@ -85,9 +87,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i488.SignOut>(() => _i488.SignOut(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i287.SignUpUserCase>(
         () => _i287.SignUpUserCase(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i411.ForgotPasswordUserCase>(
+        () => _i411.ForgotPasswordUserCase(gh<_i936.AuthRepo>()));
     gh.factory<_i715.AuthBloc>(() => _i715.AuthBloc(
           signIn: gh<_i627.SignInUserCase>(),
           twoFactor: gh<_i245.TwoFactorUserCase>(),
+          forgotPassword: gh<_i411.ForgotPasswordUserCase>(),
           verifyEmail: gh<_i245.VerifyEmailUserCase>(),
           signUp: gh<_i287.SignUpUserCase>(),
           resetPassword: gh<_i492.ResetPassword>(),

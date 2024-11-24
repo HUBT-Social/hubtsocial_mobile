@@ -35,6 +35,8 @@ abstract class AuthRemoteDataSource {
   Future<SignInResponseModel> twoFactor({required String postcode});
 
   Future<SignInResponseModel> verifyEmail({required String postcode});
+
+  Future<void> forgotPassword({required String usernameOrEmail});
 }
 
 @LazySingleton(
@@ -359,6 +361,37 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // }
 
       return responseData;
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      logError(e.toString());
+      debugPrintStack(stackTrace: s);
+      throw const ServerException(
+        message: 'Please try again later',
+        statusCode: '505',
+      );
+    }
+  }
+
+  @override
+  Future<void> forgotPassword({required String usernameOrEmail}) async {
+    try {
+      final response = await APIRequest.post(
+        url: EndPoint.authForgotPassword,
+        body: {
+          'usernameOrEmail': usernameOrEmail,
+        },
+      );
+
+      if (response.statusCode != 200) {
+        logError('Could not finalize api due to: ${response.body.toString()}');
+        throw ServerException(
+          message: response.body.toString(),
+          statusCode: response.statusCode.toString(),
+        );
+      }
+
+      return;
     } on ServerException {
       rethrow;
     } catch (e, s) {

@@ -8,6 +8,7 @@ enum AppRoute {
   staging('/staging'),
   signIn('/sign-in'),
   twoFactor('/two-factor'),
+  forgotPassword('/forgot-password'),
   emailVerify('/email-verify'),
   signUp('/sign-up'),
   information('/information'),

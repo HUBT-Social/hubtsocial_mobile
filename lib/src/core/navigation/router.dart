@@ -19,6 +19,7 @@ final GoRouter router = GoRouter(
     if (state.fullPath!.contains(AppRoute.getStarted.path) ||
         state.fullPath!.contains(AppRoute.signIn.path) ||
         state.fullPath!.contains(AppRoute.twoFactor.path) ||
+        state.fullPath!.contains(AppRoute.forgotPassword.path) ||
         state.fullPath!.contains(AppRoute.signUp.path) ||
         state.fullPath!.contains(AppRoute.emailVerify.path)) {
       return null;
@@ -70,6 +71,13 @@ final GoRouter router = GoRouter(
       builder: (context, state) => BlocProvider(
         create: (context) => getIt<AuthBloc>(),
         child: TwoFactorPage(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoute.forgotPassword.path,
+      builder: (context, state) => BlocProvider(
+        create: (context) => getIt<AuthBloc>(),
+        child: ForgotPasswordScreen(),
       ),
     ),
 

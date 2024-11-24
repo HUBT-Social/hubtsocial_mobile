@@ -28,6 +28,17 @@ class TwoFactorEvent extends AuthEvent {
   List<String> get props => [postcode];
 }
 
+class ForgotPasswordEvent extends AuthEvent {
+  const ForgotPasswordEvent({
+    required this.usernameOrEmail,
+  });
+
+  final String usernameOrEmail;
+
+  @override
+  List<String> get props => [usernameOrEmail];
+}
+
 class VerifyEmailEvent extends AuthEvent {
   const VerifyEmailEvent({
     required this.postcode,
