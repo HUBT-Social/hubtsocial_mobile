@@ -4,6 +4,7 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../../core/configs/assets.dart';
+import '../../../../core/navigation/route.dart';
 import '../../../../core/theme/presentation/widget/button_change_theme.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 
@@ -21,22 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
       headerSliverBuilder: (context, innerBoxIsScrolled) => [
         MainAppBar(
           title: context.loc.home,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.search_outlined,
-                size: 18,
-              ),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.message_rounded,
-                size: 18,
-              ),
-            ),
-          ],
         )
       ],
       body: ListView(
@@ -53,6 +38,11 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: Text("data"),
           ),
+          FilledButton(
+              onPressed: () {
+                AppRoute.profile.push(context);
+              },
+              child: Text("data")),
           TextButton(
             onPressed: () {
               context.push("/location");

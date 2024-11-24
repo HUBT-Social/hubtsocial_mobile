@@ -28,8 +28,8 @@ class _MainWrapperState extends State<MainWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      extendBody: true,
+      extendBodyBehindAppBar: false,
+      extendBody: false,
       body: widget.navigationShell,
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
@@ -37,7 +37,7 @@ class _MainWrapperState extends State<MainWrapper> {
         index: 0,
         items: const [
           NavigationItem(icon: Icons.home_filled),
-          NavigationItem(icon: Icons.newspaper),
+          NavigationItem(icon: Icons.chat),
           NavigationItem(icon: Icons.calendar_month),
           NavigationItem(icon: Icons.notifications),
           NavigationItem(icon: Icons.menu),

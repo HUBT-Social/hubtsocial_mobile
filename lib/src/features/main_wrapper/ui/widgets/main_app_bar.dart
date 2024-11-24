@@ -8,13 +8,13 @@ class MainAppBar extends StatelessWidget {
   const MainAppBar({
     super.key,
     required this.title,
-    required this.actions,
+    this.actions,
   });
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      toolbarHeight: 42,
+      toolbarHeight: 52,
       backgroundColor:
           // Theme.of(context).colorScheme.surfaceContainerHighest.withAlpha(192),
           Theme.of(context).colorScheme.surfaceContainerHighest,

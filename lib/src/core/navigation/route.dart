@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'router.import.dart';
-
 enum AppRoute {
   // none(''),
+  auth('/auth'),
   getStarted('/getStarted'),
   staging('/staging'),
   signIn('/sign-in'),
@@ -12,10 +11,13 @@ enum AppRoute {
   emailVerify('/email-verify'),
   signUp('/sign-up'),
   information('/information'),
+
   home('/'),
-  settings('/settings'),
+  chat('/chat'),
+  timetable('/timetable'),
   notifications('/notifications'),
-  profile('/profile'),
+  menu('/menu'),
+  profile('/menu/profile'),
   error('/error'),
   ;
 
@@ -36,4 +38,8 @@ extension AppRouteNavigation on AppRoute {
   void pushReplacement(BuildContext context) {
     context.pushReplacement(path);
   }
+
+  // void goNamed(BuildContext context) {
+  //   context.goNamed(path);
+  // }
 }

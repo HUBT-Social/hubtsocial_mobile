@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../configs/assets.dart';
@@ -49,8 +50,10 @@ class _NotFoundScreenState extends State<NotFoundScreen> {
           BackButton(),
           FilledButton(
               onPressed: () {
-                if (context.canPop()) {
+                try {
                   context.pop();
+                } catch (e) {
+                  AppRoute.home.go(context);
                 }
               },
               child: Text("Go Home"))
