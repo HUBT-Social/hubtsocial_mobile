@@ -1,13 +1,14 @@
 import 'package:injectable/injectable.dart';
 import 'package:hubtsocial_mobile/src/core/usecases/usecases.dart';
 import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
-import 'package:hubtsocial_mobile/src/features/profile/domain/repos/user_profile_repo.dart';
+import 'package:hubtsocial_mobile/src/features/user/domain/repos/user_repo.dart';
 
 @lazySingleton
-class ChangePassword extends UseCaseWithParams<void, ChangePasswordParams> {
+class ChangePasswordUserCase
+    extends UseCaseWithParams<void, ChangePasswordParams> {
   final UserRepo _repo;
 
-  ChangePassword(this._repo);
+  ChangePasswordUserCase(this._repo);
 
   @override
   ResultFuture<void> call(ChangePasswordParams param) => _repo.changePassword(

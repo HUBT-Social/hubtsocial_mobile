@@ -6,11 +6,11 @@ import 'package:injectable/injectable.dart';
 
 import 'package:hubtsocial_mobile/src/core/usecases/usecases.dart';
 import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
-import 'package:hubtsocial_mobile/src/features/profile/domain/repos/user_profile_repo.dart';
+import 'package:hubtsocial_mobile/src/features/user/domain/repos/user_repo.dart';
 
 @LazySingleton()
-class UpdateUserProfile extends UseCaseWithParams<void, UpdateProfileParams> {
-  const UpdateUserProfile(this._repo);
+class UpdateUserUserCase extends UseCaseWithParams<void, UpdateProfileParams> {
+  const UpdateUserUserCase(this._repo);
 
   final UserRepo _repo;
 

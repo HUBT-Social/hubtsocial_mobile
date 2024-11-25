@@ -11,6 +11,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart' as _i892;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:hive/hive.dart' as _i979;
+import 'package:hive_flutter/adapters.dart' as _i744;
 import 'package:hubtsocial_mobile/src/core/injections/module.dart' as _i107;
 import 'package:hubtsocial_mobile/src/features/auth/data/datasources/auth_remote_data_source.dart'
     as _i953;
@@ -32,14 +33,20 @@ import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/sign_up_user
     as _i287;
 import 'package:hubtsocial_mobile/src/features/auth/presentation/bloc/auth_bloc.dart'
     as _i715;
-import 'package:hubtsocial_mobile/src/features/profile/domain/repos/user_profile_repo.dart'
-    as _i81;
-import 'package:hubtsocial_mobile/src/features/profile/domain/usecases/change_password.dart'
-    as _i462;
-import 'package:hubtsocial_mobile/src/features/profile/domain/usecases/init_user_profile.dart'
-    as _i223;
-import 'package:hubtsocial_mobile/src/features/profile/domain/usecases/update_user_profile.dart'
-    as _i62;
+import 'package:hubtsocial_mobile/src/features/user/data/datasources/user_profile_remote_datasource.dart'
+    as _i592;
+import 'package:hubtsocial_mobile/src/features/user/data/repos/user_repo_impl.dart'
+    as _i674;
+import 'package:hubtsocial_mobile/src/features/user/domain/repos/user_repo.dart'
+    as _i1042;
+import 'package:hubtsocial_mobile/src/features/user/domain/usecases/change_password_usercase.dart'
+    as _i789;
+import 'package:hubtsocial_mobile/src/features/user/domain/usecases/init_user_usercase.dart'
+    as _i477;
+import 'package:hubtsocial_mobile/src/features/user/domain/usecases/update_user_usercase.dart'
+    as _i925;
+import 'package:hubtsocial_mobile/src/features/user/presentation/bloc/user_bloc.dart'
+    as _i527;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
@@ -68,14 +75,13 @@ extension GetItInjectableX on _i174.GetIt {
               prefs: gh<_i460.SharedPreferences>(),
               messaging: gh<_i892.FirebaseMessaging>(),
             ));
-    gh.lazySingleton<_i462.ChangePassword>(
-        () => _i462.ChangePassword(gh<_i81.UserRepo>()));
-    gh.lazySingleton<_i223.InitUserProfile>(
-        () => _i223.InitUserProfile(gh<_i81.UserRepo>()));
-    gh.lazySingleton<_i62.UpdateUserProfile>(
-        () => _i62.UpdateUserProfile(gh<_i81.UserRepo>()));
+    gh.lazySingleton<_i592.UserProfileRemoteDataSource>(() =>
+        _i592.UserProfileRemoteDataSourceImpl(
+            hiveAuth: gh<_i744.HiveInterface>()));
     gh.lazySingleton<_i936.AuthRepo>(
         () => _i457.AuthRepoImpl(gh<_i953.AuthRemoteDataSource>()));
+    gh.lazySingleton<_i1042.UserRepo>(
+        () => _i674.UserRepoImpl(gh<_i592.UserProfileRemoteDataSource>()));
     gh.lazySingleton<_i245.TwoFactorUserCase>(
         () => _i245.TwoFactorUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i245.VerifyEmailUserCase>(
@@ -89,6 +95,17 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i287.SignUpUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i411.ForgotPasswordUserCase>(
         () => _i411.ForgotPasswordUserCase(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i789.ChangePasswordUserCase>(
+        () => _i789.ChangePasswordUserCase(gh<_i1042.UserRepo>()));
+    gh.lazySingleton<_i477.InitUserUserCase>(
+        () => _i477.InitUserUserCase(gh<_i1042.UserRepo>()));
+    gh.lazySingleton<_i925.UpdateUserUserCase>(
+        () => _i925.UpdateUserUserCase(gh<_i1042.UserRepo>()));
+    gh.factory<_i527.UserBloc>(() => _i527.UserBloc(
+          initUserProfile: gh<_i477.InitUserUserCase>(),
+          updateUserProfile: gh<_i925.UpdateUserUserCase>(),
+          changedPassword: gh<_i789.ChangePasswordUserCase>(),
+        ));
     gh.factory<_i715.AuthBloc>(() => _i715.AuthBloc(
           signIn: gh<_i627.SignInUserCase>(),
           twoFactor: gh<_i245.TwoFactorUserCase>(),

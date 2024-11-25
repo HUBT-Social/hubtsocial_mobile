@@ -11,4 +11,6 @@ class EndPoint {
   static String get authRegister => "$auth/register";
   static String get authConfirmCode => "$auth/confirm-code";
   static String get authForgotPassword => "$auth/forgot-password";
+  static String get authGetUser => "$auth/get-user";
+  static String get authRefreshToken => "$auth/refresh-token";
 }

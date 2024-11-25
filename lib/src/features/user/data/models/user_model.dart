@@ -1,0 +1,65 @@
+import 'dart:convert';
+
+import 'package:hive_flutter/adapters.dart';
+import 'package:hubtsocial_mobile/src/features/user/domain/entities/user.dart';
+
+part 'user_model.g.dart';
+
+@HiveType(typeId: 3)
+class UserModel extends User {
+  const UserModel({
+    required super.firstName,
+    required super.lastName,
+    required super.gender,
+    required super.email,
+    required super.avatarUrl,
+    required super.birthDay,
+    required super.phoneNumber,
+  });
+
+  UserModel copyWith({
+    String? firstName,
+    String? lastName,
+    int? gender,
+    String? avatarUrl,
+    DateTime? birthDay,
+    String? phoneNumber,
+    String? email,
+  }) {
+    return UserModel(
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      gender: gender ?? this.gender,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      birthDay: birthDay ?? this.birthDay,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      email: email ?? this.email,
+    );
+  }
+
+  Map<String, dynamic> toMap() => {
+        "firstName": firstName,
+        "lastName": lastName,
+        "gender": gender,
+        "avatarUrl": avatarUrl,
+        "birthDay": birthDay?.toIso8601String(),
+        "phoneNumber": phoneNumber,
+      };
+
+  factory UserModel.fromMap(Map<String, dynamic> json) {
+    return UserModel(
+      firstName: json["firstName"],
+      lastName: json["lastName"],
+      gender: json["gender"],
+      avatarUrl: json["avatarUrl"],
+      birthDay: DateTime.tryParse(json["birthDay"] ?? ""),
+      phoneNumber: json["phoneNumber"],
+      email: json["email"],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
+}

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
+import '../app/providers/user_provider.dart';
 
 extension Context on BuildContext {
   ThemeData get theme => Theme.of(this);
@@ -8,6 +11,7 @@ extension Context on BuildContext {
   TextTheme get textTheme => theme.textTheme;
 
   AppLocalizations get loc => AppLocalizations.of(this);
+  UserProvider get userProvider => read<UserProvider>();
 
   void closeKeyboard() => FocusScope.of(this).unfocus();
 

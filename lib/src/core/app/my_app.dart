@@ -4,9 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:hubtsocial_mobile/src/core/app/di.dart';
+import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';
 import 'package:hubtsocial_mobile/src/core/style/app_font.dart';
 import 'package:hubtsocial_mobile/src/core/style/app_theme.dart';
+import 'package:provider/provider.dart';
 
 import '../localization/bloc/localization_bloc.dart';
 import '../navigation/router.import.dart';
@@ -35,7 +36,16 @@ class MyApp extends StatelessWidget {
         TextTheme textTheme =
             AppFont.createTextTheme(context, "Roboto", "Roboto");
         AppTheme theme = AppTheme(textTheme);
-        return DI(
+        return MultiBlocProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => UserProvider()),
+            BlocProvider(
+              create: (context) => LocalizationBloc()..add(GetLanguage()),
+            ),
+            BlocProvider(
+              create: (context) => ThemeBloc()..add(GetTheme()),
+            ),
+          ],
           child: BlocBuilder<LocalizationBloc, AppLocalizationState>(
             builder: (context, stateLocalization) {
               return BlocBuilder<ThemeBloc, AppThemeState>(

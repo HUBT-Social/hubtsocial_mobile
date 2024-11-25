@@ -7,16 +7,16 @@ enum UrlImageShape {
 }
 
 class UrlImage extends StatelessWidget {
-  const UrlImage({
-    required this.url,
-    required this.width,
-    required this.height,
+  const UrlImage(
+    this.url, {
+    this.width,
+    this.height,
     this.fit = BoxFit.cover,
     super.key,
   }) : shape = UrlImageShape.rectangle;
 
-  const UrlImage.square({
-    required this.url,
+  const UrlImage.square(
+    this.url, {
     required double size,
     this.fit = BoxFit.cover,
     super.key,
@@ -24,8 +24,8 @@ class UrlImage extends StatelessWidget {
         height = size,
         shape = UrlImageShape.rectangle;
 
-  const UrlImage.circle({
-    required this.url,
+  const UrlImage.circle(
+    this.url, {
     required double size,
     this.fit = BoxFit.cover,
     super.key,
@@ -34,8 +34,8 @@ class UrlImage extends StatelessWidget {
         shape = UrlImageShape.circle;
 
   final String url;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final UrlImageShape shape;
   final BoxFit fit;
 

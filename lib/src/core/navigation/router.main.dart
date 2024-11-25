@@ -11,8 +11,15 @@ part of 'router.import.dart';
 StatefulShellRoute _mainRoute() {
   return StatefulShellRoute.indexedStack(
     builder: (context, state, navigationShell) {
-      return MainWrapper(
-        navigationShell: navigationShell,
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => getIt<UserBloc>(),
+          ),
+        ],
+        child: MainWrapper(
+          navigationShell: navigationShell,
+        ),
       );
     },
     branches: <StatefulShellBranch>[

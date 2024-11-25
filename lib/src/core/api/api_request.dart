@@ -24,6 +24,7 @@ class APIRequest {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'User-Agent': AppLocalStorage.uniqueDeviceId,
         'Authorization': token != null ? 'Bearer $token' : '',
       },
       body: body != null ? jsonEncode(body) : null,
@@ -43,6 +44,7 @@ class APIRequest {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'User-Agent': AppLocalStorage.uniqueDeviceId,
         'Authorization': token != null ? 'Bearer $token' : '',
       },
       body: body != null ? jsonEncode(body) : null,
@@ -63,6 +65,7 @@ class APIRequest {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'User-Agent': AppLocalStorage.uniqueDeviceId,
         'Authorization': token != null ? 'Bearer $token' : '',
       },
       body: body != null ? jsonEncode(body) : null,
@@ -83,6 +86,7 @@ class APIRequest {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'User-Agent': AppLocalStorage.uniqueDeviceId,
         'Authorization': token != null ? 'Bearer $token' : '',
       },
     );
@@ -102,6 +106,7 @@ class APIRequest {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'User-Agent': AppLocalStorage.uniqueDeviceId,
         'Authorization': token != null ? 'Bearer $token' : '',
       },
       body: body != null ? jsonEncode(body) : null,
@@ -133,10 +138,11 @@ class APIRequest {
     UserTokenModel token = hiveAuth.box('token').get('userToken');
     if (isExpiredToken(token.accessToken)) {
       final response = await APIRequest.post(
-        url: '${EndPoint.apiUrl}/refresh',
+        url: EndPoint.authRefreshToken,
         body: {
-          'refreshToken': token.refreshToken,
+          "refreshToken": token.refreshToken,
         },
+        token: token.accessToken,
       );
       if (response.statusCode != 200) {
         throw const ServerException(
