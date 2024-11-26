@@ -119,7 +119,7 @@ class APIRequest {
     var payload = jwtDecode(token).payload;
     int expiredTime = payload['exp'];
     var currentTimestamp = DateTime.now()
-        .subtract(const Duration(minutes: 30))
+        .subtract(const Duration(minutes: 10))
         .millisecondsSinceEpoch;
     if (currentTimestamp ~/ 1000 > expiredTime) {
       return true;
@@ -145,6 +145,7 @@ class APIRequest {
         token: token.accessToken,
       );
       if (response.statusCode != 200) {
+        logError(response.body);
         throw const ServerException(
           message: 'Please try again later',
           statusCode: '401',

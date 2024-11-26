@@ -82,6 +82,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i457.AuthRepoImpl(gh<_i953.AuthRemoteDataSource>()));
     gh.lazySingleton<_i1042.UserRepo>(
         () => _i674.UserRepoImpl(gh<_i592.UserProfileRemoteDataSource>()));
+    gh.lazySingleton<_i411.ForgotPasswordUserCase>(
+        () => _i411.ForgotPasswordUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i245.TwoFactorUserCase>(
         () => _i245.TwoFactorUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i245.VerifyEmailUserCase>(
@@ -93,8 +95,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i488.SignOut>(() => _i488.SignOut(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i287.SignUpUserCase>(
         () => _i287.SignUpUserCase(gh<_i936.AuthRepo>()));
-    gh.lazySingleton<_i411.ForgotPasswordUserCase>(
-        () => _i411.ForgotPasswordUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i789.ChangePasswordUserCase>(
         () => _i789.ChangePasswordUserCase(gh<_i1042.UserRepo>()));
     gh.lazySingleton<_i477.InitUserUserCase>(
