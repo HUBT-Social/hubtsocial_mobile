@@ -30,6 +30,18 @@ class VerifyEmailUserCase extends UseCaseWithParams<UserResponse, OtpParams> {
       );
 }
 
+@LazySingleton()
+class VerifyPasswordUserCase extends UseCaseWithParams<void, OtpParams> {
+  const VerifyPasswordUserCase(this._repo);
+
+  final AuthRepo _repo;
+
+  @override
+  ResultFuture<void> call(OtpParams param) => _repo.verifyPassword(
+        postcode: param.postcode,
+      );
+}
+
 class OtpParams extends Equatable {
   const OtpParams({
     required this.postcode,

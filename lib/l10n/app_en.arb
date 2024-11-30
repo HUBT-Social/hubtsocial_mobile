@@ -48,6 +48,8 @@
   "@forgot_password_question_mark": {},
   "forgot_password": "Forgot Password",
   "@forgot_password": {},
+  "password_verify": "Password Verification",
+  "@password_verify": {},
   "sign_up": "Sign up",
   "@sign_up": {},
   "password": "Password",
@@ -73,5 +75,15 @@
   "theme_light": "Light",
   "@theme_light": {},
   "theme_dark": "Dark",
-  "@theme_dark": {}
+  "@theme_dark": {},
+  "forgot_password_message": "Please enter your Username or Email to reset the password",
+  "@forgot_password_message": {},
+  "enter_otp_message": "Enter the 6-digit code we sent you at Email hubt*****@gmail.com",
+  "@enter_otp_message": {},
+  "enter_message": "Please enter your Username or Email to reset the password",
+  "@enter_message": {},
+  "resend": "resend",
+  "@resend": {},
+  "otp_expire_message": "otp_expire_message",
+  "@otp_expire_message": {}
 }

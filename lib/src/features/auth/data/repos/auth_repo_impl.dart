@@ -117,4 +117,31 @@ class AuthRepoImpl implements AuthRepo {
       return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
     }
   }
+
+  @override
+  ResultFuture<UserResponse> twoFactorPassword(
+      {required String otpPassword}) async {
+    try {
+      final result = await _remoteDataSource.twoFactorPassword(
+        otpPassword: otpPassword,
+      );
+
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
+
+  @override
+  ResultFuture<void> verifyPassword({required String postcode}) async {
+    try {
+      final result = await _remoteDataSource.verifyPassword(
+        postcode: postcode,
+      );
+
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
 }

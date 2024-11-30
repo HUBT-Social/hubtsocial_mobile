@@ -31,6 +31,10 @@ class VerifyForgotPassword extends AuthState {
   const VerifyForgotPassword();
 }
 
+class VerifyForgotPasswordSuccess extends AuthState {
+  const VerifyForgotPasswordSuccess();
+}
+
 class SignedIn extends AuthState {
   const SignedIn();
 }

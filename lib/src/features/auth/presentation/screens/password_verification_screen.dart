@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/core/presentation/input/input_field.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/background.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_auth_otp.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
 import '../../../../core/navigation/route.dart';
 import '../../../../core/presentation/dialog/app_dialog.dart';
 import '../bloc/auth_bloc.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({super.key});
+class PasswordVerifiCationScreen extends StatefulWidget {
+  const PasswordVerifiCationScreen({super.key});
 
   @override
-  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  State<PasswordVerifiCationScreen> createState() =>
+      _PasswordVerifiCationScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  final _usernameOrEmailController = TextEditingController();
+class _PasswordVerifiCationScreenState
+    extends State<PasswordVerifiCationScreen> {
+  final otpController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -30,9 +33,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 AppDialog.errorMessage(state.message, context));
           } else if (state is AuthLoading) {
             AppDialog.showLoadingDialog(message: context.loc.forgot_password);
-          } else if (state is VerifyForgotPassword) {
+          } else if (state is VerifyForgotPasswordSuccess) {
             AppDialog.closeDialog();
-            AppRoute.passwordVerify.push(context);
+            AppRoute.setNewPassword.push(context);
           }
         },
         builder: (context, state) {
@@ -63,14 +66,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            context.loc.forgot_password,
+                            context.loc.password_verify,
                             style: context.textTheme.headlineMedium?.copyWith(
                               color: context.colorScheme.onSurface,
                             ),
                           ),
                           Center(
                             child: Text(
-                              context.loc.enter_message,
+                              context.loc.enter_otp_message,
                               style: context.textTheme.titleSmall?.copyWith(
                                 color: context.colorScheme.onSurface,
                               ),
@@ -84,17 +87,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 6),
-                                  child: InputField.name(
-                                    controller: _usernameOrEmailController,
-                                    textInputAction: TextInputAction.next,
-                                    hintText: context.loc.username_or_email,
-                                    prefixIcon: Align(
-                                      widthFactor: 1.0,
-                                      heightFactor: 1.0,
-                                      child: Icon(
-                                        Icons.person,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      InputAuthOTP(
+                                        controller: otpController,
+                                        onCompleted: (value) {
+                                          _onVerifyButtonClicked();
+                                        },
                                       ),
-                                    ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -105,8 +108,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           ),
                           FilledButton(
                             onPressed: () {
-                              _onSignInButtonClicked();
-                              AppRoute.passwordVerify.path;
+                              _onVerifyButtonClicked();
                             },
                             child: SizedBox(
                               width: double.infinity,
@@ -117,9 +119,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 12,
                           ),
                           SizedBox(
                             height: 24,
@@ -146,15 +145,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  void _onSignInButtonClicked() {
+  void _onVerifyButtonClicked() {
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
     context.closeKeyboard();
 
-    context.read<AuthBloc>().add(ForgotPasswordEvent(
-          usernameOrEmail: _usernameOrEmailController.text.trim(),
+    context.read<AuthBloc>().add(VerifyPasswordEvent(
+          otpPassword: otpController.text.trim(),
         ));
   }
 }

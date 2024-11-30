@@ -48,6 +48,8 @@
   "@forgot_password_question_mark": {},
   "forgot_password": "Quên Mật Khẩu",
   "@forgot_password": {},
+  "password_verify": "Xác minh mật khẩu",
+  "@password_verify": {},
   "sign_up": "Đăng ký",
   "@sign_up": {},
   "password": "Mật khẩu",
@@ -73,5 +75,15 @@
   "theme_light": "Sáng",
   "@theme_light": {},
   "theme_dark": "Tối",
-  "@theme_dark": {}
+  "@theme_dark": {},
+  "forgot_password_message": "Vui lòng nhập Tên người dùng hoặc Email của bạn để đặt lại mật khẩu",
+  "@forgot_password_message": {},
+  "enter_otp_message": "Enter the 6-digit code we sent you at Email hubt*****@gmail.com",
+  "@enter_otp_message": {},
+  "enter_message": "Vui lòng nhập Tên đăng nhập hoặc Email của bạn để đặt lại mật khẩu",
+  "@enter_message": {},
+  "resend": "resend",
+  "@resend": {},
+  "otp_expire_message": "otp_expire_message",
+  "@otp_expire_message": {}
 }

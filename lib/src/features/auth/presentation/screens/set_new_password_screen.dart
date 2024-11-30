@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/core/presentation/input/input_field.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/background.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/bloc/auth_bloc.dart';
+
 import '../../../../core/navigation/route.dart';
 import '../../../../core/presentation/dialog/app_dialog.dart';
-import '../bloc/auth_bloc.dart';
+import '../../../../core/presentation/input/input_field.dart';
+import '../widgets/background.dart';
+import '../widgets/system_setting.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({super.key});
+class SetNewPasswordScreen extends StatefulWidget {
+  const SetNewPasswordScreen({super.key});
 
   @override
-  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  State<SetNewPasswordScreen> createState() => _SetNewPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  final _usernameOrEmailController = TextEditingController();
+class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -24,15 +26,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (_, state) async {
-          debugPrint('Current state: $state');
           if (state is AuthError) {
+            // AuthError when the user is not found
             AppDialog.showMessageDialog(
                 AppDialog.errorMessage(state.message, context));
           } else if (state is AuthLoading) {
-            AppDialog.showLoadingDialog(message: context.loc.forgot_password);
-          } else if (state is VerifyForgotPassword) {
-            AppDialog.closeDialog();
-            AppRoute.passwordVerify.push(context);
+            // Shown Loading Dialog
+            AppDialog.showLoadingDialog(message: 'signing');
           }
         },
         builder: (context, state) {
@@ -63,17 +63,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            context.loc.forgot_password,
+                            context.loc.sign_in,
                             style: context.textTheme.headlineMedium?.copyWith(
                               color: context.colorScheme.onSurface,
-                            ),
-                          ),
-                          Center(
-                            child: Text(
-                              context.loc.enter_message,
-                              style: context.textTheme.titleSmall?.copyWith(
-                                color: context.colorScheme.onSurface,
-                              ),
                             ),
                           ),
                           SizedBox(height: 12),
@@ -85,18 +77,54 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 6),
                                   child: InputField.name(
-                                    controller: _usernameOrEmailController,
+                                    controller: _passwordController,
                                     textInputAction: TextInputAction.next,
-                                    hintText: context.loc.username_or_email,
+                                    hintText: context.loc.password,
                                     prefixIcon: Align(
                                       widthFactor: 1.0,
                                       heightFactor: 1.0,
                                       child: Icon(
-                                        Icons.person,
+                                        Icons.lock_rounded,
                                       ),
                                     ),
                                   ),
                                 ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 6),
+                                  child: InputField.password(
+                                    controller: _confirmPasswordController,
+                                    textInputAction: TextInputAction.done,
+                                    hintText: context.loc.password,
+                                    prefixIcon: Align(
+                                      widthFactor: 1.0,
+                                      heightFactor: 1.0,
+                                      child: Icon(
+                                        Icons.lock_rounded,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        AppRoute.forgotPassword.push(context);
+                                      },
+                                      child: Text(
+                                        context
+                                            .loc.forgot_password_question_mark,
+                                        style: context.textTheme.labelLarge
+                                            ?.copyWith(
+                                          color:
+                                              context.colorScheme.surfaceTint,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -104,14 +132,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             height: 12,
                           ),
                           FilledButton(
-                            onPressed: () {
-                              _onSignInButtonClicked();
-                              AppRoute.passwordVerify.path;
-                            },
+                            onPressed: () {},
                             child: SizedBox(
                               width: double.infinity,
                               child: Text(
-                                context.loc.continue_text,
+                                context.loc.sign_in,
                                 style: context.textTheme.bodyLarge?.copyWith(
                                     color: context.colorScheme.onPrimary),
                                 textAlign: TextAlign.center,
@@ -120,6 +145,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           ),
                           SizedBox(
                             height: 12,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              AppRoute.signUp.push(context);
+                            },
+                            child: Text(
+                              context.loc.do_not_have_an_account,
+                              style: context.textTheme.labelLarge?.copyWith(
+                                color: context.colorScheme.surfaceTint,
+                              ),
+                            ),
                           ),
                           SizedBox(
                             height: 24,
@@ -144,17 +180,5 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         },
       ),
     );
-  }
-
-  void _onSignInButtonClicked() {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
-    context.closeKeyboard();
-
-    context.read<AuthBloc>().add(ForgotPasswordEvent(
-          usernameOrEmail: _usernameOrEmailController.text.trim(),
-        ));
   }
 }

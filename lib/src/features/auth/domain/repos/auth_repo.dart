@@ -12,6 +12,9 @@ abstract class AuthRepo {
   ResultFuture<UserResponse> twoFactor({
     required String postcode,
   });
+  ResultFuture<UserResponse> twoFactorPassword({
+    required String otpPassword,
+  });
 
   ResultFuture<void> signUp({
     required String userName,
@@ -21,6 +24,9 @@ abstract class AuthRepo {
   });
 
   ResultFuture<UserResponse> verifyEmail({
+    required String postcode,
+  });
+  ResultFuture<void> verifyPassword({
     required String postcode,
   });
 

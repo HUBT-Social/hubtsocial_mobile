@@ -21,6 +21,8 @@ final GoRouter router = GoRouter(
         state.fullPath!.contains(AppRoute.twoFactor.path) ||
         state.fullPath!.contains(AppRoute.forgotPassword.path) ||
         state.fullPath!.contains(AppRoute.signUp.path) ||
+        state.fullPath!.contains(AppRoute.passwordVerify.path) ||
+        state.fullPath!.contains(AppRoute.setNewPassword.path) ||
         state.fullPath!.contains(AppRoute.emailVerify.path)) {
       return null;
     }
@@ -42,17 +44,6 @@ final GoRouter router = GoRouter(
       // Move to sign in screen if no token found
       return joinRoute(['', AppRoute.getStarted.path]);
     }
-    // if (user == null) {
-    // if (state.fullPath != null) {
-    //   var param = Map<String, String>.from(state.uri.queryParameters);
-    //   logInfo('Param $param');
-    //   param.putIfAbsent(
-    //       'forwardRoute', () => state.fullPath!.replaceAll('/', ''));
-    //   return parseRoute(
-    //       route: '/${AppRoute.home.path}', queryParameters: param);
-    // }
-    // return '/';
-    // }
 
     return null;
   },
@@ -102,7 +93,20 @@ final GoRouter router = GoRouter(
       path: AppRoute.information.path,
       builder: (context, state) => const InformationScreen(),
     ),
-
+    GoRoute(
+      path: AppRoute.passwordVerify.path,
+      builder: (context, state) => BlocProvider(
+        create: (context) => getIt<AuthBloc>(),
+        child: PasswordVerifiCationScreen(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoute.setNewPassword.path,
+      builder: (context, state) => BlocProvider(
+        create: (context) => getIt<AuthBloc>(),
+        child: SetNewPasswordScreen(),
+      ),
+    ),
     // MainWrapper
     _mainRoute(),
   ],

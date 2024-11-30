@@ -19,10 +19,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({
     required SignInUserCase signIn,
     required TwoFactorUserCase twoFactor,
+    required VerifyPasswordUserCase password,
     required ForgotPasswordUserCase forgotPassword,
     required VerifyEmailUserCase verifyEmail,
     required SignUpUserCase signUp,
     required ResetPassword resetPassword,
+    required VerifyPasswordUserCase verifyPassword,
     required SignOut signOut,
   })  : _signIn = signIn,
         _twoFactor = twoFactor,
@@ -30,12 +32,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _verifyEmail = verifyEmail,
         _signUp = signUp,
         _resetPassword = resetPassword,
+        _verifyPassword = verifyPassword,
         _signOut = signOut,
         super(const AuthInitial()) {
     on<AuthEvent>((event, emit) {
       emit(const AuthLoading());
     });
     on<SignInEvent>(_signInHandler);
+    on<VerifyPasswordEvent>(_verifyPasswordHandler);
     on<TwoFactorEvent>(_twoFactorHandler);
     on<ForgotPasswordEvent>(_forgotPasswordHandler);
     on<VerifyEmailEvent>(_verifyEmailHandler);
@@ -47,9 +51,36 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final TwoFactorUserCase _twoFactor;
   final ForgotPasswordUserCase _forgotPassword;
   final VerifyEmailUserCase _verifyEmail;
+  final VerifyPasswordUserCase _verifyPassword;
   final SignUpUserCase _signUp;
   final ResetPassword _resetPassword;
   final SignOut _signOut;
+
+  Future<void> _verifyPasswordHandler(
+    VerifyPasswordEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    final result = await _verifyPassword(
+      OtpParams(
+        postcode: event.otpPassword,
+      ),
+    );
+    result.fold(
+      (failure) {
+        switch (int.parse(failure.statusCode)) {
+          case 401:
+            emit(AuthError(failure.message));
+            break;
+          default:
+            emit(AuthError(failure.message));
+            break;
+        }
+      },
+      (response) {
+        emit(VerifyForgotPasswordSuccess());
+      },
+    );
+  }
 
   Future<void> _signInHandler(
     SignInEvent event,
