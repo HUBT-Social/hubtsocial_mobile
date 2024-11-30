@@ -27,6 +27,17 @@ class Assets {
   static const writeInput = 'assets/lottie/write_form.json';
   static const paidSuccess = 'assets/lottie/wallet_paid_success.json';
   static const paidFailed = 'assets/lottie/wallet_paid_failed.json';
+
+  static const String navigationIconHome =
+      "assets/icons/navigation_icon_home.svg";
+  static const String navigationIconChat =
+      "assets/icons/navigation_icon_chat.svg";
+  static const String navigationIconTimetable =
+      "assets/icons/navigation_icon_timetable.svg";
+  static const String navigationIconNotification =
+      "assets/icons/navigation_icon_notification.svg";
+  static const String navigationIconMenu =
+      "assets/icons/navigation_icon_menu.svg";
 }
 
 class AppIcons {

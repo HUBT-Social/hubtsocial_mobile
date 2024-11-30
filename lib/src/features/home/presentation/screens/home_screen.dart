@@ -60,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             },
           ),
+          // Text(context.userProvider.user!.avatarUrl),
           FilledButton(
               onPressed: () {
                 AppRoute.profile.go(context);

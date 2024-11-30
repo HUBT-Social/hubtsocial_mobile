@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 class NavigationItem extends StatelessWidget {
-  final IconData icon;
+  final String file;
 
   const NavigationItem({
     super.key,
-    required this.icon,
+    required this.file,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      icon,
-      size: 24,
-      color: context.colorScheme.onSurfaceVariant,
+    return SvgPicture.asset(
+      file,
+      width: 36,
+      height: 36,
+      fit: BoxFit.cover,
+      colorFilter: ColorFilter.mode(
+          context.colorScheme.onSurfaceVariant, BlendMode.srcIn),
     );
   }
 }

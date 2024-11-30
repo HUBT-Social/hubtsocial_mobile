@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hubtsocial_mobile/src/core/configs/assets.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 import 'widgets/navigation_item.dart';
@@ -36,11 +37,11 @@ class _MainWrapperState extends State<MainWrapper> {
         key: bottomNavigationKey,
         index: widget.navigationShell.currentIndex,
         items: const [
-          NavigationItem(icon: Icons.home_filled),
-          NavigationItem(icon: Icons.chat),
-          NavigationItem(icon: Icons.calendar_month),
-          NavigationItem(icon: Icons.notifications),
-          NavigationItem(icon: Icons.menu),
+          NavigationItem(file: Assets.navigationIconHome),
+          NavigationItem(file: Assets.navigationIconChat),
+          NavigationItem(file: Assets.navigationIconTimetable),
+          NavigationItem(file: Assets.navigationIconNotification),
+          NavigationItem(file: Assets.navigationIconMenu),
         ],
         color: context.colorScheme.surfaceContainerHighest,
         backgroundColor: Colors.transparent,
