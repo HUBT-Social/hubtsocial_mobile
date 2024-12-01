@@ -42,7 +42,7 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
       UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
 
       final response = await APIRequest.get(
-        url: EndPoint.authGetUser,
+        url: EndPoint.userGetUser,
         token: userToken.accessToken,
       );
       if (response.statusCode != 200) {
