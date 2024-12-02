@@ -20,7 +20,7 @@ class User extends Equatable {
   @HiveField(6)
   final String? email;
 
-  String get fullname => firstName + lastName;
+  String get fullname => "$firstName $lastName";
 
   const User({
     // required this.idUser,

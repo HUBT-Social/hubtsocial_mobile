@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/localization/ui/widget/button_change_localization.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
+import 'package:hubtsocial_mobile/src/features/menu/presentation/widgets/user_card_in_menu.dart';
 
 import '../../../../core/app/providers/hive_provider.dart';
 import '../../../../core/theme/presentation/widget/button_change_theme.dart';
@@ -29,6 +30,7 @@ class _MenuScreenState extends State<MenuScreen> {
         // controller: scrollController,
         physics: const BouncingScrollPhysics(),
         children: [
+          UserCardInMenu(),
           ButtonChangeTheme(),
           ButtonChangeLocalization(),
           FilledButton(

@@ -81,25 +81,11 @@ class _PasswordVerifiCationScreenState
                           SizedBox(height: 12),
                           Form(
                             key: _formKey,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 6),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      InputAuthOTP(
-                                        controller: otpController,
-                                        onCompleted: (value) {
-                                          _onVerifyButtonClicked();
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                            child: InputAuthOTP(
+                              controller: otpController,
+                              onCompleted: (value) {
+                                _onVerifyButtonClicked();
+                              },
                             ),
                           ),
                           SizedBox(
