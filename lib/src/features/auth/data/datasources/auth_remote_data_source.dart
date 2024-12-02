@@ -36,7 +36,7 @@ abstract class AuthRemoteDataSource {
   Future<SignInResponseModel> twoFactorPassword({required String otpPassword});
   Future<void> verifyPassword({required String postcode});
   Future<void> forgotPassword({required String usernameOrEmail});
-  Future<void> setnewpassword(
+  Future<void> setNewPassword(
       {required String newPassword, required String confirmNewPassword});
 }
 
@@ -89,8 +89,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logError('Error in twoFactorPassword: ${e.toString()}');
-      debugPrintStack(stackTrace: s);
+      logError(e.toString());
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Failed to verify OTP password. Please try again later.',
         statusCode: '505',
@@ -120,8 +120,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logError('Error in verifyEmailPassword: ${e.toString()}');
-      debugPrintStack(stackTrace: s);
+      logError(e.toString());
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Failed to verify email password. Please try again later.',
         statusCode: '505',
@@ -197,7 +197,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       rethrow;
     } catch (e, s) {
       logError(e.toString());
-      debugPrintStack(stackTrace: s);
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Please try again later',
         statusCode: '505',
@@ -267,7 +267,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
     } catch (e, s) {
-      debugPrintStack(stackTrace: s);
+      logError(e.toString());
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Issue with the server',
         statusCode: '505',
@@ -301,7 +302,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         logDebug('Devices response : ${response.body.toString()}');
       }
     } catch (e, s) {
-      debugPrintStack(stackTrace: s);
+      logError(e.toString());
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Issue with the server',
         statusCode: '505',
@@ -344,7 +346,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       rethrow;
     } catch (e, s) {
       logError(e.toString());
-      debugPrintStack(stackTrace: s);
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Please try again later',
         statusCode: '505',
@@ -387,7 +389,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       rethrow;
     } catch (e, s) {
       logError(e.toString());
-      debugPrintStack(stackTrace: s);
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Please try again later',
         statusCode: '505',
@@ -418,7 +420,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       rethrow;
     } catch (e, s) {
       logError(e.toString());
-      debugPrintStack(stackTrace: s);
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Please try again later',
         statusCode: '505',
@@ -427,10 +429,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> setnewpassword(
+  Future<void> setNewPassword(
       {required String newPassword, required String confirmNewPassword}) async {
-    logInfo(
-        'newPassword :$newPassword, confirmNewPassword : $confirmNewPassword');
     try {
       final response = await APIRequest.post(
         url: EndPoint.authSetNewPassword,

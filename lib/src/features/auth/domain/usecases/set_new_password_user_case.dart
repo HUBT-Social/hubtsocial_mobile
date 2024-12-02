@@ -13,7 +13,7 @@ class SetNewPasswordUserCase
   const SetNewPasswordUserCase(this._repo);
   final AuthRepo _repo;
   @override
-  ResultFuture<void> call(SetNewPasswordParams param) => _repo.setnewpassword(
+  ResultFuture<void> call(SetNewPasswordParams param) => _repo.setNewPassword(
       newPassword: param.newPassword,
       confirmNewPassword: param.confirmNewPassword);
 }
