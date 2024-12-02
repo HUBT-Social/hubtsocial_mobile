@@ -1,13 +1,13 @@
 //dev
-import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_dev.dart'
     as firebaseDev;
 //prod
 import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_prod.dart'
     as firebaseProd;
 
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
