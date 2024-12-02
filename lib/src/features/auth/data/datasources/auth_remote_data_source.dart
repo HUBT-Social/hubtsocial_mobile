@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hubtsocial_mobile/src/core/configs/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hubtsocial_mobile/src/core/errors/exceptions.dart';
@@ -36,6 +37,8 @@ abstract class AuthRemoteDataSource {
   Future<SignInResponseModel> twoFactorPassword({required String otpPassword});
   Future<void> verifyPassword({required String postcode});
   Future<void> forgotPassword({required String usernameOrEmail});
+  Future<void> setnewpassword(
+      {required String newpassword, required String confirmNewPassword});
 }
 
 @LazySingleton(
@@ -419,6 +422,42 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrintStack(stackTrace: s);
       throw const ServerException(
         message: 'Please try again later',
+        statusCode: '505',
+      );
+    }
+  }
+
+  @override
+  Future<void> setnewpassword(
+      {required String newpassword,
+      required String confirmNewPasswordn}) async {
+    logInfo(
+        'newpassword :$newpassword, confirmNewPasswordn : $confirmNewPasswordn');
+    try {
+      final response = await APIRequest.post(
+        url: EndPoint.authSetNewPassword,
+        body: {
+          "newpassword": newpassword,
+          "confirmNewPasswordn": confirmNewPasswordn,
+        },
+      );
+
+      if (response.statusCode != 200) {
+        logError('Could not finalize api due to: ${response.body.toString()}');
+        throw ServerException(
+          message: response.body.toString(),
+          statusCode: response.statusCode.toString(),
+        );
+      }
+
+      return;
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      logError(e.toString());
+      logDebug(s.toString());
+      throw const ServerException(
+        message: 'Issue with the server',
         statusCode: '505',
       );
     }

@@ -144,4 +144,18 @@ class AuthRepoImpl implements AuthRepo {
       return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
     }
   }
+
+  @override
+  ResultFuture<void> setnewpassword(
+      {required String newpassword, required String confirmNewPassword}) async {
+    try {
+      final result = await _remoteDataSource.setnewpassword(
+        newpassword: newpassword,
+        confirmNewPassword: confirmNewPassword,
+      );
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
 }

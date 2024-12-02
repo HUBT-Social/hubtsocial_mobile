@@ -30,6 +30,8 @@
   "@welcome_info": {},
   "sign_in": "Sign in",
   "@sign_in": {},
+  "set_new_password": "Set New PassWord",
+  "@set_new_password": {},
   "enter_code": "Enter Code",
   "@enter_code": {},
   "student_code": "Student code",

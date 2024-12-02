@@ -30,6 +30,8 @@
   "@welcome_info": {},
   "sign_in": "Đăng nhập",
   "@sign_in": {},
+  "set_new_password": "Tạo mật khẩu mới",
+  "@set_new_password": {},
   "enter_code": "Điền mã",
   "@enter_code": {},
   "student_code": "Mã sinh viên",

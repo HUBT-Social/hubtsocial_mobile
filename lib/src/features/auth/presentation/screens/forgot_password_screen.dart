@@ -68,12 +68,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               color: context.colorScheme.onSurface,
                             ),
                           ),
-                          Center(
-                            child: Text(
-                              context.loc.enter_message,
-                              style: context.textTheme.titleSmall?.copyWith(
-                                color: context.colorScheme.onSurface,
-                              ),
+                          Text(
+                            context.loc.enter_message,
+                            textAlign: TextAlign.center,
+                            style: context.textTheme.titleSmall?.copyWith(
+                              color: context.colorScheme.onSurface,
                             ),
                           ),
                           SizedBox(height: 12),

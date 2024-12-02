@@ -11,6 +11,8 @@ class EndPoint {
   static String get authSignUpVerifyEmail => "$auth/sign-up/verify-otp";
   static String get authVerifyPassword =>
       "$auth/forgot-password/password-verification";
+  static String get authSetNewPassword =>
+      "$auth/forgot-password/change-password";
   static String get authRegister => "$auth/register";
   static String get authConfirmCode => "$auth/confirm-code";
   static String get authForgotPassword => "$auth/forgot-password";

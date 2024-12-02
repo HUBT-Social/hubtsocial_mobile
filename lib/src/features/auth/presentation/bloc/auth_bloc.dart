@@ -4,9 +4,11 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/forgot_password_user_case.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/otp_user_case.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/screens/set_new_password_screen.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../domain/usecases/reset_password.dart';
+import '../../domain/usecases/set_new_password_user_case.dart';
 import '../../domain/usecases/sign_in_user_case.dart';
 import '../../domain/usecases/sign_out.dart';
 import '../../domain/usecases/sign_up_user_case.dart';
@@ -25,6 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required SignUpUserCase signUp,
     required ResetPassword resetPassword,
     required VerifyPasswordUserCase verifyPassword,
+    required SetNewPasswordUserCase setnewpassword,
     required SignOut signOut,
   })  : _signIn = signIn,
         _twoFactor = twoFactor,
@@ -33,12 +36,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _signUp = signUp,
         _resetPassword = resetPassword,
         _verifyPassword = verifyPassword,
+        _setnewpassword = setnewpassword,
         _signOut = signOut,
         super(const AuthInitial()) {
     on<AuthEvent>((event, emit) {
       emit(const AuthLoading());
     });
     on<SignInEvent>(_signInHandler);
+    on<SetNewPasswordEvent>(_setnewpasswordHandler);
     on<VerifyPasswordEvent>(_verifyPasswordHandler);
     on<TwoFactorEvent>(_twoFactorHandler);
     on<ForgotPasswordEvent>(_forgotPasswordHandler);
@@ -52,9 +57,37 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final ForgotPasswordUserCase _forgotPassword;
   final VerifyEmailUserCase _verifyEmail;
   final VerifyPasswordUserCase _verifyPassword;
+  final SetNewPasswordUserCase _setnewpassword;
   final SignUpUserCase _signUp;
   final ResetPassword _resetPassword;
   final SignOut _signOut;
+
+  Future<void> _setnewpasswordHandler(
+    SetNewPasswordEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    final result = await _setnewpassword(
+      SetNewPasswordParams(
+        newpassword: event.newPassword,
+        confirmNewPassword: event.confirmNewPassword,
+      ),
+    );
+    result.fold(
+      (failure) {
+        switch (int.parse(failure.statusCode)) {
+          case 401:
+            emit(AuthError(failure.message));
+            break;
+          default:
+            emit(AuthError(failure.message));
+            break;
+        }
+      },
+      (response) {
+        emit(SetNewPasswordScreen());
+      },
+    );
+  }
 
   Future<void> _verifyPasswordHandler(
     VerifyPasswordEvent event,
@@ -62,7 +95,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     final result = await _verifyPassword(
       OtpParams(
-        postcode: event.otpPassword,
+        postcode: event.postcode,
       ),
     );
     result.fold(

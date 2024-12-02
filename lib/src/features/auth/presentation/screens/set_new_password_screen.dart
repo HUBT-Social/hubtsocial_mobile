@@ -17,8 +17,8 @@ class SetNewPasswordScreen extends StatefulWidget {
 }
 
 class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  final _newPasswordController = TextEditingController();
+  final _confirmNewPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -63,7 +63,7 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            context.loc.sign_in,
+                            context.loc.set_new_password,
                             style: context.textTheme.headlineMedium?.copyWith(
                               color: context.colorScheme.onSurface,
                             ),
@@ -77,7 +77,7 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 6),
                                   child: InputField.name(
-                                    controller: _passwordController,
+                                    controller: _newPasswordController,
                                     textInputAction: TextInputAction.next,
                                     hintText: context.loc.password,
                                     prefixIcon: Align(
@@ -93,7 +93,7 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 6),
                                   child: InputField.password(
-                                    controller: _confirmPasswordController,
+                                    controller: _confirmNewPasswordController,
                                     textInputAction: TextInputAction.done,
                                     hintText: context.loc.password,
                                     prefixIcon: Align(
@@ -132,11 +132,13 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                             height: 12,
                           ),
                           FilledButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              _onVerifyButtonClicked();
+                            },
                             child: SizedBox(
                               width: double.infinity,
                               child: Text(
-                                context.loc.sign_in,
+                                context.loc.continue_text,
                                 style: context.textTheme.bodyLarge?.copyWith(
                                     color: context.colorScheme.onPrimary),
                                 textAlign: TextAlign.center,
@@ -180,5 +182,18 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
         },
       ),
     );
+  }
+
+  void _onVerifyButtonClicked() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    context.closeKeyboard();
+
+    context.read<AuthBloc>().add(SetNewPasswordEvent(
+          newPassword: _newPasswordController.text.trim(),
+          confirmNewPassword: _confirmNewPasswordController.text.trim(),
+        ));
   }
 }

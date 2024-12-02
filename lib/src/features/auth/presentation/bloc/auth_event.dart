@@ -50,15 +50,28 @@ class VerifyEmailEvent extends AuthEvent {
   List<String> get props => [postcode];
 }
 
-class VerifyPasswordEvent extends AuthEvent {
-  const VerifyPasswordEvent({
-    required this.otpPassword,
+class SetNewPasswordEvent extends AuthEvent {
+  const SetNewPasswordEvent({
+    required this.newPassword,
+    required this.confirmNewPassword,
   });
-  final String otpPassword;
+  final newPassword;
+  final confirmNewPassword;
 
   @override
   // TODO: implement props
-  List<Object?> get props => [otpPassword];
+  List<Object?> get props => [newPassword, confirmNewPassword];
+}
+
+class VerifyPasswordEvent extends AuthEvent {
+  const VerifyPasswordEvent({
+    required this.postcode,
+  });
+  final String postcode;
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [postcode];
 }
 
 class SignUpEvent extends AuthEvent {

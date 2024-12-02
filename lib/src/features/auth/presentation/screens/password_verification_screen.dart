@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/background.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_auth_otp.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
@@ -27,12 +28,12 @@ class _PasswordVerifiCationScreenState
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (_, state) async {
-          debugPrint('Current state: $state');
+          logDebug('Current state: $state');
           if (state is AuthError) {
             AppDialog.showMessageDialog(
                 AppDialog.errorMessage(state.message, context));
           } else if (state is AuthLoading) {
-            AppDialog.showLoadingDialog(message: context.loc.forgot_password);
+            AppDialog.showLoadingDialog(message: context.loc.password_verify);
           } else if (state is VerifyForgotPasswordSuccess) {
             AppDialog.closeDialog();
             AppRoute.setNewPassword.push(context);
@@ -71,12 +72,11 @@ class _PasswordVerifiCationScreenState
                               color: context.colorScheme.onSurface,
                             ),
                           ),
-                          Center(
-                            child: Text(
-                              context.loc.enter_otp_message,
-                              style: context.textTheme.titleSmall?.copyWith(
-                                color: context.colorScheme.onSurface,
-                              ),
+                          Text(
+                            context.loc.enter_otp_message,
+                            textAlign: TextAlign.center,
+                            style: context.textTheme.titleSmall?.copyWith(
+                              color: context.colorScheme.onSurface,
                             ),
                           ),
                           SizedBox(height: 12),
@@ -153,7 +153,7 @@ class _PasswordVerifiCationScreenState
     context.closeKeyboard();
 
     context.read<AuthBloc>().add(VerifyPasswordEvent(
-          otpPassword: otpController.text.trim(),
+          postcode: otpController.text.trim(),
         ));
   }
 }

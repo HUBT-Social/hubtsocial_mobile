@@ -29,7 +29,10 @@ abstract class AuthRepo {
   ResultFuture<void> verifyPassword({
     required String postcode,
   });
-
+  ResultFuture<void> setnewpassword({
+    required String newpassword,
+    required String confirmNewPassword,
+  });
   ResultFuture<void> forgotPassword({
     required String usernameOrEmail,
   });
