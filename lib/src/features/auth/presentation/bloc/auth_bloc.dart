@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/forgot_password_user_case.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/otp_user_case.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/screens/set_new_password_screen.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../domain/usecases/reset_password.dart';
@@ -68,7 +67,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     final result = await _setnewpassword(
       SetNewPasswordParams(
-        newpassword: event.newPassword,
+        newPassword: event.newPassword,
         confirmNewPassword: event.confirmNewPassword,
       ),
     );
@@ -84,7 +83,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       },
       (response) {
-        emit(SetNewPasswordScreen());
+        emit(SetNewPasswordSuccess());
       },
     );
   }

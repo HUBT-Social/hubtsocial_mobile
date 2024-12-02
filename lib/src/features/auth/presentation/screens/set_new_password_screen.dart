@@ -33,6 +33,11 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
           } else if (state is AuthLoading) {
             // Shown Loading Dialog
             AppDialog.showLoadingDialog(message: 'signing');
+          } else if (state is SetNewPasswordSuccess) {
+            AppDialog.closeDialog();
+            AppRoute.signIn.pushReplacement(context);
+          } else {
+            AppDialog.closeDialog();
           }
         },
         builder: (context, state) {

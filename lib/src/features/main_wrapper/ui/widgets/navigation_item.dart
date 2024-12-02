@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 class NavigationItem extends StatelessWidget {

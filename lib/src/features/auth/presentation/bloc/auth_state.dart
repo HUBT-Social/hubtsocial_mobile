@@ -39,8 +39,8 @@ class SignedIn extends AuthState {
   const SignedIn();
 }
 
-class SetNewPasswordScreen extends AuthState {
-  const SetNewPasswordScreen();
+class SetNewPasswordSuccess extends AuthState {
+  const SetNewPasswordSuccess();
 }
 
 class VerifyEmail extends AuthState {

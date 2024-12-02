@@ -14,20 +14,21 @@ class SetNewPasswordUserCase
   final AuthRepo _repo;
   @override
   ResultFuture<void> call(SetNewPasswordParams param) => _repo.setnewpassword(
-      newpassword: param.newpassword,
+      newPassword: param.newPassword,
       confirmNewPassword: param.confirmNewPassword);
 }
 
 class SetNewPasswordParams extends Equatable {
   const SetNewPasswordParams({
-    required this.newpassword,
+    required this.newPassword,
     required this.confirmNewPassword,
   });
   const SetNewPasswordParams.empty()
-      : newpassword = '',
+      : newPassword = '',
         confirmNewPassword = '';
-  final String newpassword;
+  final String newPassword;
   final String confirmNewPassword;
 
-  List<String> get props => [newpassword, confirmNewPassword];
+  @override
+  List<String> get props => [newPassword, confirmNewPassword];
 }

@@ -147,10 +147,10 @@ class AuthRepoImpl implements AuthRepo {
 
   @override
   ResultFuture<void> setnewpassword(
-      {required String newpassword, required String confirmNewPassword}) async {
+      {required String newPassword, required String confirmNewPassword}) async {
     try {
       final result = await _remoteDataSource.setnewpassword(
-        newpassword: newpassword,
+        newPassword: newPassword,
         confirmNewPassword: confirmNewPassword,
       );
       return Right(result);

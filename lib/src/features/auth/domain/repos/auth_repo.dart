@@ -30,7 +30,7 @@ abstract class AuthRepo {
     required String postcode,
   });
   ResultFuture<void> setnewpassword({
-    required String newpassword,
+    required String newPassword,
     required String confirmNewPassword,
   });
   ResultFuture<void> forgotPassword({

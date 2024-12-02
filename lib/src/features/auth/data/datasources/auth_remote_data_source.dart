@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hubtsocial_mobile/src/core/configs/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hubtsocial_mobile/src/core/errors/exceptions.dart';
@@ -38,7 +37,7 @@ abstract class AuthRemoteDataSource {
   Future<void> verifyPassword({required String postcode});
   Future<void> forgotPassword({required String usernameOrEmail});
   Future<void> setnewpassword(
-      {required String newpassword, required String confirmNewPassword});
+      {required String newPassword, required String confirmNewPassword});
 }
 
 @LazySingleton(
@@ -429,16 +428,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> setnewpassword(
-      {required String newpassword,
-      required String confirmNewPasswordn}) async {
+      {required String newPassword, required String confirmNewPassword}) async {
     logInfo(
-        'newpassword :$newpassword, confirmNewPasswordn : $confirmNewPasswordn');
+        'newPassword :$newPassword, confirmNewPassword : $confirmNewPassword');
     try {
       final response = await APIRequest.post(
         url: EndPoint.authSetNewPassword,
         body: {
-          "newpassword": newpassword,
-          "confirmNewPasswordn": confirmNewPasswordn,
+          "newPassword": newPassword,
+          "confirmNewPassword": confirmNewPassword,
         },
       );
 
