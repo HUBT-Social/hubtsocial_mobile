@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
@@ -42,12 +43,11 @@ class _NotFoundScreenState extends State<NotFoundScreen> {
             textAlign: TextAlign.center,
           ),
           Text(
-            widget.url ?? '',
+            kDebugMode ? widget.url ?? "" : "",
             style: context.textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 24),
-          BackButton(),
           FilledButton(
               onPressed: () {
                 try {

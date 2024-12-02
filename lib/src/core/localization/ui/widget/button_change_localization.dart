@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/localization/utils/change_language_bottom_sheet.dart';
 
+import '../../../navigation/router.import.dart';
 import '../../bloc/localization_bloc.dart';
 
 class ButtonChangeLocalization extends StatelessWidget {
@@ -14,7 +15,8 @@ class ButtonChangeLocalization extends StatelessWidget {
       height: 35,
       width: 60,
       child: OutlinedButton(
-        onPressed: () => LocalizatioUtils.showLanguageBottomSheet(context),
+        onPressed: () => LocalizatioUtils.showLanguageBottomSheet(
+            navigatorKey.currentContext ?? context),
         style: OutlinedButton.styleFrom(
           padding: EdgeInsets.symmetric(horizontal: 6),
           backgroundColor: context.colorScheme.surface,

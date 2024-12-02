@@ -35,8 +35,6 @@ final GoRouter router = GoRouter(
       UserToken token = tokenBox.get(LocalStorageKey.userToken);
       var payload = jwtDecode(token.refreshToken).payload;
 
-      logDebug("token.refreshToken:" + token.refreshToken);
-      logDebug("token.accessToken:" + token.accessToken);
       // Check if token is expired
       var currentTimestamp = DateTime.now().millisecondsSinceEpoch;
       if (currentTimestamp ~/ 1000 < payload['exp']) {

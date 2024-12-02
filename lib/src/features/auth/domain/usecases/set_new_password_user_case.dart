@@ -1,8 +1,6 @@
-import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/repos/auth_repo.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/usecases/usecases.dart';

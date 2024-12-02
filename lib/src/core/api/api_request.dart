@@ -5,13 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:hubtsocial_mobile/src/core/errors/exceptions.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
-import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
-import 'package:hubtsocial_mobile/src/core/navigation/router.import.dart';
-import 'package:hubtsocial_mobile/src/core/presentation/dialog/app_dialog.dart';
 import 'package:hubtsocial_mobile/src/features/auth/data/models/user_token_model.dart';
 import 'package:jwt_decode_full/jwt_decode_full.dart';
 
-import '../app/providers/hive_provider.dart';
 import '../configs/end_point.dart';
 import '../local_storage/local_storage_key.dart';
 

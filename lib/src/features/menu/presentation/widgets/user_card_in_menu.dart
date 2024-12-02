@@ -5,12 +5,18 @@ import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/url_image.dart';
 import 'package:hubtsocial_mobile/src/features/user/domain/entities/user.dart';
 import 'package:hubtsocial_mobile/src/features/user/presentation/bloc/user_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
-class UserCardInMenu extends StatelessWidget {
+class UserCardInMenu extends StatefulWidget {
   const UserCardInMenu({
     super.key,
   });
 
+  @override
+  State<UserCardInMenu> createState() => _UserCardInMenuState();
+}
+
+class _UserCardInMenuState extends State<UserCardInMenu> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -20,44 +26,85 @@ class UserCardInMenu extends StatelessWidget {
         builder: (context, state) {
           if (state is UserProfileLoaded) {
             User user = state.user;
-            return GestureDetector(
+            return InkWell(
+              borderRadius: BorderRadius.circular(12),
               onTap: () => AppRoute.profile.push(context),
               child: SizedBox(
-                  height: 72,
-                  child: Row(
-                    children: [
-                      SizedBox(width: 12),
-                      UrlImage.circle(
-                        user.avatarUrl,
-                        size: 48,
-                      ),
-                      SizedBox(width: 12),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            user.fullname,
-                            style: context.textTheme.titleSmall,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            "Xem trang cá nhân",
-                            style: context.textTheme.bodySmall?.copyWith(
-                                color: context.colorScheme.onSurfaceVariant),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )),
+                height: 72,
+                child: Row(
+                  children: [
+                    SizedBox(width: 12),
+                    UrlImage.circle(
+                      user.avatarUrl,
+                      size: 48,
+                    ),
+                    SizedBox(width: 12),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          user.fullname,
+                          style: context.textTheme.titleSmall,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          "Xem trang cá nhân",
+                          style: context.textTheme.bodySmall?.copyWith(
+                              color: context.colorScheme.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             );
-          } else if (state is UserProfileLoading) {
-            return Center(child: Text("UserProfileLoading"));
-          } else if (state is UserProfileInitial) {
-            return Center(child: Text("UserProfileInitial"));
           } else {
-            return Center(child: Text(state.toString()));
+            return SizedBox(
+              height: 72,
+              child: Shimmer.fromColors(
+                baseColor: Colors.red,
+                highlightColor: Colors.blue,
+                child: Row(
+                  children: [
+                    SizedBox(width: 12),
+                    Container(
+                      height: 48,
+                      width: 48,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 16,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                        ),
+                        SizedBox(height: 12),
+                        Container(
+                          height: 12,
+                          width: 180,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
           }
         },
       ),

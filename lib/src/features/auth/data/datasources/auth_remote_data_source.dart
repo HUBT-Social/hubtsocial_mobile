@@ -1,5 +1,4 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hubtsocial_mobile/src/core/configs/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';

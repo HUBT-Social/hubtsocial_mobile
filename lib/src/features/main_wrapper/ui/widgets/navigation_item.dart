@@ -19,8 +19,8 @@ class NavigationItem extends StatelessWidget {
         width: 24,
         height: 24,
         fit: BoxFit.cover,
-        colorFilter: ColorFilter.mode(
-            context.colorScheme.onSurfaceVariant, BlendMode.srcIn),
+        colorFilter:
+            ColorFilter.mode(context.colorScheme.onSurface, BlendMode.srcIn),
       ),
     );
   }
