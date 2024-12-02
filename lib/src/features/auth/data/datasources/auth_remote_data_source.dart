@@ -9,6 +9,7 @@ import 'package:hubtsocial_mobile/src/core/errors/exceptions.dart';
 import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_token.dart';
 
+import '../../../../core/local_storage/local_storage_key.dart';
 import '../models/sign_in_response_model.dart';
 
 abstract class AuthRemoteDataSource {
@@ -73,16 +74,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
-      if (!await _hiveAuth.boxExists('token')) {
-        await _hiveAuth.openBox('token');
+      if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
-      if (!_hiveAuth.isBoxOpen('token')) {
-        await _hiveAuth.openBox('token');
+      if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
 
       var token = responseData.userToken;
-      var tokenBox = _hiveAuth.box('token');
-      await tokenBox.put('userToken', token);
+      var tokenBox = _hiveAuth.box(LocalStorageKey.token);
+      await tokenBox.put(LocalStorageKey.userToken, token);
       logInfo('Token saved successfully: $token');
 
       return responseData;
@@ -153,15 +154,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       if (!responseData.requiresTwoFactor! && responseData.userToken != null) {
-        if (!await _hiveAuth.boxExists('token')) {
-          await _hiveAuth.openBox('token');
+        if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
+          await _hiveAuth.openBox(LocalStorageKey.token);
         }
-        if (!_hiveAuth.isBoxOpen('token')) {
-          await _hiveAuth.openBox('token');
+        if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
+          await _hiveAuth.openBox(LocalStorageKey.token);
         }
         var token = responseData.userToken;
-        var tokenBox = _hiveAuth.box('token');
-        await tokenBox.put('userToken', token);
+        var tokenBox = _hiveAuth.box(LocalStorageKey.token);
+        await tokenBox.put(LocalStorageKey.userToken, token);
         logInfo('Sign in token : $token');
 
         // if (tokenBox.containsKey('fcmToken')) {
@@ -170,7 +171,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         //     // url: ApiConstants.devicesEndpoint,
         //     url: EndPoint.apiUrl,
         //     body: {
-        //       'token': fcmToken,
+        //       LocalStorageKey.token: fcmToken,
         //     },
         //     token: token.accessToken,
         //   );
@@ -184,7 +185,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         //       url: EndPoint.apiUrl,
 
         //       body: {
-        //         'token': value,
+        //         LocalStorageKey.token: value,
         //       },
         //       token: token.accessToken,
         //     );
@@ -280,14 +281,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> signOut() async {
     try {
       UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
-      if (!await _hiveAuth.boxExists('token')) {
-        await _hiveAuth.openBox('token');
+      if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
-      if (!_hiveAuth.isBoxOpen('token')) {
-        await _hiveAuth.openBox('token');
+      if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
 
-      var tokenBox = _hiveAuth.box('token');
+      var tokenBox = _hiveAuth.box(LocalStorageKey.token);
 
       if (tokenBox.containsKey('fcmToken')) {
         String fcmToken = tokenBox.get('fcmToken');
@@ -295,7 +296,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           // url: ApiConstants.devicesEndpoint,
           url: EndPoint.apiUrl,
           body: {
-            'token': fcmToken,
+            LocalStorageKey.token: fcmToken,
           },
           token: userToken.accessToken,
         );
@@ -330,15 +331,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
-      if (!await _hiveAuth.boxExists('token')) {
-        await _hiveAuth.openBox('token');
+      if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
-      if (!_hiveAuth.isBoxOpen('token')) {
-        await _hiveAuth.openBox('token');
+      if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
       var token = responseData.userToken;
-      var tokenBox = _hiveAuth.box('token');
-      await tokenBox.put('userToken', token);
+      var tokenBox = _hiveAuth.box(LocalStorageKey.token);
+      await tokenBox.put(LocalStorageKey.userToken, token);
       logInfo('Sign in token : $token');
 
       return responseData;
@@ -373,15 +374,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
-      if (!await _hiveAuth.boxExists('token')) {
-        await _hiveAuth.openBox('token');
+      if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
-      if (!_hiveAuth.isBoxOpen('token')) {
-        await _hiveAuth.openBox('token');
+      if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
       var token = responseData.userToken;
-      var tokenBox = _hiveAuth.box('token');
-      await tokenBox.put('userToken', token);
+      var tokenBox = _hiveAuth.box(LocalStorageKey.token);
+      await tokenBox.put(LocalStorageKey.userToken, token);
       logInfo('Sign in token : $token');
 
       return responseData;

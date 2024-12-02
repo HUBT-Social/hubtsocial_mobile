@@ -5,10 +5,15 @@ import 'package:http/http.dart' as http;
 import 'package:hubtsocial_mobile/src/core/errors/exceptions.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
+import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
+import 'package:hubtsocial_mobile/src/core/navigation/router.import.dart';
+import 'package:hubtsocial_mobile/src/core/presentation/dialog/app_dialog.dart';
 import 'package:hubtsocial_mobile/src/features/auth/data/models/user_token_model.dart';
 import 'package:jwt_decode_full/jwt_decode_full.dart';
 
+import '../app/providers/hive_provider.dart';
 import '../configs/end_point.dart';
+import '../local_storage/local_storage_key.dart';
 
 class APIRequest {
   static Future<http.Response> post(
@@ -128,14 +133,15 @@ class APIRequest {
   }
 
   static Future<UserTokenModel> getUserToken(HiveInterface hiveAuth) async {
-    if (!await hiveAuth.boxExists('token')) {
-      await hiveAuth.openBox('token');
+    if (!await hiveAuth.boxExists(LocalStorageKey.token)) {
+      await hiveAuth.openBox(LocalStorageKey.token);
     }
-    if (!hiveAuth.isBoxOpen('token')) {
-      await hiveAuth.openBox('token');
+    if (!hiveAuth.isBoxOpen(LocalStorageKey.token)) {
+      await hiveAuth.openBox(LocalStorageKey.token);
     }
 
-    UserTokenModel token = hiveAuth.box('token').get('userToken');
+    UserTokenModel token =
+        hiveAuth.box(LocalStorageKey.token).get(LocalStorageKey.userToken);
     if (isExpiredToken(token.accessToken)) {
       final response = await APIRequest.post(
         url: EndPoint.authRefreshToken,
@@ -144,15 +150,23 @@ class APIRequest {
         },
         token: token.accessToken,
       );
+
+      if (response.statusCode == 401) {
+        var tokenBox = Hive.box(LocalStorageKey.token);
+        tokenBox.clear();
+      }
+
       if (response.statusCode != 200) {
         logError(response.body);
-        throw const ServerException(
-          message: 'Please try again later',
-          statusCode: '401',
+        throw ServerException(
+          message: response.statusCode.toString(),
+          statusCode: response.statusCode.toString(),
         );
       }
       var newToken = UserTokenModel.fromJson(response.body);
-      await hiveAuth.box('token').put('userToken', newToken);
+      await hiveAuth
+          .box(LocalStorageKey.token)
+          .put(LocalStorageKey.userToken, newToken);
       return newToken;
     }
     return token;

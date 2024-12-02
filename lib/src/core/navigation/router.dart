@@ -27,11 +27,12 @@ final GoRouter router = GoRouter(
       return null;
     }
     // LocalUser? user = context.read<UserProvider>().user;
-    var tokenBox = Hive.box('token');
-    if (tokenBox.isEmpty || !tokenBox.containsKey('userToken')) {
+    var tokenBox = Hive.box(LocalStorageKey.token);
+    if (tokenBox.isEmpty || !tokenBox.containsKey(LocalStorageKey.userToken)) {
       return joinRoute(['', AppRoute.getStarted.path]);
-    } else if (tokenBox.isNotEmpty && tokenBox.containsKey('userToken')) {
-      UserToken token = tokenBox.get('userToken');
+    } else if (tokenBox.isNotEmpty &&
+        tokenBox.containsKey(LocalStorageKey.userToken)) {
+      UserToken token = tokenBox.get(LocalStorageKey.userToken);
       var payload = jwtDecode(token.refreshToken).payload;
 
       logDebug("token.refreshToken:" + token.refreshToken);
