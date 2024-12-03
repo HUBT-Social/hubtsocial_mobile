@@ -38,6 +38,10 @@ class Assets {
       "assets/icons/navigation_icon_notification.svg";
   static const String navigationIconMenu =
       "assets/icons/navigation_icon_menu.svg";
+  static const String iconFirstName = "assets/icons/icon_first_name.svg";
+  static const String iconBirthdate = "assets/icons/icon_birthdate.svg";
+  static const String iconGender = "assets/icons/icon_gender.svg";
+  static const String iconPhoneNumber = "assets/icons/icon_phone_number.svg";
 }
 
 class AppIcons {

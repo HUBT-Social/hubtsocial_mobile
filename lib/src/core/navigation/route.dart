@@ -21,6 +21,7 @@ enum AppRoute {
   menu('/menu'),
   profile('/menu/profile'),
   error('/error'),
+  passwordSuccessful('/password-successful'),
   ;
 
   const AppRoute(this.path);
