@@ -83,11 +83,13 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      InputAuthOTP(
-                                        controller: otpController,
-                                        onCompleted: (value) {
-                                          _onVerifyButtonClicked();
-                                        },
+                                      Expanded(
+                                        child: InputAuthOTP(
+                                          controller: otpController,
+                                          onCompleted: (value) {
+                                            _onVerifyButtonClicked();
+                                          },
+                                        ),
                                       ),
                                     ],
                                   ),
