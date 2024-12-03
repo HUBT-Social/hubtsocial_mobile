@@ -50,7 +50,7 @@
   "@forgot_password_question_mark": {},
   "forgot_password": "Quên Mật Khẩu",
   "@forgot_password": {},
-  "password_verify": "Xác minh mật khẩu",
+  "password_verify": "Xác minh OTP",
   "@password_verify": {},
   "sign_up": "Đăng ký",
   "@sign_up": {},

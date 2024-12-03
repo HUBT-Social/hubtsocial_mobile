@@ -32,7 +32,7 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                 AppDialog.errorMessage(state.message, context));
           } else if (state is AuthLoading) {
             // Shown Loading Dialog
-            AppDialog.showLoadingDialog(message: 'signing');
+            AppDialog.showLoadingDialog(message: context.loc.set_new_password);
           } else if (state is SetNewPasswordSuccess) {
             AppDialog.closeDialog();
             AppRoute.signIn.pushReplacement(context);
@@ -81,9 +81,9 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                                 Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 6),
-                                  child: InputField.name(
+                                  child: InputField.password(
                                     controller: _newPasswordController,
-                                    textInputAction: TextInputAction.next,
+                                    textInputAction: TextInputAction.done,
                                     hintText: context.loc.password,
                                     prefixIcon: Align(
                                       widthFactor: 1.0,
@@ -110,26 +110,6 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                                     ),
                                   ),
                                 ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        AppRoute.forgotPassword.push(context);
-                                      },
-                                      child: Text(
-                                        context
-                                            .loc.forgot_password_question_mark,
-                                        style: context.textTheme.labelLarge
-                                            ?.copyWith(
-                                          color:
-                                              context.colorScheme.surfaceTint,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
                               ],
                             ),
                           ),
@@ -152,17 +132,6 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                           ),
                           SizedBox(
                             height: 12,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              AppRoute.signUp.push(context);
-                            },
-                            child: Text(
-                              context.loc.do_not_have_an_account,
-                              style: context.textTheme.labelLarge?.copyWith(
-                                color: context.colorScheme.surfaceTint,
-                              ),
-                            ),
                           ),
                           SizedBox(
                             height: 24,
