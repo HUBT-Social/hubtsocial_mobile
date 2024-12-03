@@ -1,5 +1,4 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hubtsocial_mobile/src/core/configs/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
@@ -9,6 +8,7 @@ import 'package:hubtsocial_mobile/src/core/errors/exceptions.dart';
 import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_token.dart';
 
+import '../../../../core/local_storage/local_storage_key.dart';
 import '../models/sign_in_response_model.dart';
 
 abstract class AuthRemoteDataSource {
@@ -36,7 +36,7 @@ abstract class AuthRemoteDataSource {
   Future<SignInResponseModel> twoFactorPassword({required String otpPassword});
   Future<void> verifyPassword({required String postcode});
   Future<void> forgotPassword({required String usernameOrEmail});
-  Future<void> setnewpassword(
+  Future<void> setNewPassword(
       {required String newPassword, required String confirmNewPassword});
 }
 
@@ -73,24 +73,24 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
-      if (!await _hiveAuth.boxExists('token')) {
-        await _hiveAuth.openBox('token');
+      if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
-      if (!_hiveAuth.isBoxOpen('token')) {
-        await _hiveAuth.openBox('token');
+      if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
 
       var token = responseData.userToken;
-      var tokenBox = _hiveAuth.box('token');
-      await tokenBox.put('userToken', token);
+      var tokenBox = _hiveAuth.box(LocalStorageKey.token);
+      await tokenBox.put(LocalStorageKey.userToken, token);
       logInfo('Token saved successfully: $token');
 
       return responseData;
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logError('Error in twoFactorPassword: ${e.toString()}');
-      debugPrintStack(stackTrace: s);
+      logError(e.toString());
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Failed to verify OTP password. Please try again later.',
         statusCode: '505',
@@ -120,8 +120,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logError('Error in verifyEmailPassword: ${e.toString()}');
-      debugPrintStack(stackTrace: s);
+      logError(e.toString());
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Failed to verify email password. Please try again later.',
         statusCode: '505',
@@ -153,15 +153,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       if (!responseData.requiresTwoFactor! && responseData.userToken != null) {
-        if (!await _hiveAuth.boxExists('token')) {
-          await _hiveAuth.openBox('token');
+        if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
+          await _hiveAuth.openBox(LocalStorageKey.token);
         }
-        if (!_hiveAuth.isBoxOpen('token')) {
-          await _hiveAuth.openBox('token');
+        if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
+          await _hiveAuth.openBox(LocalStorageKey.token);
         }
         var token = responseData.userToken;
-        var tokenBox = _hiveAuth.box('token');
-        await tokenBox.put('userToken', token);
+        var tokenBox = _hiveAuth.box(LocalStorageKey.token);
+        await tokenBox.put(LocalStorageKey.userToken, token);
         logInfo('Sign in token : $token');
 
         // if (tokenBox.containsKey('fcmToken')) {
@@ -170,7 +170,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         //     // url: ApiConstants.devicesEndpoint,
         //     url: EndPoint.apiUrl,
         //     body: {
-        //       'token': fcmToken,
+        //       LocalStorageKey.token: fcmToken,
         //     },
         //     token: token.accessToken,
         //   );
@@ -184,7 +184,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         //       url: EndPoint.apiUrl,
 
         //       body: {
-        //         'token': value,
+        //         LocalStorageKey.token: value,
         //       },
         //       token: token.accessToken,
         //     );
@@ -197,7 +197,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       rethrow;
     } catch (e, s) {
       logError(e.toString());
-      debugPrintStack(stackTrace: s);
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Please try again later',
         statusCode: '505',
@@ -267,7 +267,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
     } catch (e, s) {
-      debugPrintStack(stackTrace: s);
+      logError(e.toString());
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Issue with the server',
         statusCode: '505',
@@ -279,14 +280,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> signOut() async {
     try {
       UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
-      if (!await _hiveAuth.boxExists('token')) {
-        await _hiveAuth.openBox('token');
+      if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
-      if (!_hiveAuth.isBoxOpen('token')) {
-        await _hiveAuth.openBox('token');
+      if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
 
-      var tokenBox = _hiveAuth.box('token');
+      var tokenBox = _hiveAuth.box(LocalStorageKey.token);
 
       if (tokenBox.containsKey('fcmToken')) {
         String fcmToken = tokenBox.get('fcmToken');
@@ -294,14 +295,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           // url: ApiConstants.devicesEndpoint,
           url: EndPoint.apiUrl,
           body: {
-            'token': fcmToken,
+            LocalStorageKey.token: fcmToken,
           },
           token: userToken.accessToken,
         );
         logDebug('Devices response : ${response.body.toString()}');
       }
     } catch (e, s) {
-      debugPrintStack(stackTrace: s);
+      logError(e.toString());
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Issue with the server',
         statusCode: '505',
@@ -328,15 +330,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
-      if (!await _hiveAuth.boxExists('token')) {
-        await _hiveAuth.openBox('token');
+      if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
-      if (!_hiveAuth.isBoxOpen('token')) {
-        await _hiveAuth.openBox('token');
+      if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
       var token = responseData.userToken;
-      var tokenBox = _hiveAuth.box('token');
-      await tokenBox.put('userToken', token);
+      var tokenBox = _hiveAuth.box(LocalStorageKey.token);
+      await tokenBox.put(LocalStorageKey.userToken, token);
       logInfo('Sign in token : $token');
 
       return responseData;
@@ -344,7 +346,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       rethrow;
     } catch (e, s) {
       logError(e.toString());
-      debugPrintStack(stackTrace: s);
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Please try again later',
         statusCode: '505',
@@ -371,15 +373,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
-      if (!await _hiveAuth.boxExists('token')) {
-        await _hiveAuth.openBox('token');
+      if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
-      if (!_hiveAuth.isBoxOpen('token')) {
-        await _hiveAuth.openBox('token');
+      if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
       }
       var token = responseData.userToken;
-      var tokenBox = _hiveAuth.box('token');
-      await tokenBox.put('userToken', token);
+      var tokenBox = _hiveAuth.box(LocalStorageKey.token);
+      await tokenBox.put(LocalStorageKey.userToken, token);
       logInfo('Sign in token : $token');
 
       return responseData;
@@ -387,7 +389,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       rethrow;
     } catch (e, s) {
       logError(e.toString());
-      debugPrintStack(stackTrace: s);
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Please try again later',
         statusCode: '505',
@@ -418,7 +420,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       rethrow;
     } catch (e, s) {
       logError(e.toString());
-      debugPrintStack(stackTrace: s);
+      logDebug(s.toString());
       throw const ServerException(
         message: 'Please try again later',
         statusCode: '505',
@@ -427,10 +429,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> setnewpassword(
+  Future<void> setNewPassword(
       {required String newPassword, required String confirmNewPassword}) async {
-    logInfo(
-        'newPassword :$newPassword, confirmNewPassword : $confirmNewPassword');
     try {
       final response = await APIRequest.post(
         url: EndPoint.authSetNewPassword,

@@ -106,7 +106,7 @@ Future<void> _initLocalStorage() async {
   registerAdapters();
 
   await Hive.openBox(LocalStorageKey.localStorage);
-  await Hive.openBox('token');
+  await Hive.openBox(LocalStorageKey.token);
   // await Hive.openBox('notification');
 }
 

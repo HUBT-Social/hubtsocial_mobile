@@ -43,7 +43,7 @@ class _MainWrapperState extends State<MainWrapper> {
           NavigationItem(file: Assets.navigationIconNotification),
           NavigationItem(file: Assets.navigationIconMenu),
         ],
-        color: context.colorScheme.surfaceContainerHighest,
+        color: context.colorScheme.surfaceDim,
         backgroundColor: Colors.transparent,
         animationCurve: Curves.easeOutQuint,
         animationDuration: const Duration(milliseconds: 600),

@@ -27,6 +27,7 @@ import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/timetable/presentation/screens/timetable_screen.dart';
 import '../../features/user/presentation/bloc/user_bloc.dart';
 import '../injections/injections.dart';
+import '../local_storage/local_storage_key.dart';
 import '../logger/logger.dart';
 
 part 'router.dart';

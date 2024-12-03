@@ -12,13 +12,16 @@ class NavigationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset(
-      file,
-      width: 36,
-      height: 36,
-      fit: BoxFit.cover,
-      colorFilter: ColorFilter.mode(
-          context.colorScheme.onSurfaceVariant, BlendMode.srcIn),
+    return Padding(
+      padding: const EdgeInsets.all(3),
+      child: SvgPicture.asset(
+        file,
+        width: 24,
+        height: 24,
+        fit: BoxFit.cover,
+        colorFilter:
+            ColorFilter.mode(context.colorScheme.onSurface, BlendMode.srcIn),
+      ),
     );
   }
 }

@@ -85,7 +85,14 @@ StatefulShellRoute _mainRoute() {
         routes: [
           GoRoute(
             path: AppRoute.menu.path,
-            builder: (context, state) => const MenuScreen(),
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) => getIt<AuthBloc>(),
+                ),
+              ],
+              child: MenuScreen(),
+            ),
             routes: [
               GoRoute(
                 path: 'profile',

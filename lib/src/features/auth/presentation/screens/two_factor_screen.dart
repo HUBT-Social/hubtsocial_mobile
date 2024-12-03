@@ -76,19 +76,11 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                           SizedBox(height: 12),
                           Form(
                             key: _formKey,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 6),
-                                  child: InputAuthOTP(
-                                    controller: otpController,
-                                    onCompleted: (value) {
-                                      _onTwoFactorButtonClicked();
-                                    },
-                                  ),
-                                ),
-                              ],
+                            child: InputAuthOTP(
+                              controller: otpController,
+                              onCompleted: (value) {
+                                _onTwoFactorButtonClicked();
+                              },
                             ),
                           ),
                           SizedBox(

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 
+import '../../local_storage/local_storage_key.dart';
 import '../../presentation/dialog/app_dialog.dart';
 
 class HiveProvider {
@@ -24,18 +24,6 @@ class HiveProvider {
     } else {
       notiBox.put('unReadNotiCount', notiBox.get('unReadNotiCount') + 1);
     }
-  }
-
-  static Locale getLocale() {
-    var languageBox = Hive.box('language');
-    logDebug('getLocale: ${languageBox.get('locale')}');
-    return Locale(languageBox.get('locale', defaultValue: 'vi'));
-  }
-
-  static Future<Locale> setLocale(String locale) async {
-    var languageBox = Hive.box('language');
-    await languageBox.put('locale', locale);
-    return Locale(locale);
   }
 
   static void subtractNotification() async {
@@ -62,11 +50,11 @@ class HiveProvider {
   }
 
   static void clearToken(VoidCallback callback) {
-    var tokenBox = Hive.box('token');
+    var tokenBox = Hive.box(LocalStorageKey.token);
     AppDialog.showLoadingDialog(message: 'Logging out');
     tokenBox.clear().then((_) {
       Timer(
-        const Duration(seconds: 2),
+        const Duration(seconds: 1),
         () {
           AppDialog.closeDialog();
           callback();
