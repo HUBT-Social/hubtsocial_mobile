@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/core/localization/bloc/localization_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/localization/ui/widget/button_change_localization.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 import 'package:hubtsocial_mobile/src/features/menu/presentation/widgets/user_card_in_menu.dart';
 
 import '../../../../core/app/providers/hive_provider.dart';
+import '../../../../core/localization/utils/change_language_bottom_sheet.dart';
 import '../../../../core/navigation/router.import.dart';
 import '../../../../core/theme/bloc/theme_bloc.dart';
 import '../../../../core/theme/utils/change_theme_bottom_sheet.dart';
@@ -34,16 +36,32 @@ class _MenuScreenState extends State<MenuScreen> {
         physics: const BouncingScrollPhysics(),
         children: [
           UserCardInMenu(),
-          Card(
-            elevation: 2,
+          SizedBox(height: 6),
+          Container(
+            height: 2,
+            width: double.infinity,
             color: context.colorScheme.surfaceContainerHighest,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(12),
-              onTap: () => ThemeUtils.showThemeBottomSheet(
-                  navigatorKey.currentContext ?? context),
+          ),
+          SizedBox(height: 6),
+          InkWell(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+            ),
+            onTap: () => ThemeUtils.showThemeBottomSheet(
+                navigatorKey.currentContext ?? context),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
               child: Container(
                 height: 48,
                 padding: EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
+                  ),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -57,14 +75,65 @@ class _MenuScreenState extends State<MenuScreen> {
                                   BlendMode.srcIn),
                               state.selectedTheme.image,
                               fit: BoxFit.fitHeight,
-                              height: 32,
+                              height: 28,
+                            );
+                          },
+                        ),
+                        SizedBox(width: 12),
+                        Text(
+                          "Đổi giao diện",
+                          style: context.textTheme.titleSmall,
+                        ),
+                      ],
+                    ),
+                    Icon(
+                      Icons.arrow_drop_down_rounded,
+                      color: context.colorScheme.onSurface,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 6),
+          InkWell(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(12),
+              bottomRight: Radius.circular(12),
+            ),
+            onTap: () => LocalizatioUtils.showLanguageBottomSheet(
+                navigatorKey.currentContext ?? context),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: Container(
+                height: 48,
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        BlocBuilder<LocalizationBloc, AppLocalizationState>(
+                          builder: (context, state) {
+                            return Image.asset(
+                              state.selectedLanguage.image,
+                              fit: BoxFit.fitHeight,
+                              height: 28,
+                              width: 28,
                             );
                           },
                         ),
                         SizedBox(width: 12),
                         Text(
                           "Đổi ngôn ngữ",
-                          style: context.textTheme.titleMedium,
+                          style: context.textTheme.titleSmall,
                         ),
                       ],
                     ),

@@ -97,8 +97,8 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                   prefixIcon: Align(
                                     widthFactor: 1.0,
                                     heightFactor: 1.0,
-                                    child:
-                                        SvgPicture.asset(Assets.iconFirstName),
+                                    child: SvgPicture.asset(
+                                        AppIcons.iconFirstName),
                                   ),
                                 ),
                               ),
@@ -127,8 +127,8 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                   prefixIcon: Align(
                                     widthFactor: 1.0,
                                     heightFactor: 1.0,
-                                    child:
-                                        SvgPicture.asset(Assets.iconBirthdate),
+                                    child: SvgPicture.asset(
+                                        AppIcons.iconBirthdate),
                                   ),
                                 ),
                               ),
@@ -142,7 +142,8 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                   prefixIcon: Align(
                                     widthFactor: 1.0,
                                     heightFactor: 1.0,
-                                    child: SvgPicture.asset(Assets.iconGender),
+                                    child:
+                                        SvgPicture.asset(AppIcons.iconGender),
                                   ),
                                 ),
                               ),
@@ -157,7 +158,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                     widthFactor: 1.0,
                                     heightFactor: 1.0,
                                     child: SvgPicture.asset(
-                                        Assets.iconPhoneNumber),
+                                        AppIcons.iconPhoneNumber),
                                   ),
                                 ),
                               ),

@@ -28,7 +28,7 @@ class _NotFoundScreenState extends State<NotFoundScreen> {
             style: context.textTheme.displaySmall,
           ),
           Lottie.asset(
-            Assets.screenNotFound,
+            AppLotties.screenNotFound,
             fit: BoxFit.contain,
             height: 360,
             width: 360,

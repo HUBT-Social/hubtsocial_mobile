@@ -27,7 +27,7 @@ class _PasswordSuccessfulScreenState extends State<PasswordSuccessfulScreen> {
             SizedBox(
               height: 347,
               width: 360,
-              child: Lottie.asset(Assets.passwordSuccessful),
+              child: Lottie.asset(AppLotties.passwordSuccessful),
             ),
             const SizedBox(height: 30),
             Text(

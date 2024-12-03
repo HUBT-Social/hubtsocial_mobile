@@ -128,7 +128,7 @@ sealed class AppDialog {
           SizedBox(
             height: 100,
             width: 100,
-            child: Lottie.asset(Assets.success),
+            child: Lottie.asset(AppLotties.success),
           ),
           const SizedBox(height: 10),
           SizedBox(
@@ -159,7 +159,7 @@ sealed class AppDialog {
           SizedBox(
             height: 100,
             width: 100,
-            child: Lottie.asset(Assets.wrongInput),
+            child: Lottie.asset(AppLotties.wrongInput),
           ),
           const SizedBox(height: 10),
           SizedBox(

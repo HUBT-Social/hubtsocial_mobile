@@ -95,42 +95,42 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 700,
             width: 500,
-            child: Lottie.asset(Assets.screenNotFound),
+            child: Lottie.asset(AppLotties.screenNotFound),
           ),
           SizedBox(
             height: 700,
             width: 500,
-            child: Lottie.asset(Assets.passwordSuccessful),
+            child: Lottie.asset(AppLotties.passwordSuccessful),
           ),
           SizedBox(
             height: 700,
             width: 500,
-            child: Lottie.asset(Assets.verificationWaiting),
+            child: Lottie.asset(AppLotties.verificationWaiting),
           ),
           SizedBox(
             height: 700,
             width: 500,
-            child: Lottie.asset(Assets.success),
+            child: Lottie.asset(AppLotties.success),
           ),
           SizedBox(
             height: 700,
             width: 500,
-            child: Lottie.asset(Assets.wrongInput),
+            child: Lottie.asset(AppLotties.wrongInput),
           ),
           SizedBox(
             height: 700,
             width: 500,
-            child: Lottie.asset(Assets.writeInput),
+            child: Lottie.asset(AppLotties.writeInput),
           ),
           SizedBox(
             height: 700,
             width: 500,
-            child: Lottie.asset(Assets.paidSuccess),
+            child: Lottie.asset(AppLotties.paidSuccess),
           ),
           SizedBox(
             height: 700,
             width: 500,
-            child: Lottie.asset(Assets.paidFailed),
+            child: Lottie.asset(AppLotties.paidFailed),
           ),
           Container(
             height: 500,
