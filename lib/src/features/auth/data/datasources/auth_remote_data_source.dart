@@ -38,6 +38,12 @@ abstract class AuthRemoteDataSource {
   Future<void> forgotPassword({required String usernameOrEmail});
   Future<void> setNewPassword(
       {required String newPassword, required String confirmNewPassword});
+  Future<void> informationUser(
+      {required String firstName,
+      required String lastName,
+      required String birtOfDate,
+      required String gender,
+      required String phoneNumber});
 }
 
 @LazySingleton(
@@ -437,6 +443,46 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         body: {
           "newPassword": newPassword,
           "confirmNewPassword": confirmNewPassword,
+        },
+      );
+
+      if (response.statusCode != 200) {
+        logError('Could not finalize api due to: ${response.body.toString()}');
+        throw ServerException(
+          message: response.body.toString(),
+          statusCode: response.statusCode.toString(),
+        );
+      }
+
+      return;
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      logError(e.toString());
+      logDebug(s.toString());
+      throw const ServerException(
+        message: 'Issue with the server',
+        statusCode: '505',
+      );
+    }
+  }
+
+  @override
+  Future<void> informationUser(
+      {required String firstName,
+      required String lastName,
+      required String birtOfDate,
+      required String gender,
+      required String phoneNumber}) async {
+    try {
+      final response = await APIRequest.post(
+        url: EndPoint.informationUser,
+        body: {
+          "firstName": firstName,
+          "lastName": lastName,
+          "birtOfDate": birtOfDate,
+          "gender": gender,
+          "phoneNumber": phoneNumber,
         },
       );
 

@@ -17,6 +17,28 @@ class AuthRepoImpl implements AuthRepo {
   final AuthRemoteDataSource _remoteDataSource;
 
   @override
+  ResultFuture<void> informationUser({
+    required String firstName,
+    required String lastName,
+    required String birtOfDate,
+    required String gender,
+    required String phoneNumber,
+  }) async {
+    try {
+      await _remoteDataSource.informationUser(
+        firstName: firstName,
+        lastName: lastName,
+        birtOfDate: birtOfDate,
+        gender: gender,
+        phoneNumber: phoneNumber,
+      );
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
+
+  @override
   ResultFuture<UserResponse> signIn({
     required String usernameOrEmail,
     required String password,

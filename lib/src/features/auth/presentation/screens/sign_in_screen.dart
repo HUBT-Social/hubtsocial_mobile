@@ -96,6 +96,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                         Icons.person,
                                       ),
                                     ),
+                                    onChanged: (value) {},
                                   ),
                                 ),
                                 Padding(

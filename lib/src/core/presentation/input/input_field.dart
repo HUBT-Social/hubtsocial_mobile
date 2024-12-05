@@ -19,6 +19,50 @@ class InputField extends StatefulWidget {
     this.onChanged,
     super.key,
   });
+  const InputField.gender({
+    required TextEditingController controller,
+    String? errorText,
+    String hintText = 'Gender',
+    Widget? prefixIcon,
+    TextInputAction textInputAction = TextInputAction.next,
+    Key? key,
+  }) : this(
+          key: key,
+          controller: controller,
+          textInputAction: textInputAction,
+          keyboardType: TextInputType.text,
+          errorText: errorText,
+          hintText: hintText,
+          prefixIcon: prefixIcon,
+          autofillHints: const [AutofillHints.name],
+          validator: Validators.required,
+        );
+
+  InputField.dob({
+    required TextEditingController controller,
+    String? errorText,
+    String hintText = 'Date of Birth',
+    Widget? prefixIcon,
+    TextInputAction textInputAction = TextInputAction.next,
+    Key? key,
+  }) : this(
+          key: key,
+          controller: controller,
+          textInputAction: textInputAction,
+          keyboardType: TextInputType.datetime,
+          errorText: errorText,
+          hintText: hintText,
+          prefixIcon: prefixIcon,
+          inputFormatters: [
+            DateInputFormatter(),
+          ],
+          autofillHints: const [
+            AutofillHints.birthdayDay,
+            AutofillHints.birthdayMonth,
+            AutofillHints.birthdayYear,
+          ],
+          validator: Validators.required,
+        );
 
   const InputField.name({
     required TextEditingController controller,
@@ -27,6 +71,7 @@ class InputField extends StatefulWidget {
     Widget? prefixIcon,
     TextInputAction textInputAction = TextInputAction.next,
     Key? key,
+    required Null Function(dynamic value) onChanged,
   }) : this(
           key: key,
           controller: controller,
@@ -232,6 +277,32 @@ class _InputFieldState extends State<InputField> {
               )
             : null,
       ),
+    );
+  }
+}
+
+class DateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final text = newValue.text;
+    final digitsOnly = text.replaceAll(RegExp(r'[^0-9]'), '');
+    String formatted = '';
+    for (int i = 0; i < digitsOnly.length; i++) {
+      if (i == 2 || i == 4) {
+        formatted += '/';
+      }
+      formatted += digitsOnly[i];
+    }
+    if (formatted.length > 10) {
+      formatted = formatted.substring(0, 10);
+    }
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
     );
   }
 }

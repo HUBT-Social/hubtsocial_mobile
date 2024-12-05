@@ -39,6 +39,15 @@ class ForgotPasswordEvent extends AuthEvent {
   List<String> get props => [usernameOrEmail];
 }
 
+// class UpdateEmailEvent extends AuthEvent {
+//   final String email;
+
+//   UpdateEmailEvent(this.email);
+
+//   @override
+//   List<Object?> get props => [email];
+// }
+
 class VerifyEmailEvent extends AuthEvent {
   const VerifyEmailEvent({
     required this.postcode,

@@ -96,6 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       Icons.person,
                                     ),
                                   ),
+                                  onChanged: (value) {},
                                 ),
                               ),
                               Padding(

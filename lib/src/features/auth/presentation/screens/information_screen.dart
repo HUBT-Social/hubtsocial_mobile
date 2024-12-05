@@ -69,6 +69,7 @@ class _InformationScreenState extends State<InformationScreen> {
                                 Icons.person,
                               ),
                             ),
+                            onChanged: (value) {},
                           ),
                         ),
                         Padding(

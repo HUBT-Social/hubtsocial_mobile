@@ -20,4 +20,5 @@ class EndPoint {
 
   static String get user => "$apiUrl/user";
   static String get userGetUser => "$user/get-user";
+  static String get informationUser => "$user/add-info-user";
 }

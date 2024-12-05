@@ -19,6 +19,7 @@ import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/auth/presentation/screens/password_successful_screen.dart';
 import '../../features/auth/presentation/screens/password_verification_screen.dart';
 import '../../features/auth/presentation/screens/set_new_password_screen.dart';
+import '../../features/auth/presentation/screens/sign_up_information_sceen.dart';
 import '../../features/auth/presentation/screens/sign_up_screen.dart';
 import '../../features/chat/presentation/screens/chat_screen.dart';
 import '../../features/main_wrapper/ui/main_wrapper.dart';

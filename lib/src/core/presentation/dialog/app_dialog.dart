@@ -166,7 +166,6 @@ sealed class AppDialog {
             width: 200,
             child: Text(
               message,
-              // overflow: TextOverflow.ellipsis,
               style: context.textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
