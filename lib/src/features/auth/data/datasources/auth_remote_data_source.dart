@@ -41,7 +41,7 @@ abstract class AuthRemoteDataSource {
   Future<void> informationUser(
       {required String firstName,
       required String lastName,
-      required String birtOfDate,
+      required String birthOfDate,
       required String gender,
       required String phoneNumber});
 }
@@ -471,7 +471,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> informationUser(
       {required String firstName,
       required String lastName,
-      required String birtOfDate,
+      required String birthOfDate,
       required String gender,
       required String phoneNumber}) async {
     try {
@@ -480,7 +480,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         body: {
           "firstName": firstName,
           "lastName": lastName,
-          "birtOfDate": birtOfDate,
+          "birthOfDate": birthOfDate,
           "gender": gender,
           "phoneNumber": phoneNumber,
         },

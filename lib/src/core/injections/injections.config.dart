@@ -111,11 +111,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i477.InitUserUserCase(gh<_i1042.UserRepo>()));
     gh.lazySingleton<_i925.UpdateUserUserCase>(
         () => _i925.UpdateUserUserCase(gh<_i1042.UserRepo>()));
-    gh.factory<_i527.UserBloc>(() => _i527.UserBloc(
-          initUserProfile: gh<_i477.InitUserUserCase>(),
-          updateUserProfile: gh<_i925.UpdateUserUserCase>(),
-          changedPassword: gh<_i789.ChangePasswordUserCase>(),
-        ));
     gh.factory<_i715.AuthBloc>(() => _i715.AuthBloc(
           signIn: gh<_i627.SignInUserCase>(),
           twoFactor: gh<_i245.TwoFactorUserCase>(),
@@ -127,7 +122,12 @@ extension GetItInjectableX on _i174.GetIt {
           verifyPassword: gh<_i245.VerifyPasswordUserCase>(),
           setnewpassword: gh<_i356.SetNewPasswordUserCase>(),
           signOut: gh<_i488.SignOut>(),
-          informationuser: gh<_i556.InformationUserCase>(),
+          informationUserCase: gh<_i556.InformationUserCase>(),
+        ));
+    gh.factory<_i527.UserBloc>(() => _i527.UserBloc(
+          initUserProfile: gh<_i477.InitUserUserCase>(),
+          updateUserProfile: gh<_i925.UpdateUserUserCase>(),
+          changedPassword: gh<_i789.ChangePasswordUserCase>(),
         ));
     return this;
   }

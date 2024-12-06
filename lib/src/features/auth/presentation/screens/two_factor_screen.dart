@@ -29,7 +29,7 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                 AppDialog.errorMessage(state.message, context));
           } else if (state is SignedIn) {
             AppDialog.showMessageDialog(
-                AppDialog.sucessMessage('wellcomeBack', context));
+                AppDialog.successMessage('wellcomeBack', context));
             AppDialog.closeDialog();
             AppRoute.home.go(context);
           } else if (state is AuthLoading) {

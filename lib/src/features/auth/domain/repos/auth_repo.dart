@@ -25,7 +25,7 @@ abstract class AuthRepo {
   ResultFuture<void> informationUser({
     required String firstName,
     required String lastName,
-    required String birtOfDate,
+    required String birthOfDate,
     required String gender,
     required String phoneNumber,
   });

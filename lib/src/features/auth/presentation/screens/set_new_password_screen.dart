@@ -25,13 +25,11 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (_, state) async {
           if (state is AuthError) {
-            // AuthError when the user is not found
             AppDialog.showMessageDialog(AppDialog.errorMessage(
               state.message,
               context,
             ));
           } else if (state is AuthLoading) {
-            // Shown Loading Dialog
             AppDialog.showLoadingDialog(message: context.loc.set_new_password);
           } else if (state is SetNewPasswordSuccess) {
             AppDialog.closeDialog();

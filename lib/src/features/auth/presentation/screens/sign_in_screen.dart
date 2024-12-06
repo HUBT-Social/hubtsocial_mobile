@@ -24,20 +24,16 @@ class _SignInScreenState extends State<SignInScreen> {
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (_, state) async {
           if (state is AuthError) {
-            // AuthError when the user is not found
             AppDialog.showMessageDialog(
                 AppDialog.errorMessage(state.message, context));
           } else if (state is SignedIn) {
-            // SignedIn and move to Dashboard
             AppDialog.showMessageDialog(
-                AppDialog.sucessMessage('wellcomeBack', context));
+                AppDialog.successMessage('wellcomeBack', context));
             AppDialog.closeDialog();
             AppRoute.home.go(context);
           } else if (state is AuthLoading) {
-            // Shown Loading Dialog
             AppDialog.showLoadingDialog(message: 'signing');
           } else if (state is VerifyTwoFactor) {
-            //Phone number is valid and move to Verification Screen
             AppDialog.closeDialog();
             AppRoute.twoFactor.push(context);
           }

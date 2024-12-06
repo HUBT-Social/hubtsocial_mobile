@@ -113,7 +113,7 @@ sealed class AppDialog {
     });
   }
 
-  static Widget sucessMessage(String message, BuildContext context) {
+  static Widget successMessage(String message, BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(

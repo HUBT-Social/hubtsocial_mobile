@@ -29,7 +29,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required VerifyPasswordUserCase verifyPassword,
     required SetNewPasswordUserCase setnewpassword,
     required SignOut signOut,
-    required InformationUserCase informationuser,
+    required InformationUserCase informationUserCase,
   })  : _signIn = signIn,
         _twoFactor = twoFactor,
         _forgotPassword = forgotPassword,
@@ -39,13 +39,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _verifyPassword = verifyPassword,
         _setnewpassword = setnewpassword,
         _signOut = signOut,
-        _informationuser = informationuser,
+        _informationUserCase = informationUserCase,
         super(const AuthInitial()) {
     on<AuthEvent>((event, emit) {
       emit(const AuthLoading());
     });
-    // on<UpdateEmailEvent>(
-    //     _updateEmailHandler as EventHandler<UpdateEmailEvent, AuthState>);
     on<SignInEvent>(_signInHandler);
     on<SetNewPasswordEvent>(_setnewpasswordHandler);
     on<VerifyPasswordEvent>(_verifyPasswordHandler);
@@ -55,7 +53,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignUpEvent>(_signUpHandler);
     on<SignOutEvent>(_signOutHandler);
 
-    on<SignUpInformationEvent>(_SignUpInformationHandler);
+    on<SignUpInformationEvent>(_signUpInformationHandler);
   }
 
   final SignInUserCase _signIn;
@@ -67,31 +65,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignUpUserCase _signUp;
   final ResetPassword _resetPassword;
   final SignOut _signOut;
-  final InformationUserCase _informationuser;
+  final InformationUserCase _informationUserCase;
 
-  Future<void> _SignUpInformationHandler(
+  Future<void> _signUpInformationHandler(
     SignUpInformationEvent event,
     Emitter<AuthState> emit,
   ) async {
-    final result = await _informationuser(
+    final result = await _informationUserCase(
       InformationUserParams(
         firstName: event.firstName,
         lastName: event.lastName,
-        birtOfDate: event.birtOfDate,
+        birthOfDate: event.birthOfDate,
         gender: event.gender,
         phoneNumber: event.phoneNumber,
       ),
     );
     result.fold(
       (failure) {
-        switch (int.parse(failure.statusCode)) {
-          case 401:
-            emit(ExpiredToken(failure.message));
-            break;
-          default:
-            emit(AuthError(failure.message));
-            break;
-        }
+        emit(AuthError(failure.message));
       },
       (_) => emit(InformationUserSuccess()),
     );

@@ -79,7 +79,6 @@ class VerifyPasswordEvent extends AuthEvent {
   final String postcode;
 
   @override
-  // TODO: implement props
   List<Object?> get props => [postcode];
 }
 
@@ -87,18 +86,18 @@ class SignUpInformationEvent extends AuthEvent {
   const SignUpInformationEvent({
     required this.firstName,
     required this.lastName,
-    required this.birtOfDate,
+    required this.birthOfDate,
     required this.gender,
     required this.phoneNumber,
   });
   final String firstName;
   final String lastName;
-  final String birtOfDate;
+  final String birthOfDate;
   final String gender;
   final String phoneNumber;
   @override
   List<String> get props =>
-      [firstName, lastName, birtOfDate, gender, phoneNumber];
+      [firstName, lastName, birthOfDate, gender, phoneNumber];
 }
 
 class SignUpEvent extends AuthEvent {

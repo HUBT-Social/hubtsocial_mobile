@@ -20,7 +20,7 @@ class AuthRepoImpl implements AuthRepo {
   ResultFuture<void> informationUser({
     required String firstName,
     required String lastName,
-    required String birtOfDate,
+    required String birthOfDate,
     required String gender,
     required String phoneNumber,
   }) async {
@@ -28,7 +28,7 @@ class AuthRepoImpl implements AuthRepo {
       await _remoteDataSource.informationUser(
         firstName: firstName,
         lastName: lastName,
-        birtOfDate: birtOfDate,
+        birthOfDate: birthOfDate,
         gender: gender,
         phoneNumber: phoneNumber,
       );
