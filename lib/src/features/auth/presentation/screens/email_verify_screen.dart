@@ -4,6 +4,7 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/background.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_auth_otp.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
+import '../../../../core/configs/countdown_timer.dart';
 import '../../../../core/navigation/route.dart';
 import '../../../../core/presentation/dialog/app_dialog.dart';
 import '../bloc/auth_bloc.dart';
@@ -18,6 +19,7 @@ class EmailVerifyScreen extends StatefulWidget {
 class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
   final otpController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  late CountdownTimer countdownTimer;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
             AppDialog.showMessageDialog(
                 AppDialog.sucessMessage('wellcomeBack', context));
             AppDialog.closeDialog();
-            AppRoute.home.go(context);
+            AppRoute.signupinformatin.go(context);
           } else if (state is AuthLoading) {
             AppDialog.showLoadingDialog(message: 'Verify');
           } else {
@@ -113,6 +115,52 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  // context.read<AuthBloc>().add(
+                                  //     ForgotPasswordEvent(
+                                  //         usernameOrEmail: email));
+                                  countdownTimer.reset();
+                                  countdownTimer.start(() {
+                                    AppDialog.showMessageDialog(
+                                        AppDialog.errorMessage(
+                                            context.loc.otp_expired, context));
+                                  });
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.refresh,
+                                        size: 20,
+                                        color: context.colorScheme.primary),
+                                    SizedBox(width: 4),
+                                    Text(
+                                      context.loc.resend,
+                                      style: context.textTheme.labelLarge
+                                          ?.copyWith(
+                                        color: context.colorScheme.primary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              AnimatedBuilder(
+                                animation: countdownTimer,
+                                builder: (context, child) {
+                                  return Text(
+                                    '${context.loc.the_code_will} ${countdownTimer.formattedTime}',
+                                    style:
+                                        context.textTheme.titleSmall?.copyWith(
+                                      color: context.colorScheme.onSurface,
+                                    ),
+                                    textAlign: TextAlign.right,
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                           SizedBox(
                             height: 24,

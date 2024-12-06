@@ -22,7 +22,13 @@ abstract class AuthRepo {
     required String password,
     required String confirmPassword,
   });
-
+  ResultFuture<void> informationUser({
+    required String firstName,
+    required String lastName,
+    required String birtOfDate,
+    required String gender,
+    required String phoneNumber,
+  });
   ResultFuture<UserResponse> verifyEmail({
     required String postcode,
   });

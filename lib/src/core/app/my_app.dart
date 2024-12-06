@@ -8,7 +8,6 @@ import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';
 import 'package:hubtsocial_mobile/src/core/style/app_font.dart';
 import 'package:hubtsocial_mobile/src/core/style/app_theme.dart';
 import 'package:provider/provider.dart';
-
 import '../localization/bloc/localization_bloc.dart';
 import '../navigation/router.import.dart';
 import '../theme/bloc/theme_bloc.dart';

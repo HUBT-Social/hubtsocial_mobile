@@ -6,6 +6,7 @@ import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/forgot_passw
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/otp_user_case.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../domain/usecases/information_user_case.dart';
 import '../../domain/usecases/reset_password.dart';
 import '../../domain/usecases/set_new_password_user_case.dart';
 import '../../domain/usecases/sign_in_user_case.dart';
@@ -28,6 +29,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required VerifyPasswordUserCase verifyPassword,
     required SetNewPasswordUserCase setnewpassword,
     required SignOut signOut,
+    required InformationUserCase informationuser,
   })  : _signIn = signIn,
         _twoFactor = twoFactor,
         _forgotPassword = forgotPassword,
@@ -37,10 +39,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _verifyPassword = verifyPassword,
         _setnewpassword = setnewpassword,
         _signOut = signOut,
+        _informationuser = informationuser,
         super(const AuthInitial()) {
     on<AuthEvent>((event, emit) {
       emit(const AuthLoading());
     });
+    // on<UpdateEmailEvent>(
+    //     _updateEmailHandler as EventHandler<UpdateEmailEvent, AuthState>);
     on<SignInEvent>(_signInHandler);
     on<SetNewPasswordEvent>(_setnewpasswordHandler);
     on<VerifyPasswordEvent>(_verifyPasswordHandler);
@@ -49,6 +54,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<VerifyEmailEvent>(_verifyEmailHandler);
     on<SignUpEvent>(_signUpHandler);
     on<SignOutEvent>(_signOutHandler);
+
+    on<SignUpInformationEvent>(_SignUpInformationHandler);
   }
 
   final SignInUserCase _signIn;
@@ -60,6 +67,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignUpUserCase _signUp;
   final ResetPassword _resetPassword;
   final SignOut _signOut;
+  final InformationUserCase _informationuser;
+
+  Future<void> _SignUpInformationHandler(
+    SignUpInformationEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    final result = await _informationuser(
+      InformationUserParams(
+        firstName: event.firstName,
+        lastName: event.lastName,
+        birtOfDate: event.birtOfDate,
+        gender: event.gender,
+        phoneNumber: event.phoneNumber,
+      ),
+    );
+    result.fold(
+      (failure) {
+        switch (int.parse(failure.statusCode)) {
+          case 401:
+            emit(ExpiredToken(failure.message));
+            break;
+          default:
+            emit(AuthError(failure.message));
+            break;
+        }
+      },
+      (_) => emit(InformationUserSuccess()),
+    );
+  }
 
   Future<void> _setnewpasswordHandler(
     SetNewPasswordEvent event,
@@ -258,4 +294,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       },
     );
   }
+
+  // Future<void> _updateEmailHandler(
+  //     UpdateEmailEvent event, Emitter<AuthState> emit) async {
+  //   final result = await _forgotPassword(
+  //     ForgotPasswordParams(
+  //       usernameOrEmail: event.email,
+  //     ),
+  //   );
+  //   result.fold(
+  //     (failure) {
+  //       switch (int.parse(failure.statusCode)) {
+  //         case 401:
+  //           emit(AuthError(failure.message));
+  //           break;
+  //         default:
+  //           emit(AuthError(failure.message));
+  //           break;
+  //       }
+  //     },
+  //     (response) {
+  //       emit(VerifyForgotPassword());
+  //     },
+  //   );
+  // }
 }

@@ -40,10 +40,10 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
               AppDialog.errorMessage(state.message, context));
         } else if (state is AuthLoading) {
           // Shown Loading Dialog
-          AppDialog.showLoadingDialog(message: 'đăng ký thông tin ');
-        } else if (state is VerifyEmail) {
+          AppDialog.showLoadingDialog(message: context.loc.signup_information);
+        } else if (state is VerifySignUp) {
           AppDialog.closeDialog();
-          AppRoute.emailVerify.push(context);
+          AppRoute.signIn.push(context);
         } else {
           AppDialog.closeDialog();
           logDebug(state.toString());
@@ -77,7 +77,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          context.loc.sign_up,
+                          context.loc.signup_information,
                           style: context.textTheme.headlineMedium?.copyWith(
                             color: context.colorScheme.onSurface,
                           ),
@@ -91,21 +91,23 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 6),
                                 child: InputField.name(
-                                  hintText: context.loc.user_name,
+                                  hintText: context.loc.first_name,
                                   controller: _firstNameController,
                                   textInputAction: TextInputAction.next,
                                   prefixIcon: Align(
                                     widthFactor: 1.0,
                                     heightFactor: 1.0,
-                                    child: SvgPicture.asset(
-                                        AppIcons.iconFirstName),
+                                    child:
+                                        SvgPicture.asset(Assets.iconFirstName),
                                   ),
+                                  onChanged: (value) {},
                                 ),
                               ),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 6),
-                                child: InputField.email(
+                                child: InputField.name(
+                                  hintText: context.loc.last_name,
                                   controller: _lastNameController,
                                   textInputAction: TextInputAction.next,
                                   prefixIcon: Align(
@@ -115,100 +117,113 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                       Icons.person,
                                     ),
                                   ),
+                                  onChanged: (value) {},
                                 ),
                               ),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 6),
-                                child: InputField.password(
-                                  hintText: context.loc.password,
-                                  controller: _birthOfDateController,
-                                  textInputAction: TextInputAction.next,
-                                  prefixIcon: Align(
-                                    widthFactor: 1.0,
-                                    heightFactor: 1.0,
-                                    child: SvgPicture.asset(
-                                        AppIcons.iconBirthdate),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    DateTime? pickedDate = await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(1900),
+                                      lastDate: DateTime.now(),
+                                    );
+                                    if (pickedDate != null) {
+                                      _birthOfDateController.text =
+                                          "${pickedDate.day.toString().padLeft(2, '0')}/"
+                                          "${pickedDate.month.toString().padLeft(2, '0')}/"
+                                          "${pickedDate.year}";
+                                    }
+                                  },
+                                  child: AbsorbPointer(
+                                    child: InputField.dob(
+                                      hintText: context.loc.birth_of_date,
+                                      controller: _birthOfDateController,
+                                      textInputAction: TextInputAction.next,
+                                      prefixIcon: Align(
+                                        widthFactor: 1.0,
+                                        heightFactor: 1.0,
+                                        child: SvgPicture.asset(
+                                            Assets.iconBirthdate),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 6),
-                                child: InputField.password(
-                                  hintText: context.loc.confirm_password,
+                                child: InputField.gender(
+                                  hintText: context.loc.gender,
                                   controller: _genderController,
                                   textInputAction: TextInputAction.done,
                                   prefixIcon: Align(
                                     widthFactor: 1.0,
                                     heightFactor: 1.0,
-                                    child:
-                                        SvgPicture.asset(AppIcons.iconGender),
+                                    child: SvgPicture.asset(Assets.iconGender),
                                   ),
                                 ),
                               ),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 6),
-                                child: InputField.password(
-                                  hintText: context.loc.confirm_password,
+                                child: InputField.phone(
+                                  hintText: context.loc.phonenuber,
                                   controller: _phoneNumberController,
                                   textInputAction: TextInputAction.done,
                                   prefixIcon: Align(
                                     widthFactor: 1.0,
                                     heightFactor: 1.0,
                                     child: SvgPicture.asset(
-                                        AppIcons.iconPhoneNumber),
+                                        Assets.iconPhoneNumber),
                                   ),
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        Row(
-                          children: [
-                            Checkbox(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              value: isAgreePolicy,
-                              onChanged: (value) {
-                                setState(
-                                  () {
-                                    isAgreePolicy = value!;
-                                  },
-                                );
-                              },
-                            ),
-                            Text(
-                              "I Agree with",
-                              // AppLocalizations.of(context).hashCode.toString(),
-                              style: context.textTheme.labelLarge,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Center(
-                                        child: Container(
-                                          height: 300,
-                                          width: 300,
-                                          color: context.colorScheme.surface,
-                                          child: Text("data"),
-                                        ),
-                                      );
-                                    });
-                              },
-                              child: Text(
-                                " privacy and policy",
-                                style: context.textTheme.labelLarge?.copyWith(
-                                  color: context.colorScheme.surfaceTint,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     Checkbox(
+                        //       shape: RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(5),
+                        //       ),
+                        //       value: isAgreePolicy,
+                        //       onChanged: (value) {
+                        //         setState(
+                        //           () {
+                        //             isAgreePolicy = value!;
+                        //           },
+                        //         );
+                        //       },
+                        //     ),
+                        //     InkWell(
+                        //       onTap: () {
+                        //         showDialog(
+                        //             context: context,
+                        //             builder: (BuildContext context) {
+                        //               return Center(
+                        //                 child: Container(
+                        //                   height: 300,
+                        //                   width: 300,
+                        //                   color: context.colorScheme.surface,
+                        //                   child: Text("data"),
+                        //                 ),
+                        //               );
+                        //             });
+                        //       },
+                        //       child: Text(
+                        //         " privacy and policy",
+                        //         style: context.textTheme.labelLarge?.copyWith(
+                        //           color: context.colorScheme.surfaceTint,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         SizedBox(
                           height: 12,
                         ),
@@ -219,7 +234,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                           child: SizedBox(
                             width: double.infinity,
                             child: Text(
-                              context.loc.continue_text,
+                              context.loc.next,
                               style: context.textTheme.bodyLarge?.copyWith(
                                   color: context.colorScheme.onPrimary),
                               textAlign: TextAlign.center,
@@ -234,7 +249,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                             AppRoute.signIn.push(context);
                           },
                           child: Text(
-                            context.loc.already_have_an_account,
+                            context.loc.skip,
                             style: context.textTheme.labelLarge?.copyWith(
                               color: context.colorScheme.surfaceTint,
                             ),

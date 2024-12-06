@@ -18,7 +18,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _usernameOrEmailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
+  String savedEmail = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,17 +84,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 6),
                                   child: InputField.name(
-                                    controller: _usernameOrEmailController,
-                                    textInputAction: TextInputAction.next,
-                                    hintText: context.loc.username_or_email,
-                                    prefixIcon: Align(
-                                      widthFactor: 1.0,
-                                      heightFactor: 1.0,
-                                      child: Icon(
-                                        Icons.person,
+                                      controller: _usernameOrEmailController,
+                                      textInputAction: TextInputAction.next,
+                                      hintText: context.loc.username_or_email,
+                                      prefixIcon: Align(
+                                        widthFactor: 1.0,
+                                        heightFactor: 1.0,
+                                        child: Icon(
+                                          Icons.person,
+                                        ),
                                       ),
-                                    ),
-                                  ),
+                                      onChanged: (value) {
+                                        // context.read<AuthBloc>().add(
+                                        //     UpdateEmailEvent(value.trim()));
+                                      }),
                                 ),
                               ],
                             ),
@@ -152,8 +155,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     context.closeKeyboard();
 
-    context.read<AuthBloc>().add(ForgotPasswordEvent(
-          usernameOrEmail: _usernameOrEmailController.text.trim(),
-        ));
+    // String email = '';
+    // final emailState = context.read<AuthBloc>().state;
+    // if (emailState is EmailUpdatedState) {
+    //   email = emailState.email;
+    // }
+    context.read<AuthBloc>().add(
+          ForgotPasswordEvent(
+              usernameOrEmail: _usernameOrEmailController.text.trim()),
+        );
   }
 }

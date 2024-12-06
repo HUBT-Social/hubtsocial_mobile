@@ -12,6 +12,7 @@ enum AppRoute {
   emailVerify('/email-verify'),
   signUp('/sign-up'),
   information('/information'),
+  signupinformatin('/signup_information'),
   passwordVerify('/password-verify'),
   setNewPassword('/set-new-password'),
   home('/'),

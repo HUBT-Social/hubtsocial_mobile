@@ -28,8 +28,10 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
         listener: (_, state) async {
           if (state is AuthError) {
             // AuthError when the user is not found
-            AppDialog.showMessageDialog(
-                AppDialog.errorMessage(state.message, context));
+            AppDialog.showMessageDialog(AppDialog.errorMessage(
+              state.message,
+              context,
+            ));
           } else if (state is AuthLoading) {
             // Shown Loading Dialog
             AppDialog.showLoadingDialog(message: context.loc.set_new_password);

@@ -23,6 +23,7 @@ final GoRouter router = GoRouter(
         state.fullPath!.contains(AppRoute.signUp.path) ||
         state.fullPath!.contains(AppRoute.passwordVerify.path) ||
         state.fullPath!.contains(AppRoute.setNewPassword.path) ||
+        state.fullPath!.contains(AppRoute.signupinformatin.path) ||
         state.fullPath!.contains(AppRoute.passwordSuccessful.path) ||
         state.fullPath!.contains(AppRoute.emailVerify.path)) {
       return null;
@@ -112,6 +113,13 @@ final GoRouter router = GoRouter(
       builder: (context, state) => BlocProvider(
         create: (context) => getIt<AuthBloc>(),
         child: PasswordSuccessfulScreen(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoute.signupinformatin.path,
+      builder: (context, state) => BlocProvider(
+        create: (context) => getIt<AuthBloc>(),
+        child: SignUpInformationScreen(),
       ),
     ),
     // MainWrapper

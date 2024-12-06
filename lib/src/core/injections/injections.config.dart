@@ -21,6 +21,8 @@ import 'package:hubtsocial_mobile/src/features/auth/domain/repos/auth_repo.dart'
     as _i936;
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/forgot_password_user_case.dart'
     as _i411;
+import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/information_user_case.dart'
+    as _i556;
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/otp_user_case.dart'
     as _i245;
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/reset_password.dart'
@@ -94,19 +96,26 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i245.VerifyPasswordUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i492.ResetPassword>(
         () => _i492.ResetPassword(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i356.SetNewPasswordUserCase>(
+        () => _i356.SetNewPasswordUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i627.SignInUserCase>(
         () => _i627.SignInUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i488.SignOut>(() => _i488.SignOut(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i287.SignUpUserCase>(
         () => _i287.SignUpUserCase(gh<_i936.AuthRepo>()));
-    gh.lazySingleton<_i356.SetNewPasswordUserCase>(
-        () => _i356.SetNewPasswordUserCase(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i556.InformationUserCase>(
+        () => _i556.InformationUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i789.ChangePasswordUserCase>(
         () => _i789.ChangePasswordUserCase(gh<_i1042.UserRepo>()));
     gh.lazySingleton<_i477.InitUserUserCase>(
         () => _i477.InitUserUserCase(gh<_i1042.UserRepo>()));
     gh.lazySingleton<_i925.UpdateUserUserCase>(
         () => _i925.UpdateUserUserCase(gh<_i1042.UserRepo>()));
+    gh.factory<_i527.UserBloc>(() => _i527.UserBloc(
+          initUserProfile: gh<_i477.InitUserUserCase>(),
+          updateUserProfile: gh<_i925.UpdateUserUserCase>(),
+          changedPassword: gh<_i789.ChangePasswordUserCase>(),
+        ));
     gh.factory<_i715.AuthBloc>(() => _i715.AuthBloc(
           signIn: gh<_i627.SignInUserCase>(),
           twoFactor: gh<_i245.TwoFactorUserCase>(),
@@ -118,11 +127,7 @@ extension GetItInjectableX on _i174.GetIt {
           verifyPassword: gh<_i245.VerifyPasswordUserCase>(),
           setnewpassword: gh<_i356.SetNewPasswordUserCase>(),
           signOut: gh<_i488.SignOut>(),
-        ));
-    gh.factory<_i527.UserBloc>(() => _i527.UserBloc(
-          initUserProfile: gh<_i477.InitUserUserCase>(),
-          updateUserProfile: gh<_i925.UpdateUserUserCase>(),
-          changedPassword: gh<_i789.ChangePasswordUserCase>(),
+          informationuser: gh<_i556.InformationUserCase>(),
         ));
     return this;
   }
