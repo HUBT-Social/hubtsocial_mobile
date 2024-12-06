@@ -97,8 +97,8 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                   prefixIcon: Align(
                                     widthFactor: 1.0,
                                     heightFactor: 1.0,
-                                    child:
-                                        SvgPicture.asset(Assets.iconFirstName),
+                                    child: SvgPicture.asset(
+                                        AppIcons.iconFirstName),
                                   ),
                                   onChanged: (value) {},
                                 ),
@@ -147,7 +147,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                         widthFactor: 1.0,
                                         heightFactor: 1.0,
                                         child: SvgPicture.asset(
-                                            Assets.iconBirthdate),
+                                            AppIcons.iconBirthdate),
                                       ),
                                     ),
                                   ),
@@ -163,7 +163,8 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                   prefixIcon: Align(
                                     widthFactor: 1.0,
                                     heightFactor: 1.0,
-                                    child: SvgPicture.asset(Assets.iconGender),
+                                    child:
+                                        SvgPicture.asset(AppIcons.iconGender),
                                   ),
                                 ),
                               ),
@@ -171,14 +172,14 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 6),
                                 child: InputField.phone(
-                                  hintText: context.loc.phonenuber,
+                                  hintText: context.loc.phone_number,
                                   controller: _phoneNumberController,
                                   textInputAction: TextInputAction.done,
                                   prefixIcon: Align(
                                     widthFactor: 1.0,
                                     heightFactor: 1.0,
                                     child: SvgPicture.asset(
-                                        Assets.iconPhoneNumber),
+                                        AppIcons.iconPhoneNumber),
                                   ),
                                 ),
                               ),
