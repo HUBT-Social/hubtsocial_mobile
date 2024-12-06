@@ -99,7 +99,6 @@ StatefulShellRoute _mainRoute() {
                 pageBuilder: (context, state) {
                   return CustomTransitionPage(
                     key: state.pageKey,
-                    child: const ProfileScreen(),
                     transitionsBuilder: (
                       context,
                       animation,
@@ -107,6 +106,7 @@ StatefulShellRoute _mainRoute() {
                       child,
                     ) =>
                         FadeTransition(opacity: animation, child: child),
+                    child: const ProfileScreen(),
                   );
                 },
               ),

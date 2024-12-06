@@ -4,16 +4,16 @@ import 'package:go_router/go_router.dart';
 enum AppRoute {
   // none(''),
   auth('/auth'),
-  getStarted('/auth/getStarted'),
+  getStarted('/auth'),
   signIn('/auth/sign-in'),
   twoFactor('/auth/two-factor'),
   forgotPassword('/auth/forgot-password'),
   emailVerify('/auth/email-verify'),
   signUp('/auth/sign-up'),
-  information('/auth/information'),
   signUpInformation('/auth/sign-up-information'),
   passwordVerify('/auth/password-verify'),
   setNewPassword('/auth/set-new-password'),
+  passwordSuccessful('/auth/password-successful'),
   home('/'),
   chat('/chat'),
   timetable('/timetable'),
@@ -21,7 +21,6 @@ enum AppRoute {
   menu('/menu'),
   profile('/menu/profile'),
   error('/error'),
-  passwordSuccessful('/password-successful'),
   ;
 
   const AppRoute(this.path);

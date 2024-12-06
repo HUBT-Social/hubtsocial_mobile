@@ -57,7 +57,7 @@ class _PasswordVerifiCationScreenState
             AppDialog.showLoadingDialog(message: context.loc.password_verify);
           } else if (state is VerifyForgotPasswordSuccess) {
             AppDialog.closeDialog();
-            AppRoute.setNewPassword.push(context);
+            AppRoute.setNewPassword.pushReplacement(context);
           }
         },
         builder: (context, state) {

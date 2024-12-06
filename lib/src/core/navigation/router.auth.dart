@@ -11,79 +11,51 @@ part of 'router.import.dart';
 ShellRoute _authRoute() {
   return ShellRoute(
     builder: (context, state, child) {
-      return AuthScreen(child: child);
+      return BlocProvider(
+        create: (context) => getIt<AuthBloc>(),
+        child: AuthScreen(child: child),
+      );
     },
     routes: [
       GoRoute(
         path: AppRoute.getStarted.path,
-        builder: (context, state) => const GetStartedScreen(),
+        builder: (context, state) => GetStartedScreen(),
       ),
       GoRoute(
         path: AppRoute.signIn.path,
-        builder: (context, state) => BlocProvider(
-          create: (context) => getIt<AuthBloc>(),
-          child: SignInScreen(),
-        ),
+        builder: (context, state) => SignInScreen(),
       ),
       GoRoute(
         path: AppRoute.twoFactor.path,
-        builder: (context, state) => BlocProvider(
-          create: (context) => getIt<AuthBloc>(),
-          child: TwoFactorPage(),
-        ),
+        builder: (context, state) => TwoFactorPage(),
       ),
       GoRoute(
         path: AppRoute.forgotPassword.path,
-        builder: (context, state) => BlocProvider(
-          create: (context) => getIt<AuthBloc>(),
-          child: ForgotPasswordScreen(),
-        ),
+        builder: (context, state) => ForgotPasswordScreen(),
       ),
       GoRoute(
         path: AppRoute.signUp.path,
-        builder: (context, state) => BlocProvider(
-          create: (context) => getIt<AuthBloc>(),
-          child: const SignUpScreen(),
-        ),
+        builder: (context, state) => SignUpScreen(),
       ),
       GoRoute(
         path: AppRoute.emailVerify.path,
-        builder: (context, state) => BlocProvider(
-          create: (context) => getIt<AuthBloc>(),
-          child: EmailVerifyScreen(),
-        ),
-      ),
-      GoRoute(
-        path: AppRoute.information.path,
-        builder: (context, state) => const InformationScreen(),
+        builder: (context, state) => EmailVerifyScreen(),
       ),
       GoRoute(
         path: AppRoute.passwordVerify.path,
-        builder: (context, state) => BlocProvider(
-          create: (context) => getIt<AuthBloc>(),
-          child: PasswordVerifiCationScreen(),
-        ),
+        builder: (context, state) => PasswordVerifiCationScreen(),
       ),
       GoRoute(
         path: AppRoute.setNewPassword.path,
-        builder: (context, state) => BlocProvider(
-          create: (context) => getIt<AuthBloc>(),
-          child: SetNewPasswordScreen(),
-        ),
+        builder: (context, state) => SetNewPasswordScreen(),
       ),
       GoRoute(
         path: AppRoute.passwordSuccessful.path,
-        builder: (context, state) => BlocProvider(
-          create: (context) => getIt<AuthBloc>(),
-          child: PasswordSuccessfulScreen(),
-        ),
+        builder: (context, state) => PasswordSuccessfulScreen(),
       ),
       GoRoute(
         path: AppRoute.signUpInformation.path,
-        builder: (context, state) => BlocProvider(
-          create: (context) => getIt<AuthBloc>(),
-          child: SignUpInformationScreen(),
-        ),
+        builder: (context, state) => SignUpInformationScreen(),
       ),
     ],
   );
