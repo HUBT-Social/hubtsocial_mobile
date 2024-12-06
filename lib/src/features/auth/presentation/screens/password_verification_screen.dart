@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/background.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_auth_otp.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
 import '../../../../core/configs/countdown_timer.dart';
 import '../../../../core/navigation/route.dart';
 import '../../../../core/presentation/dialog/app_dialog.dart';
@@ -48,8 +46,8 @@ class _PasswordVerifiCationScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocConsumer<AuthBloc, AuthState>(
+    return Center(
+      child: BlocConsumer<AuthBloc, AuthState>(
         listener: (_, state) async {
           logDebug('Current state: $state');
           if (state is AuthError) {
@@ -63,154 +61,133 @@ class _PasswordVerifiCationScreenState
           }
         },
         builder: (context, state) {
-          return Stack(
-            children: [
-              Background(),
-              Center(
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          right: 12, left: 12, top: 24, bottom: 12),
-                      decoration: BoxDecoration(
-                        color: context.colorScheme.surface,
-                        borderRadius:
-                            BorderRadiusDirectional.all(Radius.circular(24)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: context.colorScheme.shadow.withAlpha(128),
-                            blurRadius: 4,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
+          return SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Container(
+                padding:
+                    EdgeInsets.only(right: 12, left: 12, top: 24, bottom: 12),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.surface,
+                  borderRadius:
+                      BorderRadiusDirectional.all(Radius.circular(24)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: context.colorScheme.shadow.withAlpha(128),
+                      blurRadius: 4,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      context.loc.password_verify,
+                      style: context.textTheme.headlineMedium?.copyWith(
+                        color: context.colorScheme.onSurface,
                       ),
+                    ),
+                    Text(
+                      context.loc.enter_otp_message,
+                      textAlign: TextAlign.center,
+                      style: context.textTheme.titleSmall?.copyWith(
+                        color: context.colorScheme.onSurface,
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    Form(
+                      key: _formKey,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            context.loc.password_verify,
-                            style: context.textTheme.headlineMedium?.copyWith(
-                              color: context.colorScheme.onSurface,
-                            ),
-                          ),
-                          Text(
-                            context.loc.enter_otp_message,
-                            textAlign: TextAlign.center,
-                            style: context.textTheme.titleSmall?.copyWith(
-                              color: context.colorScheme.onSurface,
-                            ),
-                          ),
-                          SizedBox(height: 12),
-                          Form(
-                            key: _formKey,
-                            child: Column(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 6),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: InputAuthOTP(
-                                          controller: otpController,
-                                          onCompleted: (value) {
-                                            _onVerifyButtonClicked();
-                                          },
-                                        ),
-                                      ),
-                                    ],
+                                Expanded(
+                                  child: InputAuthOTP(
+                                    controller: otpController,
+                                    onCompleted: (value) {
+                                      _onVerifyButtonClicked();
+                                    },
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          FilledButton(
-                            onPressed: () {
-                              _onVerifyButtonClicked();
-                            },
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: Text(
-                                context.loc.continue_text,
-                                style: context.textTheme.bodyLarge?.copyWith(
-                                    color: context.colorScheme.onPrimary),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 12),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  // context.read<AuthBloc>().add(
-                                  //     ForgotPasswordEvent(
-                                  //         usernameOrEmail: email));
-                                  countdownTimer.reset();
-                                  countdownTimer.start(() {
-                                    AppDialog.showMessageDialog(
-                                        AppDialog.errorMessage(
-                                            context.loc.otp_expired, context));
-                                  });
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.refresh,
-                                        size: 20,
-                                        color: context.colorScheme.primary),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      context.loc.resend,
-                                      style: context.textTheme.labelLarge
-                                          ?.copyWith(
-                                        color: context.colorScheme.primary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              AnimatedBuilder(
-                                animation: countdownTimer,
-                                builder: (context, child) {
-                                  return Text(
-                                    '${context.loc.the_code_will} ${countdownTimer.formattedTime}',
-                                    style:
-                                        context.textTheme.titleSmall?.copyWith(
-                                      color: context.colorScheme.onSurface,
-                                    ),
-                                    textAlign: TextAlign.right,
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 24,
-                          ),
                         ],
                       ),
                     ),
-                  ),
-                ),
-              ),
-              BackButton(),
-              SafeArea(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SystemSetting(),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    FilledButton(
+                      onPressed: () {
+                        _onVerifyButtonClicked();
+                      },
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          context.loc.continue_text,
+                          style: context.textTheme.bodyLarge
+                              ?.copyWith(color: context.colorScheme.onPrimary),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            // context.read<AuthBloc>().add(
+                            //     ForgotPasswordEvent(
+                            //         usernameOrEmail: email));
+                            countdownTimer.reset();
+                            countdownTimer.start(() {
+                              AppDialog.showMessageDialog(
+                                  AppDialog.errorMessage(
+                                      context.loc.otp_expired, context));
+                            });
+                          },
+                          child: Row(
+                            children: [
+                              Icon(Icons.refresh,
+                                  size: 20, color: context.colorScheme.primary),
+                              SizedBox(width: 4),
+                              Text(
+                                context.loc.resend,
+                                style: context.textTheme.labelLarge?.copyWith(
+                                  color: context.colorScheme.primary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        AnimatedBuilder(
+                          animation: countdownTimer,
+                          builder: (context, child) {
+                            return Text(
+                              '${context.loc.the_code_will} ${countdownTimer.formattedTime}',
+                              style: context.textTheme.titleSmall?.copyWith(
+                                color: context.colorScheme.onSurface,
+                              ),
+                              textAlign: TextAlign.right,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 24,
+                    ),
                   ],
                 ),
               ),
-            ],
+            ),
           );
         },
       ),

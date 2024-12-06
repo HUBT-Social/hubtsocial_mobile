@@ -16,6 +16,7 @@ import 'package:jwt_decode_full/jwt_decode_full.dart';
 
 import '../../features/auth/domain/entities/user_token.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../features/auth/presentation/screens/auth_screen.dart';
 import '../../features/auth/presentation/screens/password_successful_screen.dart';
 import '../../features/auth/presentation/screens/password_verification_screen.dart';
 import '../../features/auth/presentation/screens/set_new_password_screen.dart';
@@ -33,3 +34,4 @@ import '../logger/logger.dart';
 
 part 'router.dart';
 part 'router.main.dart';
+part 'router.auth.dart';

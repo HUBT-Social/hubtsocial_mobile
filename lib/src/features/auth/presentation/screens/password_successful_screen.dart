@@ -16,47 +16,45 @@ class PasswordSuccessfulScreen extends StatefulWidget {
 class _PasswordSuccessfulScreenState extends State<PasswordSuccessfulScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 347,
-              width: 360,
-              child: Lottie.asset(AppLotties.passwordSuccessful),
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 347,
+            width: 360,
+            child: Lottie.asset(AppLotties.passwordSuccessful),
+          ),
+          const SizedBox(height: 30),
+          Text(
+            context.loc.password_change_successful,
+            style: TextStyle(
+              fontSize: 36,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
-            const SizedBox(height: 30),
-            Text(
-              context.loc.password_change_successfull,
-              style: TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 38),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                onPressed: () {
-                  AppRoute.signIn.go(context);
-                },
-                child: Text(
-                  context.loc.sign_in,
-                  style: context.textTheme.bodyLarge?.copyWith(
-                    color: context.colorScheme.onPrimary,
-                  ),
-                  textAlign: TextAlign.center,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 38),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: () {
+                AppRoute.signIn.go(context);
+              },
+              child: Text(
+                context.loc.sign_in,
+                style: context.textTheme.bodyLarge?.copyWith(
+                  color: context.colorScheme.onPrimary,
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

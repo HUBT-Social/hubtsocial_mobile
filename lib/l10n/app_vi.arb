@@ -84,8 +84,8 @@
   "@required": {},
   "enter_valid_email": "Vui lòng nhập email",
   "@enter_valid_email": {},
-  "password_change_successfull": "Thay đổi mật khẩu thành công!",
-  "@password_change_successfull": {},
+  "password_change_successful": "Thay đổi mật khẩu thành công!",
+  "@password_change_successful": {},
   "password_must_be_at_least": "Mật khẩu phải dài ít nhất {value} ký tự",
   "@password_must_be_at_least": {
     "placeholders": {

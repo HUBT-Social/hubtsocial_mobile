@@ -6,8 +6,6 @@ import 'package:hubtsocial_mobile/src/features/auth/presentation/bloc/auth_bloc.
 import '../../../../core/navigation/route.dart';
 import '../../../../core/presentation/dialog/app_dialog.dart';
 import '../../../../core/presentation/input/input_field.dart';
-import '../widgets/background.dart';
-import '../widgets/system_setting.dart';
 
 class SetNewPasswordScreen extends StatefulWidget {
   const SetNewPasswordScreen({super.key});
@@ -23,8 +21,8 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocConsumer<AuthBloc, AuthState>(
+    return Center(
+      child: BlocConsumer<AuthBloc, AuthState>(
         listener: (_, state) async {
           if (state is AuthError) {
             // AuthError when the user is not found
@@ -43,117 +41,99 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
           }
         },
         builder: (context, state) {
-          return Stack(
-            children: [
-              Background(),
-              Center(
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          right: 12, left: 12, top: 24, bottom: 12),
-                      decoration: BoxDecoration(
-                        color: context.colorScheme.surface,
-                        borderRadius:
-                            BorderRadiusDirectional.all(Radius.circular(24)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: context.colorScheme.shadow.withAlpha(128),
-                            blurRadius: 4,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
+          return SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Container(
+                padding:
+                    EdgeInsets.only(right: 12, left: 12, top: 24, bottom: 12),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.surface,
+                  borderRadius:
+                      BorderRadiusDirectional.all(Radius.circular(24)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: context.colorScheme.shadow.withAlpha(128),
+                      blurRadius: 4,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      context.loc.set_new_password,
+                      style: context.textTheme.headlineMedium?.copyWith(
+                        color: context.colorScheme.onSurface,
                       ),
+                    ),
+                    SizedBox(height: 12),
+                    Form(
+                      key: _formKey,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            context.loc.set_new_password,
-                            style: context.textTheme.headlineMedium?.copyWith(
-                              color: context.colorScheme.onSurface,
-                            ),
-                          ),
-                          SizedBox(height: 12),
-                          Form(
-                            key: _formKey,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 6),
-                                  child: InputField.password(
-                                    controller: _newPasswordController,
-                                    textInputAction: TextInputAction.done,
-                                    hintText: context.loc.password,
-                                    prefixIcon: Align(
-                                      widthFactor: 1.0,
-                                      heightFactor: 1.0,
-                                      child: Icon(
-                                        Icons.lock_rounded,
-                                      ),
-                                    ),
-                                  ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6),
+                            child: InputField.password(
+                              controller: _newPasswordController,
+                              textInputAction: TextInputAction.done,
+                              hintText: context.loc.password,
+                              prefixIcon: Align(
+                                widthFactor: 1.0,
+                                heightFactor: 1.0,
+                                child: Icon(
+                                  Icons.lock_rounded,
                                 ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 6),
-                                  child: InputField.password(
-                                    controller: _confirmNewPasswordController,
-                                    textInputAction: TextInputAction.done,
-                                    hintText: context.loc.password,
-                                    prefixIcon: Align(
-                                      widthFactor: 1.0,
-                                      heightFactor: 1.0,
-                                      child: Icon(
-                                        Icons.lock_rounded,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          FilledButton(
-                            onPressed: () {
-                              _onVerifyButtonClicked();
-                            },
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: Text(
-                                context.loc.continue_text,
-                                style: context.textTheme.bodyLarge?.copyWith(
-                                    color: context.colorScheme.onPrimary),
-                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          SizedBox(
-                            height: 24,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6),
+                            child: InputField.password(
+                              controller: _confirmNewPasswordController,
+                              textInputAction: TextInputAction.done,
+                              hintText: context.loc.password,
+                              prefixIcon: Align(
+                                widthFactor: 1.0,
+                                heightFactor: 1.0,
+                                child: Icon(
+                                  Icons.lock_rounded,
+                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ),
-              ),
-              BackButton(),
-              SafeArea(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SystemSetting(),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    FilledButton(
+                      onPressed: () {
+                        _onVerifyButtonClicked();
+                      },
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          context.loc.continue_text,
+                          style: context.textTheme.bodyLarge
+                              ?.copyWith(color: context.colorScheme.onPrimary),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    SizedBox(
+                      height: 24,
+                    ),
                   ],
                 ),
               ),
-            ],
+            ),
           );
         },
       ),

@@ -84,8 +84,8 @@
   "@required": {},
   "enter_valid_email": "Enter valid email",
   "@enter_valid_email": {},
-  "password_change_successfull": "Password_change_successfull!",
-  "@password_change_successfull": {},
+  "password_change_successful": "Password_change_successful!",
+  "@password_change_successful": {},
   "password_must_be_at_least": "Password must be at least {value} characters long",
   "@password_must_be_at_least": {
     "placeholders": {
