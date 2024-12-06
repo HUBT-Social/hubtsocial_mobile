@@ -29,7 +29,6 @@ class _SignInScreenState extends State<SignInScreen> {
           } else if (state is SignedIn) {
             AppDialog.showMessageDialog(
                 AppDialog.successMessage('wellcomeBack', context));
-            AppDialog.closeDialog();
             AppRoute.home.go(context);
           } else if (state is AuthLoading) {
             AppDialog.showLoadingDialog(message: 'signing');

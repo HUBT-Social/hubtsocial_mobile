@@ -33,7 +33,7 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
             AppDialog.showLoadingDialog(message: context.loc.set_new_password);
           } else if (state is SetNewPasswordSuccess) {
             AppDialog.closeDialog();
-            AppRoute.passwordSuccessful.pushReplacement(context);
+            AppRoute.passwordSuccessful.go(context);
           } else {
             AppDialog.closeDialog();
           }
