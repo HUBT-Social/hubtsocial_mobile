@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/screens/auth_screen.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/screens/sign_up_information_screen.dart';
 
 class ButtonBack extends StatefulWidget {
   const ButtonBack({

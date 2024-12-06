@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/button_back.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
 
