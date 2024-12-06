@@ -5,18 +5,10 @@ import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/background.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_auth_otp.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
-import '../../../../core/api/api_request.dart';
 import '../../../../core/configs/countdown_timer.dart';
-import '../../../../core/configs/end_point.dart';
-import '../../../../core/errors/exceptions.dart';
-import '../../../../core/local_storage/local_storage_key.dart';
 import '../../../../core/navigation/route.dart';
 import '../../../../core/presentation/dialog/app_dialog.dart';
-import '../../data/datasources/auth_remote_data_source.dart';
-import '../../data/models/sign_in_response_model.dart';
-import '../../domain/usecases/forgot_password_user_case.dart';
 import '../bloc/auth_bloc.dart';
-import 'forgot_password_screen.dart';
 
 class PasswordVerifiCationScreen extends StatefulWidget {
   const PasswordVerifiCationScreen({super.key});
