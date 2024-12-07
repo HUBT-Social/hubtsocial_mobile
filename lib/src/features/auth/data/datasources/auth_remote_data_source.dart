@@ -3,12 +3,12 @@ import 'package:hive/hive.dart';
 import 'package:hubtsocial_mobile/src/core/configs/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hubtsocial_mobile/src/core/errors/exceptions.dart';
 import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_token.dart';
 
 import '../../../../core/local_storage/local_storage_key.dart';
+import '../models/forgot_password_response_model.dart';
 import '../models/sign_in_response_model.dart';
 
 abstract class AuthRemoteDataSource {
@@ -35,7 +35,8 @@ abstract class AuthRemoteDataSource {
   Future<SignInResponseModel> verifyEmail({required String postcode});
   Future<SignInResponseModel> twoFactorPassword({required String otpPassword});
   Future<void> verifyPassword({required String postcode});
-  Future<void> forgotPassword({required String usernameOrEmail});
+  Future<ForgotPasswordResponseModel> forgotPassword(
+      {required String usernameOrEmail});
   Future<void> setNewPassword(
       {required String newPassword, required String confirmNewPassword});
   Future<void> informationUser(
@@ -52,7 +53,6 @@ abstract class AuthRemoteDataSource {
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   const AuthRemoteDataSourceImpl({
     required HiveInterface hiveAuth,
-    required SharedPreferences prefs,
     required FirebaseMessaging messaging,
   })  : _hiveAuth = hiveAuth,
         _messaging = messaging;
@@ -149,14 +149,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         },
       );
 
-      var responseData = SignInResponseModel.fromJson(response.body);
       if (response.statusCode != 200) {
         logError('Could not finalize api due to: ${response.body.toString()}');
         throw ServerException(
-          message: responseData.message.toString(),
+          message: response.body.toString(),
           statusCode: response.statusCode.toString(),
         );
       }
+      var responseData = SignInResponseModel.fromJson(response.body);
 
       if (!responseData.requiresTwoFactor! && responseData.userToken != null) {
         if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
@@ -404,7 +404,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> forgotPassword({required String usernameOrEmail}) async {
+  Future<ForgotPasswordResponseModel> forgotPassword(
+      {required String usernameOrEmail}) async {
     try {
       final response = await APIRequest.post(
         url: EndPoint.authForgotPassword,
@@ -420,8 +421,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           statusCode: response.statusCode.toString(),
         );
       }
+      var responseData = ForgotPasswordResponseModel.fromJson(response.body);
 
-      return;
+      return responseData;
     } on ServerException {
       rethrow;
     } catch (e, s) {

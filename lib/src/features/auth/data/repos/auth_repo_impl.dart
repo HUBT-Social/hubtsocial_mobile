@@ -7,6 +7,7 @@ import 'package:hubtsocial_mobile/src/features/auth/data/datasources/auth_remote
 import 'package:hubtsocial_mobile/src/features/auth/domain/repos/auth_repo.dart';
 
 import '../../domain/entities/user_response.dart';
+import '../models/forgot_password_response_model.dart';
 
 @LazySingleton(
   as: AuthRepo,
@@ -128,7 +129,8 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  ResultFuture<void> forgotPassword({required String usernameOrEmail}) async {
+  ResultFuture<ForgotPasswordResponseModel> forgotPassword(
+      {required String usernameOrEmail}) async {
     try {
       final result = await _remoteDataSource.forgotPassword(
         usernameOrEmail: usernameOrEmail,

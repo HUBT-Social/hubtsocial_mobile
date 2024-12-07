@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/button_back.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/system_setting.dart';
 
 import '../widgets/background.dart';
@@ -22,11 +23,12 @@ class _AuthScreenScreenState extends State<AuthScreen> {
       children: [
         Background(),
         widget.child,
-        BackButton(),
         SafeArea(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              ButtonBack(),
               SystemSetting(),
             ],
           ),

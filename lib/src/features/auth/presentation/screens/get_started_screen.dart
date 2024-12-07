@@ -57,42 +57,37 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               padding: EdgeInsets.symmetric(horizontal: 36, vertical: 24),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: 24,
+                  SizedBox(height: 12),
+                  Text(
+                    context.loc.welcome,
+                    style: context.textTheme.displayMedium?.copyWith(
+                        color: context.colorScheme.tertiary,
+                        fontWeight: FontWeight.w800),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        context.loc.welcome,
-                        style: context.textTheme.displayMedium?.copyWith(
-                            color: context.colorScheme.tertiary,
-                            fontWeight: FontWeight.w800),
-                      ),
-                      Text(
-                        context.loc.welcome_info,
-                        style: context.textTheme.labelLarge
-                            ?.copyWith(color: context.colorScheme.tertiary),
-                      ),
-                    ],
+                  Text(
+                    context.loc.welcome_info,
+                    style: context.textTheme.labelLarge
+                        ?.copyWith(color: context.colorScheme.tertiary),
                   ),
-                  SizedBox(
-                    height: 24,
-                  ),
+                  SizedBox(height: 24),
                   FilledButton(
-                      onPressed: () {
-                        AppRoute.signIn.push(context);
-                      },
-                      child: SizedBox(
-                          width: double.infinity,
-                          child: Text(
-                            context.loc.sign_in,
-                            style: context.textTheme.bodyLarge?.copyWith(
-                              color: context.colorScheme.onPrimary,
-                            ),
-                            textAlign: TextAlign.center,
-                          ))),
+                    onPressed: () {
+                      AppRoute.signIn.push(context);
+                    },
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        context.loc.sign_in,
+                        style: context.textTheme.bodyLarge?.copyWith(
+                          color: context.colorScheme.onPrimary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 12),
                 ],
               ),
             ),

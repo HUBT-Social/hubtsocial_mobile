@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,6 +15,7 @@ import '../../../../core/theme/bloc/theme_bloc.dart';
 import '../../../../core/theme/utils/change_theme_bottom_sheet.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
+import 'package:flutter/services.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -153,6 +155,25 @@ class _MenuScreenState extends State<MenuScreen> {
               HiveProvider.clearToken(() => AppRoute.getStarted.go(context));
             },
             child: Text("Sign out"),
+          ),
+          FilledButton(
+            onPressed: () async {
+              try {
+                final String? textToCopy =
+                    await FirebaseMessaging.instance.getToken();
+                if (textToCopy != null) {
+                  await Clipboard.setData(ClipboardData(text: textToCopy));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Copied to Clipboard!')),
+                  );
+                }
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Failed to copy to clipboard.')),
+                );
+              }
+            },
+            child: Text("FCM"),
           ),
         ],
       ),

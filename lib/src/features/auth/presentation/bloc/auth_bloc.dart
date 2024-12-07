@@ -52,7 +52,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<VerifyEmailEvent>(_verifyEmailHandler);
     on<SignUpEvent>(_signUpHandler);
     on<SignOutEvent>(_signOutHandler);
-
     on<SignUpInformationEvent>(_signUpInformationHandler);
   }
 
@@ -281,7 +280,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       },
       (response) {
-        emit(VerifyForgotPassword());
+        emit(VerifyForgotPassword(response.email ?? ""));
       },
     );
   }

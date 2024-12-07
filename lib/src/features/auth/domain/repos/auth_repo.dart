@@ -1,4 +1,5 @@
 import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
+import '../../data/models/forgot_password_response_model.dart';
 import '../entities/user_response.dart';
 
 abstract class AuthRepo {
@@ -39,7 +40,7 @@ abstract class AuthRepo {
     required String newPassword,
     required String confirmNewPassword,
   });
-  ResultFuture<void> forgotPassword({
+  ResultFuture<ForgotPasswordResponseModel> forgotPassword({
     required String usernameOrEmail,
   });
 

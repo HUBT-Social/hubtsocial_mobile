@@ -45,8 +45,9 @@ dependencies:
   flutter_bloc: ^8.1.6
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  flutter_local_notifications: ^18.0.1
-  shared_preferences: ^2.0.11
+  awesome_notifications_core: ^0.10.0
+  awesome_notifications_fcm: ^0.10.0
+  awesome_notifications: ^0.10.0
   flutter_animate: ^4.5.0
   curved_navigation_bar: ^1.0.6
   flutter_dotenv: ^5.1.0
@@ -74,7 +75,9 @@ dependencies:
   device_info_plus: ^11.1.1
   shimmer: ^3.0.0
 
+
 dev_dependencies:
+
   flutter_test:
     sdk: flutter
 

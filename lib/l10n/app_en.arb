@@ -62,11 +62,11 @@
   "@username_or_email": {},
   "do_not_have_an_account": "Don’t have an account?",
   "@do_not_have_an_account": {},
-  "already_have_an_account": "Already have an account?",
+  "already_have_an_account": "You already have an account?",
   "@already_have_an_account": {},
   "remember_me": "Remember me",
   "@remember_me": {},
-  "forgot_password_question_mark": "Forgot password?",
+  "forgot_password_question_mark": "Forgot your account?",
   "@forgot_password_question_mark": {},
   "forgot_password": "Forgot Password",
   "@forgot_password": {},
@@ -80,11 +80,11 @@
   "@confirm_password": {},
   "continue_text": "Continue",
   "@continue_text": {},
-  "required": "required",
+  "required": "Please enter",
   "@required": {},
   "enter_valid_email": "Enter valid email",
   "@enter_valid_email": {},
-  "password_change_successful": "Password_change_successful!",
+  "password_change_successful": "Password change successful!",
   "@password_change_successful": {},
   "password_must_be_at_least": "Password must be at least {value} characters long",
   "@password_must_be_at_least": {
@@ -102,12 +102,16 @@
   "@theme_dark": {},
   "forgot_password_message": "Please enter your Username or Email to reset the password",
   "@forgot_password_message": {},
-  "enter_otp_message": "Enter the 6-digit code we sent you at Email hubt*****@gmail.com",
-  "@enter_otp_message": {},
+  "enter_otp_message": "Enter the 6-digit code we sent you at Email {maskMail} ",
+  "@enter_otp_message": {
+    "placeholders": {
+      "maskMail": {}
+    }
+  },
   "enter_message": "Please enter your Username or Email to reset the password",
   "@enter_message": {},
-  "resend": "resend",
+  "resend": "Resend",
   "@resend": {},
-  "otp_expire_message": "otp_expire_message",
+  "otp_expire_message": "Otp expire message",
   "@otp_expire_message": {}
 }

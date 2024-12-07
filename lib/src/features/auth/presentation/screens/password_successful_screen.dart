@@ -17,8 +17,8 @@ class _PasswordSuccessfulScreenState extends State<PasswordSuccessfulScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      color: context.colorScheme.surface,
+      padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -28,17 +28,17 @@ class _PasswordSuccessfulScreenState extends State<PasswordSuccessfulScreen> {
             width: 360,
             child: Lottie.asset(AppLotties.passwordSuccessful),
           ),
-          const SizedBox(height: 30),
+          SizedBox(height: 30),
           Text(
             context.loc.password_change_successful,
             style: TextStyle(
               fontSize: 36,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: context.colorScheme.onSurface,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 38),
+          SizedBox(height: 38),
           SizedBox(
             width: double.infinity,
             child: FilledButton(

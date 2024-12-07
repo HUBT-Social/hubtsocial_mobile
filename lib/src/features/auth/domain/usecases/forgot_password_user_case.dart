@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import '../../../../core/usecases/usecases.dart';
 
 import '../../../../core/utils/typedefs.dart';
+import '../../data/models/forgot_password_response_model.dart';
 import '../repos/auth_repo.dart';
 
 @LazySingleton()
@@ -13,7 +14,8 @@ class ForgotPasswordUserCase
   final AuthRepo _repo;
 
   @override
-  ResultFuture<void> call(ForgotPasswordParams param) => _repo.forgotPassword(
+  ResultFuture<ForgotPasswordResponseModel> call(ForgotPasswordParams param) =>
+      _repo.forgotPassword(
         usernameOrEmail: param.usernameOrEmail,
       );
 }
