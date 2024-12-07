@@ -6,6 +6,7 @@ import 'package:hubtsocial_mobile/src/core/presentation/input/input_field.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/bloc/auth_bloc.dart';
 import '../../../../core/navigation/route.dart';
 import '../../../../core/presentation/dialog/app_dialog.dart';
+import '../widgets/container_auth.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -43,183 +44,155 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
       },
       builder: (context, state) {
-        return SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Container(
-              padding:
-                  EdgeInsets.only(right: 12, left: 12, top: 24, bottom: 12),
-              decoration: BoxDecoration(
-                color: context.colorScheme.surface,
-                borderRadius: BorderRadiusDirectional.all(Radius.circular(24)),
-                boxShadow: [
-                  BoxShadow(
-                    color: context.colorScheme.shadow.withAlpha(128),
-                    blurRadius: 4,
-                    offset: Offset(0, 4),
-                  ),
-                ],
+        return ContainerAuth(
+          children: [
+            Text(
+              context.loc.sign_up,
+              style: context.textTheme.headlineMedium?.copyWith(
+                color: context.colorScheme.onSurface,
               ),
+            ),
+            SizedBox(height: 12),
+            Form(
+              key: _formKey,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    context.loc.sign_up,
-                    style: context.textTheme.headlineMedium?.copyWith(
-                      color: context.colorScheme.onSurface,
-                    ),
-                  ),
-                  SizedBox(height: 12),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: InputField.name(
-                            hintText: context.loc.user_name,
-                            controller: _userNameController,
-                            textInputAction: TextInputAction.next,
-                            prefixIcon: Align(
-                              widthFactor: 1.0,
-                              heightFactor: 1.0,
-                              child: Icon(
-                                Icons.person,
-                              ),
-                            ),
-                            onChanged: (value) {},
-                          ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: InputField.name(
+                      hintText: context.loc.user_name,
+                      controller: _userNameController,
+                      textInputAction: TextInputAction.next,
+                      prefixIcon: Align(
+                        widthFactor: 1.0,
+                        heightFactor: 1.0,
+                        child: Icon(
+                          Icons.person,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: InputField.email(
-                            controller: _emailController,
-                            textInputAction: TextInputAction.next,
-                            prefixIcon: Align(
-                              widthFactor: 1.0,
-                              heightFactor: 1.0,
-                              child: Icon(
-                                Icons.email,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: InputField.password(
-                            hintText: context.loc.password,
-                            controller: _passwordController,
-                            textInputAction: TextInputAction.next,
-                            prefixIcon: Align(
-                              widthFactor: 1.0,
-                              heightFactor: 1.0,
-                              child: Icon(
-                                Icons.lock,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          child: InputField.password(
-                            hintText: context.loc.confirm_password,
-                            controller: _confirmPasswordController,
-                            textInputAction: TextInputAction.done,
-                            prefixIcon: Align(
-                              widthFactor: 1.0,
-                              heightFactor: 1.0,
-                              child: Icon(
-                                Icons.lock,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Checkbox(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        value: isAgreePolicy,
-                        onChanged: (value) {
-                          setState(
-                            () {
-                              isAgreePolicy = value!;
-                            },
-                          );
-                        },
-                      ),
-                      Text(
-                        "I Agree with",
-                        // AppLocalizations.of(context).hashCode.toString(),
-                        style: context.textTheme.labelLarge,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Center(
-                                  child: Container(
-                                    height: 300,
-                                    width: 300,
-                                    color: context.colorScheme.surface,
-                                    child: Text("data"),
-                                  ),
-                                );
-                              });
-                        },
-                        child: Text(
-                          " privacy and policy",
-                          style: context.textTheme.labelLarge?.copyWith(
-                            color: context.colorScheme.surfaceTint,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  FilledButton(
-                    onPressed: () {
-                      _onSignUpButtonClicked();
-                    },
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        context.loc.continue_text,
-                        style: context.textTheme.bodyLarge
-                            ?.copyWith(color: context.colorScheme.onPrimary),
-                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      AppRoute.signIn.push(context);
-                    },
-                    child: Text(
-                      context.loc.already_have_an_account,
-                      style: context.textTheme.labelLarge?.copyWith(
-                        color: context.colorScheme.surfaceTint,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: InputField.email(
+                      controller: _emailController,
+                      textInputAction: TextInputAction.next,
+                      prefixIcon: Align(
+                        widthFactor: 1.0,
+                        heightFactor: 1.0,
+                        child: Icon(
+                          Icons.email,
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 24,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: InputField.password(
+                      hintText: context.loc.password,
+                      controller: _passwordController,
+                      textInputAction: TextInputAction.next,
+                      prefixIcon: Align(
+                        widthFactor: 1.0,
+                        heightFactor: 1.0,
+                        child: Icon(
+                          Icons.lock,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: InputField.password(
+                      hintText: context.loc.confirm_password,
+                      controller: _confirmPasswordController,
+                      textInputAction: TextInputAction.done,
+                      prefixIcon: Align(
+                        widthFactor: 1.0,
+                        heightFactor: 1.0,
+                        child: Icon(
+                          Icons.lock,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
+            Row(
+              children: [
+                Checkbox(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  value: isAgreePolicy,
+                  onChanged: (value) {
+                    setState(
+                      () {
+                        isAgreePolicy = value!;
+                      },
+                    );
+                  },
+                ),
+                Text(
+                  "I Agree with",
+                  // AppLocalizations.of(context).hashCode.toString(),
+                  style: context.textTheme.labelLarge,
+                ),
+                InkWell(
+                  autofocus: false,
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Center(
+                            child: Container(
+                              height: 300,
+                              width: 300,
+                              color: context.colorScheme.surface,
+                              child: Text("data"),
+                            ),
+                          );
+                        });
+                  },
+                  child: Text(
+                    " privacy and policy",
+                    style: context.textTheme.labelLarge?.copyWith(
+                      color: context.colorScheme.surfaceTint,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 12),
+            FilledButton(
+              onPressed: () {
+                _onSignUpButtonClicked();
+              },
+              child: SizedBox(
+                width: double.infinity,
+                child: Text(
+                  context.loc.continue_text,
+                  style: context.textTheme.bodyLarge
+                      ?.copyWith(color: context.colorScheme.onPrimary),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            SizedBox(height: 12),
+            InkWell(
+              autofocus: false,
+              onTap: () {
+                AppRoute.signIn.push(context);
+              },
+              child: Text(
+                context.loc.already_have_an_account,
+                style: context.textTheme.labelLarge?.copyWith(
+                  color: context.colorScheme.surfaceTint,
+                ),
+              ),
+            ),
+          ],
         );
       },
     ));

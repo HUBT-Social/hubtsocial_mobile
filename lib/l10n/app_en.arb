@@ -102,8 +102,12 @@
   "@theme_dark": {},
   "forgot_password_message": "Please enter your Username or Email to reset the password",
   "@forgot_password_message": {},
-  "enter_otp_message": "Enter the 6-digit code we sent you at Email hubt*****@gmail.com",
-  "@enter_otp_message": {},
+  "enter_otp_message": "Enter the 6-digit code we sent you at Email {maskMail} ",
+  "@enter_otp_message": {
+    "placeholders": {
+      "maskMail": {}
+    }
+  },
   "enter_message": "Please enter your Username or Email to reset the password",
   "@enter_message": {},
   "resend": "resend",

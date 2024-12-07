@@ -71,7 +71,6 @@ class InputField extends StatefulWidget {
     Widget? prefixIcon,
     TextInputAction textInputAction = TextInputAction.next,
     Key? key,
-    required Null Function(dynamic value) onChanged,
   }) : this(
           key: key,
           controller: controller,
@@ -162,40 +161,6 @@ class InputField extends StatefulWidget {
           onFieldSubmitted: onFieldSubmitted,
         );
 
-  // InputField.otp({
-  //   required BuildContext context,
-  //   required TextEditingController controller,
-  //   String? errorText,
-  //   String hintText = '',
-  //   Widget? prefixIcon,
-  //   TextInputAction textInputAction = TextInputAction.next,
-  //   ValueChanged<String>? onFieldSubmitted,
-  //   Key? key,
-  // }) : this(
-  //         key: key,
-  //         controller: controller,
-  //         textInputAction: textInputAction,
-  //         keyboardType: TextInputType.number,
-  //         // autofillHints: const [AutofillHints.password],
-  //         errorText: errorText,
-  //         hintText: hintText,
-  //         prefixIcon: prefixIcon,
-  //         validator: Validators.otp,
-  //         textAlign: TextAlign.center,
-  //         onFieldSubmitted: onFieldSubmitted,
-  //         inputFormatters: [
-  //           LengthLimitingTextInputFormatter(1),
-  //           FilteringTextInputFormatter.digitsOnly,
-  //         ],
-  //         onChanged: (value) {
-  //           if (value.length == 1) {
-  //             FocusScope.of(context).nextFocus();
-  //           } else {
-  //             FocusScope.of(context).previousFocus();
-  //           }
-  //         },
-  //       );
-
   final TextEditingController controller;
   final TextInputAction textInputAction;
   final TextInputType keyboardType;
@@ -270,6 +235,7 @@ class _InputFieldState extends State<InputField> {
             : context.colorScheme.error,
         suffixIcon: _isPassword
             ? IconButton(
+                autofocus: false,
                 onPressed: () => setState(() => _obscureText = !_obscureText),
                 icon: _obscureText
                     ? const Icon(Icons.visibility_off)

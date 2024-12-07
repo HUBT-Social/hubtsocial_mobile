@@ -43,7 +43,8 @@ ShellRoute _authRoute() {
       ),
       GoRoute(
         path: AppRoute.passwordVerify.path,
-        builder: (context, state) => PasswordVerifiCationScreen(),
+        builder: (context, state) => PasswordVerifiCationScreen(
+            maskMail: state.uri.queryParameters['maskMail'].toString()),
       ),
       GoRoute(
         path: AppRoute.setNewPassword.path,

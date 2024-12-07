@@ -3,24 +3,45 @@ import 'package:go_router/go_router.dart';
 
 enum AppRoute {
   // none(''),
+  error('/error'),
+
+  // auth
   auth('/auth'),
   getStarted('/auth'),
+
   signIn('/auth/sign-in'),
-  twoFactor('/auth/two-factor'),
-  forgotPassword('/auth/forgot-password'),
-  emailVerify('/auth/email-verify'),
+  twoFactor('/auth/sign-in/two-factor'),
+
   signUp('/auth/sign-up'),
-  signUpInformation('/auth/sign-up-information'),
-  passwordVerify('/auth/password-verify'),
-  setNewPassword('/auth/set-new-password'),
-  passwordSuccessful('/auth/password-successful'),
+  emailVerify('/auth/sign-up/email-verify'),
+  signUpInformation('/auth/sign-up/sign-up-information'),
+
+  forgotPassword('/auth/forgot-password'),
+  passwordVerify('/auth/forgot-password/password-verify'),
+  setNewPassword('/auth/forgot-password/set-new-password'),
+  passwordSuccessful('/auth/forgot-password/password-successful'),
+  // auth
+
+  // home
   home('/'),
+  // home
+
+  // chat
   chat('/chat'),
+  // chat
+
+  // timetable
   timetable('/timetable'),
+  // timetable
+
+  // notifications
   notifications('/notifications'),
+  // notifications
+
+  // menu
   menu('/menu'),
   profile('/menu/profile'),
-  error('/error'),
+  // menu
   ;
 
   const AppRoute(this.path);
@@ -29,19 +50,47 @@ enum AppRoute {
 }
 
 extension AppRouteNavigation on AppRoute {
-  void go(BuildContext context) {
-    context.go(path);
+  String parseRoute({
+    // Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic>? queryParameters,
+  }) {
+    var uri = Uri(path: path, queryParameters: queryParameters);
+    return uri.toString();
   }
 
-  void push(BuildContext context) {
-    context.push(path);
+  void go(
+    BuildContext context, {
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) {
+    context.go(
+      parseRoute(queryParameters: queryParameters),
+      extra: extra,
+    );
   }
 
-  void pushReplacement(BuildContext context) {
-    context.pushReplacement(path);
+  void push(
+    BuildContext context, {
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) {
+    context.push(
+      parseRoute(queryParameters: queryParameters),
+      extra: extra,
+    );
   }
 
-  // void goNamed(BuildContext context) {
-  //   context.goNamed(path);
-  // }
+  void pushReplacement(
+    BuildContext context, {
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) {
+    context.pushReplacement(
+      parseRoute(queryParameters: queryParameters),
+      extra: extra,
+    );
+  }
 }

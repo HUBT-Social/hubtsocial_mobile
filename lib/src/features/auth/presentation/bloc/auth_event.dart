@@ -64,11 +64,10 @@ class SetNewPasswordEvent extends AuthEvent {
     required this.newPassword,
     required this.confirmNewPassword,
   });
-  final newPassword;
-  final confirmNewPassword;
+  final String newPassword;
+  final String confirmNewPassword;
 
   @override
-  // TODO: implement props
   List<Object?> get props => [newPassword, confirmNewPassword];
 }
 

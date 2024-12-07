@@ -38,7 +38,12 @@ class VerifyTwoFactor extends AuthState {
 }
 
 class VerifyForgotPassword extends AuthState {
-  const VerifyForgotPassword();
+  const VerifyForgotPassword(this.mailMask);
+
+  final String mailMask;
+
+  @override
+  List<String> get props => [mailMask];
 }
 
 class InformationUserSuccess extends AuthState {
