@@ -2,7 +2,6 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/style/app_theme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:io';
 
@@ -30,8 +29,8 @@ class NotificationService {
     }
 
     // Kiểm tra trạng thái thông báo
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? notificationsEnabled = prefs.getBool('notifications_enabled');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // bool? notificationsEnabled = prefs.getBool('notifications_enabled');
 
     // if (notificationsEnabled == null || !notificationsEnabled) {
     //   _showNotificationPermissionDialog();

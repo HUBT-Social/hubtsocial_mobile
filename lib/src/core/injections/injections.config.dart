@@ -52,31 +52,25 @@ import 'package:hubtsocial_mobile/src/features/user/domain/usecases/update_user_
 import 'package:hubtsocial_mobile/src/features/user/presentation/bloc/user_bloc.dart'
     as _i527;
 import 'package:injectable/injectable.dart' as _i526;
-import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
-  Future<_i174.GetIt> init({
+  _i174.GetIt init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
-  }) async {
+  }) {
     final gh = _i526.GetItHelper(
       this,
       environment,
       environmentFilter,
     );
     final registerModule = _$RegisterModule();
-    await gh.lazySingletonAsync<_i460.SharedPreferences>(
-      () => registerModule.prefs,
-      preResolve: true,
-    );
     gh.lazySingleton<_i979.HiveInterface>(() => registerModule.hive);
     gh.lazySingleton<_i892.FirebaseMessaging>(
         () => registerModule.firebaseMessaging);
     gh.lazySingleton<_i953.AuthRemoteDataSource>(
         () => _i953.AuthRemoteDataSourceImpl(
               hiveAuth: gh<_i979.HiveInterface>(),
-              prefs: gh<_i460.SharedPreferences>(),
               messaging: gh<_i892.FirebaseMessaging>(),
             ));
     gh.lazySingleton<_i592.UserProfileRemoteDataSource>(() =>
@@ -88,6 +82,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i674.UserRepoImpl(gh<_i592.UserProfileRemoteDataSource>()));
     gh.lazySingleton<_i411.ForgotPasswordUserCase>(
         () => _i411.ForgotPasswordUserCase(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i556.InformationUserCase>(
+        () => _i556.InformationUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i245.TwoFactorUserCase>(
         () => _i245.TwoFactorUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i245.VerifyEmailUserCase>(
@@ -103,8 +99,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i488.SignOut>(() => _i488.SignOut(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i287.SignUpUserCase>(
         () => _i287.SignUpUserCase(gh<_i936.AuthRepo>()));
-    gh.lazySingleton<_i556.InformationUserCase>(
-        () => _i556.InformationUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i789.ChangePasswordUserCase>(
         () => _i789.ChangePasswordUserCase(gh<_i1042.UserRepo>()));
     gh.lazySingleton<_i477.InitUserUserCase>(

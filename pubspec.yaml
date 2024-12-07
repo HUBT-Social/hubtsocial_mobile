@@ -48,7 +48,6 @@ dependencies:
   awesome_notifications_core: ^0.10.0
   awesome_notifications_fcm: ^0.10.0
   awesome_notifications: ^0.10.0
-  shared_preferences: ^2.0.11
   flutter_animate: ^4.5.0
   curved_navigation_bar: ^1.0.6
   flutter_dotenv: ^5.1.0
