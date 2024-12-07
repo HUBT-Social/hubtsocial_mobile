@@ -23,7 +23,8 @@ import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'src/core/injections/injections.dart';
 import 'src/core/local_storage/local_storage_key.dart';
-import 'src/core/notification/notification_service.dart';
+import 'src/core/notification/firebase_message.dart';
+import 'src/core/notification/local_message.dart';
 import 'src/features/auth/data/models/user_token_model.dart';
 import 'src/features/user/data/models/user_model.dart';
 
@@ -41,10 +42,10 @@ void main() async {
     _initUniqueDeviceId(),
     _initLocalStorage(),
     _initLoggy(),
-    _initNotification(),
     _initFirebase(),
   ]);
-
+  FirebaseMessage().initNotification();
+  LocalMessage().initNotification();
   await configureDependencies();
 
   runApp(const MyApp());
@@ -147,5 +148,6 @@ Future<void> _initFirebase() async {
 Future<void> _initNotification() async {
   //FirebaseMessagingService().initialize();
   // AwesomeNotificationService.initialize();
-  NotificationService.initialize();
+  FirebaseMessage().initNotification();
+  LocalMessage().initNotification();
 }

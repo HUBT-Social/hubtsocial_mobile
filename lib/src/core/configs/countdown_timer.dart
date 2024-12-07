@@ -33,7 +33,7 @@ class CountdownTimer extends ChangeNotifier {
   void reset() {
     _timer.cancel();
     _remainingSeconds = _initialSeconds;
-    notifyListeners();
+    //notifyListeners();
 
     void cancel() {
       _timer.cancel();
