@@ -58,7 +58,7 @@
   "@the_code_will": {},
   "signup_information": "Thông tin cá nhân ",
   "@signup_information": {},
-  "username_or_email": "Tên người dùng hoặc Email",
+  "username_or_email": "Tên đăng nhập hoặc Email",
   "@username_or_email": {},
   "do_not_have_an_account": "Bạn chưa có tài khoản?",
   "@do_not_have_an_account": {},
@@ -80,7 +80,7 @@
   "@confirm_password": {},
   "continue_text": "Tiếp tục",
   "@continue_text": {},
-  "required": "Cần thiết",
+  "required": "Vui lòng nhập",
   "@required": {},
   "enter_valid_email": "Vui lòng nhập email",
   "@enter_valid_email": {},
@@ -100,7 +100,7 @@
   "@theme_light": {},
   "theme_dark": "Tối",
   "@theme_dark": {},
-  "forgot_password_message": "Vui lòng nhập Tên người dùng hoặc Email của bạn để đặt lại mật khẩu",
+  "forgot_password_message": "Vui lòng nhập Tên đăng nhập hoặc Email của bạn để đặt lại mật khẩu",
   "@forgot_password_message": {},
   "enter_otp_message": "Enter the 6-digit code we sent you at Email {maskMail} ",
   "@enter_otp_message": {
@@ -110,8 +110,8 @@
   },
   "enter_message": "Vui lòng nhập Tên đăng nhập hoặc Email của bạn để đặt lại mật khẩu",
   "@enter_message": {},
-  "resend": "resend",
+  "resend": "Gửi lại",
   "@resend": {},
-  "otp_expire_message": "otp_expire_message",
+  "otp_expire_message": "Tin nhắn OTP đã hết hạn",
   "@otp_expire_message": {}
 }
