@@ -69,6 +69,7 @@ class _PasswordVerifiCationScreenState
                   color: context.colorScheme.onSurface,
                 ),
               ),
+              SizedBox(height: 12),
               Text(
                 context.loc.enter_otp_message(widget.maskMail),
                 textAlign: TextAlign.center,
