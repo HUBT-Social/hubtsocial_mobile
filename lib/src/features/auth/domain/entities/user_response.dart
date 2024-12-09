@@ -5,20 +5,24 @@ class UserResponse extends Equatable {
   const UserResponse({
     required this.userToken,
     required this.message,
+    required this.maskEmail,
     required this.requiresTwoFactor,
   });
 
   final UserTokenModel? userToken;
+  final String? maskEmail;
   final String? message;
   final bool? requiresTwoFactor;
 
   UserResponse copyWith({
     UserTokenModel? userToken,
+    String? maskEmail,
     String? message,
     bool? requiresTwoFactor,
   }) {
     return UserResponse(
       userToken: userToken ?? this.userToken,
+      maskEmail: maskEmail ?? this.maskEmail,
       message: message ?? this.message,
       requiresTwoFactor: requiresTwoFactor,
     );
@@ -29,6 +33,7 @@ class UserResponse extends Equatable {
       userToken: json["userToken"] == null
           ? null
           : UserTokenModel.fromJson(json["userToken"]),
+      maskEmail: json["maskEmail"],
       message: json["message"],
       requiresTwoFactor: json["requiresTwoFactor"],
     );
@@ -36,12 +41,13 @@ class UserResponse extends Equatable {
 
   @override
   String toString() {
-    return "$userToken, $message, $requiresTwoFactor, ";
+    return "$userToken, $maskEmail, $message, $requiresTwoFactor, ";
   }
 
   @override
   List<Object?> get props => [
         userToken,
+        maskEmail,
         message,
         requiresTwoFactor,
       ];

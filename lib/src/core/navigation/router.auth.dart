@@ -27,7 +27,8 @@ ShellRoute _authRoute() {
       ),
       GoRoute(
         path: AppRoute.twoFactor.path,
-        builder: (context, state) => TwoFactorPage(),
+        builder: (context, state) => TwoFactorPage(
+            maskMail: state.uri.queryParameters['maskMail'].toString()),
       ),
       GoRoute(
         path: AppRoute.forgotPassword.path,
