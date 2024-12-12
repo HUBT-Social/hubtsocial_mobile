@@ -10,9 +10,9 @@ import '../bloc/auth_bloc.dart';
 import '../widgets/container_auth.dart';
 
 class TwoFactorPage extends StatefulWidget {
-  const TwoFactorPage({required this.maskMail, super.key});
+  const TwoFactorPage({required this.maskEmail, super.key});
 
-  final String maskMail;
+  final String maskEmail;
   @override
   State<TwoFactorPage> createState() => _TwoFactorPageState();
 }
@@ -53,7 +53,7 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
               ),
               SizedBox(height: 12),
               Text(
-                context.loc.enter_otp_message(widget.maskMail),
+                context.loc.enter_otp_message(widget.maskEmail),
                 textAlign: TextAlign.center,
                 style: context.textTheme.titleSmall?.copyWith(
                   color: context.colorScheme.onSurface,

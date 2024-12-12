@@ -74,7 +74,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   SizedBox(height: 24),
                   FilledButton(
                     onPressed: () {
-                      AppRoute.signIn.push(context);
+                      AppRoute.signIn.pushReplacement(context);
                     },
                     child: SizedBox(
                       width: double.infinity,

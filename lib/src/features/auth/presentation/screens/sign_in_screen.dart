@@ -37,7 +37,7 @@ class _SignInScreenState extends State<SignInScreen> {
           } else if (state is VerifyTwoFactor) {
             AppDialog.closeDialog();
             AppRoute.twoFactor
-                .push(context, queryParameters: {"maskMail": state.mailMask});
+                .push(context, queryParameters: {"maskEmail": state.maskEmail});
           } else {
             AppDialog.closeDialog();
             logDebug(state.toString());

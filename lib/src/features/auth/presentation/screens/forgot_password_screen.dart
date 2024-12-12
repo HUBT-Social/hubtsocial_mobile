@@ -33,7 +33,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           } else if (state is VerifyForgotPassword) {
             AppDialog.closeDialog();
             AppRoute.passwordVerify
-                .push(context, queryParameters: {"maskMail": state.mailMask});
+                .push(context, queryParameters: {"maskEmail": state.maskEmail});
           } else {
             AppDialog.closeDialog();
             logDebug(state.toString());

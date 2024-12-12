@@ -9,7 +9,8 @@ import '../bloc/auth_bloc.dart';
 import '../widgets/container_auth.dart';
 
 class EmailVerifyScreen extends StatefulWidget {
-  const EmailVerifyScreen({super.key});
+  const EmailVerifyScreen({required this.email, super.key});
+  final String email;
 
   @override
   State<EmailVerifyScreen> createState() => _EmailVerifyScreenState();
@@ -29,8 +30,6 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
             AppDialog.showMessageDialog(
                 AppDialog.errorMessage(state.message, context));
           } else if (state is SignedIn) {
-            AppDialog.showMessageDialog(
-                AppDialog.successMessage('wellcomeBack', context));
             AppRoute.signUpInformation.pushReplacement(context);
           } else if (state is AuthLoading) {
             AppDialog.showLoadingDialog(message: 'Verify');
@@ -45,6 +44,14 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
               Text(
                 context.loc.enter_code,
                 style: context.textTheme.headlineMedium?.copyWith(
+                  color: context.colorScheme.onSurface,
+                ),
+              ),
+              SizedBox(height: 12),
+              Text(
+                context.loc.enter_otp_message(widget.email),
+                textAlign: TextAlign.center,
+                style: context.textTheme.titleSmall?.copyWith(
                   color: context.colorScheme.onSurface,
                 ),
               ),
