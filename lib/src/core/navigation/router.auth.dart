@@ -28,7 +28,7 @@ ShellRoute _authRoute() {
       GoRoute(
         path: AppRoute.twoFactor.path,
         builder: (context, state) => TwoFactorPage(
-            maskMail: state.uri.queryParameters['maskMail'].toString()),
+            maskEmail: state.uri.queryParameters['maskEmail'].toString()),
       ),
       GoRoute(
         path: AppRoute.forgotPassword.path,
@@ -40,12 +40,13 @@ ShellRoute _authRoute() {
       ),
       GoRoute(
         path: AppRoute.emailVerify.path,
-        builder: (context, state) => EmailVerifyScreen(),
+        builder: (context, state) => EmailVerifyScreen(
+            email: state.uri.queryParameters['email'].toString()),
       ),
       GoRoute(
         path: AppRoute.passwordVerify.path,
         builder: (context, state) => PasswordVerifiCationScreen(
-            maskMail: state.uri.queryParameters['maskMail'].toString()),
+            maskEmail: state.uri.queryParameters['maskEmail'].toString()),
       ),
       GoRoute(
         path: AppRoute.setNewPassword.path,

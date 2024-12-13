@@ -37,7 +37,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           AppDialog.showLoadingDialog(message: 'sign up');
         } else if (state is VerifyEmail) {
           AppDialog.closeDialog();
-          AppRoute.emailVerify.push(context);
+          AppRoute.emailVerify.pushReplacement(context,
+              queryParameters: {"email": _emailController.text.trim()});
         } else {
           AppDialog.closeDialog();
           logDebug(state.toString());

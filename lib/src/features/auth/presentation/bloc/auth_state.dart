@@ -34,21 +34,21 @@ class VerifySignUp extends AuthState {
 }
 
 class VerifyTwoFactor extends AuthState {
-  const VerifyTwoFactor(this.mailMask);
+  const VerifyTwoFactor(this.maskEmail);
 
-  final String mailMask;
+  final String maskEmail;
 
   @override
-  List<String> get props => [mailMask];
+  List<String> get props => [maskEmail];
 }
 
 class VerifyForgotPassword extends AuthState {
-  const VerifyForgotPassword(this.mailMask);
+  const VerifyForgotPassword(this.maskEmail);
 
-  final String mailMask;
+  final String maskEmail;
 
   @override
-  List<String> get props => [mailMask];
+  List<String> get props => [maskEmail];
 }
 
 class InformationUserSuccess extends AuthState {

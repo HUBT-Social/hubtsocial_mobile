@@ -10,9 +10,9 @@ import '../../../../core/presentation/dialog/app_dialog.dart';
 import '../bloc/auth_bloc.dart';
 
 class PasswordVerifiCationScreen extends StatefulWidget {
-  const PasswordVerifiCationScreen({required this.maskMail, super.key});
+  const PasswordVerifiCationScreen({required this.maskEmail, super.key});
 
-  final String maskMail;
+  final String maskEmail;
 
   @override
   State<PasswordVerifiCationScreen> createState() =>
@@ -71,7 +71,7 @@ class _PasswordVerifiCationScreenState
               ),
               SizedBox(height: 12),
               Text(
-                context.loc.enter_otp_message(widget.maskMail),
+                context.loc.enter_otp_message(widget.maskEmail),
                 textAlign: TextAlign.center,
                 style: context.textTheme.titleSmall?.copyWith(
                   color: context.colorScheme.onSurface,
