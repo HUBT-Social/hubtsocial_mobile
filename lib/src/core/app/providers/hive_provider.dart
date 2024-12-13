@@ -8,13 +8,13 @@ import '../../presentation/dialog/app_dialog.dart';
 
 class HiveProvider {
   static Future<Box> openNotiBox() async {
-    if (!await Hive.boxExists('notification')) {
-      await Hive.openBox('notification');
+    if (!await Hive.boxExists('notifications')) {
+      await Hive.openBox('notifications');
     }
-    if (!Hive.isBoxOpen('notification')) {
-      await Hive.openBox('notification');
+    if (!Hive.isBoxOpen('notifications')) {
+      await Hive.openBox('notifications');
     }
-    return Hive.box('notification');
+    return Hive.box('notifications');
   }
 
   static void addNotification() async {

@@ -4,4 +4,5 @@ class LocalStorageKey {
   static const themePrefs = "theme_prefs";
   static const token = "token";
   static const userToken = "userToken";
+  static const notification = "notifications";
 }

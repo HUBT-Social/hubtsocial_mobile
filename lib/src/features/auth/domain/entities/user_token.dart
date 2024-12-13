@@ -1,8 +1,10 @@
 import 'package:hive_flutter/adapters.dart';
 
+import '../../../../core/constants/hive_type_id.dart';
+
 part 'user_token.g.dart';
 
-@HiveType(typeId: 0)
+@HiveType(typeId: HiveTypeId.userToken)
 class UserToken extends HiveObject {
   @HiveField(0)
   final String accessToken;

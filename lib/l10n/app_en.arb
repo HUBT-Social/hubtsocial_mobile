@@ -18,8 +18,6 @@
   "@chat": {},
   "timetable": "Timetable",
   "@timetable": {},
-  "notifications": "Notifications",
-  "@notifications": {},
   "menu": "Menu",
   "@menu": {},
   "profile": "Profile",
@@ -113,5 +111,29 @@
   "resend": "Resend",
   "@resend": {},
   "otp_expire_message": "Otp expire message",
-  "@otp_expire_message": {}
+  "@otp_expire_message": {},
+  "starts": "Start",
+  "@starts": {},
+  "notifications": "Notifications",
+  "@notifications": {},
+  "markAllAsRead": "Mark all as read",
+  "@markAllAsRead": {},
+  "noNotifications": "No notifications",
+  "@noNotifications": {},
+  "justNow": "Just now",
+  "@justNow": {},
+  "minutesAgo": "{minutes} minutes ago",
+  "@minutesAgo": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "hoursAgo": "{hours} hours ago",
+  "@hoursAgo": {
+    "placeholders": {
+      "hours": {}
+    }
+  },
+  "timeFormat": "dd/MM/yyyy HH:mm",
+  "@timeFormat": {}
 }

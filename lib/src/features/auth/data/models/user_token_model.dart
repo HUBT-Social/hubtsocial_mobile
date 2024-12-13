@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_token.dart';
 
+import '../../../../core/constants/hive_type_id.dart';
+
 part 'user_token_model.g.dart';
 
-@HiveType(typeId: 1)
+@HiveType(typeId: HiveTypeId.userTokenModel)
 class UserTokenModel extends UserToken {
   UserTokenModel({
     required super.accessToken,

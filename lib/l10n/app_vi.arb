@@ -18,8 +18,6 @@
   "@chat": {},
   "timetable": "Thời khoá biểu",
   "@timetable": {},
-  "notifications": "Thông báo",
-  "@notifications": {},
   "menu": "Menu",
   "@menu": {},
   "profile": "Hồ sơ",
@@ -113,5 +111,29 @@
   "resend": "Gửi lại",
   "@resend": {},
   "otp_expire_message": "Tin nhắn OTP đã hết hạn",
-  "@otp_expire_message": {}
+  "@otp_expire_message": {},
+  "starts": "Bắt Đầu",
+  "@starts": {},
+  "notifications": "Thông báo",
+  "@notifications": {},
+  "markAllAsRead": "Đánh dấu đã đọc",
+  "@markAllAsRead": {},
+  "noNotifications": "Không có thông báo nào",
+  "@noNotifications": {},
+  "justNow": "Vừa xong",
+  "@justNow": {},
+  "minutesAgo": "{minutes} phút trước",
+  "@minutesAgo": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "hoursAgo": "{hours} giờ trước",
+  "@hoursAgo": {
+    "placeholders": {
+      "hours": {}
+    }
+  },
+  "timeFormat": "dd/MM/yyyy HH:mm",
+  "@timeFormat": {}
 }

@@ -1,4 +1,5 @@
 //dev
+
 import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_dev.dart'
     as firebaseDev;
 //prod
@@ -19,8 +20,11 @@ import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/app/my_app.dart';
 import 'package:hubtsocial_mobile/src/core/configs/environment.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
+import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
+
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
+import 'src/core/constants/hive_type_id.dart';
 import 'src/core/injections/injections.dart';
 import 'src/core/local_storage/local_storage_key.dart';
 import 'src/core/notification/firebase_message.dart';
@@ -38,22 +42,69 @@ void main() async {
 
   await dotenv.load(fileName: Environment.fileName);
 
+  // Khởi tạo Hive trước tiên
+  await fixHive();
+
+  // Sau đó mới khởi tạo các service khác
   await Future.wait([
     _initUniqueDeviceId(),
-    _initLocalStorage(),
     _initLoggy(),
     _initFirebase(),
   ]);
+
   FirebaseMessage().initNotification();
-  LocalMessage().initNotification();
+  LocalMessage().initLocalNotifications();
+
   await configureDependencies();
 
   runApp(const MyApp());
 }
 
+Future<void> fixHive() async {
+  final appDocumentDirectory = await getApplicationDocumentsDirectory();
+  await Hive.initFlutter(appDocumentDirectory.path);
+
+  // // Xóa box cũ nếu có lỗi
+  // try {
+  //   await Hive.deleteBoxFromDisk('notifications');
+  // } catch (e) {
+  //   print("Lỗi khi xóa box: $e");
+  // }
+
+  // Đăng ký adapter
+  if (!Hive.isAdapterRegistered(HiveTypeId.notification)) {
+    Hive.registerAdapter(NotificationModelAdapter());
+  }
+
+  // Đăng ký các adapter khác
+  registerAdapters();
+
+  // Mở các box cơ bản
+  await Hive.openBox(LocalStorageKey.localStorage);
+  await Hive.openBox(LocalStorageKey.token);
+
+  // Mở box notifications với compact mode
+  print("Đang mở box notifications");
+  try {
+    final box = await Hive.openBox<NotificationModel>('notifications',
+        compactionStrategy: (entries, deletedEntries) => deletedEntries > 50);
+    print("Đã mở box notifications thành công: ${box.name}");
+  } catch (e) {
+    print("Lỗi khi mở box notifications: $e");
+  }
+}
+
+// Tách riêng hàm registerAdapters
 void registerAdapters() {
-  Hive.registerAdapter(UserTokenModelAdapter());
-  Hive.registerAdapter(UserModelAdapter());
+  if (!Hive.isAdapterRegistered(HiveTypeId.notification)) {
+    Hive.registerAdapter(NotificationModelAdapter());
+  }
+  if (!Hive.isAdapterRegistered(HiveTypeId.userTokenModel)) {
+    Hive.registerAdapter(UserTokenModelAdapter());
+  }
+  if (!Hive.isAdapterRegistered(HiveTypeId.userModel)) {
+    Hive.registerAdapter(UserModelAdapter());
+  }
 }
 
 String _readAndroidDeviceInfo(AndroidDeviceInfo data) {
@@ -100,17 +151,6 @@ Future<void> _initUniqueDeviceId() async {
   logDebug("AppLocalStorage.uniqueDeviceId: ${AppLocalStorage.uniqueDeviceId}");
 }
 
-Future<void> _initLocalStorage() async {
-  await Hive.initFlutter();
-  final appDocumentDirectory = await getApplicationDocumentsDirectory();
-  Hive.init(appDocumentDirectory.path);
-  registerAdapters();
-
-  await Hive.openBox(LocalStorageKey.localStorage);
-  await Hive.openBox(LocalStorageKey.token);
-  // await Hive.openBox('notification');
-}
-
 Future<void> _initLoggy() async {
   Loggy.initLoggy(
     logOptions: const LogOptions(
@@ -140,8 +180,8 @@ Future<void> _initFirebase() async {
     FirebaseCrashlytics.instance.recordError(error, stack);
     return true;
   };
-
   final fcmToken = await FirebaseMessaging.instance.getToken();
+
   logDebug("fcmToken : $fcmToken");
 }
 
@@ -149,5 +189,5 @@ Future<void> _initNotification() async {
   //FirebaseMessagingService().initialize();
   // AwesomeNotificationService.initialize();
   FirebaseMessage().initNotification();
-  LocalMessage().initNotification();
+  LocalMessage().initLocalNotifications();
 }

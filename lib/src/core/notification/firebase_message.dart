@@ -1,34 +1,46 @@
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
-
-import '../app/providers/hive_provider.dart';
+import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 import '../navigation/route.dart';
 import '../navigation/router.import.dart';
 import 'local_message.dart';
 
-// Định nghĩa các key cho từng shell branch để dễ quản lý
-final GlobalKey<NavigatorState> _shellNavigatorHome =
-    GlobalKey<NavigatorState>(debugLabel: 'shellHome');
-final GlobalKey<NavigatorState> _shellNavigatorSettings =
-    GlobalKey<NavigatorState>(debugLabel: 'shellSettings');
-final GlobalKey<NavigatorState> _shellNavigatorNotifications =
-    GlobalKey<NavigatorState>(debugLabel: 'shellNotifications');
-Future<void> handleBackgroundMessage(RemoteMessage message) async {
-  logInfo('Handling a background message: ${message.messageId}');
-  logInfo('Title: ${message.notification?.title}');
-  logInfo('Body: ${message.notification?.body}');
-}
-
 class FirebaseMessage {
   final _firebaseMessaging = FirebaseMessaging.instance;
 
+  static Future<void> _handleBackgroundMessage(RemoteMessage message) async {
+    logInfo('Handling a background message: ${message.messageId}');
+    logInfo('Title: ${message.notification?.title}');
+    logInfo('Body: ${message.notification?.body}');
+
+    // Lưu notification vào Hive khi nhận được ở background
+    final notification = NotificationModel(
+      id: message.messageId ?? DateTime.now().toString(),
+      title: message.notification?.title,
+      body: message.notification?.body,
+      time: DateTime.now().toIso8601String(),
+      isRead: false,
+      data: message.data,
+    );
+
+    final box = await Hive.openBox<NotificationModel>('notifications');
+    await box.add(notification);
+  }
+
   Future<void> initNotification() async {
-    // Request permission for notifications
+    await _requestPermission();
+    await _configureForegroundNotification();
+    FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
+    _handleForegroundMessage();
+    FirebaseMessaging.onMessageOpenedApp.listen(_navigateToNotificationScreen);
+    await _handleTerminatedState();
+  }
+
+  Future<void> _requestPermission() async {
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
       alert: true,
       badge: true,
@@ -37,76 +49,72 @@ class FirebaseMessage {
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      // Firebase token handling
-      _firebaseMessaging.getToken().then((token) async {
-        if (!await Hive.boxExists('token')) {
-          await Hive.openBox('token');
-        }
-        var tokenBox = Hive.box('token');
-        await tokenBox.put('fcmToken', token);
-      });
+      String? token = await _firebaseMessaging.getToken();
+      print('FCM Token: $token');
     }
+  }
 
+  Future<void> _configureForegroundNotification() async {
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
       sound: true,
     );
+  }
 
-    // Handle background messages
-    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+  void _handleForegroundMessage() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      // Lưu notification vào Hive
+      final notification = NotificationModel(
+        id: message.messageId ?? DateTime.now().toString(),
+        title: message.notification?.title,
+        body: message.notification?.body,
+        time: DateTime.now().toIso8601String(),
+        isRead: false,
+        data: message.data,
+      );
 
-    // Listen for foreground messages
-    FirebaseMessaging.onMessage.listen(
-      (RemoteMessage message) {
-        RemoteNotification? notification = message.notification;
-        AndroidNotification? android = message.notification?.android;
-        if (notification != null && android != null) {
-          HiveProvider.addNotification();
-          flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                channelDescription: channel.description,
-                color: Colors.blue,
-                playSound: true,
-                icon: '@mipmap/ic_launcher',
-              ),
-            ),
-            payload: message.data['Data'].toString(),
-          );
-        }
-      },
-    );
+      final box = await Hive.openBox<NotificationModel>('notifications');
+      await box.add(notification);
 
-    // Listen for when app is opened from a background notification
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      _navigateToNotificationScreen(message);
+      // Hiển thị local notification
+      _showLocalNotification(message);
     });
+  }
 
-    // Check if app was opened from a terminated state (completely closed)
+  void _showLocalNotification(RemoteMessage message) {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+
+    if (notification != null && android != null) {
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            'high_importance_channel',
+            'Thông báo quan trọng',
+            channelDescription: 'Kênh nhận thông báo từ server',
+            importance: Importance.max,
+            priority: Priority.high,
+          ),
+        ),
+        payload: jsonEncode(message.data),
+      );
+    }
+  }
+
+  void _navigateToNotificationScreen(RemoteMessage message) {
+    router.go(AppRoute.notifications.path);
+  }
+
+  Future<void> _handleTerminatedState() async {
     RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       _navigateToNotificationScreen(initialMessage);
-    }
-  }
-
-  // Function to navigate to the notification screen
-  void _navigateToNotificationScreen(RemoteMessage message) {
-    if (message.data.containsKey('Data')) {
-      var payload = message.data['Data'].toString();
-      var data = jsonDecode(payload);
-      router.go(
-        '${AppRoute.notifications.path}?id=${data['PackageId'] ?? ''}',
-      );
-    } else {
-      router.go(AppRoute.notifications.path); // Default screen
     }
   }
 }

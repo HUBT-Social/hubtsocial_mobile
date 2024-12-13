@@ -17,44 +17,40 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 class LocalMessage {
   // Khởi tạo thông báo
-  Future<void> initNotification() async {
-    // Tạo kênh thông báo cho Android
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
 
-    // Khởi tạo cài đặt thông báo Android
+  Future<void> initLocalNotifications() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-    const InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
 
-    // Khởi tạo plugin thông báo
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
+      android: initializationSettingsAndroid,
+    );
+
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: _onDidReceiveNotificationResponse,
     );
   }
 
-  // Xử lý khi người dùng nhấn vào thông báo
   void _onDidReceiveNotificationResponse(
-      NotificationResponse notificationResponse) async {
+      NotificationResponse notificationResponse) {
     final String? payload = notificationResponse.payload;
-
     if (payload != null && payload.isNotEmpty) {
-      // Nếu có payload, kiểm tra có 'PackageId' hay không
-      if (payload.contains('PackageId')) {
-        var data = json.decode(payload) as Map<String, dynamic>;
-        router.go(
-          '/${AppRoute.notifications.path}/?id=${data['PackageId']}',
-        );
-      } else {
-        // Nếu không có 'PackageId', điều hướng đến màn hình thông báo
+      try {
+        final data = json.decode(payload) as Map<String, dynamic>;
+        if (data.containsKey('PackageId')) {
+          router.go(
+            '${AppRoute.notifications.path}?id=${data['PackageId']}',
+          );
+        } else {
+          router.go(AppRoute.notifications.path);
+        }
+      } catch (e) {
+        print('Lỗi khi xử lý payload: $e');
         router.go(AppRoute.notifications.path);
       }
     } else {
-      // Nếu không có payload, điều hướng đến màn hình chính
       router.go(AppRoute.notifications.path);
     }
   }
@@ -67,10 +63,11 @@ class LocalMessage {
   }) async {
     final AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
-      channel.id, // This is not a constant value
+      channel.id,
       channel.name,
       channelDescription: channel.description,
       importance: Importance.high,
+      priority: Priority.high,
       playSound: true,
       icon: '@mipmap/ic_launcher',
     );
@@ -78,13 +75,12 @@ class LocalMessage {
     final NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
 
-    // Hiển thị thông báo
     await flutterLocalNotificationsPlugin.show(
-      0, // ID của thông báo
-      title, // Tiêu đề thông báo
-      body, // Nội dung thông báo
-      notificationDetails, // Thông tin chi tiết thông báo
-      payload: payload, // Dữ liệu kèm theo
+      0,
+      title,
+      body,
+      notificationDetails,
+      payload: payload,
     );
   }
 }
