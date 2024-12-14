@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hubtsocial_mobile/src/core/navigation/router.import.dart';
 import 'package:intl/intl.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
@@ -100,7 +101,20 @@ class _NotificationsState extends State<NotificationsScreen> {
     }
 
     if (notification.data != null) {
-      // Xử lý điều hướng dựa vào data
+      switch (notification.data!['type']) {
+        case 'chat':
+          router.go('/chat');
+          break;
+        case 'timetable':
+          router.go('/timetable');
+          break;
+        case 'profile':
+          router.go('/menu/profile');
+          break;
+        default:
+          router.go('/chat');
+          break;
+      }
     }
   }
 }
@@ -164,6 +178,30 @@ class _NotificationItem extends StatelessWidget {
                         color: Colors.grey[600],
                       ),
                     ),
+                    if (notification.data != null &&
+                        notification.data!.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: notification.data!.entries.map((entry) {
+                              return Text(
+                                '${entry.key}: ${entry.value}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey[700],
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
                     const SizedBox(height: 8),
                     Text(
                       _formatTime(context, notification.time),

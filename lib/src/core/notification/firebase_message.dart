@@ -65,7 +65,7 @@ class FirebaseMessage {
 
   void _handleForegroundMessage() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      // Lưu notification vào Hive
+      // Lưu notification vào Hive với custom data
       final notification = NotificationModel(
         id: message.messageId ?? DateTime.now().toString(),
         title: message.notification?.title,
