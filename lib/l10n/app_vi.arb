@@ -52,8 +52,12 @@
   "@skip": {},
   "otp_expired": "OTP đã hết hạn",
   "@otp_expired": {},
-  "the_code_will": "Mã sẽ hết hạn sau:",
-  "@the_code_will": {},
+  "the_code_will": "Mã sẽ hết hạn sau: {value}",
+  "@the_code_will": {
+    "placeholders": {
+      "value": {}
+    }
+  },
   "signup_information": "Thông tin cá nhân ",
   "@signup_information": {},
   "username_or_email": "Tên đăng nhập hoặc Email",

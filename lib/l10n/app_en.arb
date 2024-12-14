@@ -44,8 +44,12 @@
   "@last_name": {},
   "otp_expired": "OTP Expired",
   "@otp_expired": {},
-  "the_code_will": "The code will expire in:",
-  "@the_code_will": {},
+  "the_code_will": "The code will expire in: {value}",
+  "@the_code_will": {
+    "placeholders": {
+      "value": {}
+    }
+  },
   "birth_of_date": "Birth of date",
   "@birth_of_date": {},
   "gender": "Gender",

@@ -71,6 +71,7 @@ dependencies:
   shimmer: ^3.0.0
   flutter_local_notifications: ^18.0.1
   logger: ^2.5.0
+  flutter_countdown_timer: ^4.1.0
 
 
 dev_dependencies:
