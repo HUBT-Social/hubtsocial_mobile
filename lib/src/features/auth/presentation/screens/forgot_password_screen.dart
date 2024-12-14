@@ -24,7 +24,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Center(
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (_, state) async {
-          logDebug('Current state: $state');
+          logger.d('Current state: $state');
           if (state is AuthError) {
             AppDialog.showMessageDialog(
                 AppDialog.errorMessage(state.message, context));
@@ -36,7 +36,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 .push(context, queryParameters: {"maskEmail": state.maskEmail});
           } else {
             AppDialog.closeDialog();
-            logDebug(state.toString());
+            logger.d(state.toString());
           }
         },
         builder: (context, state) {

@@ -16,7 +16,7 @@ class APIRequest {
       {required String url,
       required Map<String, dynamic>? body,
       String? token}) async {
-    logDebug(jsonEncode(body).toString());
+    logger.d(jsonEncode(body).toString());
 
     final response = await http.post(
       Uri.parse(
@@ -31,13 +31,13 @@ class APIRequest {
       body: body != null ? jsonEncode(body) : null,
     );
 
-    logDebug(response.body);
+    logger.d(response.body);
     return response;
   }
 
   static Future<http.Response> patch(
       {required String url, Map<String, dynamic>? body, String? token}) async {
-    logDebug(jsonEncode(body).toString());
+    logger.d(jsonEncode(body).toString());
     final response = await http.patch(
       Uri.parse(
         "$url?culture=${AppLocalStorage.currentLanguageCode}",
@@ -50,7 +50,7 @@ class APIRequest {
       },
       body: body != null ? jsonEncode(body) : null,
     );
-    logDebug(response.body);
+    logger.d(response.body);
     return response;
   }
 
@@ -71,7 +71,7 @@ class APIRequest {
       },
       body: body != null ? jsonEncode(body) : null,
     );
-    logDebug(response.body);
+    logger.d(response.body);
     return response;
   }
 
@@ -91,7 +91,7 @@ class APIRequest {
         'Authorization': token != null ? 'Bearer $token' : '',
       },
     );
-    logDebug(response.body);
+    logger.d(response.body);
     return response;
   }
 
@@ -112,7 +112,7 @@ class APIRequest {
       },
       body: body != null ? jsonEncode(body) : null,
     );
-    logDebug(response.toString());
+    logger.d(response.toString());
     return response;
   }
 
@@ -147,13 +147,13 @@ class APIRequest {
         token: token.accessToken,
       );
 
-      if (response.statusCode == 401) {
+      if (response.statusCode == 405) {
         var tokenBox = Hive.box(LocalStorageKey.token);
         tokenBox.clear();
       }
 
       if (response.statusCode != 200) {
-        logError(response.body);
+        logger.e(response.body);
         throw ServerException(
           message: response.statusCode.toString(),
           statusCode: response.statusCode.toString(),

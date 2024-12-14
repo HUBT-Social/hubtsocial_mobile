@@ -46,7 +46,7 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
         token: userToken.accessToken,
       );
       if (response.statusCode != 200) {
-        logError('Could not finalize api due to: ${response.body.toString()}');
+        logger.e('Could not finalize api due to: ${response.body.toString()}');
         throw ServerException(
           message: response.body,
           statusCode: response.statusCode.toString(),
@@ -56,8 +56,8 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logError(e.toString());
-      logDebug(s.toString());
+      logger.e(e.toString());
+      logger.d(s.toString());
       throw const ServerException(
         message: 'Please try again later',
         statusCode: '505',
@@ -127,7 +127,7 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
         token: userToken.accessToken,
       );
       if (response.statusCode != 200) {
-        logError('Could not finalize api due to: ${response.body.toString()}');
+        logger.e('Could not finalize api due to: ${response.body.toString()}');
         if (response.statusCode == 400) {
           throw ServerException(
             message: 'Your current password is incorrect',

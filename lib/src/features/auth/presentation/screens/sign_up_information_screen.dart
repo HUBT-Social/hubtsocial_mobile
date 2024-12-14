@@ -42,7 +42,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
           AppRoute.home.go(context);
         } else {
           AppDialog.closeDialog();
-          logDebug(state.toString());
+          logger.d(state.toString());
         }
       },
       builder: (context, state) {

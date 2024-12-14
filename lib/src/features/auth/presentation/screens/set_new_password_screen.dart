@@ -38,7 +38,7 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
             AppRoute.passwordSuccessful.go(context);
           } else {
             AppDialog.closeDialog();
-            logDebug(state.toString());
+            logger.d(state.toString());
           }
         },
         builder: (context, state) {

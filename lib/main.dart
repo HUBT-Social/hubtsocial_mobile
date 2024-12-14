@@ -22,11 +22,11 @@ import 'package:hubtsocial_mobile/src/core/configs/environment.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 
-import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'src/core/constants/hive_type_id.dart';
 import 'src/core/injections/injections.dart';
 import 'src/core/local_storage/local_storage_key.dart';
+import 'src/core/logger/logger.dart';
 import 'src/core/notification/firebase_message.dart';
 import 'src/core/notification/local_message.dart';
 import 'src/features/auth/data/models/user_token_model.dart';
@@ -42,34 +42,22 @@ void main() async {
 
   await dotenv.load(fileName: Environment.fileName);
 
-  // Khởi tạo Hive trước tiên
-  await fixHive();
+  await configureDependencies();
 
-  // Sau đó mới khởi tạo các service khác
   await Future.wait([
     _initUniqueDeviceId(),
-    _initLoggy(),
     _initFirebase(),
+    _initLocalStorage(),
   ]);
 
-  FirebaseMessage().initNotification();
-  LocalMessage().initLocalNotifications();
-
-  await configureDependencies();
+  await _initNotification();
 
   runApp(const MyApp());
 }
 
-Future<void> fixHive() async {
+Future<void> _initLocalStorage() async {
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   await Hive.initFlutter(appDocumentDirectory.path);
-
-  // // Xóa box cũ nếu có lỗi
-  // try {
-  //   await Hive.deleteBoxFromDisk('notifications');
-  // } catch (e) {
-  //   print("Lỗi khi xóa box: $e");
-  // }
 
   // Đăng ký adapter
   if (!Hive.isAdapterRegistered(HiveTypeId.notification)) {
@@ -148,17 +136,8 @@ Future<void> _initUniqueDeviceId() async {
   }
   AppLocalStorage.uniqueDeviceId =
       AppLocalStorage.uniqueDeviceId.replaceAll(RegExp(r"[^a-zA-Z0-9\s]"), "");
-  logDebug("AppLocalStorage.uniqueDeviceId: ${AppLocalStorage.uniqueDeviceId}");
-}
 
-Future<void> _initLoggy() async {
-  Loggy.initLoggy(
-    logOptions: const LogOptions(
-      LogLevel.all,
-      stackTraceLevel: LogLevel.warning,
-    ),
-    logPrinter: const PrettyPrinter(showColors: true),
-  );
+  logger.d("AppLocalStorage.uniqueDeviceId: ${AppLocalStorage.uniqueDeviceId}");
 }
 
 Future<void> _initFirebase() async {
@@ -182,12 +161,10 @@ Future<void> _initFirebase() async {
   };
   final fcmToken = await FirebaseMessaging.instance.getToken();
 
-  logDebug("fcmToken : $fcmToken");
+  logger.d("fcmToken : $fcmToken");
 }
 
 Future<void> _initNotification() async {
-  //FirebaseMessagingService().initialize();
-  // AwesomeNotificationService.initialize();
   FirebaseMessage().initNotification();
   LocalMessage().initLocalNotifications();
 }

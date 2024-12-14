@@ -39,7 +39,7 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
             AppDialog.showLoadingDialog(message: 'signing');
           } else {
             AppDialog.closeDialog();
-            logDebug(state.toString());
+            logger.d(state.toString());
           }
         },
         builder: (context, state) {

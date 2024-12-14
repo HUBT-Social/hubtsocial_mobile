@@ -40,7 +40,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 .push(context, queryParameters: {"maskEmail": state.maskEmail});
           } else {
             AppDialog.closeDialog();
-            logDebug(state.toString());
+            logger.d(state.toString());
           }
         },
         builder: (context, state) {

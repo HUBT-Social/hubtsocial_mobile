@@ -27,7 +27,7 @@ sealed class AppDialog {
 
   static void showLoadingDialog({String? message}) {
     if (message != null) {
-      logDebug('Loading message: $message');
+      logger.d('Loading message: $message');
     }
     AppDialog.closeDialog();
     SmartDialog.show(

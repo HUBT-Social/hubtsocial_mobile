@@ -10,7 +10,7 @@ String joinRoute(List<String> routes) {
 final GoRouter router = GoRouter(
   navigatorKey: navigatorKey,
   errorBuilder: (context, state) {
-    logError(state.uri.path);
+    logger.e(state.uri.path);
     return NotFoundScreen(url: state.uri.path);
   },
   debugLogDiagnostics: true,

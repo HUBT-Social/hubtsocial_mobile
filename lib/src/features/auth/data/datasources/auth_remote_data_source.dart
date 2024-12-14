@@ -72,7 +72,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       var responseData = SignInResponseModel.fromJson(response.body);
 
       if (response.statusCode != 200) {
-        logError('Failed to verify OTP password: ${response.body.toString()}');
+        logger.e('Failed to verify OTP password: ${response.body.toString()}');
         throw ServerException(
           message: responseData.message.toString(),
           statusCode: response.statusCode.toString(),
@@ -89,14 +89,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       var token = responseData.userToken;
       var tokenBox = _hiveAuth.box(LocalStorageKey.token);
       await tokenBox.put(LocalStorageKey.userToken, token);
-      logInfo('Token saved successfully: $token');
+      logger.i('Token saved successfully: $token');
 
       return responseData;
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logError(e.toString());
-      logDebug(s.toString());
+      logger.e(e.toString());
+      logger.d(s.toString());
       throw const ServerException(
         message: 'Failed to verify OTP password. Please try again later.',
         statusCode: '505',
@@ -115,7 +115,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        logError('Failed to verify password: ${response.body.toString()}');
+        logger.e('Failed to verify password: ${response.body.toString()}');
         throw ServerException(
           message: response.body,
           statusCode: response.statusCode.toString(),
@@ -126,8 +126,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logError(e.toString());
-      logDebug(s.toString());
+      logger.e(e.toString());
+      logger.d(s.toString());
       throw const ServerException(
         message: 'Failed to verify email password. Please try again later.',
         statusCode: '505',
@@ -150,7 +150,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        logError('Could not finalize api due to: ${response.body.toString()}');
+        logger.e('Could not finalize api due to: ${response.body.toString()}');
         throw ServerException(
           message: response.body.toString(),
           statusCode: response.statusCode.toString(),
@@ -168,7 +168,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         var token = responseData.userToken;
         var tokenBox = _hiveAuth.box(LocalStorageKey.token);
         await tokenBox.put(LocalStorageKey.userToken, token);
-        logInfo('Sign in token : $token');
+        logger.i('Sign in token : $token');
 
         // if (tokenBox.containsKey('fcmToken')) {
         //   String fcmToken = tokenBox.get('fcmToken');
@@ -181,7 +181,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         //     token: token.accessToken,
         //   );
 
-        //   logInfo('Devices response : $response');
+        //   logger.i('Devices response : $response');
         // } else {
         //   _messaging.getToken().then((value) async {
         //     await tokenBox.put('fcmToken', value);
@@ -202,8 +202,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logError(e.toString());
-      logDebug(s.toString());
+      logger.e(e.toString());
+      logger.d(s.toString());
       throw const ServerException(
         message: 'Please try again later',
         statusCode: '505',
@@ -218,7 +218,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String password,
     required String confirmPassword,
   }) async {
-    logInfo('phone number :$userName, name: $email, password: $password');
+    logger.i('phone number :$userName, name: $email, password: $password');
     try {
       final response = await APIRequest.post(
         url: EndPoint.authSignUp,
@@ -231,7 +231,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        logError('Could not finalize api due to: ${response.body.toString()}');
+        logger.e('Could not finalize api due to: ${response.body.toString()}');
         throw ServerException(
           message: response.body.toString(),
           statusCode: response.statusCode.toString(),
@@ -242,8 +242,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logError(e.toString());
-      logDebug(s.toString());
+      logger.e(e.toString());
+      logger.d(s.toString());
       throw const ServerException(
         message: 'Issue with the server',
         statusCode: '505',
@@ -266,15 +266,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        logError('Could not finalize api due to: ${response.body.toString()}');
+        logger.e('Could not finalize api due to: ${response.body.toString()}');
         throw ServerException(
           message: response.body.toString(),
           statusCode: response.statusCode.toString(),
         );
       }
     } catch (e, s) {
-      logError(e.toString());
-      logDebug(s.toString());
+      logger.e(e.toString());
+      logger.d(s.toString());
       throw const ServerException(
         message: 'Issue with the server',
         statusCode: '505',
@@ -305,11 +305,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           },
           token: userToken.accessToken,
         );
-        logDebug('Devices response : ${response.body.toString()}');
+        logger.d('Devices response : ${response.body.toString()}');
       }
     } catch (e, s) {
-      logError(e.toString());
-      logDebug(s.toString());
+      logger.e(e.toString());
+      logger.d(s.toString());
       throw const ServerException(
         message: 'Issue with the server',
         statusCode: '505',
@@ -329,7 +329,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       var responseData = SignInResponseModel.fromJson(response.body);
       if (response.statusCode != 200) {
-        logError('Could not finalize api due to: ${response.body.toString()}');
+        logger.e('Could not finalize api due to: ${response.body.toString()}');
         throw ServerException(
           message: responseData.message.toString(),
           statusCode: response.statusCode.toString(),
@@ -345,14 +345,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       var token = responseData.userToken;
       var tokenBox = _hiveAuth.box(LocalStorageKey.token);
       await tokenBox.put(LocalStorageKey.userToken, token);
-      logInfo('Sign in token : $token');
+      logger.i('Sign in token : $token');
 
       return responseData;
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logError(e.toString());
-      logDebug(s.toString());
+      logger.e(e.toString());
+      logger.d(s.toString());
       throw const ServerException(
         message: 'Please try again later',
         statusCode: '505',
@@ -372,7 +372,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       var responseData = SignInResponseModel.fromJson(response.body);
       if (response.statusCode != 200) {
-        logError('Could not finalize api due to: ${response.body.toString()}');
+        logger.e('Could not finalize api due to: ${response.body.toString()}');
         throw ServerException(
           message: responseData.message.toString(),
           statusCode: response.statusCode.toString(),
@@ -388,14 +388,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       var token = responseData.userToken;
       var tokenBox = _hiveAuth.box(LocalStorageKey.token);
       await tokenBox.put(LocalStorageKey.userToken, token);
-      logInfo('Sign in token : $token');
+      logger.i('Sign in token : $token');
 
       return responseData;
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logError(e.toString());
-      logDebug(s.toString());
+      logger.e(e.toString());
+      logger.d(s.toString());
       throw const ServerException(
         message: 'Please try again later',
         statusCode: '505',
@@ -415,7 +415,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        logError('Could not finalize api due to: ${response.body.toString()}');
+        logger.e('Could not finalize api due to: ${response.body.toString()}');
         throw ServerException(
           message: response.body.toString(),
           statusCode: response.statusCode.toString(),
@@ -427,8 +427,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logError(e.toString());
-      logDebug(s.toString());
+      logger.e(e.toString());
+      logger.d(s.toString());
       throw const ServerException(
         message: 'Please try again later',
         statusCode: '505',
@@ -449,7 +449,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        logError('Could not finalize api due to: ${response.body.toString()}');
+        logger.e('Could not finalize api due to: ${response.body.toString()}');
         throw ServerException(
           message: response.body.toString(),
           statusCode: response.statusCode.toString(),
@@ -460,8 +460,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logError(e.toString());
-      logDebug(s.toString());
+      logger.e(e.toString());
+      logger.d(s.toString());
       throw const ServerException(
         message: 'Issue with the server',
         statusCode: '505',
@@ -489,7 +489,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        logError('Could not finalize api due to: ${response.body.toString()}');
+        logger.e('Could not finalize api due to: ${response.body.toString()}');
         throw ServerException(
           message: response.body.toString(),
           statusCode: response.statusCode.toString(),
@@ -500,8 +500,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logError(e.toString());
-      logDebug(s.toString());
+      logger.e(e.toString());
+      logger.d(s.toString());
       throw const ServerException(
         message: 'Issue with the server',
         statusCode: '505',

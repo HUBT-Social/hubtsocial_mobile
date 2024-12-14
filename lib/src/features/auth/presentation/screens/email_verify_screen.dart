@@ -35,7 +35,7 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
             AppDialog.showLoadingDialog(message: 'Verify');
           } else {
             AppDialog.closeDialog();
-            logDebug(state.toString());
+            logger.d(state.toString());
           }
         },
         builder: (context, state) {

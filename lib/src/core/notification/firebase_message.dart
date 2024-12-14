@@ -13,9 +13,9 @@ class FirebaseMessage {
   final _firebaseMessaging = FirebaseMessaging.instance;
 
   static Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-    logInfo('Handling a background message: ${message.messageId}');
-    logInfo('Title: ${message.notification?.title}');
-    logInfo('Body: ${message.notification?.body}');
+    logger.i('Handling a background message: ${message.messageId}');
+    logger.i('Title: ${message.notification?.title}');
+    logger.i('Body: ${message.notification?.body}');
 
     // Lưu notification vào Hive khi nhận được ở background
     final notification = NotificationModel(

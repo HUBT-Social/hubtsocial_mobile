@@ -41,7 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               queryParameters: {"email": _emailController.text.trim()});
         } else {
           AppDialog.closeDialog();
-          logDebug(state.toString());
+          logger.d(state.toString());
         }
       },
       builder: (context, state) {
