@@ -147,7 +147,7 @@ class APIRequest {
         token: token.accessToken,
       );
 
-      if (response.statusCode == 405) {
+      if (response.statusCode == 401) {
         var tokenBox = Hive.box(LocalStorageKey.token);
         tokenBox.clear();
       }
