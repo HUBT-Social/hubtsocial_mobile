@@ -16,18 +16,18 @@ class NotificationModel extends HiveObject {
   final String? body;
 
   @HiveField(3)
-  final Map<String, dynamic>? data;
-
-  @HiveField(4)
   final String time;
 
-  @HiveField(5)
+  @HiveField(4)
   bool isRead;
+
+  @HiveField(5)
+  final Map<String, dynamic>? data;
 
   NotificationModel({
     required this.id,
-    required this.title,
-    required this.body,
+    this.title,
+    this.body,
     required this.time,
     this.isRead = false,
     this.data,

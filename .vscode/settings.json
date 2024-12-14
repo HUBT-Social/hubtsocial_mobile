@@ -1,4 +1,5 @@
 {
   "java.configuration.updateBuildConfiguration": "interactive",
-  "cSpell.words": ["setnewpassword"]
+  "cSpell.words": ["setnewpassword"],
+  "cmake.sourceDirectory": "D:/phong/HUBTSocial/hubtsocial_mobile/linux"
 }
