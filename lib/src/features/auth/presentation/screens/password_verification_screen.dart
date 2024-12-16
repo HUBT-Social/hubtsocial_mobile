@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/main.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
@@ -9,6 +12,7 @@ import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/router.import.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/container_auth.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_auth_otp.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/otp_count_down_timer.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/navigation/route.dart';
 import '../../../../core/presentation/dialog/app_dialog.dart';
@@ -30,15 +34,23 @@ class _PasswordVerifiCationScreenState
   final _formKey = GlobalKey<FormState>();
   late CountdownTimerController countdownTimerController;
 
-  int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 150;
-
   @override
   void initState() {
     super.initState();
-    countdownTimerController = CountdownTimerController(endTime: endTime);
+    int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 150; //2m30s
+    countdownTimerController =
+        CountdownTimerController(endTime: endTime, onEnd: onEnd);
   }
 
-  void onEnd() {}
+  void onEnd() {
+    try {
+      context.pop();
+      AppDialog.showMessageDialog(
+          AppDialog.errorMessage(context.loc.otp_expire_message, context));
+    } catch (e) {
+      logger.e(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +64,7 @@ class _PasswordVerifiCationScreenState
           } else if (state is AuthLoading) {
             AppDialog.showLoadingDialog(message: context.loc.password_verify);
           } else if (state is VerifyForgotPasswordSuccess) {
+            countdownTimerController.dispose();
             AppDialog.closeDialog();
             AppRoute.setNewPassword.pushReplacement(context);
           } else {
@@ -119,33 +132,8 @@ class _PasswordVerifiCationScreenState
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  CountdownTimer(
-                    controller: countdownTimerController,
-                    onEnd: () {
-                      context.pop();
-                    },
-                    widgetBuilder: (_, time) {
-                      if (time == null) {
-                        return Text("thời gian đã hết ");
-                      }
-
-                      var numberFormat = NumberFormat("00");
-
-                      String min = time.min != null
-                          ? numberFormat.format(time.min)
-                          : "0";
-
-                      String sec = time.sec != null
-                          ? numberFormat.format(time.sec)
-                          : "00";
-
-                      return Text(
-                        context.loc.the_code_will('$min:$sec'),
-                        style: context.textTheme.labelLarge
-                            ?.copyWith(color: context.colorScheme.primary),
-                      );
-                    },
-                  ),
+                  OtpCountDownTimer(
+                      countdownTimerController: countdownTimerController),
                 ],
               ),
             ],

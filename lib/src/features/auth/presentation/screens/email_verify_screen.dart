@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_auth_otp.dart';
 import '../../../../core/logger/logger.dart';
@@ -7,6 +9,7 @@ import '../../../../core/navigation/route.dart';
 import '../../../../core/presentation/dialog/app_dialog.dart';
 import '../bloc/auth_bloc.dart';
 import '../widgets/container_auth.dart';
+import '../widgets/otp_count_down_timer.dart';
 
 class EmailVerifyScreen extends StatefulWidget {
   const EmailVerifyScreen({required this.email, super.key});
@@ -19,7 +22,25 @@ class EmailVerifyScreen extends StatefulWidget {
 class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
   final otpController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  // late CountdownTimer countdownTimer;
+  late CountdownTimerController countdownTimerController;
+
+  @override
+  void initState() {
+    super.initState();
+    int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 150; //2m30s
+    countdownTimerController =
+        CountdownTimerController(endTime: endTime, onEnd: onEnd);
+  }
+
+  void onEnd() {
+    try {
+      context.pop();
+      AppDialog.showMessageDialog(
+          AppDialog.errorMessage(context.loc.otp_expire_message, context));
+    } catch (e) {
+      logger.e(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,48 +115,12 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
                   ),
                 ),
               ),
+              SizedBox(height: 12),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      // context.read<AuthBloc>().add(
-                      //     ForgotPasswordEvent(
-                      //         usernameOrEmail: email));
-                      // countdownTimer.reset();
-                      // countdownTimer.start(() {
-                      //   AppDialog.showMessageDialog(
-                      //       AppDialog.errorMessage(
-                      //           context.loc.otp_expired, context));
-                      // });
-                    },
-                    child: Row(
-                      children: [
-                        Icon(Icons.refresh,
-                            size: 20, color: context.colorScheme.primary),
-                        SizedBox(width: 4),
-                        Text(
-                          context.loc.resend,
-                          style: context.textTheme.labelLarge?.copyWith(
-                            color: context.colorScheme.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // AnimatedBuilder(
-                  //   animation: countdownTimer,
-                  //   builder: (context, child) {
-                  //     return Text(
-                  //       '${context.loc.the_code_will} ${countdownTimer.formattedTime}',
-                  //       style:
-                  //           context.textTheme.titleSmall?.copyWith(
-                  //         color: context.colorScheme.onSurface,
-                  //       ),
-                  //       textAlign: TextAlign.right,
-                  //     );
-                  //   },
-                  // ),
+                  OtpCountDownTimer(
+                      countdownTimerController: countdownTimerController),
                 ],
               ),
             ],
