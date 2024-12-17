@@ -200,7 +200,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _onSignUpButtonClicked() {
-    if (!_formKey.currentState!.validate() && isAgreePolicy) {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    if (!isAgreePolicy) {
       return;
     }
 

@@ -50,7 +50,8 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
           if (state is AuthError) {
             AppDialog.showMessageDialog(
                 AppDialog.errorMessage(state.message, context));
-          } else if (state is SignedIn) {
+          } else if (state is VerifyEmailSuccess) {
+            AppDialog.closeDialog();
             AppRoute.signUpInformation.pushReplacement(context);
           } else if (state is AuthLoading) {
             AppDialog.showLoadingDialog(message: 'Verify');

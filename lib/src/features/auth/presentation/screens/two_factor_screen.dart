@@ -53,7 +53,7 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
           if (state is AuthError) {
             AppDialog.showMessageDialog(
                 AppDialog.errorMessage(state.message, context));
-          } else if (state is SignedIn) {
+          } else if (state is VerifyTwoFactorSuccess) {
             countdownTimerController.dispose();
             AppDialog.showMessageDialog(
                 AppDialog.successMessage('wellcomeBack', context));

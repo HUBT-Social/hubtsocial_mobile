@@ -6,6 +6,7 @@ import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/forgot_passw
 import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/otp_user_case.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../user/data/gender.dart';
 import '../../domain/usecases/information_user_case.dart';
 import '../../domain/usecases/reset_password.dart';
 import '../../domain/usecases/set_new_password_user_case.dart';
@@ -192,7 +193,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       },
       (response) {
-        emit(SignedIn());
+        emit(VerifyTwoFactorSuccess());
       },
     );
   }
@@ -218,7 +219,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       },
       (response) {
-        emit(SignedIn());
+        emit(VerifyEmailSuccess());
       },
     );
   }
@@ -284,28 +285,4 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       },
     );
   }
-
-  // Future<void> _updateEmailHandler(
-  //     UpdateEmailEvent event, Emitter<AuthState> emit) async {
-  //   final result = await _forgotPassword(
-  //     ForgotPasswordParams(
-  //       usernameOrEmail: event.email,
-  //     ),
-  //   );
-  //   result.fold(
-  //     (failure) {
-  //       switch (int.parse(failure.statusCode)) {
-  //         case 401:
-  //           emit(AuthError(failure.message));
-  //           break;
-  //         default:
-  //           emit(AuthError(failure.message));
-  //           break;
-  //       }
-  //     },
-  //     (response) {
-  //       emit(VerifyForgotPassword());
-  //     },
-  //   );
-  // }
 }

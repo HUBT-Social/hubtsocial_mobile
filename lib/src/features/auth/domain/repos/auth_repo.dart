@@ -1,4 +1,5 @@
 import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
+import '../../../user/data/gender.dart';
 import '../../data/models/forgot_password_response_model.dart';
 import '../entities/user_response.dart';
 
@@ -26,8 +27,8 @@ abstract class AuthRepo {
   ResultFuture<void> informationUser({
     required String firstName,
     required String lastName,
-    required String birthOfDate,
-    required String gender,
+    required DateTime birthOfDate,
+    required Gender gender,
     required String phoneNumber,
   });
   ResultFuture<UserResponse> verifyEmail({

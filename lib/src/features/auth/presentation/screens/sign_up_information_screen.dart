@@ -5,9 +5,11 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/input/input_field.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:hubtsocial_mobile/src/features/user/data/gender.dart';
 import '../../../../core/configs/assets.dart';
 import '../../../../core/navigation/route.dart';
 import '../../../../core/presentation/dialog/app_dialog.dart';
+import '../../../../core/utils/validators.dart';
 import '../widgets/container_auth.dart';
 
 class SignUpInformationScreen extends StatefulWidget {
@@ -22,7 +24,8 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _birthOfDateController = TextEditingController();
-  final _genderController = TextEditingController();
+  DateTime _birthOfDate = DateTime.now();
+  Gender? _genderValue;
   final _phoneNumberController = TextEditingController();
   bool isAgreePolicy = false;
   final _formKey = GlobalKey<FormState>();
@@ -98,10 +101,13 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                           lastDate: DateTime.now(),
                         );
                         if (pickedDate != null) {
+                          _birthOfDate = pickedDate;
                           _birthOfDateController.text =
                               "${pickedDate.day.toString().padLeft(2, '0')}/"
                               "${pickedDate.month.toString().padLeft(2, '0')}/"
                               "${pickedDate.year}";
+                        } else {
+                          _birthOfDateController.text = "";
                         }
                       },
                       child: AbsorbPointer(
@@ -120,15 +126,42 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: InputField.gender(
-                      hintText: context.loc.gender,
-                      controller: _genderController,
-                      textInputAction: TextInputAction.done,
-                      prefixIcon: Align(
-                        widthFactor: 1.0,
-                        heightFactor: 1.0,
-                        child: SvgPicture.asset(AppIcons.iconGender),
+                    child: DropdownButtonFormField<Gender>(
+                      value: _genderValue,
+                      validator: Validators.requiredTyped,
+                      onChanged: (value) {
+                        _genderValue = value;
+                      },
+                      hint: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          context.loc.gender,
+                          style: context.textTheme.bodyLarge
+                              ?.copyWith(color: context.colorScheme.outline),
+                        ),
                       ),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          gapPadding: 0,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(12)),
+                          borderSide:
+                              BorderSide(color: context.colorScheme.outline),
+                        ),
+                        prefixIcon: Align(
+                          widthFactor: 1.0,
+                          heightFactor: 1.0,
+                          child: SvgPicture.asset(AppIcons.iconGender),
+                        ),
+                      ),
+                      items: Gender.values.map((Gender classType) {
+                        return DropdownMenuItem<Gender>(
+                          value: classType,
+                          child: Text(
+                            classType.name,
+                          ),
+                        );
+                      }).toList(),
                     ),
                   ),
                   Padding(
@@ -190,8 +223,8 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
     context.read<AuthBloc>().add(SignUpInformationEvent(
           firstName: _firstNameController.text.trim(),
           lastName: _lastNameController.text.trim(),
-          birthOfDate: _birthOfDateController.text.trim(),
-          gender: _genderController.text.trim(),
+          birthOfDate: _birthOfDate,
+          gender: _genderValue ?? Gender.Other,
           phoneNumber: _phoneNumberController.text.trim(),
         ));
   }

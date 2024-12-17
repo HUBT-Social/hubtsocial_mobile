@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../../../../core/constants/hive_type_id.dart';
+import '../../data/gender.dart';
 
 part 'user.g.dart';
 
@@ -12,7 +13,7 @@ class User extends Equatable {
   @HiveField(1)
   final String lastName;
   @HiveField(2)
-  final int gender;
+  final Gender gender;
   @HiveField(3)
   final String avatarUrl;
   @HiveField(4)

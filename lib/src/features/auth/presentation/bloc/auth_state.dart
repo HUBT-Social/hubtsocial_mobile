@@ -42,6 +42,10 @@ class VerifyTwoFactor extends AuthState {
   List<String> get props => [maskEmail];
 }
 
+class VerifyTwoFactorSuccess extends AuthState {
+  const VerifyTwoFactorSuccess();
+}
+
 class VerifyForgotPassword extends AuthState {
   const VerifyForgotPassword(this.maskEmail);
 
@@ -63,12 +67,20 @@ class SignedIn extends AuthState {
   const SignedIn();
 }
 
+class SignUpSuccess extends AuthState {
+  const SignUpSuccess();
+}
+
 class SetNewPasswordSuccess extends AuthState {
   const SetNewPasswordSuccess();
 }
 
 class VerifyEmail extends AuthState {
   const VerifyEmail();
+}
+
+class VerifyEmailSuccess extends AuthState {
+  const VerifyEmailSuccess();
 }
 
 class AuthError extends AuthState {

@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:hubtsocial_mobile/src/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/repos/auth_repo.dart';
 
+import '../../../user/data/gender.dart';
 import '../../domain/entities/user_response.dart';
 import '../models/forgot_password_response_model.dart';
 
@@ -21,8 +22,8 @@ class AuthRepoImpl implements AuthRepo {
   ResultFuture<void> informationUser({
     required String firstName,
     required String lastName,
-    required String birthOfDate,
-    required String gender,
+    required DateTime birthOfDate,
+    required Gender gender,
     required String phoneNumber,
   }) async {
     try {

@@ -19,25 +19,6 @@ class InputField extends StatefulWidget {
     this.onChanged,
     super.key,
   });
-  const InputField.gender({
-    required TextEditingController controller,
-    String? errorText,
-    String hintText = 'Gender',
-    Widget? prefixIcon,
-    TextInputAction textInputAction = TextInputAction.next,
-    Key? key,
-  }) : this(
-          key: key,
-          controller: controller,
-          textInputAction: textInputAction,
-          keyboardType: TextInputType.text,
-          errorText: errorText,
-          hintText: hintText,
-          prefixIcon: prefixIcon,
-          autofillHints: const [AutofillHints.name],
-          validator: Validators.required,
-        );
-
   InputField.dob({
     required TextEditingController controller,
     String? errorText,
@@ -227,9 +208,7 @@ class _InputFieldState extends State<InputField> {
         errorText: widget.errorText,
         hintText: widget.hintText,
         prefixIcon: widget.prefixIcon,
-        prefixIconColor: widget.errorText == null
-            ? context.colorScheme.primary
-            : context.colorScheme.error,
+        prefixIconColor: context.colorScheme.primary,
         suffixIconColor: widget.errorText == null
             ? context.colorScheme.primary
             : context.colorScheme.error,

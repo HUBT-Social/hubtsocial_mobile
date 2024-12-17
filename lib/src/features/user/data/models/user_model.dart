@@ -4,6 +4,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/features/user/domain/entities/user.dart';
 
 import '../../../../core/constants/hive_type_id.dart';
+import '../gender.dart';
 
 part 'user_model.g.dart';
 
@@ -22,7 +23,7 @@ class UserModel extends User {
   UserModel copyWith({
     String? firstName,
     String? lastName,
-    int? gender,
+    Gender? gender,
     String? avatarUrl,
     DateTime? birthDay,
     String? phoneNumber,
@@ -52,7 +53,7 @@ class UserModel extends User {
     return UserModel(
       firstName: json["firstName"],
       lastName: json["lastName"],
-      gender: json["gender"],
+      gender: Gender.values[json["gender"]],
       avatarUrl: json["avatarUrl"],
       birthDay: DateTime.tryParse(json["birthDay"] ?? ""),
       phoneNumber: json["phoneNumber"],

@@ -88,6 +88,23 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                     ),
                   ),
                   SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        autofocus: false,
+                        onTap: () {
+                          AppRoute.signUp.pushReplacement(context);
+                        },
+                        child: Text(
+                          context.loc.do_not_have_an_account,
+                          style: context.textTheme.labelLarge?.copyWith(
+                            color: context.colorScheme.surfaceTint,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

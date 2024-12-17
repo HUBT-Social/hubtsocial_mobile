@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive/hive.dart';
 import 'package:hubtsocial_mobile/src/core/configs/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
+import 'package:hubtsocial_mobile/src/features/user/data/gender.dart';
 import 'package:injectable/injectable.dart';
 import 'package:hubtsocial_mobile/src/core/errors/exceptions.dart';
 import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
@@ -42,8 +43,8 @@ abstract class AuthRemoteDataSource {
   Future<void> informationUser(
       {required String firstName,
       required String lastName,
-      required String birthOfDate,
-      required String gender,
+      required DateTime birthOfDate,
+      required Gender gender,
       required String phoneNumber});
 }
 
@@ -473,18 +474,21 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> informationUser(
       {required String firstName,
       required String lastName,
-      required String birthOfDate,
-      required String gender,
+      required DateTime birthOfDate,
+      required Gender gender,
       required String phoneNumber}) async {
     try {
+      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
+
       final response = await APIRequest.post(
         url: EndPoint.informationUser,
+        token: userToken.accessToken,
         body: {
           "firstName": firstName,
           "lastName": lastName,
-          "birthOfDate": birthOfDate,
-          "gender": gender,
           "phoneNumber": phoneNumber,
+          "gender": gender.index,
+          "dateOfBirth": birthOfDate.toIso8601String()
         },
       );
 

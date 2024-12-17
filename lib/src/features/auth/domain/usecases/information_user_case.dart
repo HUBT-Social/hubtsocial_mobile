@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../core/usecases/usecases.dart';
 import '../../../../core/utils/typedefs.dart';
+import '../../../user/data/gender.dart';
 import '../repos/auth_repo.dart';
 
 @LazySingleton()
@@ -34,8 +35,8 @@ class InformationUserParams extends Equatable {
       this.birthOfDate, this.gender, this.phoneNumber);
   final String firstName;
   final String lastName;
-  final String birthOfDate;
-  final String gender;
+  final DateTime birthOfDate;
+  final Gender gender;
   final String phoneNumber;
 
   @override

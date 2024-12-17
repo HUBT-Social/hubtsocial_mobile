@@ -91,12 +91,17 @@ class SignUpInformationEvent extends AuthEvent {
   });
   final String firstName;
   final String lastName;
-  final String birthOfDate;
-  final String gender;
+  final DateTime birthOfDate;
+  final Gender gender;
   final String phoneNumber;
   @override
-  List<String> get props =>
-      [firstName, lastName, birthOfDate, gender, phoneNumber];
+  List<String> get props => [
+        firstName,
+        lastName,
+        birthOfDate.toIso8601String(),
+        gender.toString(),
+        phoneNumber
+      ];
 }
 
 class SignUpEvent extends AuthEvent {
