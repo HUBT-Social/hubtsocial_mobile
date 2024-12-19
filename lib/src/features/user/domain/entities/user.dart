@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 
 import '../../../../core/constants/hive_type_id.dart';
 import '../../data/gender.dart';

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:hive/hive.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 import 'package:http/http.dart' as http;
 import 'package:hubtsocial_mobile/src/core/errors/exceptions.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';

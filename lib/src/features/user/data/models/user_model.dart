@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/features/user/domain/entities/user.dart';
 
 import '../../../../core/constants/hive_type_id.dart';

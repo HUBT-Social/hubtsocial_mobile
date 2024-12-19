@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:hubtsocial_mobile/src/core/navigation/router.import.dart';
 import 'package:intl/intl.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
@@ -7,7 +7,7 @@ import 'package:hubtsocial_mobile/src/features/notification/model/notification_m
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 
 class NotificationsScreen extends StatefulWidget {
-  const NotificationsScreen({Key? key}) : super(key: key);
+  const NotificationsScreen({super.key});
 
   @override
   State<NotificationsScreen> createState() => _NotificationsState();

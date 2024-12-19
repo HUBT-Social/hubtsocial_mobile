@@ -1,5 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/configs/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/user/data/gender.dart';

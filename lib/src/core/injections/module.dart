@@ -1,5 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 import 'package:injectable/injectable.dart';
 
 @module

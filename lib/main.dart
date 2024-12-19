@@ -1,5 +1,6 @@
 //dev
 
+import 'package:hubtsocial_mobile/hive_registrar.g.dart';
 import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_dev.dart'
     as firebaseDev;
 //prod
@@ -9,7 +10,7 @@ import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_prod.dart'
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -23,14 +24,11 @@ import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart'
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 
 import 'package:path_provider/path_provider.dart';
-import 'src/core/constants/hive_type_id.dart';
 import 'src/core/injections/injections.dart';
 import 'src/core/local_storage/local_storage_key.dart';
 import 'src/core/logger/logger.dart';
 import 'src/core/notification/firebase_message.dart';
 import 'src/core/notification/local_message.dart';
-import 'src/features/auth/data/models/user_token_model.dart';
-import 'src/features/user/data/models/user_model.dart';
 
 class NavigationService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -59,13 +57,7 @@ Future<void> _initLocalStorage() async {
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   await Hive.initFlutter(appDocumentDirectory.path);
 
-  // Đăng ký adapter
-  if (!Hive.isAdapterRegistered(HiveTypeId.notification)) {
-    Hive.registerAdapter(NotificationModelAdapter());
-  }
-
-  // Đăng ký các adapter khác
-  registerAdapters();
+  Hive.registerAdapters();
 
   // Mở các box cơ bản
   await Hive.openBox(LocalStorageKey.localStorage);
@@ -79,19 +71,6 @@ Future<void> _initLocalStorage() async {
     print("Đã mở box notifications thành công: ${box.name}");
   } catch (e) {
     print("Lỗi khi mở box notifications: $e");
-  }
-}
-
-// Tách riêng hàm registerAdapters
-void registerAdapters() {
-  if (!Hive.isAdapterRegistered(HiveTypeId.notification)) {
-    Hive.registerAdapter(NotificationModelAdapter());
-  }
-  if (!Hive.isAdapterRegistered(HiveTypeId.userTokenModel)) {
-    Hive.registerAdapter(UserTokenModelAdapter());
-  }
-  if (!Hive.isAdapterRegistered(HiveTypeId.userModel)) {
-    Hive.registerAdapter(UserModelAdapter());
   }
 }
 

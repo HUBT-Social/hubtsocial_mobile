@@ -1,19 +1,12 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hubtsocial_mobile/main.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
-import 'package:hubtsocial_mobile/src/core/navigation/router.import.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/container_auth.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_auth_otp.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/otp_count_down_timer.dart';
-import 'package:intl/intl.dart';
 import '../../../../core/navigation/route.dart';
 import '../../../../core/presentation/dialog/app_dialog.dart';
 import '../bloc/auth_bloc.dart';

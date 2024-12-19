@@ -10,8 +10,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:firebase_messaging/firebase_messaging.dart' as _i892;
 import 'package:get_it/get_it.dart' as _i174;
-import 'package:hive/hive.dart' as _i979;
-import 'package:hive_flutter/adapters.dart' as _i744;
+import 'package:hive_ce_flutter/adapters.dart' as _i170;
 import 'package:hubtsocial_mobile/src/core/injections/module.dart' as _i107;
 import 'package:hubtsocial_mobile/src/features/auth/data/datasources/auth_remote_data_source.dart'
     as _i953;
@@ -65,21 +64,32 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final registerModule = _$RegisterModule();
-    gh.lazySingleton<_i979.HiveInterface>(() => registerModule.hive);
+    gh.lazySingleton<_i170.HiveInterface>(() => registerModule.hive);
     gh.lazySingleton<_i892.FirebaseMessaging>(
         () => registerModule.firebaseMessaging);
-    gh.lazySingleton<_i953.AuthRemoteDataSource>(
-        () => _i953.AuthRemoteDataSourceImpl(
-              hiveAuth: gh<_i979.HiveInterface>(),
-              messaging: gh<_i892.FirebaseMessaging>(),
-            ));
     gh.lazySingleton<_i592.UserProfileRemoteDataSource>(() =>
         _i592.UserProfileRemoteDataSourceImpl(
-            hiveAuth: gh<_i744.HiveInterface>()));
-    gh.lazySingleton<_i936.AuthRepo>(
-        () => _i457.AuthRepoImpl(gh<_i953.AuthRemoteDataSource>()));
+            hiveAuth: gh<_i170.HiveInterface>()));
     gh.lazySingleton<_i1042.UserRepo>(
         () => _i674.UserRepoImpl(gh<_i592.UserProfileRemoteDataSource>()));
+    gh.lazySingleton<_i953.AuthRemoteDataSource>(
+        () => _i953.AuthRemoteDataSourceImpl(
+              hiveAuth: gh<_i170.HiveInterface>(),
+              messaging: gh<_i892.FirebaseMessaging>(),
+            ));
+    gh.lazySingleton<_i936.AuthRepo>(
+        () => _i457.AuthRepoImpl(gh<_i953.AuthRemoteDataSource>()));
+    gh.lazySingleton<_i789.ChangePasswordUserCase>(
+        () => _i789.ChangePasswordUserCase(gh<_i1042.UserRepo>()));
+    gh.lazySingleton<_i477.InitUserUserCase>(
+        () => _i477.InitUserUserCase(gh<_i1042.UserRepo>()));
+    gh.lazySingleton<_i925.UpdateUserUserCase>(
+        () => _i925.UpdateUserUserCase(gh<_i1042.UserRepo>()));
+    gh.factory<_i527.UserBloc>(() => _i527.UserBloc(
+          initUserProfile: gh<_i477.InitUserUserCase>(),
+          updateUserProfile: gh<_i925.UpdateUserUserCase>(),
+          changedPassword: gh<_i789.ChangePasswordUserCase>(),
+        ));
     gh.lazySingleton<_i411.ForgotPasswordUserCase>(
         () => _i411.ForgotPasswordUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i556.InformationUserCase>(
@@ -99,12 +109,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i488.SignOut>(() => _i488.SignOut(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i287.SignUpUserCase>(
         () => _i287.SignUpUserCase(gh<_i936.AuthRepo>()));
-    gh.lazySingleton<_i789.ChangePasswordUserCase>(
-        () => _i789.ChangePasswordUserCase(gh<_i1042.UserRepo>()));
-    gh.lazySingleton<_i477.InitUserUserCase>(
-        () => _i477.InitUserUserCase(gh<_i1042.UserRepo>()));
-    gh.lazySingleton<_i925.UpdateUserUserCase>(
-        () => _i925.UpdateUserUserCase(gh<_i1042.UserRepo>()));
     gh.factory<_i715.AuthBloc>(() => _i715.AuthBloc(
           signIn: gh<_i627.SignInUserCase>(),
           twoFactor: gh<_i245.TwoFactorUserCase>(),
@@ -117,11 +121,6 @@ extension GetItInjectableX on _i174.GetIt {
           setnewpassword: gh<_i356.SetNewPasswordUserCase>(),
           signOut: gh<_i488.SignOut>(),
           informationUserCase: gh<_i556.InformationUserCase>(),
-        ));
-    gh.factory<_i527.UserBloc>(() => _i527.UserBloc(
-          initUserProfile: gh<_i477.InitUserUserCase>(),
-          updateUserProfile: gh<_i925.UpdateUserUserCase>(),
-          changedPassword: gh<_i789.ChangePasswordUserCase>(),
         ));
     return this;
   }

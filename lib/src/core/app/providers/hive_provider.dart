@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 
 import '../../local_storage/local_storage_key.dart';
 import '../../presentation/dialog/app_dialog.dart';

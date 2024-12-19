@@ -1,4 +1,4 @@
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 
 import 'local_storage_key.dart';
 
