@@ -47,14 +47,16 @@ class UrlImage extends StatelessWidget {
       width: width,
       height: height,
       fit: fit,
-      imageBuilder: (context, imageProvider) => Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: imageProvider,
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)),
-        ),
-      ),
+      // imageBuilder: (context, imageProvider) => Container(
+      //   decoration: BoxDecoration(
+      //     image: DecorationImage(
+      //         image: imageProvider,
+      //         fit: BoxFit.cover,
+      //         colorFilter: ColorFilter.mode(
+      //             const Color.fromARGB(255, 255, 255, 255),
+      //             BlendMode.colorBurn)),
+      //   ),
+      // ),
       progressIndicatorBuilder: (context, url, downloadProgress) =>
           CircularProgressIndicator(value: downloadProgress.progress),
       errorWidget: (context, url, error) => Icon(

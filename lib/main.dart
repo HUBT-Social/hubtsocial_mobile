@@ -1,5 +1,6 @@
 //dev
 
+import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/hive_registrar.g.dart';
 import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_dev.dart'
     as firebaseDev;
@@ -10,7 +11,6 @@ import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_prod.dart'
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:hive_ce_flutter/adapters.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -54,8 +54,7 @@ void main() async {
 }
 
 Future<void> _initLocalStorage() async {
-  final appDocumentDirectory = await getApplicationDocumentsDirectory();
-  await Hive.initFlutter(appDocumentDirectory.path);
+  await Hive.initFlutter();
 
   Hive.registerAdapters();
 

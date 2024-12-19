@@ -148,14 +148,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         },
       );
 
+      var responseData = SignInResponseModel.fromJson(response.body);
+
       if (response.statusCode != 200) {
-        logger.e('Could not finalize api due to: ${response.body.toString()}');
+        logger.e(
+            'Could not finalize api due to: ${responseData.message.toString()}');
         throw ServerException(
-          message: response.body.toString(),
+          message: responseData.message.toString(),
           statusCode: response.statusCode.toString(),
         );
       }
-      var responseData = SignInResponseModel.fromJson(response.body);
 
       if (!responseData.requiresTwoFactor! && responseData.userToken != null) {
         if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
