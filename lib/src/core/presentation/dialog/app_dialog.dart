@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hubtsocial_mobile/src/core/configs/assets.dart';
+import 'package:hubtsocial_mobile/src/constants/assets.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/dialog/confirmation_dialog.dart';

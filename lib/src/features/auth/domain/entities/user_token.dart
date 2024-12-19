@@ -1,10 +1,10 @@
 import 'package:hive_ce_flutter/adapters.dart';
 
-import '../../../../core/constants/hive_type_id.dart';
+import '../../../../core/local_storage/local_storage_type_id.dart';
 
 part 'user_token.g.dart';
 
-@HiveType(typeId: HiveTypeId.userToken)
+@HiveType(typeId: LocalStorageTypeId.userToken)
 class UserToken extends HiveObject {
   @HiveField(0)
   final String accessToken;

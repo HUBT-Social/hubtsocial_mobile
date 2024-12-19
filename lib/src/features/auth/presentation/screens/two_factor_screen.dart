@@ -6,7 +6,7 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_auth_otp.dart';
 
 import '../../../../core/logger/logger.dart';
-import '../../../../core/navigation/route.dart';
+import '../../../../router/route.dart';
 import '../../../../core/presentation/dialog/app_dialog.dart';
 import '../bloc/auth_bloc.dart';
 import '../widgets/container_auth.dart';

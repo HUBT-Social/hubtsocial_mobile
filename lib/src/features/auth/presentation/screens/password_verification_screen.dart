@@ -7,7 +7,7 @@ import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/container_auth.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_auth_otp.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/otp_count_down_timer.dart';
-import '../../../../core/navigation/route.dart';
+import '../../../../router/route.dart';
 import '../../../../core/presentation/dialog/app_dialog.dart';
 import '../bloc/auth_bloc.dart';
 

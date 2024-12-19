@@ -1,4 +1,4 @@
-abstract class HiveTypeId {
+abstract class LocalStorageTypeId {
   static const userToken = 0;
   static const userTokenModel = 1;
   static const user = 2;

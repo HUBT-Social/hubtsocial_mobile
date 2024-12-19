@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../../../core/configs/assets.dart';
-import '../../../../core/navigation/route.dart';
+import '../../../../constants/assets.dart';
+import '../../../../router/route.dart';
 import '../../../../core/presentation/widget/url_image.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 import '../../../user/domain/entities/user.dart';

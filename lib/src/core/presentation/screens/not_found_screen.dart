@@ -2,10 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../configs/assets.dart';
+import '../../../constants/assets.dart';
 
 class NotFoundScreen extends StatefulWidget {
   const NotFoundScreen({super.key, required this.url});

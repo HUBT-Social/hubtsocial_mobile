@@ -1,4 +1,4 @@
-import 'package:hubtsocial_mobile/src/core/errors/exceptions.dart';
+import 'package:hubtsocial_mobile/src/core/api/errors/exceptions.dart';
 import 'package:equatable/equatable.dart';
 
 class Failure extends Equatable {

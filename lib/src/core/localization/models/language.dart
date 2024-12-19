@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import '../../configs/assets.dart';
+import '../../../constants/assets.dart';
 // import '../../gen/assets.gen.dart';
 
 enum Language {

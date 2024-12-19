@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 
-import '../../../../core/constants/hive_type_id.dart';
+import '../../../../core/local_storage/local_storage_type_id.dart';
 import '../../data/gender.dart';
 
 part 'user.g.dart';
 
-@HiveType(typeId: HiveTypeId.user)
+@HiveType(typeId: LocalStorageTypeId.user)
 class User extends Equatable {
   @HiveField(0)
   final String firstName;

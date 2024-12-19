@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/core/navigation/route.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/url_image.dart';
 import 'package:hubtsocial_mobile/src/features/user/domain/entities/user.dart';
 import 'package:hubtsocial_mobile/src/features/user/presentation/bloc/user_bloc.dart';

@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/errors/exceptions.dart';
-import '../../../../core/errors/failure.dart';
+import '../../../../core/api/errors/exceptions.dart';
+import '../../../../core/api/errors/failure.dart';
 import '../../../../core/utils/typedefs.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repos/user_repo.dart';

@@ -9,9 +9,6 @@ abstract class RegisterModule {
 
   @LazySingleton()
   FirebaseMessaging get firebaseMessaging => FirebaseMessaging.instance;
-
-  // @LazySingleton()
-  // FirebaseStorage get firebaseStorage => FirebaseStorage.instance;
 }
 
 class $RegisterModule extends RegisterModule {}

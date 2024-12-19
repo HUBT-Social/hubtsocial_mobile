@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/string.dart';
 
-import '../navigation/router.import.dart';
+import '../../router/router.import.dart';
 
 abstract class Validators {
   Validators._();

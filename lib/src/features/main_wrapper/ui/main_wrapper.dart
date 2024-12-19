@@ -1,7 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hubtsocial_mobile/src/core/configs/assets.dart';
+import 'package:hubtsocial_mobile/src/constants/assets.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 import 'widgets/navigation_item.dart';

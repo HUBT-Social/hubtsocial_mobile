@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:hubtsocial_mobile/src/core/errors/exceptions.dart';
-import 'package:hubtsocial_mobile/src/core/errors/failure.dart';
+import 'package:hubtsocial_mobile/src/core/api/errors/exceptions.dart';
+import 'package:hubtsocial_mobile/src/core/api/errors/failure.dart';
 import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
 import 'package:injectable/injectable.dart';
 import 'package:hubtsocial_mobile/src/features/auth/data/datasources/auth_remote_data_source.dart';

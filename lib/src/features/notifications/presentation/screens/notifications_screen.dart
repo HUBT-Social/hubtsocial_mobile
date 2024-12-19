@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:hubtsocial_mobile/src/core/navigation/router.import.dart';
+import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:intl/intl.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';

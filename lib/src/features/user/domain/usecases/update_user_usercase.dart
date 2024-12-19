@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:hubtsocial_mobile/src/core/usecases/usecases.dart';
+import 'package:hubtsocial_mobile/src/core/data/domain/usecases/usecases.dart';
 import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
 import 'package:hubtsocial_mobile/src/features/user/domain/repos/user_repo.dart';
 

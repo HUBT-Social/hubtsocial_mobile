@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:hive_ce_flutter/adapters.dart';
-import 'package:hubtsocial_mobile/src/core/configs/end_point.dart';
+import 'package:hubtsocial_mobile/src/constants/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/api/api_request.dart';
-import '../../../../core/errors/exceptions.dart';
+import '../../../../core/api/errors/exceptions.dart';
 import '../../../auth/domain/entities/user_token.dart';
 import '../models/user_model.dart';
 

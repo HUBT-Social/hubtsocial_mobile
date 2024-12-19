@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/app/my_app.dart';
-import 'package:hubtsocial_mobile/src/core/configs/environment.dart';
+import 'package:hubtsocial_mobile/src/constants/environment.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 

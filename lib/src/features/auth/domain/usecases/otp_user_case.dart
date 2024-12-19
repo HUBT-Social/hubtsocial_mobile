@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_response.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/usecases/usecases.dart';
+import '../../../../core/data/domain/usecases/usecases.dart';
 import '../../../../core/utils/typedefs.dart';
 import '../repos/auth_repo.dart';
 

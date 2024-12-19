@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../../../core/configs/assets.dart';
-import '../../../../core/navigation/route.dart';
+import '../../../../constants/assets.dart';
+import '../../../../router/route.dart';
 
 class PasswordSuccessfulScreen extends StatefulWidget {
   const PasswordSuccessfulScreen({super.key});

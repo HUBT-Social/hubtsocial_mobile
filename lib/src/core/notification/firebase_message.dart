@@ -5,8 +5,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
-import '../navigation/route.dart';
-import '../navigation/router.import.dart';
+import '../../router/route.dart';
+import '../../router/router.import.dart';
 import 'local_message.dart';
 
 class FirebaseMessage {

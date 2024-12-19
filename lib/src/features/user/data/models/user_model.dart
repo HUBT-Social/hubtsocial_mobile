@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/features/user/domain/entities/user.dart';
 
-import '../../../../core/constants/hive_type_id.dart';
+import '../../../../core/local_storage/local_storage_type_id.dart';
 import '../gender.dart';
 
 part 'user_model.g.dart';
 
-@HiveType(typeId: HiveTypeId.userModel)
+@HiveType(typeId: LocalStorageTypeId.userModel)
 class UserModel extends User {
   const UserModel({
     required super.firstName,

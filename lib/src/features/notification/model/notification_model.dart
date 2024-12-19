@@ -1,10 +1,10 @@
 import 'package:hive_ce_flutter/adapters.dart';
 
-import '../../../core/constants/hive_type_id.dart';
+import '../../../core/local_storage/local_storage_type_id.dart';
 
 part 'notification_model.g.dart';
 
-@HiveType(typeId: HiveTypeId.notification)
+@HiveType(typeId: LocalStorageTypeId.notification)
 class NotificationModel extends HiveObject {
   @HiveField(0)
   final String id;

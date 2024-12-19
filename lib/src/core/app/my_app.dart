@@ -5,11 +5,11 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';
-import 'package:hubtsocial_mobile/src/core/style/app_font.dart';
-import 'package:hubtsocial_mobile/src/core/style/app_theme.dart';
+import 'package:hubtsocial_mobile/src/constants/app_font.dart';
+import 'package:hubtsocial_mobile/src/constants/app_theme.dart';
 import 'package:provider/provider.dart';
 import '../localization/bloc/localization_bloc.dart';
-import '../navigation/router.import.dart';
+import '../../router/router.import.dart';
 import '../theme/bloc/theme_bloc.dart';
 
 class MyApp extends StatelessWidget {

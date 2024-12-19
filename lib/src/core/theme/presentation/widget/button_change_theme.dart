@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/core/navigation/router.import.dart';
+import 'package:hubtsocial_mobile/src/router/router.import.dart';
 
 import '../../bloc/theme_bloc.dart';
 import '../../utils/change_theme_bottom_sheet.dart';

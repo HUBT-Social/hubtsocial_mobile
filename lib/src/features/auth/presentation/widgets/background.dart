@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hubtsocial_mobile/src/core/configs/assets.dart';
+import 'package:hubtsocial_mobile/src/constants/assets.dart';
 
 class Background extends StatelessWidget {
   const Background({

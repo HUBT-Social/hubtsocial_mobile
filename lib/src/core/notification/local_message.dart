@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import '../navigation/route.dart';
-import '../navigation/router.import.dart';
+import '../../router/route.dart';
+import '../../router/router.import.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
