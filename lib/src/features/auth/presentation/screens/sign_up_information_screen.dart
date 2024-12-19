@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
-import 'package:hubtsocial_mobile/src/core/presentation/input/input_field.dart';
+import 'package:hubtsocial_mobile/src/core/presentation/widget/input_field.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/user/data/gender.dart';
 import '../../../../constants/assets.dart';

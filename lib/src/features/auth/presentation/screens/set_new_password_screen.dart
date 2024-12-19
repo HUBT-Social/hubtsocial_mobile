@@ -6,7 +6,7 @@ import 'package:hubtsocial_mobile/src/features/auth/presentation/bloc/auth_bloc.
 import '../../../../core/logger/logger.dart';
 import '../../../../router/route.dart';
 import '../../../../core/presentation/dialog/app_dialog.dart';
-import '../../../../core/presentation/input/input_field.dart';
+import '../../../../core/presentation/widget/input_field.dart';
 import '../widgets/container_auth.dart';
 
 class SetNewPasswordScreen extends StatefulWidget {
