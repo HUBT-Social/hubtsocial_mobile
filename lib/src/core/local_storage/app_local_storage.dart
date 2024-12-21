@@ -3,6 +3,7 @@ import 'package:hive_ce_flutter/adapters.dart';
 import 'local_storage_key.dart';
 
 class AppLocalStorage {
+  static String AppLocalStoragePath = "";
   static String currentLanguageCode = "";
   static String uniqueDeviceId = "";
   static final localBox = Hive.box(LocalStorageKey.localStorage);

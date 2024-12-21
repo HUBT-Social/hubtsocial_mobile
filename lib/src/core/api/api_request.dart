@@ -8,7 +8,7 @@ import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/auth/data/models/user_token_model.dart';
 import 'package:jwt_decode_full/jwt_decode_full.dart';
 
-import '../../constants/end_point.dart';
+import '../../constants/end_points.dart';
 import '../local_storage/local_storage_key.dart';
 
 class APIRequest {
@@ -139,31 +139,36 @@ class APIRequest {
     UserTokenModel token =
         hiveAuth.box(LocalStorageKey.token).get(LocalStorageKey.userToken);
     if (isExpiredToken(token.accessToken)) {
-      final response = await APIRequest.post(
-        url: EndPoint.authRefreshToken,
-        body: {
-          "refreshToken": token.refreshToken,
-        },
-        token: token.accessToken,
-      );
-
-      if (response.statusCode == 401) {
-        var tokenBox = Hive.box(LocalStorageKey.token);
-        tokenBox.clear();
-      }
-
-      if (response.statusCode != 200) {
-        logger.e(response.body);
-        throw ServerException(
-          message: response.statusCode.toString(),
-          statusCode: response.statusCode.toString(),
+      try {
+        final response = await APIRequest.post(
+          url: EndPoints.authRefreshToken,
+          body: {
+            "refreshToken": token.refreshToken,
+          },
+          token: token.accessToken,
         );
+
+        if (response.statusCode == 401) {
+          var tokenBox = Hive.box(LocalStorageKey.token);
+          tokenBox.clear();
+        }
+
+        if (response.statusCode != 200) {
+          logger.e(response.body);
+          // throw ServerException(
+          //   message: response.statusCode.toString(),
+          //   statusCode: response.statusCode.toString(),
+          // );
+          return token;
+        }
+        var newToken = UserTokenModel.fromJson(response.body);
+        await hiveAuth
+            .box(LocalStorageKey.token)
+            .put(LocalStorageKey.userToken, newToken);
+        return newToken;
+      } catch (e) {
+        return token;
       }
-      var newToken = UserTokenModel.fromJson(response.body);
-      await hiveAuth
-          .box(LocalStorageKey.token)
-          .put(LocalStorageKey.userToken, newToken);
-      return newToken;
     }
     return token;
   }

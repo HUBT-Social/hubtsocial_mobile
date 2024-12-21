@@ -49,7 +49,7 @@ class UserModel extends User {
         "phoneNumber": phoneNumber,
       };
 
-  factory UserModel.fromMap(Map<String, dynamic> json) {
+  factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       firstName: json["firstName"],
       lastName: json["lastName"],
@@ -62,7 +62,4 @@ class UserModel extends User {
   }
 
   String toJson() => json.encode(toMap());
-
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

@@ -1,10 +1,13 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:hive_ce_flutter/adapters.dart';
-import 'package:hubtsocial_mobile/src/constants/end_point.dart';
+import 'package:hubtsocial_mobile/src/constants/end_points.dart';
+import 'package:hubtsocial_mobile/src/core/api/dio/dio_service.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/api/api_request.dart';
+import '../../../../core/api/dio/api_service.dart';
 import '../../../../core/api/errors/exceptions.dart';
 import '../../../auth/domain/entities/user_token.dart';
 import '../models/user_model.dart';
@@ -39,20 +42,19 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
   @override
   Future<UserModel> initUserProfile() async {
     try {
-      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
+      final response = await DioService.instance.dio.get(EndPoints.userGetUser);
 
-      final response = await APIRequest.get(
-        url: EndPoint.userGetUser,
-        token: userToken.accessToken,
-      );
       if (response.statusCode != 200) {
-        logger.e('Could not finalize api due to: ${response.body.toString()}');
+        logger.e('Could not finalize api due to: ${response.data.toString()}');
         throw ServerException(
-          message: response.body,
+          message: response.data,
           statusCode: response.statusCode.toString(),
         );
       }
-      return UserModel.fromJson(response.body);
+      return UserModel.fromJson(response.data);
+    } on DioException catch (err) {
+      logger.e(err.toString());
+      rethrow;
     } on ServerException {
       rethrow;
     } catch (e, s) {
@@ -119,7 +121,7 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
       UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
 
       final response = await APIRequest.post(
-        url: '${EndPoint.apiUrl}/change-password',
+        url: '${EndPoints.apiUrl}/change-password',
         body: {
           'oldPassword': oldPassword,
           'newPassword': newPassword,

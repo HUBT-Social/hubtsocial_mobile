@@ -22,8 +22,8 @@ import 'package:hubtsocial_mobile/src/core/app/my_app.dart';
 import 'package:hubtsocial_mobile/src/constants/environment.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
-
 import 'package:path_provider/path_provider.dart';
+
 import 'src/core/injections/injections.dart';
 import 'src/core/local_storage/local_storage_key.dart';
 import 'src/core/logger/logger.dart';
@@ -37,7 +37,8 @@ class NavigationService {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoRouter.optionURLReflectsImperativeAPIs = true;
-
+  AppLocalStorage.AppLocalStoragePath =
+      (await getApplicationSupportDirectory()).path;
   await dotenv.load(fileName: Environment.fileName);
 
   await configureDependencies();
@@ -54,7 +55,7 @@ void main() async {
 }
 
 Future<void> _initLocalStorage() async {
-  await Hive.initFlutter();
+  await Hive.initFlutter(AppLocalStorage.AppLocalStoragePath);
 
   Hive.registerAdapters();
 

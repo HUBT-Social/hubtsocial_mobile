@@ -1,7 +1,15 @@
 import 'environment.dart';
 
-class EndPoint {
+class EndPoints {
+  EndPoints._();
+  static const cacheDuration = 7;
+
+  static const Duration receiveTimeout = Duration(seconds: 5);
+
+  static const Duration connectionTimeout = Duration(seconds: 3);
+
   static String get apiUrl => Environment.getApiUrl;
+
   static String get auth => "$apiUrl/auth";
 
   static String get authSignIn => "$auth/sign-in";

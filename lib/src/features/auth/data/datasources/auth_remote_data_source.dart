@@ -1,6 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_ce_flutter/adapters.dart';
-import 'package:hubtsocial_mobile/src/constants/end_point.dart';
+import 'package:hubtsocial_mobile/src/constants/end_points.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/user/data/gender.dart';
 import 'package:injectable/injectable.dart';
@@ -64,7 +64,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       {required String otpPassword}) async {
     try {
       final response = await APIRequest.post(
-        url: EndPoint.twoFactorPassword,
+        url: EndPoints.twoFactorPassword,
         body: {'otpPassword': otpPassword},
       );
 
@@ -107,7 +107,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> verifyPassword({required String postcode}) async {
     try {
       final response = await APIRequest.post(
-        url: EndPoint.authVerifyPassword,
+        url: EndPoints.authVerifyPassword,
         body: {
           'postcode': postcode,
         },
@@ -141,7 +141,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }) async {
     try {
       final response = await APIRequest.post(
-        url: EndPoint.authSignIn,
+        url: EndPoints.authSignIn,
         body: {
           'userName': userName,
           'password': password,
@@ -222,7 +222,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     logger.i('phone number :$userName, name: $email, password: $password');
     try {
       final response = await APIRequest.post(
-        url: EndPoint.authSignUp,
+        url: EndPoints.authSignUp,
         body: {
           "userName": userName,
           "email": email,
@@ -259,7 +259,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }) async {
     try {
       final response = await APIRequest.post(
-        url: '${EndPoint.apiUrl}/reset-password',
+        url: '${EndPoints.apiUrl}/reset-password',
         body: {
           'newPassword': newPassword,
         },
@@ -300,7 +300,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         String fcmToken = tokenBox.get('fcmToken');
         var response = await APIRequest.delete(
           // url: ApiConstants.devicesEndpoint,
-          url: EndPoint.apiUrl,
+          url: EndPoints.apiUrl,
           body: {
             LocalStorageKey.token: fcmToken,
           },
@@ -322,7 +322,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<SignInResponseModel> twoFactor({required String postcode}) async {
     try {
       final response = await APIRequest.post(
-        url: EndPoint.authSignInTwoFactor,
+        url: EndPoints.authSignInTwoFactor,
         body: {
           'postcode': postcode,
         },
@@ -365,7 +365,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<SignInResponseModel> verifyEmail({required String postcode}) async {
     try {
       final response = await APIRequest.post(
-        url: EndPoint.authSignUpVerifyEmail,
+        url: EndPoints.authSignUpVerifyEmail,
         body: {
           'postcode': postcode,
         },
@@ -409,7 +409,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       {required String usernameOrEmail}) async {
     try {
       final response = await APIRequest.post(
-        url: EndPoint.authForgotPassword,
+        url: EndPoints.authForgotPassword,
         body: {
           'usernameOrEmail': usernameOrEmail,
         },
@@ -442,7 +442,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       {required String newPassword, required String confirmNewPassword}) async {
     try {
       final response = await APIRequest.post(
-        url: EndPoint.authSetNewPassword,
+        url: EndPoints.authSetNewPassword,
         body: {
           "newPassword": newPassword,
           "confirmNewPassword": confirmNewPassword,
@@ -481,7 +481,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
 
       final response = await APIRequest.post(
-        url: EndPoint.informationUser,
+        url: EndPoints.informationUser,
         token: userToken.accessToken,
         body: {
           "firstName": firstName,
