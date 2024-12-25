@@ -480,7 +480,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
 
-      final response = await APIRequest.post(
+      final response = await APIRequest.put(
         url: EndPoint.informationUser,
         token: userToken.accessToken,
         body: {
