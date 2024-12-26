@@ -148,7 +148,6 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             ),
           ),
-          ButtonChangeLocalization(),
           FilledButton(
             onPressed: () {
               context.read<AuthBloc>().add(const SignOutEvent());

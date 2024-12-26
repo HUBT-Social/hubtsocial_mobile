@@ -19,10 +19,10 @@ class _TimetableScreenState extends State<TimetableScreen> {
           title: context.loc.timetable,
         )
       ],
-      body: ListView(
+      body: CustomScrollView(
         // controller: scrollController,
         physics: const BouncingScrollPhysics(),
-        children: [],
+        slivers: [],
       ),
     );
   }

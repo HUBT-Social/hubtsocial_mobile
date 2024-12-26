@@ -441,7 +441,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> setNewPassword(
       {required String newPassword, required String confirmNewPassword}) async {
     try {
-      final response = await APIRequest.post(
+      final response = await APIRequest.put(
         url: EndPoint.authSetNewPassword,
         body: {
           "newPassword": newPassword,

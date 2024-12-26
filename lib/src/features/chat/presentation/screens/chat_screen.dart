@@ -43,7 +43,11 @@ class _ChatScreenState extends State<ChatScreen> {
           return 'Item $id';
         }).toList());
 
-        _pagingController.appendPage(items, pageKey + 1);
+        if (items.isEmpty) {
+          _pagingController.error = "items isEmpty";
+        } else {
+          _pagingController.appendPage(items, pageKey + 1);
+        }
       }
     } catch (e) {
       _pagingController.error = e;
@@ -82,6 +86,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 itemBuilder: (context, item, index) => ListTile(
                   title: Text(item),
                 ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 100,
               ),
             ),
           ],
