@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/features/chat/presentation/widgets/chat_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
@@ -31,7 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
     try {
       final response = await APIRequest.get(
           url:
-              "https://jsonplaceholder.typicode.com/posts?_limit=20&_page=$pageKey");
+              "https://jsonplaceholder.typicode.com/posts?_limit=10&_page=$pageKey");
 
       if (response.statusCode == 200) {
         final List newItems = json.decode(response.body);
@@ -76,15 +77,34 @@ class _ChatScreenState extends State<ChatScreen> {
           physics: const BouncingScrollPhysics(),
           slivers: <Widget>[
             SliverToBoxAdapter(
-              child: Text("data"),
+              child: Padding(
+                padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: "Search...",
+                    hintStyle: TextStyle(color: Colors.grey.shade600),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: Colors.grey.shade600,
+                      size: 20,
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+                    contentPadding: EdgeInsets.all(8),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.grey.shade100)),
+                  ),
+                ),
+              ),
             ),
             PagedSliverList(
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate<String>(
                 animateTransitions: true,
                 transitionDuration: const Duration(milliseconds: 500),
-                itemBuilder: (context, item, index) => ListTile(
-                  title: Text(item),
+                itemBuilder: (context, item, index) => ChatCard(
+                  chatModel: item,
                 ),
               ),
             ),
