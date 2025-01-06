@@ -23,7 +23,6 @@ import 'package:hubtsocial_mobile/src/constants/environment.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 
-import 'package:path_provider/path_provider.dart';
 import 'src/core/injections/injections.dart';
 import 'src/core/local_storage/local_storage_key.dart';
 import 'src/core/logger/logger.dart';

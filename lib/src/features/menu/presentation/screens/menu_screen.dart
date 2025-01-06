@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/localization/bloc/localization_bloc.dart';
-import 'package:hubtsocial_mobile/src/core/localization/ui/widget/button_change_localization.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/features/menu/presentation/widgets/user_card_in_menu.dart';
 
@@ -148,7 +147,6 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             ),
           ),
-          ButtonChangeLocalization(),
           FilledButton(
             onPressed: () {
               context.read<AuthBloc>().add(const SignOutEvent());
