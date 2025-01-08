@@ -53,7 +53,7 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
                 AppDialog.errorMessage(state.message, context));
           } else if (state is VerifyEmailSuccess) {
             AppDialog.closeDialog();
-            AppRoute.signUpInformation.pushReplacement(context);
+            AppRoute.signUpInformation.go(context);
           } else if (state is AuthLoading) {
             AppDialog.showLoadingDialog(message: 'Verify');
           } else {

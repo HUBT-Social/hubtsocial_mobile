@@ -29,7 +29,7 @@ class _ButtonBackState extends State<ButtonBack> {
         ? IconButton(
             icon: Icon(
               Icons.arrow_back_ios_new,
-              color: context.colorScheme.surface,
+              color: context.colorScheme.onSurface,
               size: 32.dg,
             ),
             onPressed: () {
