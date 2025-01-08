@@ -53,6 +53,25 @@ StatefulShellRoute _mainRoute() {
           GoRoute(
             path: AppRoute.chat.path,
             builder: (context, state) => const ChatScreen(),
+            routes: [
+              GoRoute(
+                path: 'room',
+                pageBuilder: (context, state) {
+                  return CustomTransitionPage(
+                    key: state.pageKey,
+                    transitionsBuilder: (
+                      context,
+                      animation,
+                      secondaryAnimation,
+                      child,
+                    ) =>
+                        FadeTransition(opacity: animation, child: child),
+                    child: RoomChatScreen(
+                        id: state.uri.queryParameters['id'].toString()),
+                  );
+                },
+              ),
+            ],
           ),
         ],
       ),

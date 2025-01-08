@@ -28,6 +28,7 @@ enum AppRoute {
 
   // chat
   chat('/chat'),
+  roomChat('/chat/room'),
   // chat
 
   // timetable

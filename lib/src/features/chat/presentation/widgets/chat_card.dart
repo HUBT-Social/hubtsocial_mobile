@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
 
 import '../../../../core/presentation/widget/url_image.dart';
 
@@ -62,7 +63,10 @@ class _ChatCardState extends State<ChatCard> {
           ],
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            AppRoute.roomChat
+                .go(context, queryParameters: {"id": widget.chatModel});
+          },
           child: SizedBox(
               height: 60.sp,
               width: double.infinity,

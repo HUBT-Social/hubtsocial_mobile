@@ -22,6 +22,7 @@ import '../features/auth/presentation/screens/set_new_password_screen.dart';
 import '../features/auth/presentation/screens/sign_up_information_screen.dart';
 import '../features/auth/presentation/screens/sign_up_screen.dart';
 import '../features/chat/presentation/screens/chat_screen.dart';
+import '../features/chat/presentation/screens/room_chat_screen.dart';
 import '../features/main_wrapper/ui/main_wrapper.dart';
 import '../features/notifications/presentation/screens/notifications_screen.dart';
 import '../features/profile/presentation/screens/profile_screen.dart';
