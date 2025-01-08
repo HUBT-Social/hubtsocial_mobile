@@ -128,6 +128,24 @@ StatefulShellRoute _mainRoute() {
                     child: const ProfileScreen(),
                   );
                 },
+                routes: [
+                  GoRoute(
+                    path: 'profile2',
+                    pageBuilder: (context, state) {
+                      return CustomTransitionPage(
+                        key: state.pageKey,
+                        transitionsBuilder: (
+                          context,
+                          animation,
+                          secondaryAnimation,
+                          child,
+                        ) =>
+                            FadeTransition(opacity: animation, child: child),
+                        child: const ProfileScreen2(),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

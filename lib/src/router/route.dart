@@ -42,6 +42,7 @@ enum AppRoute {
   // menu
   menu('/menu'),
   profile('/menu/profile'),
+  profile2('/menu/profile/profile2'),
   // menu
   ;
 

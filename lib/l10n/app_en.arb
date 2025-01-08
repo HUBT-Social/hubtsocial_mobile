@@ -139,5 +139,17 @@
     }
   },
   "timeFormat": "dd/MM/yyyy HH:mm",
-  "@timeFormat": {}
+  "@timeFormat": {},
+  "follow": "Follow",
+  "@follow": {},
+  "share": "Share",
+  "@share": {},
+  "post": "Post",
+  "@post": {},
+  "reply": "Reply",
+  "@reply": {},
+  "repost": "Repost",
+  "@repost": {},
+  "camera": "Camera",
+  "@camera": {}
 }

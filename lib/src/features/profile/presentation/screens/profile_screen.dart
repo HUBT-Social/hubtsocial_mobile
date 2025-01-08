@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../core/app/providers/user_provider.dart';
-import '../../../user/domain/entities/user.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -11,24 +11,203 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer<UserProvider>(
-        builder: (BuildContext context, UserProvider value, Widget? child) {
-          if (value.user != null) {
-            User user = value.user!;
-            return Scaffold(
-              appBar: AppBar(
-                title: Text(user.lastName),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          context.loc.profile,
+          style: const TextStyle(color: Colors.black),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Container(
+              width: 8,
+              height: 8,
+              decoration: const BoxDecoration(
+                color: Colors.green,
+                shape: BoxShape.circle,
               ),
-              body: Text(user.lastName),
-            );
-          } else {
-            return Text("2");
-          }
-        },
+            ),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Consumer<UserProvider>(
+                  builder: (context, userProvider, child) {
+                    final user = userProvider.user;
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${user?.firstName ?? ''} ${user?.lastName ?? ''}',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 11),
+                            Text(
+                              '@${user?.lastName ?? ''}',
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'status...',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Avatar bên phải
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundImage: user?.avatarUrl != null
+                              ? NetworkImage(user!.avatarUrl)
+                              : const AssetImage('assets/icons/app_icon.png')
+                                  as ImageProvider,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                // Buttons
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          AppRoute.profile2.push(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF4CAF50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        child: Text(
+                          context.loc.follow,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF4CAF50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        child: Text(
+                          context.loc.share,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          TabBar(
+            controller: _tabController,
+            labelColor: Colors.black,
+            unselectedLabelColor: Colors.grey,
+            indicatorColor: Colors.black,
+            tabs: [
+              Tab(text: context.loc.post),
+              Tab(text: context.loc.reply),
+              Tab(text: context.loc.repost),
+            ],
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                // Posts Grid
+                GridView.builder(
+                  padding: const EdgeInsets.all(8),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
+                  ),
+                  itemCount: 6,
+                  itemBuilder: (context, index) {
+                    final colors = [
+                      const Color(0xFFFFB6B6), // Light red
+                      const Color(0xFFFF0000), // Red
+                      const Color(0xFF90EE90), // Light green
+                      const Color(0xFF4B0082), // Indigo
+                      const Color(0xFFFFE4E1), // Misty rose
+                      const Color(0xFFFFDAB9), // Peach
+                    ];
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: colors[index],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    );
+                  },
+                ),
+                Center(child: Text(context.loc.reply)),
+                Center(child: Text(context.loc.repost)),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
