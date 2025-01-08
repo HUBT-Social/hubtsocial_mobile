@@ -25,6 +25,7 @@ import '../features/chat/presentation/screens/chat_screen.dart';
 import '../features/main_wrapper/ui/main_wrapper.dart';
 import '../features/notifications/presentation/screens/notifications_screen.dart';
 import '../features/profile/presentation/screens/profile_screen.dart';
+import '../features/profile/presentation/screens/profile_screen2.dart';
 import '../features/timetable/presentation/screens/timetable_screen.dart';
 import '../features/user/presentation/bloc/user_bloc.dart';
 import '../core/injections/injections.dart';

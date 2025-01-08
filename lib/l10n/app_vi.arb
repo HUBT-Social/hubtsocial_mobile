@@ -139,5 +139,17 @@
     }
   },
   "timeFormat": "dd/MM/yyyy HH:mm",
-  "@timeFormat": {}
+  "@timeFormat": {},
+  "follow": "Theo dõi",
+  "@follow": {},
+  "share": "Chia sẻ",
+  "@share": {},
+  "post": "Bài viết",
+  "@post": {},
+  "reply": "Trả lời",
+  "@reply": {},
+  "repost": "Chia sẻ lại",
+  "@repost": {},
+  "camera": "Máy ảnh",
+  "@camera": {}
 }
