@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 
@@ -20,7 +21,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
         children: [
           SizedBox(),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 60),
+            padding: EdgeInsets.symmetric(horizontal: 60.r),
             child: Text(
               context.loc.app_name,
               textAlign: TextAlign.center,
@@ -31,7 +32,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   Shadow(
                     color: context.colorScheme.shadow.withAlpha(92),
                     offset: Offset(0, 4),
-                    blurRadius: 24,
+                    blurRadius: 24.r,
                   ),
                 ],
               ),
@@ -43,23 +44,23 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
             decoration: BoxDecoration(
               color: context.colorScheme.surface,
               borderRadius: BorderRadiusDirectional.only(
-                topStart: Radius.circular(24),
-                topEnd: Radius.circular(24),
+                topStart: Radius.circular(24.r),
+                topEnd: Radius.circular(24.r),
               ),
               boxShadow: [
                 BoxShadow(
                   color: context.colorScheme.shadow.withAlpha(192),
-                  blurRadius: 24,
+                  blurRadius: 24.r,
                 ),
               ],
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 36, vertical: 24),
+              padding: EdgeInsets.symmetric(horizontal: 36.r, vertical: 24.r),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 12),
+                  SizedBox(height: 12.h),
                   Text(
                     context.loc.welcome,
                     style: context.textTheme.displayMedium?.copyWith(
@@ -71,7 +72,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                     style: context.textTheme.labelLarge
                         ?.copyWith(color: context.colorScheme.tertiary),
                   ),
-                  SizedBox(height: 24),
+                  SizedBox(height: 24.h),
                   FilledButton(
                     onPressed: () {
                       AppRoute.signIn.pushReplacement(context);
@@ -87,7 +88,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 12.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

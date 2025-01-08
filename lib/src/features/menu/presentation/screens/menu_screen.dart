@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/localization/bloc/localization_bloc.dart';
@@ -37,30 +38,30 @@ class _MenuScreenState extends State<MenuScreen> {
         physics: const BouncingScrollPhysics(),
         children: [
           UserCardInMenu(),
-          SizedBox(height: 6),
+          SizedBox(height: 6.h),
           Container(
-            height: 2,
+            height: 2.h,
             width: double.infinity,
             color: context.colorScheme.surfaceContainerHighest,
           ),
-          SizedBox(height: 6),
+          SizedBox(height: 6.h),
           InkWell(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12),
-              topRight: Radius.circular(12),
+              topLeft: Radius.circular(12.r),
+              topRight: Radius.circular(12.r),
             ),
             onTap: () => ThemeUtils.showThemeBottomSheet(
                 navigatorKey.currentContext ?? context),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6),
+              padding: EdgeInsets.symmetric(horizontal: 6.r),
               child: Container(
                 height: 48,
-                padding: EdgeInsets.symmetric(horizontal: 12),
+                padding: EdgeInsets.symmetric(horizontal: 12.r),
                 decoration: BoxDecoration(
                   color: context.colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
+                    topLeft: Radius.circular(12.r),
+                    topRight: Radius.circular(12.r),
                   ),
                 ),
                 child: Row(
@@ -76,11 +77,11 @@ class _MenuScreenState extends State<MenuScreen> {
                                   BlendMode.srcIn),
                               state.selectedTheme.image,
                               fit: BoxFit.fitHeight,
-                              height: 28,
+                              height: 28.h,
                             );
                           },
                         ),
-                        SizedBox(width: 12),
+                        SizedBox(width: 12.h),
                         Text(
                           "Đổi giao diện",
                           style: context.textTheme.titleSmall,
@@ -96,24 +97,24 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             ),
           ),
-          SizedBox(height: 6),
+          SizedBox(height: 6.h),
           InkWell(
             borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(12),
-              bottomRight: Radius.circular(12),
+              bottomLeft: Radius.circular(12.r),
+              bottomRight: Radius.circular(12.r),
             ),
             onTap: () => LocalizatioUtils.showLanguageBottomSheet(
                 navigatorKey.currentContext ?? context),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6),
+              padding: EdgeInsets.symmetric(horizontal: 6.r),
               child: Container(
-                height: 48,
-                padding: EdgeInsets.symmetric(horizontal: 12),
+                height: 48.h,
+                padding: EdgeInsets.symmetric(horizontal: 12.r),
                 decoration: BoxDecoration(
                   color: context.colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(12),
-                    bottomRight: Radius.circular(12),
+                    bottomLeft: Radius.circular(12.r),
+                    bottomRight: Radius.circular(12.r),
                   ),
                 ),
                 child: Row(
@@ -126,12 +127,12 @@ class _MenuScreenState extends State<MenuScreen> {
                             return Image.asset(
                               state.selectedLanguage.image,
                               fit: BoxFit.fitHeight,
-                              height: 28,
-                              width: 28,
+                              height: 28.r,
+                              width: 28.r,
                             );
                           },
                         ),
-                        SizedBox(width: 12),
+                        SizedBox(width: 12.w),
                         Text(
                           "Đổi ngôn ngữ",
                           style: context.textTheme.titleSmall,

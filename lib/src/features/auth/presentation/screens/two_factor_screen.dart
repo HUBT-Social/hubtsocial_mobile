@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/input_auth_otp.dart';
@@ -75,7 +76,7 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                   color: context.colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 12.h),
               Text(
                 context.loc.enter_otp_message(widget.maskEmail),
                 textAlign: TextAlign.center,
@@ -83,7 +84,7 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                   color: context.colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 12.h),
               Form(
                 key: _formKey,
                 child: InputAuthOTP(
@@ -93,7 +94,7 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                   },
                 ),
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 12.h),
               FilledButton(
                 onPressed: () {
                   _onTwoFactorButtonClicked();
@@ -108,7 +109,7 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 12.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

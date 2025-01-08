@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/input_field.dart';
@@ -48,7 +49,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   color: context.colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 12.h),
               Text(
                 context.loc.enter_message,
                 textAlign: TextAlign.center,
@@ -56,13 +57,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   color: context.colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 12.h),
               Form(
                 key: _formKey,
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      padding: EdgeInsets.symmetric(vertical: 6.r),
                       child: InputField.name(
                         controller: _usernameOrEmailController,
                         textInputAction: TextInputAction.next,
@@ -79,7 +80,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 12.h),
               FilledButton(
                 onPressed: () {
                   _onSignInButtonClicked();
@@ -95,7 +96,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 12.h),
               InkWell(
                 autofocus: false,
                 onTap: () {

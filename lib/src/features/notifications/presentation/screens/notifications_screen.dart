@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:intl/intl.dart';
@@ -43,26 +44,21 @@ class _NotificationsState extends State<NotificationsScreen> {
                 children: [
                   Icon(
                     Icons.notifications_off_outlined,
-                    size: 80,
+                    size: 80.dg,
                     color: Colors.grey[400],
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    context.loc.noNotifications,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[600],
-                    ),
-                  ),
+                  SizedBox(height: 16.h),
+                  Text(context.loc.noNotifications,
+                      style: context.textTheme.bodyLarge),
                 ],
               ),
             );
           }
 
           return ListView.separated(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(12.r),
             itemCount: box.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 8),
+            separatorBuilder: (context, index) => SizedBox(height: 8.h),
             itemBuilder: (context, index) {
               final notification = box.getAt(box.length - 1 - index);
               return _NotificationItem(
@@ -133,24 +129,24 @@ class _NotificationItem extends StatelessWidget {
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         side: BorderSide(
           color: Colors.grey.withOpacity(0.2),
-          width: 1,
+          width: 1.w,
         ),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         child: Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16.r),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 8,
-                height: 8,
-                margin: const EdgeInsets.only(top: 6, right: 12),
+                width: 8.w,
+                height: 8.h,
+                margin: EdgeInsets.only(top: 6.r, right: 12.r),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: notification.isRead ? Colors.transparent : Colors.blue,
@@ -163,53 +159,38 @@ class _NotificationItem extends StatelessWidget {
                     Text(
                       notification.title ?? '',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16.dg,
                         fontWeight: notification.isRead
                             ? FontWeight.normal
                             : FontWeight.bold,
                         color: Colors.black87,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      notification.body ?? '',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
-                    ),
+                    SizedBox(height: 4.h),
+                    Text(notification.body ?? '',
+                        style: context.textTheme.labelMedium),
                     if (notification.data != null &&
                         notification.data!.isNotEmpty)
                       Padding(
-                        padding: const EdgeInsets.only(top: 8),
+                        padding: EdgeInsets.only(top: 8.r),
                         child: Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: EdgeInsets.all(8.r),
                           decoration: BoxDecoration(
                             color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(8.r),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: notification.data!.entries.map((entry) {
-                              return Text(
-                                '${entry.key}: ${entry.value}',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey[700],
-                                ),
-                              );
+                              return Text('${entry.key}: ${entry.value}',
+                                  style: context.textTheme.labelSmall);
                             }).toList(),
                           ),
                         ),
                       ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _formatTime(context, notification.time),
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[500],
-                      ),
-                    ),
+                    SizedBox(height: 8.h),
+                    Text(_formatTime(context, notification.time),
+                        style: context.textTheme.labelSmall),
                   ],
                 ),
               ),

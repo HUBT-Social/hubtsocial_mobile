@@ -84,7 +84,7 @@ class _ChatCardState extends State<ChatCard> {
                               size: 48.sp,
                             ),
                             Container(
-                              padding: EdgeInsets.all(2.sp),
+                              padding: EdgeInsets.all(2.r),
                               height: 14.h,
                               width: 14.w,
                               decoration: BoxDecoration(
@@ -103,7 +103,7 @@ class _ChatCardState extends State<ChatCard> {
                         SizedBox(width: 12.w),
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8.h),
+                            padding: EdgeInsets.symmetric(vertical: 8.r),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +131,7 @@ class _ChatCardState extends State<ChatCard> {
                   ),
                   SizedBox(width: 12.w),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.h),
+                    padding: EdgeInsets.symmetric(vertical: 8.r),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,

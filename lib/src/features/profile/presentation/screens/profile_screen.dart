@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:provider/provider.dart';
@@ -44,10 +45,10 @@ class _ProfileScreenState extends State<ProfileScreen>
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16),
+            padding: EdgeInsets.only(right: 16.r),
             child: Container(
-              width: 8,
-              height: 8,
+              width: 8.w,
+              height: 8.h,
               decoration: const BoxDecoration(
                 color: Colors.green,
                 shape: BoxShape.circle,
@@ -59,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.r),
             child: Column(
               children: [
                 Consumer<UserProvider>(
@@ -78,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 11),
+                            SizedBox(height: 11.h),
                             Text(
                               '@${user?.lastName ?? ''}',
                               style: TextStyle(
@@ -86,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 fontSize: 14,
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                             const Text(
                               'status...',
                               style: TextStyle(
@@ -98,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                         // Avatar bên phải
                         CircleAvatar(
-                          radius: 30,
+                          radius: 30.r,
                           backgroundImage: user?.avatarUrl != null
                               ? NetworkImage(user!.avatarUrl)
                               : const AssetImage('assets/icons/app_icon.png')
@@ -108,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                     );
                   },
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 // Buttons
                 Row(
                   children: [
@@ -120,9 +121,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF4CAF50),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(8.r),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          padding: EdgeInsets.symmetric(vertical: 12.r),
                         ),
                         child: Text(
                           context.loc.follow,
@@ -134,16 +135,16 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF4CAF50),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(8.r),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          padding: EdgeInsets.symmetric(vertical: 12.r),
                         ),
                         child: Text(
                           context.loc.share,
@@ -160,7 +161,7 @@ class _ProfileScreenState extends State<ProfileScreen>
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           TabBar(
             controller: _tabController,
             labelColor: Colors.black,
@@ -178,7 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen>
               children: [
                 // Posts Grid
                 GridView.builder(
-                  padding: const EdgeInsets.all(8),
+                  padding: EdgeInsets.all(8.r),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     mainAxisSpacing: 8,

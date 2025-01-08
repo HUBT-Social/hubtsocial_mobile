@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:lottie/lottie.dart';
@@ -47,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       UrlImage.square(
                         user.avatarUrl,
-                        size: 256,
+                        size: 256.dm,
                       ),
                       Center(
                           child: Text("UserProfileLoaded: ${user.lastName}")),
@@ -97,87 +98,87 @@ class _HomeScreenState extends State<HomeScreen> {
           SliverToBoxAdapter(
             child: Image.asset(
               Assets.appIcon,
-              width: 120,
-              height: 120,
+              width: 120.w,
+              height: 120.h,
             ),
           ),
           SliverToBoxAdapter(
             child: Container(
-              height: 200,
+              height: 200.h,
               color: Colors.amber,
             ),
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 700,
-              width: 500,
+              height: 700.h,
+              width: 500.w,
               child: Lottie.asset(AppLotties.screenNotFound),
             ),
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 700,
-              width: 500,
+              height: 700.h,
+              width: 500.w,
               child: Lottie.asset(AppLotties.passwordSuccessful),
             ),
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 700,
-              width: 500,
+              height: 700.h,
+              width: 500.w,
               child: Lottie.asset(AppLotties.verificationWaiting),
             ),
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 700,
-              width: 500,
+              height: 700.h,
+              width: 500.w,
               child: Lottie.asset(AppLotties.success),
             ),
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 700,
-              width: 500,
+              height: 700.h,
+              width: 500.w,
               child: Lottie.asset(AppLotties.wrongInput),
             ),
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 700,
-              width: 500,
+              height: 700.h,
+              width: 500.w,
               child: Lottie.asset(AppLotties.writeInput),
             ),
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 700,
-              width: 500,
+              height: 700.h,
+              width: 500.w,
               child: Lottie.asset(AppLotties.paidSuccess),
             ),
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 700,
-              width: 500,
+              height: 700.h,
+              width: 500.w,
               child: Lottie.asset(AppLotties.paidFailed),
             ),
           ),
           SliverToBoxAdapter(
             child: Container(
-              height: 500,
+              height: 500.h,
               color: Colors.red,
             ),
           ),
           SliverToBoxAdapter(
             child: Container(
-              height: 800,
+              height: 800.h,
               color: Colors.blue,
             ),
           ),
           SliverToBoxAdapter(
             child: Container(
-              height: 400,
+              height: 400.h,
               color: Colors.green,
             ),
           ),

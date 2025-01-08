@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/url_image.dart';
@@ -27,18 +28,18 @@ class _UserCardInMenuState extends State<UserCardInMenu> {
           if (state is UserProfileLoaded) {
             User user = state.user;
             return InkWell(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
               onTap: () => AppRoute.profile.push(context),
               child: SizedBox(
-                height: 72,
+                height: 72.h,
                 child: Row(
                   children: [
-                    SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     UrlImage.circle(
                       user.avatarUrl,
-                      size: 48,
+                      size: 48.dg,
                     ),
-                    SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +49,7 @@ class _UserCardInMenuState extends State<UserCardInMenu> {
                           style: context.textTheme.titleSmall,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 4.h),
                         Text(
                           "Xem trang cá nhân",
                           style: context.textTheme.bodySmall?.copyWith(
@@ -62,38 +63,38 @@ class _UserCardInMenuState extends State<UserCardInMenu> {
             );
           } else {
             return SizedBox(
-              height: 72,
+              height: 72.h,
               child: Shimmer.fromColors(
                 baseColor: Colors.red,
                 highlightColor: Colors.blue,
                 child: Row(
                   children: [
-                    SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     Container(
-                      height: 48,
-                      width: 48,
+                      height: 48.r,
+                      width: 48.r,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(50),
                       ),
                     ),
-                    SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          height: 16,
-                          width: 100,
+                          height: 16.h,
+                          width: 100.w,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(50),
                           ),
                         ),
-                        SizedBox(height: 12),
+                        SizedBox(height: 12.h),
                         Container(
-                          height: 12,
-                          width: 180,
+                          height: 12.h,
+                          width: 180.w,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(50),
