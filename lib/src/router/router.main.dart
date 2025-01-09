@@ -52,7 +52,14 @@ StatefulShellRoute _mainRoute() {
         routes: [
           GoRoute(
             path: AppRoute.chat.path,
-            builder: (context, state) => const ChatScreen(),
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) => getIt<ChatBloc>(),
+                ),
+              ],
+              child: const ChatScreen(),
+            ),
             routes: [
               GoRoute(
                 path: 'room',

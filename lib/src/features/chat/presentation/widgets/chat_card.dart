@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 
 import '../../../../core/presentation/widget/url_image.dart';
@@ -11,7 +12,7 @@ class ChatCard extends StatefulWidget {
     required this.chatModel,
     super.key,
   });
-  final String chatModel;
+  final ChatResponseModel chatModel;
 
   @override
   State<ChatCard> createState() => _ChatCardState();
@@ -21,7 +22,7 @@ class _ChatCardState extends State<ChatCard> {
   @override
   Widget build(BuildContext context) {
     return Slidable(
-        key: ValueKey<String>(widget.chatModel),
+        key: ValueKey<String>(widget.chatModel.id.toString()),
         startActionPane: ActionPane(
           motion: const DrawerMotion(),
           children: const [
@@ -65,7 +66,7 @@ class _ChatCardState extends State<ChatCard> {
         child: InkWell(
           onTap: () {
             AppRoute.roomChat
-                .go(context, queryParameters: {"id": widget.chatModel});
+                .go(context, queryParameters: {"id": widget.chatModel.id});
           },
           child: SizedBox(
               height: 60.sp,
@@ -109,14 +110,16 @@ class _ChatCardState extends State<ChatCard> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  widget.chatModel,
+                                  '${widget.chatModel.id}  ${widget.chatModel.title ?? "null"}',
                                   overflow: TextOverflow.ellipsis,
                                   style: context.textTheme.labelLarge?.copyWith(
                                       color: context.colorScheme.onSurface),
                                 ),
                                 Text(
-                                  "dòng chat cục chất đến từ vị trí của GonDraz GonDraz",
+                                  widget.chatModel.bodyNoEscapeSequence ??
+                                      "null",
                                   overflow: TextOverflow.ellipsis,
+                                  softWrap: true,
                                   style: context.textTheme.labelMedium
                                       ?.copyWith(
                                           color: context
