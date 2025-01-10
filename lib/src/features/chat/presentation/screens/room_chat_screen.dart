@@ -11,8 +11,9 @@ import '../../../../core/local_storage/local_storage_key.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 
 class RoomChatScreen extends StatefulWidget {
-  const RoomChatScreen({required this.id, super.key});
+  const RoomChatScreen({required this.id, required this.title, super.key});
   final String id;
+  final String title;
 
   @override
   State<RoomChatScreen> createState() => _RoomChatScreenState();
@@ -78,7 +79,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxIsScrolled) => [
         MainAppBar(
-          title: widget.id,
+          title: widget.title,
         )
       ],
       body: CustomScrollView(

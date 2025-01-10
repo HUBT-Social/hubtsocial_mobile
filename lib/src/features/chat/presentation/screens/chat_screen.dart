@@ -1,15 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/chat/presentation/widgets/chat_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../../../core/presentation/dialog/app_dialog.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 import '../bloc/chat_bloc.dart';
 
@@ -29,7 +25,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
-      pageKey = pageKey;
+      this.pageKey = pageKey;
       context.read<ChatBloc>().add(FetchChatEvent(
             page: pageKey,
           ));

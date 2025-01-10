@@ -65,8 +65,10 @@ class _ChatCardState extends State<ChatCard> {
         ),
         child: InkWell(
           onTap: () {
-            AppRoute.roomChat
-                .go(context, queryParameters: {"id": widget.chatModel.id});
+            AppRoute.roomChat.go(context, queryParameters: {
+              "id": widget.chatModel.id.toString(),
+              "title": widget.chatModel.title.toString()
+            });
           },
           child: SizedBox(
               height: 60.sp,

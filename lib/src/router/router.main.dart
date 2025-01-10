@@ -74,7 +74,9 @@ StatefulShellRoute _mainRoute() {
                     ) =>
                         FadeTransition(opacity: animation, child: child),
                     child: RoomChatScreen(
-                        id: state.uri.queryParameters['id'].toString()),
+                      id: state.uri.queryParameters['id'].toString(),
+                      title: state.uri.queryParameters['title'].toString(),
+                    ),
                   );
                 },
               ),
