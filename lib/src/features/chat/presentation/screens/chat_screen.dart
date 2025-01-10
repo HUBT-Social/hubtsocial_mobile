@@ -5,6 +5,7 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/chat/presentation/widgets/chat_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:signalr_netcore/signalr_client.dart';
 
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 import '../bloc/chat_bloc.dart';
@@ -17,19 +18,30 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final hubConnection = HubConnectionBuilder()
+      .withUrl(
+        "https://hubt-social-develop.onrender.com/chathub",
+      )
+      // .withHubProtocol()
+      .withAutomaticReconnect()
+      .build();
+
   int pageKey = 0;
   final _pagingController = PagingController<int, ChatResponseModel>(
     firstPageKey: 1,
   );
 
   @override
-  void initState() {
+  Future<void> initState() async {
     _pagingController.addPageRequestListener((pageKey) {
       this.pageKey = pageKey;
       context.read<ChatBloc>().add(FetchChatEvent(
             page: pageKey,
           ));
     });
+
+    await hubConnection.start();
+
     super.initState();
   }
 
