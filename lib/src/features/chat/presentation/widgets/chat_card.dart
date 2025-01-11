@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
+import 'package:hubtsocial_mobile/src/router/router.import.dart';
 
 import '../../../../core/presentation/widget/url_image.dart';
 
@@ -65,10 +66,11 @@ class _ChatCardState extends State<ChatCard> {
         ),
         child: InkWell(
           onTap: () {
-            AppRoute.roomChat.go(context, queryParameters: {
-              "id": widget.chatModel.id.toString(),
-              "title": widget.chatModel.title.toString()
-            });
+            AppRoute.roomChat.push(navigatorKey.currentContext!,
+                queryParameters: {
+                  "id": widget.chatModel.id.toString(),
+                  "title": widget.chatModel.title.toString()
+                });
           },
           child: SizedBox(
               height: 60.sp,

@@ -32,7 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
   );
 
   @override
-  Future<void> initState() async {
+  void initState() {
     _pagingController.addPageRequestListener((pageKey) {
       this.pageKey = pageKey;
       context.read<ChatBloc>().add(FetchChatEvent(
@@ -40,9 +40,13 @@ class _ChatScreenState extends State<ChatScreen> {
           ));
     });
 
-    await hubConnection.start();
+    startHub();
 
     super.initState();
+  }
+
+  Future<void> startHub() async {
+    await hubConnection.start();
   }
 
   @override

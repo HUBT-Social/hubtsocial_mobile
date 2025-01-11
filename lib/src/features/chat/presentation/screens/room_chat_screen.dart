@@ -1,13 +1,16 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_token.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../core/local_storage/local_storage_key.dart';
+import '../../../../core/presentation/widget/url_image.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 
 class RoomChatScreen extends StatefulWidget {
@@ -76,21 +79,56 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return NestedScrollView(
-      headerSliverBuilder: (context, innerBoxIsScrolled) => [
-        MainAppBar(
-          title: widget.title,
-        )
-      ],
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 100.h,
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      body: NestedScrollView(
+        reverse: true,
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverAppBar(
+            pinned: true,
+            toolbarHeight: 60.h,
+            titleSpacing: 0,
+            backgroundColor:
+                // Theme.of(context).colorScheme.primary.withAlpha(220),
+                Theme.of(context).colorScheme.primary,
+            floating: true,
+            snap: true,
+            // flexibleSpace: ClipRRect(
+            //   child: BackdropFilter(
+            //     filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            //     blendMode: BlendMode.srcOver,
+            //     child: Container(
+            //       color: Colors.transparent,
+            //     ),
+            //   ),
+            // ),
+            title: Row(
+              children: [
+                UrlImage.circle(
+                  "https://res.cloudinary.com/dnx8aew1t/image/upload/v1732549977/jgldr2myysd7u6vx6sfy.jpg",
+                  size: 42.sp,
+                ),
+                Text(
+                  "title",
+                  style: context.textTheme.headlineSmall?.copyWith(
+                      color: context.colorScheme.onSurface,
+                      fontWeight: FontWeight.w600),
+                ),
+              ],
             ),
-          ),
+          )
         ],
+        body: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 100.h,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
