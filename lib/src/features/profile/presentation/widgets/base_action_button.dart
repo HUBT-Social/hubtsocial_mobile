@@ -18,22 +18,28 @@ class BaseActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilledButton(
-      onPressed: onPressed,
-      style: FilledButton.styleFrom(
-        backgroundColor:#5BC05D;
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
+    return SizedBox(
+      height: 36.h,
+      child: FilledButton(
+        onPressed: onPressed,
+        style: FilledButton.styleFrom(
+          backgroundColor: backgroundColor ?? const Color(0xFF5BC05D),
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6.r),
+          ),
+          padding: EdgeInsets.zero,
         ),
-        padding: EdgeInsets.symmetric(vertical: 12.r),
-      ),
-      child: Text(
-        text,
-        style: context.textTheme.bodyLarge?.copyWith(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          color: textColor,
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+              color: textColor,
+              height: 1.2,
+            ),
+          ),
         ),
       ),
     );

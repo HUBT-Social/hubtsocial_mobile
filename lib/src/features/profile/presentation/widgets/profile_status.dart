@@ -21,10 +21,11 @@ class ProfileStatus extends StatelessWidget {
       child: Text(
         status.isEmpty ? 'Add bio' : status,
         style: context.textTheme.bodyMedium?.copyWith(
-          color: status.isEmpty ? Colors.grey : Colors.black,
-          fontSize: 14,
+          color: status.isEmpty ? const Color(0xFF757575) : Colors.black,
+          fontSize: 13.sp,
+          fontWeight: FontWeight.w400,
         ),
-        maxLines: 3,
+        maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),
     );

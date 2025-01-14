@@ -33,9 +33,9 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.colorScheme.onPrimary,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: context.colorScheme.onPrimary,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -43,20 +43,62 @@ class _ProfileScreenState extends State<ProfileScreen>
         ),
         title: Text(
           context.loc.profile,
+          textAlign: TextAlign.center,
           style: context.textTheme.headlineMedium?.copyWith(
-              color: context.colorScheme.onSurface,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'Roboto'),
+            color: context.colorScheme.onSurface,
+            fontWeight: FontWeight.w700,
+          ),
         ),
         actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16.r),
+          Positioned(
+            top: 2,
+            left: 2,
             child: Container(
-              width: 8.w,
-              height: 8.h,
-              decoration: const BoxDecoration(
-                color: Colors.green,
+              width: 20.w,
+              height: 20.h,
+              decoration: BoxDecoration(
+                color: context.colorScheme.primary,
                 shape: BoxShape.circle,
+                border: Border.all(
+                  color: context.colorScheme.onPrimary,
+                  width: 2,
+                ),
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 3.w,
+                        height: 3.h,
+                        decoration: BoxDecoration(
+                          color: context.colorScheme.onPrimary,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      SizedBox(width: 2.w),
+                      Container(
+                        width: 3.w,
+                        height: 3.h,
+                        decoration: BoxDecoration(
+                          color: context.colorScheme.onPrimary,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      SizedBox(width: 2.w),
+                      Container(
+                        width: 3.w,
+                        height: 3.h,
+                        decoration: BoxDecoration(
+                          color: context.colorScheme.onPrimary,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
@@ -88,27 +130,15 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   ),
                                 ),
                                 const SizedBox(width: 4),
-                                Container(
-                                  padding: const EdgeInsets.all(2),
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xFF4CAF50),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                    size: 12,
-                                  ),
-                                ),
                               ],
                             ),
                             SizedBox(height: 11.h),
                             Text(
                               '@${user?.lastName ?? ''}',
                               style: context.textTheme.labelLarge?.copyWith(
-                                  color: context.colorScheme.onSurface,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: 'Roboto'),
+                                color: context.colorScheme.onSurface,
+                                fontWeight: FontWeight.w500,
+                              ),
                               textAlign: TextAlign.left,
                             ),
                             SizedBox(height: 8.h),
@@ -119,11 +149,11 @@ class _ProfileScreenState extends State<ProfileScreen>
                             //     debugPrint('Tap on status');
                             //   },
                             // ),
-                            const Text(
+                            Text(
                               'status...', // Temporary static text
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
+                              style: context.textTheme.labelLarge?.copyWith(
+                                color: context.colorScheme.onSurface,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
@@ -135,7 +165,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
+                                    color: context.colorScheme.surface,
                                     spreadRadius: 2,
                                     blurRadius: 8,
                                     offset: const Offset(0, 2),
@@ -152,22 +182,22 @@ class _ProfileScreenState extends State<ProfileScreen>
                               ),
                             ),
                             Positioned(
+                              left: 0,
                               bottom: 0,
-                              right: 0,
                               child: Container(
-                                padding: const EdgeInsets.all(2),
+                                padding: EdgeInsets.all(4.r),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF4CAF50),
+                                  color: context.colorScheme.primary,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: Colors.white,
+                                    color: context.colorScheme.onPrimary,
                                     width: 2,
                                   ),
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.check,
-                                  color: Colors.white,
-                                  size: 12,
+                                  color: context.colorScheme.onPrimary,
+                                  size: 12.sp,
                                 ),
                               ),
                             ),
@@ -186,9 +216,9 @@ class _ProfileScreenState extends State<ProfileScreen>
           SizedBox(height: 16.h),
           TabBar(
             controller: _tabController,
-            labelColor: Colors.black,
-            unselectedLabelColor: Colors.grey,
-            indicatorColor: Colors.black,
+            labelColor: context.colorScheme.onSurface,
+            unselectedLabelColor: context.colorScheme.onSurface,
+            indicatorColor: context.colorScheme.onSurface,
             tabs: [
               Tab(text: context.loc.post),
               Tab(text: context.loc.reply),
@@ -200,11 +230,12 @@ class _ProfileScreenState extends State<ProfileScreen>
               controller: _tabController,
               children: [
                 GridView.builder(
-                  padding: EdgeInsets.all(8.r),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  padding: EdgeInsets.all(8),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     mainAxisSpacing: 8,
                     crossAxisSpacing: 8,
+                    childAspectRatio: 110 / 160,
                   ),
                   itemCount: 6,
                   itemBuilder: (context, index) {
@@ -219,7 +250,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                     return Container(
                       decoration: BoxDecoration(
                         color: colors[index],
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: context.colorScheme.surface,
+                            blurRadius: 4,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
                       ),
                     );
                   },
