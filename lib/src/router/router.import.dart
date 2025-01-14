@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_ce_flutter/adapters.dart';
+import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/chat_bloc.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/screens/not_found_screen.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/screens/email_verify_screen.dart';

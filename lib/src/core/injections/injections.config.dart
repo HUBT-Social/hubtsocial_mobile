@@ -36,6 +36,16 @@ import 'package:hubtsocial_mobile/src/features/auth/domain/usecases/sign_up_user
     as _i287;
 import 'package:hubtsocial_mobile/src/features/auth/presentation/bloc/auth_bloc.dart'
     as _i715;
+import 'package:hubtsocial_mobile/src/features/chat/data/datasources/chat_remote_data_source.dart'
+    as _i745;
+import 'package:hubtsocial_mobile/src/features/chat/data/repos/chat_repo_impl.dart'
+    as _i293;
+import 'package:hubtsocial_mobile/src/features/chat/domain/repos/chat_repo.dart'
+    as _i965;
+import 'package:hubtsocial_mobile/src/features/chat/domain/usercases/fetch_chat_usercase.dart'
+    as _i1020;
+import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/chat_bloc.dart'
+    as _i359;
 import 'package:hubtsocial_mobile/src/features/user/data/datasources/user_profile_remote_datasource.dart'
     as _i592;
 import 'package:hubtsocial_mobile/src/features/user/data/repos/user_repo_impl.dart'
@@ -72,6 +82,11 @@ extension GetItInjectableX on _i174.GetIt {
             hiveAuth: gh<_i170.HiveInterface>()));
     gh.lazySingleton<_i1042.UserRepo>(
         () => _i674.UserRepoImpl(gh<_i592.UserProfileRemoteDataSource>()));
+    gh.lazySingleton<_i745.ChatRemoteDataSource>(
+        () => _i745.ChatRemoteDataSourceImpl(
+              hiveAuth: gh<_i170.HiveInterface>(),
+              messaging: gh<_i892.FirebaseMessaging>(),
+            ));
     gh.lazySingleton<_i953.AuthRemoteDataSource>(
         () => _i953.AuthRemoteDataSourceImpl(
               hiveAuth: gh<_i170.HiveInterface>(),
@@ -85,11 +100,17 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i477.InitUserUserCase(gh<_i1042.UserRepo>()));
     gh.lazySingleton<_i925.UpdateUserUserCase>(
         () => _i925.UpdateUserUserCase(gh<_i1042.UserRepo>()));
+    gh.lazySingleton<_i965.ChatRepo>(
+        () => _i293.ChatRepoImpl(gh<_i745.ChatRemoteDataSource>()));
     gh.factory<_i527.UserBloc>(() => _i527.UserBloc(
           initUserProfile: gh<_i477.InitUserUserCase>(),
           updateUserProfile: gh<_i925.UpdateUserUserCase>(),
           changedPassword: gh<_i789.ChangePasswordUserCase>(),
         ));
+    gh.lazySingleton<_i1020.FetchChatUserCase>(
+        () => _i1020.FetchChatUserCase(gh<_i965.ChatRepo>()));
+    gh.factory<_i359.ChatBloc>(
+        () => _i359.ChatBloc(fetchChat: gh<_i1020.FetchChatUserCase>()));
     gh.lazySingleton<_i411.ForgotPasswordUserCase>(
         () => _i411.ForgotPasswordUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i556.InformationUserCase>(

@@ -52,26 +52,14 @@ StatefulShellRoute _mainRoute() {
         routes: [
           GoRoute(
             path: AppRoute.chat.path,
-            builder: (context, state) => const ChatScreen(),
-            routes: [
-              GoRoute(
-                path: 'room',
-                pageBuilder: (context, state) {
-                  return CustomTransitionPage(
-                    key: state.pageKey,
-                    transitionsBuilder: (
-                      context,
-                      animation,
-                      secondaryAnimation,
-                      child,
-                    ) =>
-                        FadeTransition(opacity: animation, child: child),
-                    child: RoomChatScreen(
-                        id: state.uri.queryParameters['id'].toString()),
-                  );
-                },
-              ),
-            ],
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) => getIt<ChatBloc>(),
+                ),
+              ],
+              child: const ChatScreen(),
+            ),
           ),
         ],
       ),
