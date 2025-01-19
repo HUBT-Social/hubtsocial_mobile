@@ -8,7 +8,6 @@ import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/url_image.dart';
 
 import 'data.dart';
-import 'theme.dart';
 
 class RoomChatScreen extends StatefulWidget {
   const RoomChatScreen({required this.id, required this.title, super.key});
@@ -20,8 +19,6 @@ class RoomChatScreen extends StatefulWidget {
 }
 
 class _RoomChatScreenState extends State<RoomChatScreen> {
-  AppTheme theme = LightTheme();
-  bool isDarkTheme = false;
   final _chatController = ChatController(
     initialMessageList: Data.messageList,
     scrollController: ScrollController(),
@@ -82,18 +79,29 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
         chatController: _chatController,
         onSendTap: _onSendTap,
         featureActiveConfig: const FeatureActiveConfig(
+          enableSwipeToReply: true,
+          enableReactionPopup: true,
+          enableTextField: true,
+          enableSwipeToSeeTime: true,
+          enableCurrentUserProfileAvatar: false,
+          enableOtherUserProfileAvatar: true,
+          enableReplySnackBar: true,
+          enablePagination: false,
+          enableChatSeparator: true,
+          enableDoubleTapToLike: true,
           lastSeenAgoBuilderVisibility: true,
           receiptsBuilderVisibility: true,
-          enableScrollToBottomButton: true,
+          enableOtherUserName: true,
+          enableScrollToBottomButton: false,
         ),
         scrollToBottomButtonConfig: ScrollToBottomButtonConfig(
-          backgroundColor: theme.textFieldBackgroundColor,
+          backgroundColor: context.colorScheme.surfaceContainerLow,
           border: Border.all(color: Colors.transparent),
           icon: Icon(
             Icons.keyboard_arrow_down_rounded,
             color: context.colorScheme.primary,
             weight: 10,
-            size: 30,
+            size: 30.r,
           ),
         ),
         chatViewState: ChatViewState.hasMessages,
@@ -108,16 +116,16 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
           flashingCircleDarkColor: context.colorScheme.primaryFixedDim,
         ),
         appBar: AppBar(
-          toolbarHeight: 52,
-          leadingWidth: 36,
+          toolbarHeight: 52.h,
+          leadingWidth: 36.w,
           backgroundColor: Theme.of(context).colorScheme.primary,
           foregroundColor: Theme.of(context).colorScheme.onPrimary,
           title: Row(
             children: [
               UrlImage.circle(
                   "https://raw.githubusercontent.com/SimformSolutionsPvtLtd/flutter_showcaseview/master/example/assets/simform.png",
-                  size: 36),
-              SizedBox(width: 12),
+                  size: 36.r),
+              SizedBox(width: 12.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,15 +147,6 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
             ],
           ),
           actions: [
-            IconButton(
-              onPressed: _onThemeIconTap,
-              icon: Icon(
-                isDarkTheme
-                    ? Icons.brightness_4_outlined
-                    : Icons.dark_mode_outlined,
-                color: context.colorScheme.onPrimary,
-              ),
-            ),
             IconButton(
               tooltip: 'Toggle TypingIndicator',
               onPressed: _showHideTypingIndicator,
@@ -207,81 +206,73 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
             ),
           ),
         ),
-        //to do: aaaaaaaaaaaaaaaaaaaa
         chatBubbleConfig: ChatBubbleConfiguration(
           outgoingChatBubbleConfig: ChatBubble(
             linkPreviewConfig: LinkPreviewConfiguration(
-              backgroundColor: theme.linkPreviewOutgoingChatColor,
-              bodyStyle: theme.outgoingChatLinkBodyStyle,
-              titleStyle: theme.outgoingChatLinkTitleStyle,
+              backgroundColor: context.colorScheme.surface,
+              bodyStyle: context.textTheme.bodyLarge,
+              titleStyle: context.textTheme.labelLarge,
             ),
             receiptsWidgetConfig:
                 const ReceiptsWidgetConfig(showReceiptsIn: ShowReceiptsIn.all),
-            color: theme.outgoingChatBubbleColor,
+            color: context.colorScheme.primary,
           ),
           inComingChatBubbleConfig: ChatBubble(
             linkPreviewConfig: LinkPreviewConfiguration(
               linkStyle: TextStyle(
-                color: theme.inComingChatBubbleTextColor,
+                color: context.colorScheme.primary,
                 decoration: TextDecoration.underline,
               ),
-              backgroundColor: theme.linkPreviewIncomingChatColor,
-              bodyStyle: theme.incomingChatLinkBodyStyle,
-              titleStyle: theme.incomingChatLinkTitleStyle,
+              backgroundColor: context.colorScheme.surfaceContainer,
+              bodyStyle: context.textTheme.bodyMedium,
+              titleStyle: context.textTheme.titleSmall,
             ),
-            textStyle: TextStyle(color: theme.inComingChatBubbleTextColor),
+            textStyle: TextStyle(color: context.colorScheme.onSurface),
             onMessageRead: (message) {
               /// send your message reciepts to the other client
-              debugPrint('Message Read');
+              logger.d('Message Read' + message.toString());
             },
             senderNameTextStyle:
-                TextStyle(color: theme.inComingChatBubbleTextColor),
-            color: theme.inComingChatBubbleColor,
+                TextStyle(color: context.colorScheme.onSurfaceVariant),
+            color: context.colorScheme.surfaceContainerLowest,
           ),
         ),
         replyPopupConfig: ReplyPopupConfiguration(
-          backgroundColor: theme.replyPopupColor,
-          buttonTextStyle: TextStyle(color: theme.replyPopupButtonColor),
-          topBorderColor: theme.replyPopupTopBorderColor,
+          backgroundColor: context.colorScheme.surfaceContainerHighest,
+          buttonTextStyle: TextStyle(color: context.colorScheme.onSurface),
+          topBorderColor: context.colorScheme.outline,
         ),
         reactionPopupConfig: ReactionPopupConfiguration(
           shadow: BoxShadow(
-            color: isDarkTheme ? Colors.black54 : Colors.grey.shade400,
+            color: context.colorScheme.shadow,
             blurRadius: 20,
           ),
-          backgroundColor: theme.reactionPopupColor,
+          backgroundColor: context.colorScheme.surfaceContainerHighest,
         ),
         messageConfig: MessageConfiguration(
           messageReactionConfig: MessageReactionConfiguration(
-            backgroundColor: theme.messageReactionBackGroundColor,
-            borderColor: theme.messageReactionBackGroundColor,
+            backgroundColor: context.colorScheme.surfaceContainer,
+            borderColor: context.colorScheme.surfaceContainer,
             reactedUserCountTextStyle:
-                TextStyle(color: theme.inComingChatBubbleTextColor),
+                TextStyle(color: context.colorScheme.onSurfaceVariant),
             reactionCountTextStyle:
-                TextStyle(color: theme.inComingChatBubbleTextColor),
+                TextStyle(color: context.colorScheme.onSurfaceVariant),
             reactionsBottomSheetConfig: ReactionsBottomSheetConfiguration(
-              backgroundColor: theme.backgroundColor,
+              backgroundColor: context.colorScheme.surfaceContainer,
               reactedUserTextStyle: TextStyle(
-                color: theme.inComingChatBubbleTextColor,
+                color: context.colorScheme.onSurfaceVariant,
               ),
               reactionWidgetDecoration: BoxDecoration(
-                color: theme.inComingChatBubbleColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: isDarkTheme ? Colors.black12 : Colors.grey.shade200,
-                    offset: const Offset(0, 20),
-                    blurRadius: 40,
-                  )
-                ],
-                borderRadius: BorderRadius.circular(10),
+                color: context.colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(12.r),
               ),
             ),
           ),
           imageMessageConfig: ImageMessageConfiguration(
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+            margin: EdgeInsets.symmetric(horizontal: 12.r, vertical: 15.r),
             shareIconConfig: ShareIconConfiguration(
-              defaultIconBackgroundColor: theme.shareIconBackgroundColor,
-              defaultIconColor: theme.shareIconColor,
+              defaultIconBackgroundColor: context.colorScheme.surfaceContainer,
+              defaultIconColor: context.colorScheme.onSurfaceVariant,
             ),
           ),
         ),
@@ -289,11 +280,11 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
           profileImageUrl: Data.profileImage,
         ),
         repliedMessageConfig: RepliedMessageConfiguration(
-          backgroundColor: theme.repliedMessageColor,
-          verticalBarColor: theme.verticalBarColor,
+          backgroundColor: context.colorScheme.secondary,
+          verticalBarColor: context.colorScheme.outline,
           repliedMsgAutoScrollConfig: RepliedMsgAutoScrollConfig(
             enableHighlightRepliedMsg: true,
-            highlightColor: Colors.pinkAccent.shade100,
+            highlightColor: context.colorScheme.primary,
             highlightScale: 1.1,
           ),
           textStyle: const TextStyle(
@@ -301,22 +292,23 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
             fontWeight: FontWeight.bold,
             letterSpacing: 0.25,
           ),
-          replyTitleTextStyle: TextStyle(color: theme.repliedTitleTextColor),
+          replyTitleTextStyle:
+              TextStyle(color: context.colorScheme.onSurfaceVariant),
         ),
         swipeToReplyConfig: SwipeToReplyConfiguration(
-          replyIconColor: theme.swipeToReplyIconColor,
+          replyIconColor: context.colorScheme.primary,
         ),
         replySuggestionsConfig: ReplySuggestionsConfig(
           itemConfig: SuggestionItemConfig(
             decoration: BoxDecoration(
-              color: theme.textFieldBackgroundColor,
+              color: context.colorScheme.surface,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: theme.outgoingChatBubbleColor ?? Colors.white,
+                color: context.colorScheme.outline,
               ),
             ),
             textStyle: TextStyle(
-              color: isDarkTheme ? Colors.white : Colors.black,
+              color: context.colorScheme.onSurface,
             ),
           ),
           onTap: (item) =>
@@ -347,18 +339,6 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
     });
     Future.delayed(const Duration(seconds: 1), () {
       _chatController.initialMessageList.last.setStatus = MessageStatus.read;
-    });
-  }
-
-  void _onThemeIconTap() {
-    setState(() {
-      if (isDarkTheme) {
-        theme = LightTheme();
-        isDarkTheme = false;
-      } else {
-        theme = DarkTheme();
-        isDarkTheme = true;
-      }
     });
   }
 }

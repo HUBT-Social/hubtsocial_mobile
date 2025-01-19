@@ -99,7 +99,8 @@ class Data {
     ),
     Message(
       id: '11',
-      message: "https://miro.medium.com/max/1000/0*s7of7kWnf9fDg4XM.jpeg",
+      message:
+          "https://cdn.discordapp.com/attachments/1276556647732609066/1317871322579075144/Screenshot_2024-12-15_220920.png?ex=678dbe90&is=678c6d10&hm=586f0435c6476a234fbf87a21247af44b868c5e9aac8d3a56c5bc88242bbed02&",
       createdAt: DateTime.now(),
       messageType: MessageType.image,
       sentBy: '1',
