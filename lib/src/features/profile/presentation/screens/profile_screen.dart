@@ -33,14 +33,9 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.colorScheme.onPrimary,
+      backgroundColor: context.colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: context.colorScheme.onPrimary,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
+        backgroundColor: context.colorScheme.surface,
         title: Text(
           context.loc.profile,
           textAlign: TextAlign.center,
@@ -61,7 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: context.colorScheme.onPrimary,
-                  width: 2,
+                  width: 2.w,
                 ),
               ),
               child: Stack(
@@ -129,12 +124,12 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                                const SizedBox(width: 4),
+                                SizedBox(width: 4.w),
                               ],
                             ),
                             SizedBox(height: 11.h),
                             Text(
-                              '@${user?.lastName ?? ''}',
+                              '@${user.lastName}',
                               style: context.textTheme.labelLarge?.copyWith(
                                 color: context.colorScheme.onSurface,
                                 fontWeight: FontWeight.w500,
@@ -166,19 +161,15 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 boxShadow: [
                                   BoxShadow(
                                     color: context.colorScheme.surface,
-                                    spreadRadius: 2,
+                                    spreadRadius: 2.r,
                                     blurRadius: 8,
                                     offset: const Offset(0, 2),
                                   ),
                                 ],
                               ),
                               child: CircleAvatar(
-                                radius: 42,
-                                backgroundImage: user?.avatarUrl != null
-                                    ? NetworkImage(user!.avatarUrl)
-                                    : const AssetImage(
-                                            'assets/icons/app_icon.png')
-                                        as ImageProvider,
+                                radius: 42.r,
+                                backgroundImage: NetworkImage(user.avatarUrl),
                               ),
                             ),
                             Positioned(
@@ -191,13 +182,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   shape: BoxShape.circle,
                                   border: Border.all(
                                     color: context.colorScheme.onPrimary,
-                                    width: 2,
+                                    width: 2.w,
                                   ),
                                 ),
                                 child: Icon(
                                   Icons.check,
                                   color: context.colorScheme.onPrimary,
-                                  size: 12.sp,
+                                  size: 12.r,
                                 ),
                               ),
                             ),
@@ -207,8 +198,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                     );
                   },
                 ),
-                SizedBox(height: 16.h),
-                const SizedBox(height: 16),
+                SizedBox(height: 32.h),
                 const ProfileActionButtons(),
               ],
             ),
@@ -250,11 +240,11 @@ class _ProfileScreenState extends State<ProfileScreen>
                     return Container(
                       decoration: BoxDecoration(
                         color: colors[index],
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(10.r),
                         boxShadow: [
                           BoxShadow(
                             color: context.colorScheme.surface,
-                            blurRadius: 4,
+                            blurRadius: 4.r,
                             offset: Offset(0, 4),
                           ),
                         ],
