@@ -4,6 +4,8 @@ import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:provider/provider.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
+import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/profile_action_buttons.dart';
+import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/profile_status.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -31,9 +33,9 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.colorScheme.onPrimary,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: context.colorScheme.onPrimary,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -41,17 +43,62 @@ class _ProfileScreenState extends State<ProfileScreen>
         ),
         title: Text(
           context.loc.profile,
-          style: const TextStyle(color: Colors.black),
+          textAlign: TextAlign.center,
+          style: context.textTheme.headlineMedium?.copyWith(
+            color: context.colorScheme.onSurface,
+            fontWeight: FontWeight.w700,
+          ),
         ),
         actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16.r),
+          Positioned(
+            top: 2,
+            left: 2,
             child: Container(
-              width: 8.w,
-              height: 8.h,
-              decoration: const BoxDecoration(
-                color: Colors.green,
+              width: 20.w,
+              height: 20.h,
+              decoration: BoxDecoration(
+                color: context.colorScheme.primary,
                 shape: BoxShape.circle,
+                border: Border.all(
+                  color: context.colorScheme.onPrimary,
+                  width: 2,
+                ),
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 3.w,
+                        height: 3.h,
+                        decoration: BoxDecoration(
+                          color: context.colorScheme.onPrimary,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      SizedBox(width: 2.w),
+                      Container(
+                        width: 3.w,
+                        height: 3.h,
+                        decoration: BoxDecoration(
+                          color: context.colorScheme.onPrimary,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      SizedBox(width: 2.w),
+                      Container(
+                        width: 3.w,
+                        height: 3.h,
+                        decoration: BoxDecoration(
+                          color: context.colorScheme.onPrimary,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
@@ -72,101 +119,106 @@ class _ProfileScreenState extends State<ProfileScreen>
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              '${user?.firstName ?? ''} ${user?.lastName ?? ''}',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            Row(
+                              children: [
+                                Text(
+                                  user!.fullname,
+                                  style: context.textTheme.headlineMedium
+                                      ?.copyWith(
+                                    color: context.colorScheme.onSurface,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                              ],
                             ),
                             SizedBox(height: 11.h),
                             Text(
                               '@${user?.lastName ?? ''}',
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 14,
+                              style: context.textTheme.labelLarge?.copyWith(
+                                color: context.colorScheme.onSurface,
+                                fontWeight: FontWeight.w500,
                               ),
+                              textAlign: TextAlign.left,
                             ),
                             SizedBox(height: 8.h),
-                            const Text(
-                              'status...',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
+                            // TODO: Implement status feature when User model is updated
+                            // ProfileStatus(
+                            //   status: user?.status ?? '',
+                            //   onTap: () {
+                            //     debugPrint('Tap on status');
+                            //   },
+                            // ),
+                            Text(
+                              'status...', // Temporary static text
+                              style: context.textTheme.labelLarge?.copyWith(
+                                color: context.colorScheme.onSurface,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
                         ),
-                        // Avatar bên phải
-                        CircleAvatar(
-                          radius: 30.r,
-                          backgroundImage: user?.avatarUrl != null
-                              ? NetworkImage(user!.avatarUrl)
-                              : const AssetImage('assets/icons/app_icon.png')
-                                  as ImageProvider,
+                        Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: context.colorScheme.surface,
+                                    spreadRadius: 2,
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: CircleAvatar(
+                                radius: 42,
+                                backgroundImage: user?.avatarUrl != null
+                                    ? NetworkImage(user!.avatarUrl)
+                                    : const AssetImage(
+                                            'assets/icons/app_icon.png')
+                                        as ImageProvider,
+                              ),
+                            ),
+                            Positioned(
+                              left: 0,
+                              bottom: 0,
+                              child: Container(
+                                padding: EdgeInsets.all(4.r),
+                                decoration: BoxDecoration(
+                                  color: context.colorScheme.primary,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: context.colorScheme.onPrimary,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.check,
+                                  color: context.colorScheme.onPrimary,
+                                  size: 12.sp,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     );
                   },
                 ),
                 SizedBox(height: 16.h),
-                // Buttons
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          AppRoute.profile2.push(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF4CAF50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          padding: EdgeInsets.symmetric(vertical: 12.r),
-                        ),
-                        child: Text(
-                          context.loc.follow,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 12.w),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF4CAF50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          padding: EdgeInsets.symmetric(vertical: 12.r),
-                        ),
-                        child: Text(
-                          context.loc.share,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                const SizedBox(height: 16),
+                const ProfileActionButtons(),
               ],
             ),
           ),
           SizedBox(height: 16.h),
           TabBar(
             controller: _tabController,
-            labelColor: Colors.black,
-            unselectedLabelColor: Colors.grey,
-            indicatorColor: Colors.black,
+            labelColor: context.colorScheme.onSurface,
+            unselectedLabelColor: context.colorScheme.onSurface,
+            indicatorColor: context.colorScheme.onSurface,
             tabs: [
               Tab(text: context.loc.post),
               Tab(text: context.loc.reply),
@@ -177,28 +229,35 @@ class _ProfileScreenState extends State<ProfileScreen>
             child: TabBarView(
               controller: _tabController,
               children: [
-                // Posts Grid
                 GridView.builder(
-                  padding: EdgeInsets.all(8.r),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  padding: EdgeInsets.all(8),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     mainAxisSpacing: 8,
                     crossAxisSpacing: 8,
+                    childAspectRatio: 110 / 160,
                   ),
                   itemCount: 6,
                   itemBuilder: (context, index) {
                     final colors = [
-                      const Color(0xFFFFB6B6), // Light red
-                      const Color(0xFFFF0000), // Red
-                      const Color(0xFF90EE90), // Light green
-                      const Color(0xFF4B0082), // Indigo
-                      const Color(0xFFFFE4E1), // Misty rose
-                      const Color(0xFFFFDAB9), // Peach
+                      const Color(0xFFFFB6B6),
+                      const Color(0xFFFF0000),
+                      const Color(0xFF90EE90),
+                      const Color(0xFF4B0082),
+                      const Color(0xFFFFE4E1),
+                      const Color(0xFFFFDAB9),
                     ];
                     return Container(
                       decoration: BoxDecoration(
                         color: colors[index],
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: context.colorScheme.surface,
+                            blurRadius: 4,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
                       ),
                     );
                   },
