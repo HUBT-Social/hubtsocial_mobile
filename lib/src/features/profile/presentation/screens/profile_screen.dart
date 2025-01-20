@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/core/theme/utils/change_theme_bottom_sheet.dart';
+import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:provider/provider.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/profile_action_buttons.dart';
@@ -121,12 +123,17 @@ class _ProfileScreenState extends State<ProfileScreen>
                           children: [
                             Row(
                               children: [
-                                Text(
-                                  user!.fullname,
-                                  style: context.textTheme.headlineMedium
-                                      ?.copyWith(
-                                    color: context.colorScheme.onSurface,
-                                    fontWeight: FontWeight.w700,
+                                GestureDetector(
+                                  onTap: () {
+                                    AppRoute.aboutprofile.push(context);
+                                  },
+                                  child: Text(
+                                    user!.fullname,
+                                    style: context.textTheme.headlineMedium
+                                        ?.copyWith(
+                                      color: context.colorScheme.onSurface,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 4),
@@ -269,6 +276,13 @@ class _ProfileScreenState extends State<ProfileScreen>
           ),
         ],
       ),
+    );
+  }
+
+  void showThemeBottomSheet() {
+    InkWell(
+      onTap: () => ThemeUtils.showThemeBottomSheet(
+          navigatorKey.currentContext ?? context),
     );
   }
 }

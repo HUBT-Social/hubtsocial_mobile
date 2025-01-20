@@ -43,7 +43,9 @@ enum AppRoute {
   menu('/menu'),
   profile('/menu/profile'),
   profile2('/menu/profile/profile2'),
+  aboutprofile('menu/profile/aboutprofile'),
   // menu
+
   ;
 
   const AppRoute(this.path);

@@ -34,7 +34,7 @@ class ProfileActionButtons extends StatelessWidget {
               text: context.loc.share,
               onPressed: onFollowPressed ??
                   () {
-                    AppRoute.profile2.push(context);
+                    AppRoute.aboutprofile.push(context);
                   },
               backgroundColor: context.colorScheme.primary,
               textColor: context.colorScheme.onPrimary),
