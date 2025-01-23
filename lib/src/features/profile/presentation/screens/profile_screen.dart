@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/theme/utils/change_theme_bottom_sheet.dart';
@@ -116,27 +117,38 @@ class _ProfileScreenState extends State<ProfileScreen>
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                AppRoute.aboutprofile.push(context);
-                              },
-                              child: Text(
-                                user!.fullname,
-                                style: context.textTheme.headlineMedium
-                                    ?.copyWith(
-                                  color: context.colorScheme.onSurface,
-                                  fontWeight: FontWeight.w700,
+                            InkWell(
+                              borderRadius: BorderRadius.circular(12.r),
+                              onTap: () => AppRoute.aboutprofile.push(context),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 6.r),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          user!.fullname,
+                                          style:
+                                              context.textTheme.headlineMedium,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                            SizedBox(width: 4.w),
-                            Text(
-                              '@${user.lastName}',
-                              style: context.textTheme.labelLarge?.copyWith(
-                                color: context.colorScheme.onSurface,
-                                fontWeight: FontWeight.w500,
+                            SizedBox(height: 4.h),
+                            Padding(
+                              padding: EdgeInsets.only(left: 18.r),
+                              child: Text(
+                                '@${user.lastName}',
+                                style: context.textTheme.labelLarge?.copyWith(
+                                  color: context.colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                              textAlign: TextAlign.left,
                             ),
                             SizedBox(height: 8.h),
                             // TODO: Implement status feature when User model is updated
@@ -157,16 +169,27 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                         GestureDetector(
                           onTap: () {
-                            context.push(
-                              AppRoute.menu.path + '/profile/fullscreen',
-                              queryParameters: {'imageUrl': user.avatarUrl},
-                            );
+                            if (user?.avatarUrl != null &&
+                                user!.avatarUrl.isNotEmpty) {
+                              context.push(
+                                AppRoute.fullprofile.path,
+                                extra: {
+                                  'imageUrl': user.avatarUrl,
+                                  'heroTag': 'profile-image',
+                                },
+                              );
+                            }
                           },
                           child: Hero(
                             tag: 'profile-image',
                             child: CircleAvatar(
                               radius: 42.r,
-                              backgroundImage: NetworkImage(user.avatarUrl),
+                              backgroundImage: user?.avatarUrl != null &&
+                                      user!.avatarUrl.isNotEmpty
+                                  ? NetworkImage(user.avatarUrl)
+                                  : const AssetImage(
+                                          'assets/images/default_avatar.png')
+                                      as ImageProvider,
                             ),
                           ),
                         ),

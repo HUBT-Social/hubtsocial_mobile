@@ -136,14 +136,30 @@ StatefulShellRoute _mainRoute() {
                   GoRoute(
                     path: 'fullscreen',
                     pageBuilder: (context, state) {
-                      final imageUrl = state.uri.queryParameters['imageUrl'];
+                      final extra = state.extra as Map<String, dynamic>?;
+                      final imageUrl = extra?['imageUrl'] as String?;
+                      final heroTag = extra?['heroTag'] as String?;
+                      if (imageUrl == null) {
+                        return MaterialPage<void>(
+                          child: Scaffold(
+                            appBar: AppBar(title: Text('Error')),
+                            body: Center(child: Text('Image URL is missing')),
+                          ),
+                        );
+                      }
+
                       return CustomTransitionPage(
                         key: state.pageKey,
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                            FadeTransition(opacity: animation, child: child),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
                         child: FullScreenImage(
-                          imageProvider: NetworkImage(imageUrl!),
-                          heroTag: 'profile-image',
+                          imageProvider: NetworkImage(imageUrl),
+                          heroTag: heroTag ?? 'profile-image',
                         ),
                       );
                     },

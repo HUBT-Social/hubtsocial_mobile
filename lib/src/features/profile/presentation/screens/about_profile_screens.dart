@@ -29,27 +29,42 @@ class AboutProfileScreen extends StatelessWidget {
         ),
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 6.r),
+        padding: EdgeInsets.symmetric(horizontal: 6.r, vertical: 8.r),
         children: [
           _buildInfoItem(
             context,
             'First name',
             user?.firstName ?? '',
           ),
+          SizedBox(height: 6.h),
           _buildInfoItem(
             context,
             'Last name',
             user?.lastName ?? '',
           ),
+          SizedBox(height: 6.h),
           _buildInfoItem(
             context,
             'Email',
             user?.email ?? '',
           ),
+          SizedBox(height: 6.h),
+          _buildInfoItem(
+            context,
+            'Gender',
+            (user?.gender ?? '').toString(),
+          ),
+          SizedBox(height: 6.h),
+          _buildInfoItem(
+            context,
+            'Date of birth',
+            (user?.birthDay ?? '').toString(),
+          ),
+          SizedBox(height: 6.h),
           _buildInfoItem(
             context,
             'Phone number',
-            user?.phone ?? '',
+            user?.phoneNumber ?? '',
           ),
         ],
       ),

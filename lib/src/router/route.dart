@@ -43,7 +43,8 @@ enum AppRoute {
   menu('/menu'),
   profile('/menu/profile'),
   profile2('/menu/profile/profile2'),
-  aboutprofile('menu/profile/aboutprofile'),
+  aboutprofile('/menu/profile/about'),
+  fullprofile('/menu/profile/fullscreen'),
   // menu
 
   ;
