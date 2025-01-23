@@ -10,6 +10,8 @@ import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/profile_action_buttons.dart';
 import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/profile_status.dart';
 
+import 'about_profile_screens.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -119,7 +121,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                           children: [
                             InkWell(
                               borderRadius: BorderRadius.circular(12.r),
-                              onTap: () => AppRoute.aboutprofile.push(context),
+                              onTap: () =>
+                                  AboutProfileUtils.showAboutProfileBottomSheet(
+                                      navigatorKey.currentContext ?? context),
                               child: Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 6.r),
                                 child: Row(

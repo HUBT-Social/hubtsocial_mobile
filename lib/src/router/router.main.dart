@@ -106,33 +106,35 @@ StatefulShellRoute _mainRoute() {
                 pageBuilder: (context, state) => CustomTransitionPage(
                   key: state.pageKey,
                   child: const ProfileScreen(),
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                      FadeTransition(opacity: animation, child: child),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(opacity: animation, child: child),
                 ),
                 routes: [
-                  GoRoute(
-                    path: 'about',
-                    pageBuilder: (context, state) => CustomTransitionPage(
-                      key: state.pageKey,
-                      child: const AboutProfileScreen(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(opacity: animation, child: child),
-                    ),
-                  ),
+                  // GoRoute(
+                  //   path: 'about',
+                  //   pageBuilder: (context, state) => CustomTransitionPage(
+                  //     key: state.pageKey,
+                  //     child: const AboutProfileScreen(),
+                  //     transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                  //         FadeTransition(opacity: animation, child: child),
+                  //   ),
+                  // ),
                   GoRoute(
                     path: 'fullscreen',
                     pageBuilder: (context, state) {
                       final extra = state.extra as Map<String, dynamic>?;
                       final imageUrl = extra?['imageUrl'] as String?;
                       final heroTag = extra?['heroTag'] as String?;
-                      
+
                       return CustomTransitionPage(
                         key: state.pageKey,
                         child: FullScreenImage(
                           imageProvider: NetworkImage(imageUrl ?? ''),
                           heroTag: heroTag ?? 'profile-image',
                         ),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                        transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) =>
                             FadeTransition(opacity: animation, child: child),
                       );
                     },
