@@ -133,6 +133,21 @@ StatefulShellRoute _mainRoute() {
                       );
                     },
                   ),
+                  GoRoute(
+                    path: 'fullscreen',
+                    pageBuilder: (context, state) {
+                      final imageUrl = state.uri.queryParameters['imageUrl'];
+                      return CustomTransitionPage(
+                        key: state.pageKey,
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                            FadeTransition(opacity: animation, child: child),
+                        child: FullScreenImage(
+                          imageProvider: NetworkImage(imageUrl!),
+                          heroTag: 'profile-image',
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ],

@@ -23,7 +23,7 @@ class ProfileActionButtons extends StatelessWidget {
               text: context.loc.follow,
               onPressed: onFollowPressed ??
                   () {
-                    AppRoute.profile2.push(context);
+                    AppRoute.aboutprofile.path;
                   },
               backgroundColor: context.colorScheme.primary,
               textColor: context.colorScheme.onPrimary),

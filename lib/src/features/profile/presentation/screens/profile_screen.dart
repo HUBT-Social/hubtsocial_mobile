@@ -116,25 +116,20 @@ class _ProfileScreenState extends State<ProfileScreen>
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    AppRoute.aboutprofile.push(context);
-                                  },
-                                  child: Text(
-                                    user!.fullname,
-                                    style: context.textTheme.headlineMedium
-                                        ?.copyWith(
-                                      color: context.colorScheme.onSurface,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                            GestureDetector(
+                              onTap: () {
+                                AppRoute.aboutprofile.push(context);
+                              },
+                              child: Text(
+                                user!.fullname,
+                                style: context.textTheme.headlineMedium
+                                    ?.copyWith(
+                                  color: context.colorScheme.onSurface,
+                                  fontWeight: FontWeight.w700,
                                 ),
-                                SizedBox(width: 4.w),
-                              ],
+                              ),
                             ),
-                            SizedBox(height: 11.h),
+                            SizedBox(width: 4.w),
                             Text(
                               '@${user.lastName}',
                               style: context.textTheme.labelLarge?.copyWith(
@@ -160,46 +155,20 @@ class _ProfileScreenState extends State<ProfileScreen>
                             ),
                           ],
                         ),
-                        Stack(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: context.colorScheme.surface,
-                                    spreadRadius: 2.r,
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: CircleAvatar(
-                                radius: 42.r,
-                                backgroundImage: NetworkImage(user.avatarUrl),
-                              ),
+                        GestureDetector(
+                          onTap: () {
+                            context.push(
+                              AppRoute.menu.path + '/profile/fullscreen',
+                              queryParameters: {'imageUrl': user.avatarUrl},
+                            );
+                          },
+                          child: Hero(
+                            tag: 'profile-image',
+                            child: CircleAvatar(
+                              radius: 42.r,
+                              backgroundImage: NetworkImage(user.avatarUrl),
                             ),
-                            Positioned(
-                              left: 0,
-                              bottom: 0,
-                              child: Container(
-                                padding: EdgeInsets.all(4.r),
-                                decoration: BoxDecoration(
-                                  color: context.colorScheme.primary,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: context.colorScheme.onPrimary,
-                                    width: 2.w,
-                                  ),
-                                ),
-                                child: Icon(
-                                  Icons.check,
-                                  color: context.colorScheme.onPrimary,
-                                  size: 12.r,
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ],
                     );

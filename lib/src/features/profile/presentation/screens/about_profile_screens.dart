@@ -17,7 +17,7 @@ class AboutProfileScreen extends StatelessWidget {
         backgroundColor: context.colorScheme.onPrimary,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -28,46 +28,55 @@ class AboutProfileScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildProfileField('First name', user?.firstName ?? ''),
-            _buildProfileField('Last name', user?.lastName ?? ''),
-            _buildProfileField('Email', user?.email ?? ''),
-            // _buildProfileField('Date of birth', user?.dateOfBirth ?? ''),
-            // _buildProfileField('Phone number', user?.phone ?? ''),
-          ],
-        ),
+      body: ListView(
+        padding: EdgeInsets.symmetric(horizontal: 6.r),
+        children: [
+          _buildInfoItem(
+            context,
+            'First name',
+            user?.firstName ?? '',
+          ),
+          _buildInfoItem(
+            context,
+            'Last name',
+            user?.lastName ?? '',
+          ),
+          _buildInfoItem(
+            context,
+            'Email',
+            user?.email ?? '',
+          ),
+          _buildInfoItem(
+            context,
+            'Phone number',
+            user?.phone ?? '',
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildProfileField(String label, String value) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildInfoItem(BuildContext context, String label, String value) {
+    return Container(
+      height: 48.h,
+      padding: EdgeInsets.symmetric(horizontal: 12.r),
+      decoration: BoxDecoration(
+        color: context.colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.grey,
-              fontWeight: FontWeight.w500,
-            ),
+            style: context.textTheme.titleSmall,
           ),
-          SizedBox(height: 4.h),
           Text(
             value,
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
+            style: context.textTheme.titleSmall?.copyWith(
+              color: context.colorScheme.onSurfaceVariant,
             ),
           ),
-          SizedBox(height: 8.h),
-          Divider(),
         ],
       ),
     );
