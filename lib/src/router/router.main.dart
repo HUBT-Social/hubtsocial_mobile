@@ -103,35 +103,21 @@ StatefulShellRoute _mainRoute() {
             routes: [
               GoRoute(
                 path: 'profile',
-                pageBuilder: (context, state) {
-                  return CustomTransitionPage(
-                    key: state.pageKey,
-                    transitionsBuilder: (
-                      context,
-                      animation,
-                      secondaryAnimation,
-                      child,
-                    ) =>
-                        FadeTransition(opacity: animation, child: child),
-                    child: const ProfileScreen(),
-                  );
-                },
+                pageBuilder: (context, state) => CustomTransitionPage(
+                  key: state.pageKey,
+                  child: const ProfileScreen(),
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                      FadeTransition(opacity: animation, child: child),
+                ),
                 routes: [
                   GoRoute(
-                    path: 'aboutprofile',
-                    pageBuilder: (context, state) {
-                      return CustomTransitionPage(
-                        key: state.pageKey,
-                        transitionsBuilder: (
-                          context,
-                          animation,
-                          secondaryAnimation,
-                          child,
-                        ) =>
-                            FadeTransition(opacity: animation, child: child),
-                        child: const AboutProfileScreen(),
-                      );
-                    },
+                    path: 'about',
+                    pageBuilder: (context, state) => CustomTransitionPage(
+                      key: state.pageKey,
+                      child: const AboutProfileScreen(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(opacity: animation, child: child),
+                    ),
                   ),
                   GoRoute(
                     path: 'fullscreen',
@@ -139,28 +125,15 @@ StatefulShellRoute _mainRoute() {
                       final extra = state.extra as Map<String, dynamic>?;
                       final imageUrl = extra?['imageUrl'] as String?;
                       final heroTag = extra?['heroTag'] as String?;
-                      if (imageUrl == null) {
-                        return MaterialPage<void>(
-                          child: Scaffold(
-                            appBar: AppBar(title: Text('Error')),
-                            body: Center(child: Text('Image URL is missing')),
-                          ),
-                        );
-                      }
-
+                      
                       return CustomTransitionPage(
                         key: state.pageKey,
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: child,
-                          );
-                        },
                         child: FullScreenImage(
-                          imageProvider: NetworkImage(imageUrl),
+                          imageProvider: NetworkImage(imageUrl ?? ''),
                           heroTag: heroTag ?? 'profile-image',
                         ),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                            FadeTransition(opacity: animation, child: child),
                       );
                     },
                   ),
