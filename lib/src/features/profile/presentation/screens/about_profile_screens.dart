@@ -20,97 +20,111 @@ final class AboutProfileUtils {
         ),
       ),
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.all(12.r),
-          child: SafeArea(
-            left: false,
-            right: false,
-            top: false,
-            child: SingleChildScrollView(
-              // Thêm widget cuộn
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      'About this profile',
-                      textAlign: TextAlign.center,
-                      style: context.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+        return Container(
+          width: 536.w,
+          height: 498.h,
+          padding: EdgeInsets.only(
+            top: 12.h,
+            right: 10.w,
+            bottom: 12.h,
+            left: 10.w,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
+                  context.loc.about_this_profile,
+                  style: context.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
                   ),
-                  SizedBox(height: 12.h),
-                  _buildInfoItem(
-                    context,
-                    'First name',
-                    user?.firstName ?? '',
-                  ),
-                  SizedBox(height: 6.h),
-                  _buildInfoItem(
-                    context,
-                    'Last name',
-                    user?.lastName ?? '',
-                  ),
-                  SizedBox(height: 6.h),
-                  _buildInfoItem(
-                    context,
-                    'Email',
-                    user?.email ?? '',
-                  ),
-                  SizedBox(height: 6.h),
-                  _buildInfoItem(
-                    context,
-                    'Gender',
-                    (user?.gender ?? '').toString(),
-                  ),
-                  SizedBox(height: 6.h),
-                  _buildInfoItem(
-                    context,
-                    'Date of birth',
-                    (user?.birthDay ?? '').toString(),
-                  ),
-                  SizedBox(height: 6.h),
-                  _buildInfoItem(
-                    context,
-                    'Phone number',
-                    user?.phoneNumber ?? '',
-                  ),
-                  SizedBox(height: 24.h),
-                ],
+                ),
               ),
-            ),
+              SizedBox(height: 4.h),
+              Text(
+                context.loc.first_name,
+                style: context.textTheme.labelMedium?.copyWith(
+                  color: context.colorScheme.onSurface,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                decoration: BoxDecoration(
+                  border: Border.all(color: context.colorScheme.outline),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: Text(
+                  user?.firstName ?? '',
+                  style: context.textTheme.bodyLarge,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              Text(
+                context.loc.last_name,
+                style: context.textTheme.labelMedium?.copyWith(
+                  color: context.colorScheme.onSurface,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                decoration: BoxDecoration(
+                  border: Border.all(color: context.colorScheme.outline),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: Text(
+                  user?.lastName ?? '',
+                  style: context.textTheme.bodyLarge,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              Text(
+                context.loc.gender,
+                style: context.textTheme.labelMedium?.copyWith(
+                  color: context.colorScheme.onSurface,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                decoration: BoxDecoration(
+                  border: Border.all(color: context.colorScheme.outline),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: Text(
+                  user?.gender.toString() ?? '',
+                  style: context.textTheme.bodyLarge,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              Text(
+                context.loc.birth_of_date,
+                style: context.textTheme.labelMedium?.copyWith(
+                  color: context.colorScheme.onSurface,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                decoration: BoxDecoration(
+                  border: Border.all(color: context.colorScheme.outline),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: Text(
+                  user?.birthDay.toString() ?? '',
+                  style: context.textTheme.bodyLarge,
+                ),
+              ),
+            ],
           ),
         );
       },
-    );
-  }
-
-  static Widget _buildInfoItem(
-      BuildContext context, String label, String value) {
-    return Container(
-      height: 48.h,
-      padding: EdgeInsets.symmetric(horizontal: 12.r),
-      decoration: BoxDecoration(
-        color: context.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(12.r),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: context.textTheme.titleSmall,
-          ),
-          Text(
-            value,
-            style: context.textTheme.titleSmall?.copyWith(
-              color: context.colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

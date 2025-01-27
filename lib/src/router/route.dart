@@ -45,6 +45,7 @@ enum AppRoute {
   profile2('/menu/profile/profile2'),
   aboutprofile('/menu/profile/about'),
   fullprofile('/menu/profile/fullscreen'),
+  editprofile('/menu/profile/editprofile'),
   // menu
 
   ;

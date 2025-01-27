@@ -50,6 +50,16 @@
       "value": {}
     }
   },
+  "email": "Email",
+  "@email": {},
+  "save_changes": "save_changes",
+  "@save_changes": {},
+  "edit_profile": "edit_profile",
+  "@edit_profile": {},
+  "change_photo": "change_photo",
+  "@change_photo": {},
+  "about_this_profile": "About this profile",
+  "@about_this_profile": {},
   "birth_of_date": "Birth of date",
   "@birth_of_date": {},
   "gender": "Gender",

@@ -55,138 +55,148 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'Edit Profile',
-          style: context.textTheme.headlineMedium?.copyWith(
+          context.loc.edit_profile,
+          style: context.textTheme.titleLarge?.copyWith(
             color: context.colorScheme.onSurface,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 20.h),
-              Center(
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        // Handle avatar tap
+        child: Column(
+          children: [
+            // Avatar section
+            Container(
+              color: context.colorScheme.surface,
+              padding: EdgeInsets.symmetric(vertical: 24.h),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      // Handle avatar change
+                    },
+                    child: Stack(
+                      children: [
+                        Hero(
+                          tag: 'profile-image',
+                          child: CircleAvatar(
+                            radius: 50.r,
+                            backgroundImage: user?.avatarUrl != null
+                                ? NetworkImage(user!.avatarUrl)
+                                : const AssetImage(
+                                        'assets/images/default_avatar.png')
+                                    as ImageProvider,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  Text(
+                    context.loc.change_photo,
+                    style: context.textTheme.labelLarge?.copyWith(
+                      color: context.colorScheme.primary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Form fields
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
+              child: Column(
+                children: [
+                  _buildTextField(
+                    context,
+                    controller: firstNameController,
+                    label: context.loc.first_name,
+                    hint: context.loc.first_name,
+                    required: true,
+                  ),
+                  _buildTextField(
+                    context,
+                    controller: lastNameController,
+                    label: context.loc.last_name,
+                    hint: context.loc.last_name,
+                    required: true,
+                  ),
+                  _buildDropdownField(
+                    context,
+                    label: context.loc.gender,
+                    value: selectedGender,
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          selectedGender = value;
+                        });
+                      }
+                    },
+                  ),
+                  _buildTextField(
+                    context,
+                    controller: dateOfBirthController,
+                    label: context.loc.birth_of_date,
+                    hint: 'dd/mm/yyyy',
+                    readOnly: true,
+                    onTap: () async {
+                      final date = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime.now(),
+                      );
+                      if (date != null) {
+                        dateOfBirthController.text =
+                            "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}";
+                      }
+                    },
+                  ),
+                  _buildTextField(
+                    context,
+                    controller: phoneController,
+                    label: context.loc.phone_number,
+                    hint: context.loc.phone_number,
+                    required: true,
+                    keyboardType: TextInputType.phone,
+                  ),
+                  _buildTextField(
+                    context,
+                    controller: emailController,
+                    label: context.loc.email,
+                    hint: context.loc.email,
+                    required: true,
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  SizedBox(height: 10.h),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 42.h,
+                    child: FilledButton(
+                      onPressed: () {
+                        // Handle save changes
                       },
-                      child: Hero(
-                        tag: 'profile-image',
-                        child: CircleAvatar(
-                          radius: 40.r,
-                          backgroundColor:
-                              context.colorScheme.surfaceContainerHighest,
-                          backgroundImage: user?.avatarUrl != null
-                              ? NetworkImage(user!.avatarUrl)
-                              : const AssetImage('assets/icons/app_icon.png')
-                                  as ImageProvider,
+                      style: FilledButton.styleFrom(
+                        backgroundColor: context.colorScheme.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      ),
+                      child: Text(
+                        context.loc.save_changes,
+                        style: context.textTheme.titleMedium?.copyWith(
+                          color: context.colorScheme.onPrimary,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                    SizedBox(height: 8.h),
-                    Text(
-                      'Change photo',
-                      style: context.textTheme.labelLarge?.copyWith(
-                        color: context.colorScheme.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 24.h),
-              _buildTextField(
-                context,
-                controller: firstNameController,
-                label: 'First name *',
-                hint: 'Enter first name',
-              ),
-              SizedBox(height: 16.h),
-              _buildTextField(
-                context,
-                controller: lastNameController,
-                label: 'Last name *',
-                hint: 'Enter last name',
-              ),
-              SizedBox(height: 16.h),
-              _buildDropdownField(
-                context,
-                label: 'Gender',
-                value: selectedGender,
-                onChanged: (value) {
-                  setState(() {
-                    selectedGender = value!;
-                  });
-                },
-              ),
-              SizedBox(height: 16.h),
-              _buildTextField(
-                context,
-                controller: dateOfBirthController,
-                label: 'Date of birth',
-                hint: 'dd/mm/yyyy',
-                readOnly: true,
-                onTap: () async {
-                  final date = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                  );
-                  if (date != null) {
-                    dateOfBirthController.text =
-                        "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}";
-                  }
-                },
-              ),
-              SizedBox(height: 16.h),
-              _buildTextField(
-                context,
-                controller: phoneController,
-                label: 'Phone number *',
-                hint: 'Enter phone number',
-                keyboardType: TextInputType.phone,
-              ),
-              SizedBox(height: 16.h),
-              _buildTextField(
-                context,
-                controller: emailController,
-                label: 'Email *',
-                hint: 'Enter email',
-                keyboardType: TextInputType.emailAddress,
-              ),
-              SizedBox(height: 32.h),
-              SizedBox(
-                width: double.infinity,
-                height: 48.h,
-                child: FilledButton(
-                  onPressed: () {
-                    // Handle save changes
-                  },
-                  style: FilledButton.styleFrom(
-                    backgroundColor: context.colorScheme.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
                   ),
-                  child: Text(
-                    'Save changes',
-                    style: context.textTheme.labelLarge?.copyWith(
-                      color: context.colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+                  SizedBox(height: 12.h),
+                ],
               ),
-              SizedBox(height: 16.h),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -197,6 +207,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     required TextEditingController controller,
     required String label,
     required String hint,
+    bool required = false,
     TextInputType? keyboardType,
     bool readOnly = false,
     VoidCallback? onTap,
@@ -204,18 +215,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: context.textTheme.labelLarge?.copyWith(
-            color: context.colorScheme.onSurface,
-          ),
+        Row(
+          children: [
+            Text(
+              label,
+              style: context.textTheme.titleSmall?.copyWith(
+                color: context.colorScheme.onSurface,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            if (required) Text(' *', style: TextStyle(color: Colors.red)),
+          ],
         ),
         SizedBox(height: 8.h),
         Container(
-          height: 48.h,
+          width: double.infinity,
+          height: 41.h,
           decoration: BoxDecoration(
-            color: context.colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(12.r),
+            borderRadius: BorderRadius.circular(24.r),
+            border: Border.all(
+              color: context.colorScheme.outline,
+              width: 1,
+            ),
           ),
           child: TextField(
             controller: controller,
@@ -230,7 +251,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               hintStyle: context.textTheme.bodyLarge?.copyWith(
                 color: context.colorScheme.onSurfaceVariant,
               ),
-              contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
+              contentPadding: EdgeInsets.symmetric(horizontal: 15.w),
               border: InputBorder.none,
             ),
           ),
@@ -250,17 +271,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       children: [
         Text(
           label,
-          style: context.textTheme.labelLarge?.copyWith(
+          style: context.textTheme.titleSmall?.copyWith(
             color: context.colorScheme.onSurface,
+            fontWeight: FontWeight.w500,
           ),
         ),
         SizedBox(height: 8.h),
         Container(
-          height: 48.h,
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          width: double.infinity,
+          height: 41.h,
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
           decoration: BoxDecoration(
-            color: context.colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(12.r),
+            borderRadius: BorderRadius.circular(24.r),
+            border: Border.all(
+              color: context.colorScheme.outline,
+              width: 1,
+            ),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(

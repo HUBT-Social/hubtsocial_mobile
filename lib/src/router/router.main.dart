@@ -111,15 +111,16 @@ StatefulShellRoute _mainRoute() {
                           FadeTransition(opacity: animation, child: child),
                 ),
                 routes: [
-                  // GoRoute(
-                  //   path: 'about',
-                  //   pageBuilder: (context, state) => CustomTransitionPage(
-                  //     key: state.pageKey,
-                  //     child: const AboutProfileScreen(),
-                  //     transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                  //         FadeTransition(opacity: animation, child: child),
-                  //   ),
-                  // ),
+                  GoRoute(
+                    path: 'editprofile',
+                    pageBuilder: (context, state) => CustomTransitionPage(
+                      key: state.pageKey,
+                      child: const EditProfileScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              FadeTransition(opacity: animation, child: child),
+                    ),
+                  ),
                   GoRoute(
                     path: 'fullscreen',
                     pageBuilder: (context, state) {

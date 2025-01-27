@@ -58,6 +58,16 @@
       "value": {}
     }
   },
+  "email": "Email",
+  "@email": {},
+  "save_changes": "Lưu thay đổi",
+  "@save_changes": {},
+  "edit_profile": "Cập nhật thông tin",
+  "@edit_profile": {},
+  "change_photo": "Đổi ảnh đại diện",
+  "@change_photo": {},
+  "about_this_profile": "Thông tin cá nhân",
+  "@about_this_profile": {},
   "signup_information": "Thông tin cá nhân ",
   "@signup_information": {},
   "username_or_email": "Tên đăng nhập hoặc Email",
