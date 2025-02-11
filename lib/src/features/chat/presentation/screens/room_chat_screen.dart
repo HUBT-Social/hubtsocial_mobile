@@ -230,7 +230,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
             textStyle: TextStyle(color: context.colorScheme.onSurface),
             onMessageRead: (message) {
               /// send your message reciepts to the other client
-              logger.d('Message Read' + message.toString());
+              logger.d('Message Read$message');
             },
             senderNameTextStyle:
                 TextStyle(color: context.colorScheme.onSurfaceVariant),
