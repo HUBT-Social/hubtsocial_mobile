@@ -120,7 +120,7 @@ class APIRequest {
     var payload = jwtDecode(token).payload;
     int expiredTime = payload['exp'];
     var currentTimestamp = DateTime.now()
-        .subtract(const Duration(minutes: 10))
+        .subtract(const Duration(minutes: 0))
         .millisecondsSinceEpoch;
     if (currentTimestamp ~/ 1000 > expiredTime) {
       return true;

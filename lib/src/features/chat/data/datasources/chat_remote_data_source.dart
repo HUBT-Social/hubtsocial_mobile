@@ -6,8 +6,10 @@ import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../constants/end_point.dart';
 import '../../../../core/api/errors/exceptions.dart';
 import '../../../../core/logger/logger.dart';
+import '../../../auth/domain/entities/user_token.dart';
 
 abstract class ChatRemoteDataSource {
   const ChatRemoteDataSource();
@@ -31,9 +33,12 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   @override
   Future<List<ChatResponseModel>> fetchChat({required int page}) async {
     try {
+      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
+
       final response = await APIRequest.get(
-          url:
-              "https://jsonplaceholder.typicode.com/posts?_limit=10&_page=$page");
+        url: "${EndPoint.chatView}?page=$page&limit=10",
+        token: userToken.accessToken,
+      );
 
       if (response.statusCode != 200) {
         logger.e('Failed to Fetch Chat: ${response.body.toString()}');

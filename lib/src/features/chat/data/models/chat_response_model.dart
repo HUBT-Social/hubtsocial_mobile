@@ -2,59 +2,59 @@ import 'package:equatable/equatable.dart';
 
 class ChatResponseModel extends Equatable {
   const ChatResponseModel({
-    required this.userId,
+    required this.totalNumber,
     required this.id,
-    required this.title,
-    required this.body,
+    required this.avatarUrl,
+    required this.groupName,
   });
 
-  final int? userId;
-  final int? id;
-  final String? title;
-  final String? body;
+  final int? totalNumber;
+  final String? id;
+  final String? avatarUrl;
+  final String? groupName;
 
   ChatResponseModel copyWith({
-    int? userId,
-    int? id,
-    String? title,
-    String? body,
+    int? totalNumber,
+    String? id,
+    String? avatarUrl,
+    String? groupName,
   }) {
     return ChatResponseModel(
-      userId: userId ?? this.userId,
+      totalNumber: totalNumber ?? this.totalNumber,
       id: id ?? this.id,
-      title: title ?? this.title,
-      body: body ?? this.body,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      groupName: groupName ?? this.groupName,
     );
   }
 
-  String? get bodyNoEscapeSequence => body?.replaceAll('\n', ' ');
+  String? get bodyNoEscapeSequence => groupName?.replaceAll('\n', ' ');
 
   factory ChatResponseModel.fromJson(Map<String, dynamic> json) {
     return ChatResponseModel(
-      userId: json["userId"],
+      totalNumber: json["totalNumber"],
       id: json["id"],
-      title: json["title"],
-      body: json["body"],
+      avatarUrl: json["avatarUrl"],
+      groupName: json["body"],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        "userId": userId,
+        "totalNumber": totalNumber,
         "id": id,
-        "title": title,
-        "body": body,
+        "avatarUrl": avatarUrl,
+        "groupName": groupName,
       };
 
   @override
   String toString() {
-    return "$userId, $id, $title, $body, ";
+    return "$totalNumber, $id, $avatarUrl, $groupName, ";
   }
 
   @override
   List<Object?> get props => [
-        userId,
+        totalNumber,
         id,
-        title,
-        body,
+        avatarUrl,
+        groupName,
       ];
 }
