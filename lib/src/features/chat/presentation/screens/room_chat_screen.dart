@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:chatview/chatview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,9 +8,14 @@ import 'package:hubtsocial_mobile/src/core/presentation/widget/url_image.dart';
 import 'data.dart';
 
 class RoomChatScreen extends StatefulWidget {
-  const RoomChatScreen({required this.id, required this.title, super.key});
+  const RoomChatScreen(
+      {required this.id,
+      required this.title,
+      required this.avatarUrl,
+      super.key});
   final String id;
   final String title;
+  final String avatarUrl;
 
   @override
   State<RoomChatScreen> createState() => _RoomChatScreenState();
@@ -122,9 +125,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
           foregroundColor: Theme.of(context).colorScheme.onPrimary,
           title: Row(
             children: [
-              UrlImage.circle(
-                  "https://raw.githubusercontent.com/SimformSolutionsPvtLtd/flutter_showcaseview/master/example/assets/simform.png",
-                  size: 36.r),
+              UrlImage.circle(widget.avatarUrl, size: 36.r),
               SizedBox(width: 12.w),
               Expanded(
                 child: Column(

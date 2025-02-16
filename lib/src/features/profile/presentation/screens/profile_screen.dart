@@ -173,8 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                         GestureDetector(
                           onTap: () {
-                            if (user.avatarUrl != null &&
-                                user.avatarUrl.isNotEmpty) {
+                            if (user.avatarUrl.isNotEmpty) {
                               context.push(
                                 AppRoute.fullprofile.path,
                                 extra: {
@@ -188,8 +187,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             tag: 'profile-image',
                             child: CircleAvatar(
                               radius: 42.r,
-                              backgroundImage: user.avatarUrl != null &&
-                                      user.avatarUrl.isNotEmpty
+                              backgroundImage: user.avatarUrl.isNotEmpty
                                   ? NetworkImage(user.avatarUrl)
                                   : const AssetImage(
                                           'assets/images/default_avatar.png')

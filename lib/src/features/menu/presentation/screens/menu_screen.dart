@@ -5,10 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/localization/bloc/localization_bloc.dart';
-import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/features/menu/presentation/widgets/user_card_in_menu.dart';
 
-import '../../../../core/app/providers/hive_provider.dart';
 import '../../../../core/localization/utils/change_language_bottom_sheet.dart';
 import '../../../../router/router.import.dart';
 import '../../../../core/theme/bloc/theme_bloc.dart';
@@ -148,20 +146,19 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             ),
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: 6.h),
           Container(
             color: context.colorScheme.outlineVariant,
             height: 2,
             width: double.infinity,
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: 6.h),
           InkWell(
             borderRadius: BorderRadius.all(
               Radius.circular(12.r),
             ),
             onTap: () {
               context.read<AuthBloc>().add(const SignOutEvent());
-              HiveProvider.clearToken(() => AppRoute.getStarted.go(context));
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 6.r),

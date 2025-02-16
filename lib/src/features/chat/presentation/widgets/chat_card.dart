@@ -68,8 +68,9 @@ class _ChatCardState extends State<ChatCard> {
           onTap: () {
             AppRoute.roomChat
                 .push(navigatorKey.currentContext!, queryParameters: {
-              "id": widget.chatModel.id.toString(),
-              "title": widget.chatModel.groupName.toString()
+              "id": widget.chatModel.id,
+              "title": widget.chatModel.groupName,
+              "avatarUrl": widget.chatModel.avatarUrl
             });
           },
           child: SizedBox(
@@ -85,7 +86,7 @@ class _ChatCardState extends State<ChatCard> {
                           alignment: AlignmentDirectional.bottomEnd,
                           children: [
                             UrlImage.circle(
-                              "https://res.cloudinary.com/dnx8aew1t/image/upload/v1732549977/jgldr2myysd7u6vx6sfy.jpg",
+                              widget.chatModel.avatarUrl,
                               size: 48.sp,
                             ),
                             Container(
@@ -114,14 +115,13 @@ class _ChatCardState extends State<ChatCard> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${widget.chatModel.id}  ${widget.chatModel.groupName ?? "null"}',
+                                  widget.chatModel.groupName,
                                   overflow: TextOverflow.ellipsis,
                                   style: context.textTheme.labelLarge?.copyWith(
                                       color: context.colorScheme.onSurface),
                                 ),
                                 Text(
-                                  widget.chatModel.bodyNoEscapeSequence ??
-                                      "null",
+                                  widget.chatModel.lastMessage ?? "",
                                   overflow: TextOverflow.ellipsis,
                                   softWrap: true,
                                   style: context.textTheme.labelMedium
@@ -153,7 +153,7 @@ class _ChatCardState extends State<ChatCard> {
                           ),
                         ),
                         Text(
-                          "24h 30p",
+                          widget.chatModel.lastInteractionTime ?? "",
                           overflow: TextOverflow.ellipsis,
                           style: context.textTheme.labelSmall
                               ?.copyWith(color: context.colorScheme.onSurface),
