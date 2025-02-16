@@ -1,5 +1,5 @@
 import '../models/class_schedule.dart';
-import '../models/class_schedule.dart';
+
 import '../../../core/notification/local_message.dart';
 import 'dart:convert';
 

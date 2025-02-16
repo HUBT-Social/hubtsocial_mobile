@@ -9,7 +9,8 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  final ScheduleNotificationService _notificationService = ScheduleNotificationService();
+  final ScheduleNotificationService _notificationService =
+      ScheduleNotificationService();
   Timer? _refreshTimer;
 
   @override
@@ -78,13 +79,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-          
+
           if (snapshot.hasError) {
             return Center(child: Text('Lỗi: ${snapshot.error}'));
           }
 
           final schedules = snapshot.data ?? [];
-          
+
           return ListView.builder(
             itemCount: schedules.length,
             itemBuilder: (context, index) {
@@ -101,4 +102,4 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       ),
     );
   }
-} 
+}

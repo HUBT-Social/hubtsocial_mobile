@@ -364,7 +364,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       var tokenBox = _hiveAuth.box(LocalStorageKey.token);
       await tokenBox.put(LocalStorageKey.userToken, token);
       logger.i('Sign in token : $token');
+      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
 
+      final responseFcm = await APIRequest.put(
+        url: EndPoint.updateFcmToken,
+        token: userToken.accessToken,
+        body: {"fcmToken": await FirebaseMessaging.instance.getToken()},
+      );
       return responseData;
     } on ServerException {
       rethrow;
@@ -407,7 +413,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       var tokenBox = _hiveAuth.box(LocalStorageKey.token);
       await tokenBox.put(LocalStorageKey.userToken, token);
       logger.i('Sign in token : $token');
+      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
 
+      final responseFcm = await APIRequest.put(
+        url: EndPoint.updateFcmToken,
+        token: userToken.accessToken,
+        body: {"fcmToken": await FirebaseMessaging.instance.getToken()},
+      );
       return responseData;
     } on ServerException {
       rethrow;

@@ -21,6 +21,7 @@ class EndPoint {
   static String get _user => "$apiUrl/user";
   static String get userGetUser => "$_user/get-user";
   static String get informationUser => "$_user/add-info-user";
+  static String get updateFcmToken => "$_user/update/fcm-token";
 
   static String get _chat => "$apiUrl/chat";
   static String get chatView => "$_chat/develop/get-all-group";
