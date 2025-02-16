@@ -47,7 +47,9 @@
   "the_code_will": "The code will expire in: {value}",
   "@the_code_will": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "String"
+      }
     }
   },
   "email": "Email",
@@ -101,7 +103,9 @@
   "password_must_be_at_least": "Password must be at least {value} characters long",
   "@password_must_be_at_least": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "int"
+      }
     }
   },
   "password_must_contain_at_least_one_capital_letter": "Password must contain at least one capital letter",
@@ -117,7 +121,9 @@
   "enter_otp_message": "Enter the 6-digit code we sent you at Email {maskMail} ",
   "@enter_otp_message": {
     "placeholders": {
-      "maskMail": {}
+      "maskMail": {
+        "type": "String"
+      }
     }
   },
   "enter_message": "Please enter your Username or Email to reset the password",
@@ -139,13 +145,17 @@
   "minutesAgo": "{minutes} minutes ago",
   "@minutesAgo": {
     "placeholders": {
-      "minutes": {}
+      "minutes": {
+        "type": "int"
+      }
     }
   },
   "hoursAgo": "{hours} hours ago",
   "@hoursAgo": {
     "placeholders": {
-      "hours": {}
+      "hours": {
+        "type": "int"
+      }
     }
   },
   "timeFormat": "dd/MM/yyyy HH:mm",

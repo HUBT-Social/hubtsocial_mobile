@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
+import '../../../l10n/output/app_localization.dart';
 import '../app/providers/user_provider.dart';
 
 extension Context on BuildContext {
