@@ -148,12 +148,52 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             ),
           ),
-          FilledButton(
-            onPressed: () {
+          SizedBox(height: 12.h),
+          Container(
+            color: context.colorScheme.outlineVariant,
+            height: 2,
+            width: double.infinity,
+          ),
+          SizedBox(height: 12.h),
+          InkWell(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12.r),
+            ),
+            onTap: () {
               context.read<AuthBloc>().add(const SignOutEvent());
               HiveProvider.clearToken(() => AppRoute.getStarted.go(context));
             },
-            child: Text("Sign out"),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 6.r),
+              child: Container(
+                height: 48.h,
+                padding: EdgeInsets.symmetric(horizontal: 12.r),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.outlineVariant,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12.r),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.output_rounded,
+                          size: 28.r,
+                        ),
+                        SizedBox(width: 12.w),
+                        Text(
+                          "Sign Out",
+                          style: context.textTheme.titleSmall,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
           FilledButton(
             onPressed: () async {
