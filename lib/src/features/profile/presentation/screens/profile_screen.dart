@@ -175,7 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           onTap: () {
                             if (user.avatarUrl != null &&
                                 user.avatarUrl.isNotEmpty) {
-                              context.push(
+                              navigatorKey.currentContext?.push(
                                 AppRoute.fullprofile.path,
                                 extra: {
                                   'imageUrl': user.avatarUrl,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class FullScreenImage extends StatelessWidget {
   final ImageProvider imageProvider;
@@ -28,9 +29,10 @@ class FullScreenImage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: IconButton(
-                icon: const Icon(Icons.close, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
-              ),
+                  icon: const Icon(Icons.close, color: Colors.white),
+                  onPressed: () {
+                    context.pop();
+                  }),
             ),
           ),
         ],
