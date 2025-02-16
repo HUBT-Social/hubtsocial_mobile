@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
@@ -8,7 +7,6 @@ import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:provider/provider.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/profile_action_buttons.dart';
-import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/profile_status.dart';
 
 import 'about_profile_screens.dart';
 
@@ -54,14 +52,14 @@ class _ProfileScreenState extends State<ProfileScreen>
             top: 2,
             left: 2,
             child: Container(
-              width: 20.w,
-              height: 20.h,
+              width: 20,
+              height: 20,
               decoration: BoxDecoration(
                 color: context.colorScheme.primary,
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: context.colorScheme.onPrimary,
-                  width: 2.w,
+                  width: 2,
                 ),
               ),
               child: Stack(
@@ -71,26 +69,26 @@ class _ProfileScreenState extends State<ProfileScreen>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: 3.w,
-                        height: 3.h,
+                        width: 3,
+                        height: 3,
                         decoration: BoxDecoration(
                           color: context.colorScheme.onPrimary,
                           shape: BoxShape.circle,
                         ),
                       ),
-                      SizedBox(width: 2.w),
+                      SizedBox(width: 2),
                       Container(
-                        width: 3.w,
-                        height: 3.h,
+                        width: 3,
+                        height: 3,
                         decoration: BoxDecoration(
                           color: context.colorScheme.onPrimary,
                           shape: BoxShape.circle,
                         ),
                       ),
-                      SizedBox(width: 2.w),
+                      SizedBox(width: 2),
                       Container(
-                        width: 3.w,
-                        height: 3.h,
+                        width: 3,
+                        height: 3,
                         decoration: BoxDecoration(
                           color: context.colorScheme.onPrimary,
                           shape: BoxShape.circle,
@@ -107,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(16.r),
+            padding: EdgeInsets.all(16),
             child: Column(
               children: [
                 Consumer<UserProvider>(
@@ -120,12 +118,12 @@ class _ProfileScreenState extends State<ProfileScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             InkWell(
-                              borderRadius: BorderRadius.circular(12.r),
+                              borderRadius: BorderRadius.circular(12),
                               onTap: () =>
                                   AboutProfileUtils.showAboutProfileBottomSheet(
                                       navigatorKey.currentContext ?? context),
                               child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 6.r),
+                                padding: EdgeInsets.symmetric(horizontal: 6),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -143,9 +141,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 ),
                               ),
                             ),
-                            SizedBox(height: 4.h),
+                            SizedBox(height: 4),
                             Padding(
-                              padding: EdgeInsets.only(left: 18.r),
+                              padding: EdgeInsets.only(left: 18),
                               child: Text(
                                 '@${user.lastName}',
                                 style: context.textTheme.labelLarge?.copyWith(
@@ -154,7 +152,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 ),
                               ),
                             ),
-                            SizedBox(height: 8.h),
+                            SizedBox(height: 8),
                             // TODO: Implement status feature when User model is updated
                             // ProfileStatus(
                             //   status: user?.status ?? '',
@@ -187,9 +185,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                           child: Hero(
                             tag: 'profile-image',
                             child: CircleAvatar(
-                              radius: 42.r,
-                              backgroundImage: user.avatarUrl != null &&
-                                      user.avatarUrl.isNotEmpty
+                              radius: 42,
+                              backgroundImage: user.avatarUrl.isNotEmpty
                                   ? NetworkImage(user.avatarUrl)
                                   : const AssetImage(
                                           'assets/images/default_avatar.png')
@@ -201,12 +198,12 @@ class _ProfileScreenState extends State<ProfileScreen>
                     );
                   },
                 ),
-                SizedBox(height: 32.h),
+                SizedBox(height: 32),
                 const ProfileActionButtons(),
               ],
             ),
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 16),
           TabBar(
             controller: _tabController,
             labelColor: context.colorScheme.onSurface,
@@ -243,11 +240,11 @@ class _ProfileScreenState extends State<ProfileScreen>
                     return Container(
                       decoration: BoxDecoration(
                         color: colors[index],
-                        borderRadius: BorderRadius.circular(10.r),
+                        borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
                             color: context.colorScheme.surface,
-                            blurRadius: 4.r,
+                            blurRadius: 4,
                             offset: Offset(0, 4),
                           ),
                         ],

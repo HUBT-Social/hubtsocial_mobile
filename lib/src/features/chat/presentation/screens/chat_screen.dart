@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/chat/presentation/widgets/chat_card.dart';
@@ -86,8 +85,7 @@ class _ChatScreenState extends State<ChatScreen> {
               slivers: <Widget>[
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding:
-                        EdgeInsets.only(top: 16.r, left: 16.r, right: 16.r),
+                    padding: EdgeInsets.only(top: 16, left: 16, right: 16),
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: "Search...",
@@ -95,13 +93,13 @@ class _ChatScreenState extends State<ChatScreen> {
                         prefixIcon: Icon(
                           Icons.search,
                           color: Colors.grey.shade600,
-                          size: 20.dg,
+                          size: 20,
                         ),
                         filled: true,
                         fillColor: Colors.grey.shade100,
-                        contentPadding: EdgeInsets.all(8.r),
+                        contentPadding: EdgeInsets.all(8),
                         enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.r),
+                            borderRadius: BorderRadius.circular(20),
                             borderSide:
                                 BorderSide(color: Colors.grey.shade100)),
                       ),
@@ -120,7 +118,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 SliverToBoxAdapter(
                   child: SizedBox(
-                    height: 100.h,
+                    height: 100,
                   ),
                 ),
               ],

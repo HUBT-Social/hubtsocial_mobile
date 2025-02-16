@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
@@ -15,13 +14,13 @@ final class LocalizatioUtils {
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24.r),
-          topRight: Radius.circular(24.r),
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
         ),
       ),
       builder: (context) {
         return Padding(
-          padding: EdgeInsets.all(12.r),
+          padding: EdgeInsets.all(12),
           child: SafeArea(
             left: false,
             right: false,
@@ -37,7 +36,7 @@ final class LocalizatioUtils {
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
-                SizedBox(height: 12.h),
+                SizedBox(height: 12),
                 BlocBuilder<LocalizationBloc, AppLocalizationState>(
                   builder: (context, state) {
                     return ListView.separated(
@@ -53,7 +52,7 @@ final class LocalizatioUtils {
                           },
                           leading: Image.asset(
                             Language.values[index].image,
-                            height: 32.h,
+                            height: 32,
                             fit: BoxFit.contain,
                           ),
                           title: Text(
@@ -73,7 +72,7 @@ final class LocalizatioUtils {
                                     )
                                   : null,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.r),
+                            borderRadius: BorderRadius.circular(10),
                             side:
                                 Language.values[index] == state.selectedLanguage
                                     ? BorderSide(
@@ -90,12 +89,12 @@ final class LocalizatioUtils {
                         );
                       },
                       separatorBuilder: (context, index) {
-                        return SizedBox(height: 12.h);
+                        return SizedBox(height: 12);
                       },
                     );
                   },
                 ),
-                SizedBox(height: 24.h),
+                SizedBox(height: 24),
               ],
             ),
           ),

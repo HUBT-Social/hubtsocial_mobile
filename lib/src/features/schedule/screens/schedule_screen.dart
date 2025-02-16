@@ -4,6 +4,8 @@ import '../services/schedule_notification_service.dart';
 import 'dart:async';
 
 class ScheduleScreen extends StatefulWidget {
+  const ScheduleScreen({super.key});
+
   @override
   State<ScheduleScreen> createState() => _ScheduleScreenState();
 }

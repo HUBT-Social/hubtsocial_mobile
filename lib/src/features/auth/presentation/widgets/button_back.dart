@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
@@ -30,7 +29,7 @@ class _ButtonBackState extends State<ButtonBack> {
             icon: Icon(
               Icons.arrow_back_ios_new,
               color: context.colorScheme.onSurface,
-              size: 32.dg,
+              size: 32,
             ),
             onPressed: () {
               if (context.canPop()) {

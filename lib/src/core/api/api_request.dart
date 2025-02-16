@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:http/http.dart' as http;
 import 'package:hubtsocial_mobile/src/core/api/errors/exceptions.dart';
+import 'package:hubtsocial_mobile/src/core/app/providers/hive_provider.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/auth/data/models/user_token_model.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
+import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:jwt_decode_full/jwt_decode_full.dart';
 
 import '../../constants/end_point.dart';
@@ -148,8 +151,8 @@ class APIRequest {
       );
 
       if (response.statusCode == 401) {
-        var tokenBox = Hive.box(LocalStorageKey.token);
-        tokenBox.clear();
+        HiveProvider.clearToken(
+            () => AppRoute.getStarted.go(navigatorKey.currentContext!));
       }
 
       if (response.statusCode != 200) {

@@ -60,6 +60,7 @@ final GoRouter router = GoRouter(
           child: RoomChatScreen(
             id: state.uri.queryParameters['id'].toString(),
             title: state.uri.queryParameters['title'].toString(),
+            avatarUrl: state.uri.queryParameters['avatarUrl'].toString(),
           ),
         );
       },

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import '../../utils/validators.dart';
 
@@ -199,7 +198,7 @@ class _InputFieldState extends State<InputField> {
       decoration: InputDecoration(
         border: OutlineInputBorder(
           gapPadding: 0,
-          borderRadius: BorderRadius.all(Radius.circular(12.r)),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(color: context.colorScheme.outline),
         ),
         counterStyle: context.textTheme.bodyLarge

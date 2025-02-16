@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
@@ -68,30 +67,31 @@ class _ChatCardState extends State<ChatCard> {
           onTap: () {
             AppRoute.roomChat
                 .push(navigatorKey.currentContext!, queryParameters: {
-              "id": widget.chatModel.id.toString(),
-              "title": widget.chatModel.groupName.toString()
+              "id": widget.chatModel.id,
+              "title": widget.chatModel.groupName,
+              "avatarUrl": widget.chatModel.avatarUrl
             });
           },
           child: SizedBox(
-              height: 60.sp,
+              height: 60,
               width: double.infinity,
               child: Row(
                 children: [
                   Expanded(
                     child: Row(
                       children: [
-                        SizedBox(width: 12.w),
+                        SizedBox(width: 12),
                         Stack(
                           alignment: AlignmentDirectional.bottomEnd,
                           children: [
                             UrlImage.circle(
-                              "https://res.cloudinary.com/dnx8aew1t/image/upload/v1732549977/jgldr2myysd7u6vx6sfy.jpg",
-                              size: 48.sp,
+                              widget.chatModel.avatarUrl,
+                              size: 48,
                             ),
                             Container(
-                              padding: EdgeInsets.all(2.r),
-                              height: 14.h,
-                              width: 14.w,
+                              padding: EdgeInsets.all(2),
+                              height: 14,
+                              width: 14,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: context.colorScheme.surface,
@@ -105,23 +105,22 @@ class _ChatCardState extends State<ChatCard> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 12.w),
+                        SizedBox(width: 12),
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8.r),
+                            padding: EdgeInsets.symmetric(vertical: 8),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${widget.chatModel.id}  ${widget.chatModel.groupName ?? "null"}',
+                                  widget.chatModel.groupName,
                                   overflow: TextOverflow.ellipsis,
                                   style: context.textTheme.labelLarge?.copyWith(
                                       color: context.colorScheme.onSurface),
                                 ),
                                 Text(
-                                  widget.chatModel.bodyNoEscapeSequence ??
-                                      "null",
+                                  widget.chatModel.lastMessage ?? "",
                                   overflow: TextOverflow.ellipsis,
                                   softWrap: true,
                                   style: context.textTheme.labelMedium
@@ -136,24 +135,24 @@ class _ChatCardState extends State<ChatCard> {
                       ],
                     ),
                   ),
-                  SizedBox(width: 12.w),
+                  SizedBox(width: 12),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.r),
+                    padding: EdgeInsets.symmetric(vertical: 8),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         SizedBox(),
                         Container(
-                          height: 8.h,
-                          width: 8.w,
+                          height: 8,
+                          width: 8,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: context.colorScheme.tertiary,
                           ),
                         ),
                         Text(
-                          "24h 30p",
+                          widget.chatModel.lastInteractionTime ?? "",
                           overflow: TextOverflow.ellipsis,
                           style: context.textTheme.labelSmall
                               ?.copyWith(color: context.colorScheme.onSurface),
@@ -161,7 +160,7 @@ class _ChatCardState extends State<ChatCard> {
                       ],
                     ),
                   ),
-                  SizedBox(width: 18.w),
+                  SizedBox(width: 18),
                 ],
               )),
         ));

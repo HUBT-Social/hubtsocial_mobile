@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'base_action_button.dart';
 
 class Profile2ActionButtons extends StatelessWidget {
@@ -26,7 +25,7 @@ class Profile2ActionButtons extends StatelessWidget {
             textColor: Colors.black,
           ),
         ),
-        SizedBox(width: 8.w),
+        SizedBox(width: 8),
         Expanded(
           child: BaseActionButton(
             text: 'Share profile',
@@ -35,7 +34,7 @@ class Profile2ActionButtons extends StatelessWidget {
             textColor: Colors.black,
           ),
         ),
-        SizedBox(width: 8.w),
+        SizedBox(width: 8),
         Expanded(
           child: BaseActionButton(
             text: 'Add person',

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
@@ -58,13 +57,13 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                 color: context.colorScheme.onSurface,
               ),
             ),
-            SizedBox(height: 12.h),
+            SizedBox(height: 12),
             Form(
               key: _formKey,
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6.r),
+                    padding: EdgeInsets.symmetric(vertical: 6),
                     child: InputField.name(
                       hintText: context.loc.first_name,
                       controller: _firstNameController,
@@ -77,7 +76,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6.r),
+                    padding: EdgeInsets.symmetric(vertical: 6),
                     child: InputField.name(
                       hintText: context.loc.last_name,
                       controller: _lastNameController,
@@ -92,7 +91,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6.r),
+                    padding: EdgeInsets.symmetric(vertical: 6),
                     child: GestureDetector(
                       onTap: () async {
                         DateTime? pickedDate = await showDatePicker(
@@ -126,7 +125,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6.r),
+                    padding: EdgeInsets.symmetric(vertical: 6),
                     child: DropdownButtonFormField<Gender>(
                       value: _genderValue,
                       validator: Validators.requiredTyped,
@@ -144,7 +143,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           gapPadding: 0,
-                          borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
                           borderSide:
                               BorderSide(color: context.colorScheme.outline),
                         ),
@@ -165,7 +164,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6.r),
+                    padding: EdgeInsets.symmetric(vertical: 6),
                     child: InputField.phone(
                       hintText: context.loc.phone_number,
                       controller: _phoneNumberController,
@@ -180,7 +179,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 12.h),
+            SizedBox(height: 12),
             FilledButton(
               onPressed: () {
                 _onSignUpButtonClicked();
@@ -195,7 +194,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 12.h),
+            SizedBox(height: 12),
             InkWell(
               onTap: () {
                 AppRoute.home.go(context);

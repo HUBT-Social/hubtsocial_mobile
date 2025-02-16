@@ -3,12 +3,15 @@ import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/constants/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/user/data/gender.dart';
+import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:injectable/injectable.dart';
 import 'package:hubtsocial_mobile/src/core/api/errors/exceptions.dart';
 import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_token.dart';
 
+import '../../../../core/app/providers/hive_provider.dart';
 import '../../../../core/local_storage/local_storage_key.dart';
+import '../../../../router/route.dart';
 import '../models/forgot_password_response_model.dart';
 import '../models/sign_in_response_model.dart';
 
@@ -304,27 +307,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> signOut() async {
     try {
       UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
-      if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
-        await _hiveAuth.openBox(LocalStorageKey.token);
-      }
-      if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
-        await _hiveAuth.openBox(LocalStorageKey.token);
-      }
 
-      var tokenBox = _hiveAuth.box(LocalStorageKey.token);
-
-      if (tokenBox.containsKey('fcmToken')) {
-        String fcmToken = tokenBox.get('fcmToken');
-        var response = await APIRequest.delete(
-          // url: ApiConstants.devicesEndpoint,
-          url: EndPoint.apiUrl,
-          body: {
-            LocalStorageKey.token: fcmToken,
-          },
-          token: userToken.accessToken,
+      var response = await APIRequest.delete(
+        url: EndPoint.authDeleteToken,
+        token: userToken.accessToken,
+      );
+      if (response.statusCode != 200) {
+        logger.e('Could not finalize api due to: ${response.body.toString()}');
+        throw ServerException(
+          message: response.body.toString(),
+          statusCode: response.statusCode.toString(),
         );
-        logger.d('Devices response : ${response.body.toString()}');
       }
+      HiveProvider.clearToken(
+          () => AppRoute.getStarted.go(navigatorKey.currentContext!));
     } catch (e, s) {
       logger.e(e.toString());
       logger.d(s.toString());

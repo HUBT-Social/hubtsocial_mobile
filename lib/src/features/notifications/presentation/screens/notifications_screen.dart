@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:intl/intl.dart';
@@ -44,10 +43,10 @@ class _NotificationsState extends State<NotificationsScreen> {
                 children: [
                   Icon(
                     Icons.notifications_off_outlined,
-                    size: 80.dg,
+                    size: 80,
                     color: Colors.grey[400],
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 16),
                   Text(context.loc.noNotifications,
                       style: context.textTheme.bodyLarge),
                 ],
@@ -56,9 +55,9 @@ class _NotificationsState extends State<NotificationsScreen> {
           }
 
           return ListView.separated(
-            padding: EdgeInsets.all(12.r),
+            padding: EdgeInsets.all(12),
             itemCount: box.length,
-            separatorBuilder: (context, index) => SizedBox(height: 8.h),
+            separatorBuilder: (context, index) => SizedBox(height: 8),
             itemBuilder: (context, index) {
               final notification = box.getAt(box.length - 1 - index);
               return _NotificationItem(
@@ -129,24 +128,24 @@ class _NotificationItem extends StatelessWidget {
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         side: BorderSide(
           color: Colors.grey.withOpacity(0.2),
-          width: 1.w,
+          width: 1,
         ),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         child: Container(
-          padding: EdgeInsets.all(16.r),
+          padding: EdgeInsets.all(16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 8.w,
-                height: 8.h,
-                margin: EdgeInsets.only(top: 6.r, right: 12.r),
+                width: 8,
+                height: 8,
+                margin: EdgeInsets.only(top: 6, right: 12),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: notification.isRead ? Colors.transparent : Colors.blue,
@@ -159,25 +158,25 @@ class _NotificationItem extends StatelessWidget {
                     Text(
                       notification.title ?? '',
                       style: TextStyle(
-                        fontSize: 16.dg,
+                        fontSize: 16,
                         fontWeight: notification.isRead
                             ? FontWeight.normal
                             : FontWeight.bold,
                         color: Colors.black87,
                       ),
                     ),
-                    SizedBox(height: 4.h),
+                    SizedBox(height: 4),
                     Text(notification.body ?? '',
                         style: context.textTheme.labelMedium),
                     if (notification.data != null &&
                         notification.data!.isNotEmpty)
                       Padding(
-                        padding: EdgeInsets.only(top: 8.r),
+                        padding: EdgeInsets.only(top: 8),
                         child: Container(
-                          padding: EdgeInsets.all(8.r),
+                          padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(8.r),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,7 +187,7 @@ class _NotificationItem extends StatelessWidget {
                           ),
                         ),
                       ),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 8),
                     Text(_formatTime(context, notification.time),
                         style: context.textTheme.labelSmall),
                   ],

@@ -2,44 +2,48 @@ import 'package:equatable/equatable.dart';
 
 class ChatResponseModel extends Equatable {
   const ChatResponseModel({
-    required this.totalNumber,
+    required this.lastMessage,
+    required this.lastInteractionTime,
     required this.id,
     required this.avatarUrl,
     required this.groupName,
   });
 
-  final int? totalNumber;
-  final String? id;
-  final String? avatarUrl;
-  final String? groupName;
+  final String? lastMessage;
+  final String? lastInteractionTime;
+  final String id;
+  final String avatarUrl;
+  final String groupName;
 
   ChatResponseModel copyWith({
-    int? totalNumber,
+    String? lastMessage,
+    String? lastInteractionTime,
     String? id,
     String? avatarUrl,
     String? groupName,
   }) {
     return ChatResponseModel(
-      totalNumber: totalNumber ?? this.totalNumber,
+      lastMessage: lastMessage ?? this.lastMessage,
+      lastInteractionTime: lastInteractionTime ?? this.lastInteractionTime,
       id: id ?? this.id,
       avatarUrl: avatarUrl ?? this.avatarUrl,
       groupName: groupName ?? this.groupName,
     );
   }
 
-  String? get bodyNoEscapeSequence => groupName?.replaceAll('\n', ' ');
-
   factory ChatResponseModel.fromJson(Map<String, dynamic> json) {
     return ChatResponseModel(
-      totalNumber: json["totalNumber"],
+      lastMessage: json["lastMessage"],
+      lastInteractionTime: json["lastInteractionTime"],
       id: json["id"],
       avatarUrl: json["avatarUrl"],
-      groupName: json["body"],
+      groupName: json["groupName"],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        "totalNumber": totalNumber,
+        "lastMessage": lastMessage,
+        "lastInteractionTime": lastInteractionTime,
         "id": id,
         "avatarUrl": avatarUrl,
         "groupName": groupName,
@@ -47,12 +51,13 @@ class ChatResponseModel extends Equatable {
 
   @override
   String toString() {
-    return "$totalNumber, $id, $avatarUrl, $groupName, ";
+    return "$lastMessage, $lastInteractionTime, $id, $avatarUrl, $groupName, ";
   }
 
   @override
   List<Object?> get props => [
-        totalNumber,
+        lastMessage,
+        lastInteractionTime,
         id,
         avatarUrl,
         groupName,
