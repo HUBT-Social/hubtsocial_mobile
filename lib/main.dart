@@ -28,6 +28,7 @@ import 'src/core/local_storage/local_storage_key.dart';
 import 'src/core/logger/logger.dart';
 import 'src/core/notification/firebase_message.dart';
 import 'src/core/notification/local_message.dart';
+import 'dart:convert';
 
 class NavigationService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -45,9 +46,23 @@ void main() async {
     _initUniqueDeviceId(),
     _initFirebase(),
     _initLocalStorage(),
+    LocalMessage().initLocalNotifications(),
   ]);
 
   await _initNotification();
+
+  // Thêm test thông báo lịch học sau 1 phút
+  Future.delayed(const Duration(minutes: 1), () {
+    LocalMessage().showNotification(
+      title: "Lịch học sắp tới",
+      body: "Bạn có môn Toán lúc 12:00",
+      payload: jsonEncode({
+        'type': 'class_schedule',
+        'classId': '1',
+        'className': 'Toán',
+      }),
+    );
+  });
 
   runApp(const MyApp());
 }

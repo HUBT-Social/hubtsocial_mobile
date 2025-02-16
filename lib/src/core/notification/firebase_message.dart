@@ -107,7 +107,17 @@ class FirebaseMessage {
   }
 
   void _navigateToNotificationScreen(RemoteMessage message) {
-    router.go(AppRoute.notifications.path);
+    // Kiểm tra va đh
+    if (message.data.containsKey('chatUserId')) {
+      //cjat
+      router.go('/chat/${message.data['chatUserId']}');
+    } else if (message.data.containsKey('notificationId')) {
+      router.go(
+          '${AppRoute.notifications.path}?id=${message.data['notificationId']}');
+    } else {
+      // Mặc định điều hướng đến màn hình thông báo
+      router.go(AppRoute.notifications.path);
+    }
   }
 
   Future<void> _handleTerminatedState() async {
