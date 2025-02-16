@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
@@ -74,25 +73,25 @@ class _ChatCardState extends State<ChatCard> {
             });
           },
           child: SizedBox(
-              height: 60.sp,
+              height: 60,
               width: double.infinity,
               child: Row(
                 children: [
                   Expanded(
                     child: Row(
                       children: [
-                        SizedBox(width: 12.w),
+                        SizedBox(width: 12),
                         Stack(
                           alignment: AlignmentDirectional.bottomEnd,
                           children: [
                             UrlImage.circle(
                               widget.chatModel.avatarUrl,
-                              size: 48.sp,
+                              size: 48,
                             ),
                             Container(
-                              padding: EdgeInsets.all(2.r),
-                              height: 14.h,
-                              width: 14.w,
+                              padding: EdgeInsets.all(2),
+                              height: 14,
+                              width: 14,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: context.colorScheme.surface,
@@ -106,10 +105,10 @@ class _ChatCardState extends State<ChatCard> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 12.w),
+                        SizedBox(width: 12),
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8.r),
+                            padding: EdgeInsets.symmetric(vertical: 8),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,17 +135,17 @@ class _ChatCardState extends State<ChatCard> {
                       ],
                     ),
                   ),
-                  SizedBox(width: 12.w),
+                  SizedBox(width: 12),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.r),
+                    padding: EdgeInsets.symmetric(vertical: 8),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         SizedBox(),
                         Container(
-                          height: 8.h,
-                          width: 8.w,
+                          height: 8,
+                          width: 8,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: context.colorScheme.tertiary,
@@ -161,7 +160,7 @@ class _ChatCardState extends State<ChatCard> {
                       ],
                     ),
                   ),
-                  SizedBox(width: 18.w),
+                  SizedBox(width: 18),
                 ],
               )),
         ));

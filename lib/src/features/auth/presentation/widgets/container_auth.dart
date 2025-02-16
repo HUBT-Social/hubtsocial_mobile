@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 class ContainerAuth extends StatefulWidget {
@@ -16,17 +15,16 @@ class _ContainerAuthState extends State<ContainerAuth> {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.r),
+        padding: EdgeInsets.symmetric(horizontal: 12),
         child: Container(
-          padding:
-              EdgeInsets.only(right: 24.r, left: 24.r, top: 24.r, bottom: 36.r),
+          padding: EdgeInsets.only(right: 24, left: 24, top: 24, bottom: 36),
           decoration: BoxDecoration(
             color: context.colorScheme.surface,
-            borderRadius: BorderRadiusDirectional.all(Radius.circular(24.r)),
+            borderRadius: BorderRadiusDirectional.all(Radius.circular(24)),
             boxShadow: [
               BoxShadow(
                 color: context.colorScheme.shadow.withAlpha(128),
-                blurRadius: 4.r,
+                blurRadius: 4,
                 offset: Offset(0, 4),
               ),
             ],

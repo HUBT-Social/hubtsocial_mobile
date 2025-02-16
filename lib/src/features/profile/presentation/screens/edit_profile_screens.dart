@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -69,7 +68,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             // Avatar section
             Container(
               color: context.colorScheme.surface,
-              padding: EdgeInsets.symmetric(vertical: 24.h),
+              padding: EdgeInsets.symmetric(vertical: 24),
               child: Column(
                 children: [
                   GestureDetector(
@@ -81,7 +80,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         Hero(
                           tag: 'profile-image',
                           child: CircleAvatar(
-                            radius: 50.r,
+                            radius: 50,
                             backgroundImage: user?.avatarUrl != null
                                 ? NetworkImage(user!.avatarUrl)
                                 : const AssetImage(
@@ -92,7 +91,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8),
                   Text(
                     context.loc.change_photo,
                     style: context.textTheme.labelLarge?.copyWith(
@@ -105,7 +104,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             // Form fields
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.w),
+              padding: EdgeInsets.symmetric(horizontal: 8),
               child: Column(
                 children: [
                   _buildTextField(
@@ -169,10 +168,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     required: true,
                     keyboardType: TextInputType.emailAddress,
                   ),
-                  SizedBox(height: 10.h),
+                  SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    height: 42.h,
+                    height: 42,
                     child: FilledButton(
                       onPressed: () {
                         // Handle save changes
@@ -180,7 +179,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       style: FilledButton.styleFrom(
                         backgroundColor: context.colorScheme.primary,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                       child: Text(
@@ -192,7 +191,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 12.h),
+                  SizedBox(height: 12),
                 ],
               ),
             ),
@@ -227,12 +226,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             if (required) Text(' *', style: TextStyle(color: Colors.red)),
           ],
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 8),
         Container(
           width: double.infinity,
-          height: 41.h,
+          height: 41,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24.r),
+            borderRadius: BorderRadius.circular(24),
             border: Border.all(
               color: context.colorScheme.outline,
               width: 1,
@@ -251,7 +250,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               hintStyle: context.textTheme.bodyLarge?.copyWith(
                 color: context.colorScheme.onSurfaceVariant,
               ),
-              contentPadding: EdgeInsets.symmetric(horizontal: 15.w),
+              contentPadding: EdgeInsets.symmetric(horizontal: 15),
               border: InputBorder.none,
             ),
           ),
@@ -276,13 +275,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 8),
         Container(
           width: double.infinity,
-          height: 41.h,
-          padding: EdgeInsets.symmetric(horizontal: 15.w),
+          height: 41,
+          padding: EdgeInsets.symmetric(horizontal: 15),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24.r),
+            borderRadius: BorderRadius.circular(24),
             border: Border.all(
               color: context.colorScheme.outline,
               width: 1,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/base_action_button.dart';
@@ -28,7 +27,7 @@ class ProfileActionButtons extends StatelessWidget {
               backgroundColor: context.colorScheme.primary,
               textColor: context.colorScheme.onPrimary),
         ),
-        SizedBox(width: 8.w),
+        SizedBox(width: 8),
         Expanded(
           child: BaseActionButton(
               text: context.loc.share,

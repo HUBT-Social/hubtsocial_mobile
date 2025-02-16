@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 class ProfileStatus extends StatelessWidget {
@@ -22,7 +21,7 @@ class ProfileStatus extends StatelessWidget {
         status.isEmpty ? 'Add bio' : status,
         style: context.textTheme.bodyMedium?.copyWith(
           color: status.isEmpty ? const Color(0xFF757575) : Colors.black,
-          fontSize: 13.sp,
+          fontSize: 13,
           fontWeight: FontWeight.w400,
         ),
         maxLines: 2,

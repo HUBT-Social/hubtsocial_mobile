@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BaseActionButton extends StatelessWidget {
   const BaseActionButton({
@@ -18,14 +17,14 @@ class BaseActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 36.h,
+      height: 36,
       child: FilledButton(
         onPressed: onPressed,
         style: FilledButton.styleFrom(
           backgroundColor: backgroundColor ?? const Color(0xFF5BC05D),
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.r),
+            borderRadius: BorderRadius.circular(6),
           ),
           padding: EdgeInsets.zero,
         ),
@@ -33,7 +32,7 @@ class BaseActionButton extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              fontSize: 14.sp,
+              fontSize: 14,
               fontWeight: FontWeight.w600,
               color: textColor,
               height: 1.2,

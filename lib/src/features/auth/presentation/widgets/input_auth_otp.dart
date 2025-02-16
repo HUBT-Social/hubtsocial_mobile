@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:pinput/pinput.dart';
 
@@ -19,12 +18,12 @@ class InputAuthOTP extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final defaultPinTheme = PinTheme(
-      height: 60.h,
-      width: 52.w,
+      height: 60,
+      width: 52,
       textStyle: context.textTheme.bodyLarge,
       decoration: BoxDecoration(
         color: context.colorScheme.surface,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: context.colorScheme.outline),
       ),
     );
@@ -43,8 +42,8 @@ class InputAuthOTP extends StatelessWidget {
         ],
         defaultPinTheme: defaultPinTheme,
         focusedPinTheme: defaultPinTheme.copyWith(
-          height: 68.h,
-          width: 60.w,
+          height: 68,
+          width: 60,
           decoration: defaultPinTheme.decoration!.copyWith(
             border: Border.all(color: context.colorScheme.primary),
           ),
@@ -52,7 +51,7 @@ class InputAuthOTP extends StatelessWidget {
         errorPinTheme: defaultPinTheme.copyWith(
           decoration: BoxDecoration(
             color: context.colorScheme.surface,
-            borderRadius: BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(color: context.colorScheme.error),
           ),
         ),

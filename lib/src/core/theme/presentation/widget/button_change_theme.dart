@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/router/router.import.dart';
@@ -14,23 +13,23 @@ class ButtonChangeTheme extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 35.h,
-      width: 60.w,
+      height: 35,
+      width: 60,
       child: OutlinedButton(
         onPressed: () => ThemeUtils.showThemeBottomSheet(
             navigatorKey.currentContext ?? context),
         style: OutlinedButton.styleFrom(
-          padding: EdgeInsets.symmetric(horizontal: 6.r),
+          padding: EdgeInsets.symmetric(horizontal: 6),
           backgroundColor: context.colorScheme.surface,
           foregroundColor: context.colorScheme.onSurface,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
+            borderRadius: BorderRadius.circular(12),
           ),
         ),
         child: Row(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 6.r),
+              padding: EdgeInsets.symmetric(vertical: 6),
               child: BlocBuilder<ThemeBloc, AppThemeState>(
                 builder: (context, state) {
                   return SvgPicture.asset(
@@ -38,7 +37,7 @@ class ButtonChangeTheme extends StatelessWidget {
                         context.colorScheme.onSurface, BlendMode.srcIn),
                     state.selectedTheme.image,
                     fit: BoxFit.fitHeight,
-                    height: 32.h,
+                    height: 32,
                   );
                 },
               ),

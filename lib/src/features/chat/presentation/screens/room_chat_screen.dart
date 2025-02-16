@@ -1,6 +1,5 @@
 import 'package:chatview/chatview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/url_image.dart';
@@ -104,7 +103,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
             Icons.keyboard_arrow_down_rounded,
             color: context.colorScheme.primary,
             weight: 10,
-            size: 30.r,
+            size: 30,
           ),
         ),
         chatViewState: ChatViewState.hasMessages,
@@ -119,14 +118,14 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
           flashingCircleDarkColor: context.colorScheme.primaryFixedDim,
         ),
         appBar: AppBar(
-          toolbarHeight: 52.h,
-          leadingWidth: 36.w,
+          toolbarHeight: 52,
+          leadingWidth: 36,
           backgroundColor: Theme.of(context).colorScheme.primary,
           foregroundColor: Theme.of(context).colorScheme.onPrimary,
           title: Row(
             children: [
-              UrlImage.circle(widget.avatarUrl, size: 36.r),
-              SizedBox(width: 12.w),
+              UrlImage.circle(widget.avatarUrl, size: 36),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -268,12 +267,12 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
               ),
               reactionWidgetDecoration: BoxDecoration(
                 color: context.colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(12.r),
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
           ),
           imageMessageConfig: ImageMessageConfiguration(
-            margin: EdgeInsets.symmetric(horizontal: 12.r, vertical: 15.r),
+            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
             shareIconConfig: ShareIconConfiguration(
               defaultIconBackgroundColor: context.colorScheme.surfaceContainer,
               defaultIconColor: context.colorScheme.onSurfaceVariant,

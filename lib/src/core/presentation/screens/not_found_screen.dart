@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
@@ -31,8 +30,8 @@ class _NotFoundScreenState extends State<NotFoundScreen> {
           Lottie.asset(
             AppLotties.screenNotFound,
             fit: BoxFit.contain,
-            height: 360.r,
-            width: 360.r,
+            height: 360,
+            width: 360,
           ),
           Text(
             "Oh no!",
@@ -48,7 +47,7 @@ class _NotFoundScreenState extends State<NotFoundScreen> {
             style: context.textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 24.h),
+          SizedBox(height: 24),
           FilledButton(
               onPressed: () {
                 try {

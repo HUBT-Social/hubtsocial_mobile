@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/constants/assets.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
@@ -35,10 +34,10 @@ sealed class AppDialog {
         clickMaskDismiss: false,
         builder: (context) {
           return Container(
-            padding: EdgeInsets.all(20.r),
+            padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: context.colorScheme.surface,
-              borderRadius: BorderRadius.circular(10.r),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -46,7 +45,7 @@ sealed class AppDialog {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const CircularProgressIndicator(),
-                SizedBox(height: 10.h),
+                SizedBox(height: 10),
                 Text(message ?? 'loading'),
               ],
             ),
@@ -62,19 +61,19 @@ sealed class AppDialog {
     AppDialog.closeDialog();
     SmartDialog.show(builder: (context) {
       return Container(
-        padding: EdgeInsets.all(20.r),
+        padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.blueAccent,
-          borderRadius: BorderRadius.circular(10.r),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 20.h),
+            SizedBox(height: 20),
             child,
-            SizedBox(height: 30.h),
+            SizedBox(height: 30),
             SizedBox(
               // width: context.width * 0.8,
               child: Row(
@@ -116,10 +115,10 @@ sealed class AppDialog {
 
   static Widget successMessage(String message, BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20.r),
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: context.colorScheme.surface,
-        borderRadius: BorderRadius.circular(10.r),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -127,13 +126,13 @@ sealed class AppDialog {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: 100.r,
-            width: 100.r,
+            height: 100,
+            width: 100,
             child: Lottie.asset(AppLotties.success),
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 10),
           SizedBox(
-            width: 200.w,
+            width: 200,
             child: Text(
               message,
               style: context.textTheme.bodyMedium,
@@ -147,10 +146,10 @@ sealed class AppDialog {
 
   static Widget errorMessage(String message, BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20.r),
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: context.colorScheme.surface,
-        borderRadius: BorderRadius.circular(10.r),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -158,13 +157,13 @@ sealed class AppDialog {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: 100.h,
-            width: 100.w,
+            height: 100,
+            width: 100,
             child: Lottie.asset(AppLotties.wrongInput),
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 10),
           SizedBox(
-            width: 200.w,
+            width: 200,
             child: Text(
               message,
               style: context.textTheme.bodyMedium,
@@ -187,7 +186,7 @@ sealed class AppDialog {
       context: context,
       builder: (BuildContext ctx) {
         return Container(
-          padding: EdgeInsets.only(left: 20.r, top: 20.r, right: 20.r),
+          padding: EdgeInsets.only(left: 20, top: 20, right: 20),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(

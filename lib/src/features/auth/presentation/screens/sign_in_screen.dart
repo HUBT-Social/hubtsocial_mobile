@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/input_field.dart';
 import '../../../../core/logger/logger.dart';
@@ -53,13 +52,13 @@ class _SignInScreenState extends State<SignInScreen> {
                   color: context.colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 12),
               Form(
                 key: _formKey,
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 6.r),
+                      padding: EdgeInsets.symmetric(vertical: 6),
                       child: InputField.name(
                         controller: _usernameOrEmailController,
                         textInputAction: TextInputAction.next,
@@ -74,7 +73,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 6.r),
+                      padding: EdgeInsets.symmetric(vertical: 6),
                       child: InputField.password(
                         controller: _passwordController,
                         textInputAction: TextInputAction.done,
@@ -109,7 +108,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 12),
               FilledButton(
                 onPressed: () {
                   _onSignInButtonClicked();
@@ -124,7 +123,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 12),
               InkWell(
                 autofocus: false,
                 onTap: () {
