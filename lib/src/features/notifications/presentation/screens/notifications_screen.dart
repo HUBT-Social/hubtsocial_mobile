@@ -209,9 +209,9 @@ class _NotificationItem extends StatelessWidget {
     if (difference.inDays > 0) {
       return DateFormat(context.loc.timeFormat).format(dateTime);
     } else if (difference.inHours > 0) {
-      return context.loc.hoursAgo(difference.inHours.toString());
+      return context.loc.hoursAgo(difference.inHours);
     } else if (difference.inMinutes > 0) {
-      return context.loc.minutesAgo(difference.inMinutes.toString());
+      return context.loc.minutesAgo(difference.inMinutes);
     } else {
       return context.loc.justNow;
     }

@@ -66,11 +66,11 @@ class _ChatCardState extends State<ChatCard> {
         ),
         child: InkWell(
           onTap: () {
-            AppRoute.roomChat.push(navigatorKey.currentContext!,
-                queryParameters: {
-                  "id": widget.chatModel.id.toString(),
-                  "title": widget.chatModel.title.toString()
-                });
+            AppRoute.roomChat
+                .push(navigatorKey.currentContext!, queryParameters: {
+              "id": widget.chatModel.id.toString(),
+              "title": widget.chatModel.groupName.toString()
+            });
           },
           child: SizedBox(
               height: 60.sp,
@@ -114,7 +114,7 @@ class _ChatCardState extends State<ChatCard> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${widget.chatModel.id}  ${widget.chatModel.title ?? "null"}',
+                                  '${widget.chatModel.id}  ${widget.chatModel.groupName ?? "null"}',
                                   overflow: TextOverflow.ellipsis,
                                   style: context.textTheme.labelLarge?.copyWith(
                                       color: context.colorScheme.onSurface),

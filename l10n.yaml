@@ -1,6 +1,8 @@
+synthetic-package: false
 arb-dir: lib/l10n
 English-arb-file: app_en.arb
 Vietnamese-arb-file: app_vi.arb
+output-dir: lib/l10n/output
 output-localization-file: app_localization.dart
 use-escaping: true
 nullable-getter: false
