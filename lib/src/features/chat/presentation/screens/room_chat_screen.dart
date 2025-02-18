@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:chatview/chatview.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/url_image.dart';
+import 'package:hubtsocial_mobile/src/features/chat/presentation/screens/chat_screen.dart';
 
 import 'data.dart';
 
@@ -21,6 +25,24 @@ class RoomChatScreen extends StatefulWidget {
 }
 
 class _RoomChatScreenState extends State<RoomChatScreen> {
+  @override
+  void initState() {
+    hubConnection.on("ReceiveChat", _handleReceiveChat);
+    hubConnection.on("ReceiveProcess", _handleReceiveProcess);
+    super.initState();
+  }
+
+  void _handleReceiveChat(List<Object?>? arguments) {
+    logger.i(arguments);
+  }
+
+  @override
+  void dispose() {
+    hubConnection.on("ReceiveChat", _handleReceiveChat);
+    hubConnection.on("ReceiveProcess", _handleReceiveProcess);
+    super.dispose();
+  }
+
   final _chatController = ChatController(
     initialMessageList: Data.messageList,
     scrollController: ScrollController(),
@@ -321,27 +343,121 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
     );
   }
 
-  void _onSendTap(
+  String generateRandomString() {
+    const chars =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#%^&*()_+=-`~[]{}|;:",./<>?';
+    Random rnd = Random();
+    return String.fromCharCodes(Iterable.generate(
+        2020, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
+  }
+
+  Future<void> _onSendTap(
     String message,
     ReplyMessage replyMessage,
     MessageType messageType,
-  ) {
-    _chatController.addMessage(
-      Message(
-        id: DateTime.now().toString(),
-        createdAt: DateTime.now(),
-        message: message,
-        sentBy: _chatController.currentUser.id,
-        replyMessage: replyMessage,
-        messageType: messageType,
-      ),
+  ) async {
+    SendChatRequestModel a = new SendChatRequestModel(
+      groupId: widget.id,
+      requestId: generateRandomString(),
+      content: message,
+      medias: null,
+      files: null,
+      replyToMessageId: null,
     );
-    Future.delayed(const Duration(milliseconds: 300), () {
-      _chatController.initialMessageList.last.setStatus =
-          MessageStatus.undelivered;
-    });
-    Future.delayed(const Duration(seconds: 1), () {
-      _chatController.initialMessageList.last.setStatus = MessageStatus.read;
-    });
+    final result =
+        await hubConnection.invoke("SendItemChat", args: [a.toJson()]);
+    logger.i(result);
+    // _chatController.addMessage(
+    //   Message(
+    //     id: DateTime.now().toString(),
+    //     createdAt: DateTime.now(),
+    //     message: message,
+    //     sentBy: _chatController.currentUser.id,
+    //     replyMessage: replyMessage,
+    //     messageType: messageType,
+    //   ),
+    // );
+    // Future.delayed(const Duration(milliseconds: 300), () {
+    //   _chatController.initialMessageList.last.setStatus =
+    //       MessageStatus.undelivered;
+    // });
+    // Future.delayed(const Duration(seconds: 1), () {
+    //   _chatController.initialMessageList.last.setStatus = MessageStatus.read;
+    // });
   }
+
+  void _handleReceiveProcess(List<Object?>? arguments) {
+    logger.i(arguments);
+  }
+}
+
+class SendChatRequestModel extends Equatable {
+  SendChatRequestModel({
+    required this.requestId,
+    required this.groupId,
+    required this.content,
+    required this.medias,
+    required this.files,
+    required this.replyToMessageId,
+  });
+
+  final String? requestId;
+  final String? groupId;
+  final String? content;
+  final String? medias;
+  final String? files;
+  final String? replyToMessageId;
+
+  SendChatRequestModel copyWith({
+    String? requestId,
+    String? groupId,
+    String? content,
+    String? medias,
+    String? files,
+    String? replyToMessageId,
+  }) {
+    return SendChatRequestModel(
+      requestId: requestId ?? this.requestId,
+      groupId: groupId ?? this.groupId,
+      content: content ?? this.content,
+      medias: medias ?? this.medias,
+      files: files ?? this.files,
+      replyToMessageId: replyToMessageId ?? this.replyToMessageId,
+    );
+  }
+
+  factory SendChatRequestModel.fromJson(Map<String, dynamic> json) {
+    return SendChatRequestModel(
+      requestId: json["requestId"],
+      groupId: json["groupId"],
+      content: json["content"],
+      medias: json["medias"],
+      files: json["files"],
+      replyToMessageId: json["replyToMessageId"],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        "requestId": requestId,
+        "groupId": groupId,
+        "content": content,
+        "medias": medias,
+        "files": files,
+        "replyToMessageId": replyToMessageId,
+      };
+
+  @override
+  String toString() {
+    return "$requestId, $groupId, $content, $medias, $files, $replyToMessageId, ";
+  }
+
+  @override
+  List<Object?> get props => [
+        requestId,
+        groupId,
+        content,
+        medias,
+        files,
+        replyToMessageId,
+      ];
 }
