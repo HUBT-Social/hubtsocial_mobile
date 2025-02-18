@@ -1,13 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/chat/presentation/widgets/chat_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 
+import '../../../../core/api/api_request.dart';
+import '../../../../core/local_storage/local_storage_key.dart';
+import '../../../auth/domain/entities/user_token.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 import '../bloc/chat_bloc.dart';
+
+Future<String> getAccessTokenFactory() async {
+  UserToken userToken = await APIRequest.getUserToken(Hive);
+  return userToken.accessToken;
+}
+
+// final connectionOptions = HttpConnectionOptions
+final httpOptions =
+    HttpConnectionOptions(accessTokenFactory: getAccessTokenFactory);
+
+final hubConnection = HubConnectionBuilder()
+    .withUrl(
+      "https://hubt-social-develop.onrender.com/chathub",
+      options: httpOptions,
+    )
+    // .withHubProtocol()
+    .withAutomaticReconnect()
+    // .withAutomaticReconnect()
+    .build();
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -17,14 +40,6 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final hubConnection = HubConnectionBuilder()
-      .withUrl(
-        "https://hubt-social-develop.onrender.com/chathub",
-      )
-      // .withHubProtocol()
-      .withAutomaticReconnect()
-      .build();
-
   int pageKey = 0;
   final _pagingController = PagingController<int, ChatResponseModel>(
     firstPageKey: 1,
@@ -46,6 +61,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> startHub() async {
     await hubConnection.start();
+    if (hubConnection.state == HubConnectionState.Connected) {}
   }
 
   @override
