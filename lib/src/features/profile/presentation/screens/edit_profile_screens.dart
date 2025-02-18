@@ -133,25 +133,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       }
                     },
                   ),
-                  _buildTextField(
-                    context,
-                    controller: dateOfBirthController,
-                    label: context.loc.birth_of_date,
-                    hint: 'dd/mm/yyyy',
-                    readOnly: true,
-                    onTap: () async {
-                      final date = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime.now(),
-                      );
-                      if (date != null) {
-                        dateOfBirthController.text =
-                            "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}";
-                      }
-                    },
-                  ),
+
+                  InputDatePickerFormField(
+                      firstDate: DateTime.now(), lastDate: DateTime.now()),
+
+                  // _buildTextField(
+                  //   context,
+                  //   controller: dateOfBirthController,
+                  //   label: context.loc.birth_of_date,
+                  //   hint: 'dd/mm/yyyy',
+                  //   readOnly: true,
+                  //   onTap: () async {
+                  //     final date = await showDatePicker(
+                  //       context: context,
+                  //       initialDate: DateTime.now(),
+                  //       firstDate: DateTime(1900),
+                  //       lastDate: DateTime.now(),
+                  //     );
+                  //     if (date != null) {
+                  //       dateOfBirthController.text = user.
+                  //           // "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}";
+                  //     }
+                  //   },
+                  // ),
                   _buildTextField(
                     context,
                     controller: phoneController,

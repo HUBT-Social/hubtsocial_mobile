@@ -162,23 +162,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
-      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
-
-      final responseFcm = await APIRequest.put(
-        url: EndPoint.updateFcmToken,
-        token: userToken.accessToken,
-        body: {"fcmToken": await FirebaseMessaging.instance.getToken()},
-      );
-
-      if (responseFcm.statusCode != 200) {
-        logger
-            .e('Could not finalize api due to: ${responseFcm.body.toString()}');
-        throw ServerException(
-          message: responseFcm.body.toString(),
-          statusCode: responseFcm.statusCode.toString(),
-        );
-      }
-
       if (!responseData.requiresTwoFactor! && responseData.userToken != null) {
         if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
           await _hiveAuth.openBox(LocalStorageKey.token);
@@ -191,6 +174,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         await tokenBox.put(LocalStorageKey.userToken, token);
         logger.i('Sign in token : $token');
 
+        UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
+
+        final responseFcm = await APIRequest.put(
+          url: EndPoint.updateFcmToken,
+          token: userToken.accessToken,
+          body: {"fcmToken": await FirebaseMessaging.instance.getToken()},
+        );
+
+        if (responseFcm.statusCode != 200) {
+          logger.e(
+              'Could not finalize api due to: ${responseFcm.body.toString()}');
+          throw ServerException(
+            message: responseFcm.body.toString(),
+            statusCode: responseFcm.statusCode.toString(),
+          );
+        }
         // if (tokenBox.containsKey('fcmToken')) {
         //   String fcmToken = tokenBox.get('fcmToken');
         //   final response = await APIRequest.post(
