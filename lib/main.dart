@@ -68,9 +68,9 @@ void main() async {
 }
 
 Future<void> _initLocalStorage() async {
-  Hive
-    ..init(Directory.current.path)
-    ..registerAdapters();
+  await Hive.initFlutter();
+
+  Hive.registerAdapters();
 
   // Mở các box cơ bản
   await Hive.openBox(LocalStorageKey.localStorage);
