@@ -31,6 +31,10 @@ class FirebaseMessage {
     await box.add(notification);
   }
 
+  void deleteFMC() async {
+    _firebaseMessaging.deleteToken();
+  }
+
   Future<void> initNotification() async {
     await _requestPermission();
     await _configureForegroundNotification();
