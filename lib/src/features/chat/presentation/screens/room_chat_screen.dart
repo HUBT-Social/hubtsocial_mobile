@@ -4,10 +4,11 @@ import 'package:chatview/chatview.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/string.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/url_image.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/send_chat_request_model.dart';
-import 'package:hubtsocial_mobile/src/features/chat/presentation/screens/chat_screen.dart';
+import 'package:hubtsocial_mobile/src/features/chat/data/datasources/chat_hub_connection.dart';
 
 import 'data.dart';
 
@@ -26,24 +27,6 @@ class RoomChatScreen extends StatefulWidget {
 }
 
 class _RoomChatScreenState extends State<RoomChatScreen> {
-  @override
-  void initState() {
-    hubConnection.on("ReceiveChat", _handleReceiveChat);
-    hubConnection.on("ReceiveProcess", _handleReceiveProcess);
-    super.initState();
-  }
-
-  void _handleReceiveChat(List<Object?>? arguments) {
-    logger.i(arguments);
-  }
-
-  @override
-  void dispose() {
-    hubConnection.on("ReceiveChat", _handleReceiveChat);
-    hubConnection.on("ReceiveProcess", _handleReceiveProcess);
-    super.dispose();
-  }
-
   final _chatController = ChatController(
     initialMessageList: Data.messageList,
     scrollController: ScrollController(),
@@ -216,7 +199,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
           textFieldConfig: TextFieldConfiguration(
             onMessageTyping: (status) {
               /// Do with status
-              logger.d(status.toString());
+              // logger.d(status.toString());
             },
             compositionThresholdTime: const Duration(seconds: 1),
             textStyle: context.textTheme.bodyLarge
@@ -344,14 +327,6 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
     );
   }
 
-  String generateRandomString() {
-    const chars =
-        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#%^&*()_+=-`~[]{}|;:",./<>?';
-    Random rnd = Random();
-    return String.fromCharCodes(Iterable.generate(
-        2020, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
-  }
-
   Future<void> _onSendTap(
     String message,
     ReplyMessage replyMessage,
@@ -359,25 +334,23 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
   ) async {
     SendChatRequestModel sendChatRequestModel = SendChatRequestModel(
       groupId: widget.id,
-      requestId: generateRandomString(),
+      requestId: "message id".generateRandomString(40),
       content: message,
       medias: null,
       files: null,
       replyToMessageId: replyMessage.messageId,
     );
-    final result = await hubConnection
-        .invoke("SendItemChat", args: [sendChatRequestModel.toJson()]);
-    logger.i(result);
-    _chatController.addMessage(
-      Message(
-        id: sendChatRequestModel.requestId!,
-        createdAt: DateTime.now(),
-        message: sendChatRequestModel.content!,
-        sentBy: _chatController.currentUser.id,
-        replyMessage: replyMessage,
-        messageType: messageType,
-      ),
-    );
+    ChatHubConnection.invokeSendItemChat(sendChatRequestModel);
+    // _chatController.addMessage(
+    //   Message(
+    //     id: sendChatRequestModel.requestId!,
+    //     createdAt: DateTime.now(),
+    //     message: sendChatRequestModel.content!,
+    //     sentBy: _chatController.currentUser.id,
+    //     replyMessage: replyMessage,
+    //     messageType: messageType,
+    //   ),
+    // );
     // Future.delayed(const Duration(milliseconds: 300), () {
     //   _chatController.initialMessageList.last.setStatus =
     //       MessageStatus.undelivered;
@@ -385,9 +358,5 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
     // Future.delayed(const Duration(seconds: 1), () {
     //   _chatController.initialMessageList.last.setStatus = MessageStatus.read;
     // });
-  }
-
-  void _handleReceiveProcess(List<Object?>? arguments) {
-    logger.i(arguments);
   }
 }

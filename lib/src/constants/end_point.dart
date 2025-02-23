@@ -1,7 +1,8 @@
 import 'environment.dart';
 
 class EndPoint {
-  static String get apiUrl => Environment.getApiUrl;
+  static String get apiUrl => "${Environment.getApiUrl}/api";
+  static String get chatHub => "${Environment.getApiUrl}/chatHub";
 
   static String get _auth => "$apiUrl/auth";
   static String get authSignIn => "$_auth/sign-in";

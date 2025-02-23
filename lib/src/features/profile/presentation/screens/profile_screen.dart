@@ -171,8 +171,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                         GestureDetector(
                           onTap: () {
-                            if (user.avatarUrl != null &&
-                                user.avatarUrl.isNotEmpty) {
+                            if (user.avatarUrl.isNotEmpty) {
                               navigatorKey.currentContext?.push(
                                 AppRoute.fullprofile.path,
                                 extra: {

@@ -13,25 +13,6 @@ import '../../../auth/domain/entities/user_token.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 import '../bloc/chat_bloc.dart';
 
-Future<String> getAccessTokenFactory() async {
-  UserToken userToken = await APIRequest.getUserToken(Hive);
-  return userToken.accessToken;
-}
-
-// final connectionOptions = HttpConnectionOptions
-final httpOptions =
-    HttpConnectionOptions(accessTokenFactory: getAccessTokenFactory);
-
-final hubConnection = HubConnectionBuilder()
-    .withUrl(
-      "https://hubt-social-develop.onrender.com/chathub",
-      options: httpOptions,
-    )
-    // .withHubProtocol()
-    .withAutomaticReconnect()
-    // .withAutomaticReconnect()
-    .build();
-
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
@@ -53,15 +34,7 @@ class _ChatScreenState extends State<ChatScreen> {
             page: pageKey,
           ));
     });
-
-    startHub();
-
     super.initState();
-  }
-
-  Future<void> startHub() async {
-    await hubConnection.start();
-    if (hubConnection.state == HubConnectionState.Connected) {}
   }
 
   @override
