@@ -153,10 +153,14 @@ class APIRequest {
       if (response.statusCode == 401) {
         HiveProvider.clearToken(
             () => AppRoute.getStarted.go(navigatorKey.currentContext!));
+        throw ServerException(
+          message: response.statusCode.toString(),
+          statusCode: response.statusCode.toString(),
+        );
       }
 
       if (response.statusCode != 200) {
-        logger.e(response.body);
+        logger.e("statusCode: ${response.statusCode}: ${response.body}");
         throw ServerException(
           message: response.statusCode.toString(),
           statusCode: response.statusCode.toString(),

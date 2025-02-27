@@ -21,7 +21,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/app/my_app.dart';
 import 'package:hubtsocial_mobile/src/constants/environment.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
-import 'package:hubtsocial_mobile/src/features/chat/data/datasources/chat_hub_connection.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 
 import 'src/core/injections/injections.dart';

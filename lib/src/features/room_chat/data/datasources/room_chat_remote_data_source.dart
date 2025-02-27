@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:chatview/chatview.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
-import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../constants/end_point.dart';
@@ -11,19 +11,19 @@ import '../../../../core/api/errors/exceptions.dart';
 import '../../../../core/logger/logger.dart';
 import '../../../auth/domain/entities/user_token.dart';
 
-abstract class ChatRemoteDataSource {
-  const ChatRemoteDataSource();
+abstract class RoomChatRemoteDataSource {
+  const RoomChatRemoteDataSource();
 
-  Future<List<ChatResponseModel>> fetchChat({
-    required int page,
+  Future<List<Message>> fetchRoomChat({
+    required String roomId,
   });
 }
 
 @LazySingleton(
-  as: ChatRemoteDataSource,
+  as: RoomChatRemoteDataSource,
 )
-class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
-  const ChatRemoteDataSourceImpl({
+class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
+  const RoomChatRemoteDataSourceImpl({
     required HiveInterface hiveAuth,
     required FirebaseMessaging messaging,
   }) : _hiveAuth = hiveAuth;
@@ -31,18 +31,18 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   final HiveInterface _hiveAuth;
 
   @override
-  Future<List<ChatResponseModel>> fetchChat({required int page}) async {
+  Future<List<Message>> fetchRoomChat({required String roomId}) async {
     try {
       UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
 
       final response = await APIRequest.get(
-        url: "${EndPoint.chatView}?page=$page&limit=10",
+        url: "${EndPoint.getHistoryChat}?ChatRoomId=$roomId",
         token: userToken.accessToken,
       );
 
       if (response.statusCode != 200) {
         logger.e(
-            'Failed to Fetch Chat: statusCode: ${response.statusCode}: ${response.body.toString()}');
+            'Failed to Fetch RoomChat: statusCode: ${response.statusCode}: ${response.body.toString()}');
         throw ServerException(
           message: response.body.toString(),
           statusCode: response.statusCode.toString(),
@@ -51,10 +51,10 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
 
       final List newItems = json.decode(response.body);
 
-      List<ChatResponseModel> items = [];
+      List<Message> items = [];
 
-      items.addAll(newItems.map<ChatResponseModel>((item) {
-        return ChatResponseModel.fromJson(item);
+      items.addAll(newItems.map<Message>((item) {
+        return Message.fromJson(item);
       }).toList());
 
       return items;

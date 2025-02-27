@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class SendChatRequestModel extends Equatable {
-  SendChatRequestModel({
+  const SendChatRequestModel({
     required this.requestId,
     required this.groupId,
     required this.content,

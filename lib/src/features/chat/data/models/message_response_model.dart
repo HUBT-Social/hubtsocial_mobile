@@ -2,7 +2,7 @@ import 'package:chatview/chatview.dart';
 import 'package:equatable/equatable.dart';
 
 class MessageResponseModel extends Equatable {
-  MessageResponseModel({
+  const MessageResponseModel({
     required this.groupId,
     required this.message,
   });

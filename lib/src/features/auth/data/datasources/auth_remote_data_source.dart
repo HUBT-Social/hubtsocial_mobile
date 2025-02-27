@@ -72,9 +72,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       var responseData = SignInResponseModel.fromJson(response.body);
-
       if (response.statusCode != 200) {
-        logger.e('Failed to verify OTP password: ${response.body.toString()}');
+        logger.e(
+            'Failed to verify OTP password: statusCode: ${response.statusCode}:  ${response.body.toString()}');
         throw ServerException(
           message: responseData.message.toString(),
           statusCode: response.statusCode.toString(),
@@ -117,7 +117,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        logger.e('Failed to verify password: ${response.body.toString()}');
+        logger.e(
+            'Failed to verify password: statusCode: ${response.statusCode}:  ${response.body.toString()}');
         throw ServerException(
           message: response.body,
           statusCode: response.statusCode.toString(),
@@ -155,7 +156,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       if (response.statusCode != 200) {
         logger.e(
-            'Could not finalize api due to: ${responseData.message.toString()}');
+            'Could not finalize api due to: statusCode: ${response.statusCode}:  ${responseData.message.toString()}');
         throw ServerException(
           message: responseData.message.toString(),
           statusCode: response.statusCode.toString(),
@@ -184,7 +185,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
         if (responseFcm.statusCode != 200) {
           logger.e(
-              'Could not finalize api due to: ${responseFcm.body.toString()}');
+              'Could not finalize api due to: statusCode: ${response.statusCode}:  ${responseFcm.body.toString()}');
           throw ServerException(
             message: responseFcm.body.toString(),
             statusCode: responseFcm.statusCode.toString(),
@@ -251,7 +252,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        logger.e('Could not finalize api due to: ${response.body.toString()}');
+        logger.e(
+            'Could not finalize api due to: statusCode: ${response.statusCode}:  ${response.body.toString()}');
         throw ServerException(
           message: response.body.toString(),
           statusCode: response.statusCode.toString(),
@@ -286,7 +288,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        logger.e('Could not finalize api due to: ${response.body.toString()}');
+        logger.e(
+            'Could not finalize api due to: statusCode: ${response.statusCode}:  ${response.body.toString()}');
         throw ServerException(
           message: response.body.toString(),
           statusCode: response.statusCode.toString(),
@@ -312,7 +315,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         token: userToken.accessToken,
       );
       if (response.statusCode != 200) {
-        logger.e('Could not finalize api due to: ${response.body.toString()}');
+        logger.e(
+            'Could not finalize api due to: statusCode: ${response.statusCode}:  ${response.body.toString()}');
         throw ServerException(
           message: response.body.toString(),
           statusCode: response.statusCode.toString(),
@@ -342,7 +346,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       var responseData = SignInResponseModel.fromJson(response.body);
       if (response.statusCode != 200) {
-        logger.e('Could not finalize api due to: ${response.body.toString()}');
+        logger.e(
+            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.body.toString()}');
         throw ServerException(
           message: responseData.message.toString(),
           statusCode: response.statusCode.toString(),
@@ -391,7 +396,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       var responseData = SignInResponseModel.fromJson(response.body);
       if (response.statusCode != 200) {
-        logger.e('Could not finalize api due to: ${response.body.toString()}');
+        logger.e(
+            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.body.toString()}');
         throw ServerException(
           message: responseData.message.toString(),
           statusCode: response.statusCode.toString(),
@@ -440,7 +446,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        logger.e('Could not finalize api due to: ${response.body.toString()}');
+        logger.e(
+            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.body.toString()}');
         throw ServerException(
           message: response.body.toString(),
           statusCode: response.statusCode.toString(),
@@ -474,7 +481,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        logger.e('Could not finalize api due to: ${response.body.toString()}');
+        logger.e(
+            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.body.toString()}');
         throw ServerException(
           message: response.body.toString(),
           statusCode: response.statusCode.toString(),
@@ -517,7 +525,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        logger.e('Could not finalize api due to: ${response.body.toString()}');
+        logger.e(
+            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.body.toString()}');
         throw ServerException(
           message: response.body.toString(),
           statusCode: response.statusCode.toString(),

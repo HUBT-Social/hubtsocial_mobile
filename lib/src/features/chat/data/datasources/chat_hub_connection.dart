@@ -1,16 +1,15 @@
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/constants/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_token.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/message_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/send_chat_request_model.dart';
+import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/receive_chat/receive_chat_cubit.dart';
+import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 
 import '../../../../core/api/api_request.dart';
-
-typedef ReceiveChatCallback = void Function(MessageResponseModel message);
 
 class ChatHubConnection {
   ChatHubConnection._();
@@ -20,8 +19,8 @@ class ChatHubConnection {
     return userToken.accessToken;
   }
 
-  static final httpOptions =
-      HttpConnectionOptions(accessTokenFactory: getAccessTokenFactory);
+  static final httpOptions = HttpConnectionOptions(
+      accessTokenFactory: getAccessTokenFactory, requestTimeout: 10000);
 
   static final chatHubConnection = HubConnectionBuilder()
       .withUrl(
@@ -33,20 +32,20 @@ class ChatHubConnection {
       // .withAutomaticReconnect()
       .build();
 
-  static ReceiveChatCallback? _onReceiveChatCallback;
+  static Future<void> initHubConnection() async {
+    try {
+      await chatHubConnection.start();
 
-  static Future<void> initHubConnection(
-      {ReceiveChatCallback? onReceiveChat}) async {
-    _onReceiveChatCallback = onReceiveChat;
-    await chatHubConnection.start();
+      chatHubConnection.onclose(({Exception? error}) {
+        logger.w("Connection closed: ${error?.toString()}");
+      });
 
-    chatHubConnection.onclose(({Exception? error}) {
-      logger.w("Connection closed: ${error?.toString()}");
-    });
-
-    if (chatHubConnection.state == HubConnectionState.Connected) {
-      chatHubConnection.on("ReceiveChat", _handleReceiveChat);
-      chatHubConnection.on("ReceiveProcess", _handleReceiveProcess);
+      if (chatHubConnection.state == HubConnectionState.Connected) {
+        chatHubConnection.on("ReceiveChat", _handleReceiveChat);
+        chatHubConnection.on("ReceiveProcess", _handleReceiveProcess);
+      }
+    } catch (e) {
+      logger.e(e);
     }
   }
 
@@ -57,7 +56,10 @@ class ChatHubConnection {
   static void _handleReceiveChat(List<Object?>? arguments) {
     final message =
         MessageResponseModel.fromJson(arguments![0] as Map<String, dynamic>);
-    _onReceiveChatCallback?.call(message);
+
+    navigatorKey.currentContext
+        ?.read<ReceiveChatCubit>()
+        .receiveMessage(message);
   }
 
   static void _handleReceiveProcess(List<Object?>? arguments) {
