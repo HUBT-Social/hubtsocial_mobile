@@ -1,0 +1,30 @@
+part of 'room_chat_bloc.dart';
+
+sealed class RoomChatEvent extends Equatable {
+  const RoomChatEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class FetchRoomChatEvent extends RoomChatEvent {
+  const FetchRoomChatEvent({
+    required this.roomId,
+  });
+
+  final String roomId;
+
+  @override
+  List<String> get props => [roomId];
+}
+
+class GetRoomMemberEvent extends RoomChatEvent {
+  const GetRoomMemberEvent({
+    required this.roomId,
+  });
+
+  final String roomId;
+
+  @override
+  List<String> get props => [roomId];
+}

@@ -7,7 +7,7 @@ import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/url_image.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/send_chat_request_model.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/datasources/chat_hub_connection.dart';
-import 'package:hubtsocial_mobile/src/features/room_chat/presentation/bloc/get_room_chat_bloc.dart';
+import 'package:hubtsocial_mobile/src/features/room_chat/presentation/bloc/room_chat_bloc.dart';
 
 class RoomChatScreen extends StatefulWidget {
   const RoomChatScreen(
@@ -26,8 +26,14 @@ class RoomChatScreen extends StatefulWidget {
 class _RoomChatScreenState extends State<RoomChatScreen> {
   @override
   void initState() {
-    context.read<GetRoomChatBloc>().add(FetchRoomChatEvent(roomId: widget.id));
+    context.read<GetRoomChatBloc>().add(GetRoomMemberEvent(roomId: widget.id));
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _chatController.dispose();
+    super.dispose();
   }
 
   late ChatController _chatController;
@@ -97,6 +103,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
         builder: (context, state) {
           if (state is RoomChatProfileLoaded) {
             return ChatView(
+              isLastPage: true,
               chatController: _chatController,
               onSendTap: _onSendTap,
               featureActiveConfig: const FeatureActiveConfig(

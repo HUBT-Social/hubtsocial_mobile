@@ -6,4 +6,7 @@ abstract class RoomChatRepo {
   ResultFuture<List<Message>> fetchRoomChat({
     required String roomId,
   });
+  ResultFuture<List<Message>> getRoomMember({
+    required String roomId,
+  });
 }

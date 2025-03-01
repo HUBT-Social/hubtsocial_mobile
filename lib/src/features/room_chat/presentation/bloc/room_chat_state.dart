@@ -1,4 +1,4 @@
-part of 'get_room_chat_bloc.dart';
+part of 'room_chat_bloc.dart';
 
 sealed class GetRoomChatState extends Equatable {
   const GetRoomChatState();

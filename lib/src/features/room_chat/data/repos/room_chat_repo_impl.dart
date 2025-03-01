@@ -28,4 +28,17 @@ class RoomChatRepoImpl implements RoomChatRepo {
       return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
     }
   }
+
+  @override
+  ResultFuture<List<Message>> getRoomMember({required String roomId}) async {
+    try {
+      final result = await _remoteDataSource.getRoomMember(
+        roomId: roomId,
+      );
+
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
 }

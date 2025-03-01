@@ -20,7 +20,7 @@ class ChatHubConnection {
   }
 
   static final httpOptions = HttpConnectionOptions(
-      accessTokenFactory: getAccessTokenFactory, requestTimeout: 10000);
+      accessTokenFactory: getAccessTokenFactory, requestTimeout: 1000000000);
 
   static final chatHubConnection = HubConnectionBuilder()
       .withUrl(
