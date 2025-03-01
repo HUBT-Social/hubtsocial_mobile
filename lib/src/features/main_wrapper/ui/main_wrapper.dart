@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/constants/assets.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/features/chat/data/datasources/chat_hub_connection.dart';
 
 import 'widgets/navigation_item.dart';
 
@@ -25,6 +26,18 @@ class _MainWrapperState extends State<MainWrapper> {
       index,
       initialLocation: index == widget.navigationShell.currentIndex,
     );
+  }
+
+  @override
+  void initState() {
+    ChatHubConnection.initHubConnection();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    ChatHubConnection.stopHubConnection();
+    super.dispose();
   }
 
   @override

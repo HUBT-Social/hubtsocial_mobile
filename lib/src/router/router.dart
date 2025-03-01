@@ -57,10 +57,17 @@ final GoRouter router = GoRouter(
             child,
           ) =>
               FadeTransition(opacity: animation, child: child),
-          child: RoomChatScreen(
-            id: state.uri.queryParameters['id'].toString(),
-            title: state.uri.queryParameters['title'].toString(),
-            avatarUrl: state.uri.queryParameters['avatarUrl'].toString(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => getIt<GetRoomChatBloc>(),
+              ),
+            ],
+            child: RoomChatScreen(
+              id: state.uri.queryParameters['id'].toString(),
+              title: state.uri.queryParameters['title'].toString(),
+              avatarUrl: state.uri.queryParameters['avatarUrl'].toString(),
+            ),
           ),
         );
       },

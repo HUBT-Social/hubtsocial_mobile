@@ -31,6 +31,10 @@ This project uses `inject` library that works with code generation, execute the 
 flutter packages pub run build_runner build --delete-conflicting-outputs
 ```
 
+```
+dart pub run build_runner build --delete-conflicting-outputs
+```
+
 or watch command in order to keep the source code synced automatically:
 
 ```

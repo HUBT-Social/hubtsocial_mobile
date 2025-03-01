@@ -38,18 +38,23 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoRouter.optionURLReflectsImperativeAPIs = true;
 
-  await dotenv.load(fileName: Environment.fileName);
-
-  await configureDependencies();
+  await Future.wait([
+    dotenv.load(fileName: Environment.fileName),
+    configureDependencies(),
+  ]);
 
   await Future.wait([
     _initUniqueDeviceId(),
     _initFirebase(),
     _initLocalStorage(),
-    LocalMessage().initLocalNotifications(),
   ]);
 
   await _initNotification();
+
+  // await ChatHubConnection.initHubConnection();
+  // await ChatHubConnection.stopHubConnection();
+
+  runApp(const MyApp());
 
   // Thêm test thông báo lịch học sau 1 phút
   Future.delayed(const Duration(minutes: 1), () {
@@ -63,8 +68,6 @@ void main() async {
       }),
     );
   });
-
-  runApp(const MyApp());
 }
 
 Future<void> _initLocalStorage() async {
