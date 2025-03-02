@@ -62,6 +62,9 @@ final GoRouter router = GoRouter(
               BlocProvider(
                 create: (_) => getIt<GetRoomChatBloc>(),
               ),
+              BlocProvider(
+                create: (_) => getIt<ReceiveChatCubit>(),
+              ),
             ],
             child: RoomChatScreen(
               id: state.uri.queryParameters['id'].toString(),

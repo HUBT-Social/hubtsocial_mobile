@@ -7,6 +7,7 @@ import '../../../../core/api/errors/exceptions.dart';
 import '../../../../core/api/errors/failure.dart';
 import '../../domain/repos/room_chat_repo.dart';
 import '../datasources/room_chat_remote_data_source.dart';
+import '../models/room_member_model.dart';
 
 @LazySingleton(
   as: RoomChatRepo,
@@ -30,7 +31,7 @@ class RoomChatRepoImpl implements RoomChatRepo {
   }
 
   @override
-  ResultFuture<List<Message>> getRoomMember({required String roomId}) async {
+  ResultFuture<RoomMemberModel> getRoomMember({required String roomId}) async {
     try {
       final result = await _remoteDataSource.getRoomMember(
         roomId: roomId,

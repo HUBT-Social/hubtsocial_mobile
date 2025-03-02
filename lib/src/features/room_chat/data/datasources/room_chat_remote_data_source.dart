@@ -4,6 +4,7 @@ import 'package:chatview/chatview.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
+import 'package:hubtsocial_mobile/src/features/room_chat/data/models/room_member_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../constants/end_point.dart';
@@ -17,7 +18,7 @@ abstract class RoomChatRemoteDataSource {
   Future<List<Message>> fetchRoomChat({
     required String roomId,
   });
-  Future<List<Message>> getRoomMember({
+  Future<RoomMemberModel> getRoomMember({
     required String roomId,
   });
 }
@@ -39,8 +40,9 @@ class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
       UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
 
       final response = await APIRequest.get(
-        url: "${EndPoint.roomHistory}?ChatRoomId=$roomId&Page=1&Limit=5&Type=4",
+        url: EndPoint.roomHistory,
         token: userToken.accessToken,
+        queryParameters: {"ChatRoomId": roomId},
       );
 
       if (response.statusCode != 200) {
@@ -74,14 +76,14 @@ class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
   }
 
   @override
-  Future<List<Message>> getRoomMember({required String roomId}) async {
+  Future<RoomMemberModel> getRoomMember({required String roomId}) async {
     try {
       UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
 
       final response = await APIRequest.get(
-        url:
-            'https://hubt-social-develop.onrender.com/api/chat/room/get-member?groupId=%40aaaaaaaaaaaa.60069',
+        url: EndPoint.roomMember,
         token: userToken.accessToken,
+        queryParameters: {"groupId": roomId},
       );
 
       if (response.statusCode != 200) {
@@ -93,15 +95,9 @@ class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
         );
       }
 
-      final List newItems = json.decode(response.body);
+      var responseData = RoomMemberModel.fromMap(response.body);
 
-      List<Message> items = [];
-
-      items.addAll(newItems.map<Message>((item) {
-        return Message.fromJson(item);
-      }).toList());
-
-      return items;
+      return responseData;
     } on ServerException {
       rethrow;
     } catch (e, s) {

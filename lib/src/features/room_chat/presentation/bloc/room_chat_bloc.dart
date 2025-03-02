@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../data/models/room_member_model.dart';
 import '../../domain/usercases/fetch_room_chat_usercase.dart';
 import '../../domain/usercases/get_room_member_usercase.dart';
 
@@ -34,7 +35,7 @@ class GetRoomChatBloc extends Bloc<RoomChatEvent, GetRoomChatState> {
     final result =
         await _fetchRoomChat(FetchRoomChatParams(roomId: event.roomId));
     result.fold((failure) => emit(RoomChaLoadedError("serverError")),
-        (response) => emit(RoomChatProfileLoaded(response)));
+        (response) => emit(FetchRoomLoaded(response)));
   }
 
   Future<void> _getRoomMemberHandler(
@@ -43,6 +44,6 @@ class GetRoomChatBloc extends Bloc<RoomChatEvent, GetRoomChatState> {
   ) async {
     final result = await _getRoomChat(GetRoomChatParams(roomId: event.roomId));
     result.fold((failure) => emit(RoomChaLoadedError("serverError")),
-        (response) => emit(RoomChatProfileLoaded(response)));
+        (response) => emit(RoomMemberLoaded(response)));
   }
 }

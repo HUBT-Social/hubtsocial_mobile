@@ -185,7 +185,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
         if (responseFcm.statusCode != 200) {
           logger.e(
-              'Could not finalize api due to: statusCode: ${response.statusCode}:  ${responseFcm.body.toString()}');
+              'Could not finalize api due to: statusCode: ${responseFcm.statusCode}:  ${responseFcm.body.toString()}');
           throw ServerException(
             message: responseFcm.body.toString(),
             statusCode: responseFcm.statusCode.toString(),

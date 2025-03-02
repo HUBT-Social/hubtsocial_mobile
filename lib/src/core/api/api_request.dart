@@ -15,16 +15,22 @@ import '../../constants/end_point.dart';
 import '../local_storage/local_storage_key.dart';
 
 class APIRequest {
-  static Future<http.Response> post(
-      {required String url,
-      required Map<String, dynamic>? body,
-      String? token}) async {
-    logger.d(jsonEncode(body).toString());
+  static Future<http.Response> post({
+    required String url,
+    required Map<String, dynamic>? body,
+    String? token,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    queryParameters?.putIfAbsent(
+        "culture", () => AppLocalStorage.currentLanguageCode);
+
+    Map<String, String>? parameters =
+        queryParameters?.map((key, value) => MapEntry(key, value.toString()));
+
+    Uri uri = Uri.parse(url).replace(queryParameters: parameters);
 
     final response = await http.post(
-      Uri.parse(
-        "$url?culture=${AppLocalStorage.currentLanguageCode}",
-      ),
+      uri,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -38,13 +44,22 @@ class APIRequest {
     return response;
   }
 
-  static Future<http.Response> patch(
-      {required String url, Map<String, dynamic>? body, String? token}) async {
-    logger.d(jsonEncode(body).toString());
+  static Future<http.Response> patch({
+    required String url,
+    Map<String, dynamic>? body,
+    String? token,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    queryParameters?.putIfAbsent(
+        "culture", () => AppLocalStorage.currentLanguageCode);
+
+    Map<String, String>? parameters =
+        queryParameters?.map((key, value) => MapEntry(key, value.toString()));
+
+    Uri uri = Uri.parse(url).replace(queryParameters: parameters);
+
     final response = await http.patch(
-      Uri.parse(
-        "$url?culture=${AppLocalStorage.currentLanguageCode}",
-      ),
+      uri,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -61,11 +76,17 @@ class APIRequest {
     required String url,
     required Map<String, dynamic>? body,
     String? token,
+    Map<String, dynamic>? queryParameters,
   }) async {
+    queryParameters?.putIfAbsent(
+        "culture", () => AppLocalStorage.currentLanguageCode);
+
+    Map<String, String>? parameters =
+        queryParameters?.map((key, value) => MapEntry(key, value.toString()));
+
+    Uri uri = Uri.parse(url).replace(queryParameters: parameters);
     final response = await http.put(
-      Uri.parse(
-        "$url?culture=${AppLocalStorage.currentLanguageCode}",
-      ),
+      uri,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -82,11 +103,18 @@ class APIRequest {
     required String url,
     Map<String, dynamic>? body,
     String? token,
+    Map<String, dynamic>? queryParameters,
   }) async {
+    queryParameters?.putIfAbsent(
+        "culture", () => AppLocalStorage.currentLanguageCode);
+
+    Map<String, String>? parameters =
+        queryParameters?.map((key, value) => MapEntry(key, value.toString()));
+
+    Uri uri = Uri.parse(url).replace(queryParameters: parameters);
+
     final response = await http.get(
-      Uri.parse(
-        "$url?culture=${AppLocalStorage.currentLanguageCode}",
-      ),
+      uri,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -102,11 +130,18 @@ class APIRequest {
     required String url,
     Map<String, dynamic>? body,
     String? token,
+    Map<String, dynamic>? queryParameters,
   }) async {
+    queryParameters?.putIfAbsent(
+        "culture", () => AppLocalStorage.currentLanguageCode);
+
+    Map<String, String>? parameters =
+        queryParameters?.map((key, value) => MapEntry(key, value.toString()));
+
+    Uri uri = Uri.parse(url).replace(queryParameters: parameters);
+
     final response = await http.delete(
-      Uri.parse(
-        "$url?culture=${AppLocalStorage.currentLanguageCode}",
-      ),
+      uri,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

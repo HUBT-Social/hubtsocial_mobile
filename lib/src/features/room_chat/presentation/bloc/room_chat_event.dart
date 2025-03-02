@@ -10,9 +10,11 @@ sealed class RoomChatEvent extends Equatable {
 class FetchRoomChatEvent extends RoomChatEvent {
   const FetchRoomChatEvent({
     required this.roomId,
+    required this.page,
   });
 
   final String roomId;
+  final int page;
 
   @override
   List<String> get props => [roomId];
