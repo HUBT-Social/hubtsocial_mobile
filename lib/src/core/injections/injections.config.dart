@@ -47,6 +47,8 @@ import 'package:hubtsocial_mobile/src/features/chat/domain/usercases/fetch_chat_
     as _i1020;
 import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/chat_bloc.dart'
     as _i359;
+import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/receive_chat/receive_chat_cubit.dart'
+    as _i441;
 import 'package:hubtsocial_mobile/src/features/room_chat/data/datasources/room_chat_remote_data_source.dart'
     as _i311;
 import 'package:hubtsocial_mobile/src/features/room_chat/data/repos/room_chat_repo_impl.dart'
@@ -55,8 +57,10 @@ import 'package:hubtsocial_mobile/src/features/room_chat/domain/repos/room_chat_
     as _i133;
 import 'package:hubtsocial_mobile/src/features/room_chat/domain/usercases/fetch_room_chat_usercase.dart'
     as _i1063;
-import 'package:hubtsocial_mobile/src/features/room_chat/presentation/bloc/get_room_chat_bloc.dart'
-    as _i95;
+import 'package:hubtsocial_mobile/src/features/room_chat/domain/usercases/get_room_member_usercase.dart'
+    as _i892;
+import 'package:hubtsocial_mobile/src/features/room_chat/presentation/bloc/room_chat_bloc.dart'
+    as _i285;
 import 'package:hubtsocial_mobile/src/features/user/data/datasources/user_profile_remote_datasource.dart'
     as _i592;
 import 'package:hubtsocial_mobile/src/features/user/data/repos/user_repo_impl.dart'
@@ -85,6 +89,7 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final registerModule = _$RegisterModule();
+    gh.factory<_i441.ReceiveChatCubit>(() => _i441.ReceiveChatCubit());
     gh.lazySingleton<_i170.HiveInterface>(() => registerModule.hive);
     gh.lazySingleton<_i892.FirebaseMessaging>(
         () => registerModule.firebaseMessaging);
@@ -114,6 +119,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i457.AuthRepoImpl(gh<_i953.AuthRemoteDataSource>()));
     gh.lazySingleton<_i1063.FetchRoomChatUserCase>(
         () => _i1063.FetchRoomChatUserCase(gh<_i133.RoomChatRepo>()));
+    gh.lazySingleton<_i892.GetRoomMemberUserCase>(
+        () => _i892.GetRoomMemberUserCase(gh<_i133.RoomChatRepo>()));
     gh.lazySingleton<_i789.ChangePasswordUserCase>(
         () => _i789.ChangePasswordUserCase(gh<_i1042.UserRepo>()));
     gh.lazySingleton<_i477.InitUserUserCase>(
@@ -129,10 +136,12 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.lazySingleton<_i1020.FetchChatUserCase>(
         () => _i1020.FetchChatUserCase(gh<_i965.ChatRepo>()));
+    gh.factory<_i285.GetRoomChatBloc>(() => _i285.GetRoomChatBloc(
+          fetchRoomChat: gh<_i1063.FetchRoomChatUserCase>(),
+          getRoomChat: gh<_i892.GetRoomMemberUserCase>(),
+        ));
     gh.factory<_i359.ChatBloc>(
         () => _i359.ChatBloc(fetchChat: gh<_i1020.FetchChatUserCase>()));
-    gh.factory<_i95.GetRoomChatBloc>(() => _i95.GetRoomChatBloc(
-        fetchRoomChat: gh<_i1063.FetchRoomChatUserCase>()));
     gh.lazySingleton<_i411.ForgotPasswordUserCase>(
         () => _i411.ForgotPasswordUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i556.InformationUserCase>(

@@ -20,7 +20,7 @@ class ChatHubConnection {
   }
 
   static final httpOptions = HttpConnectionOptions(
-      accessTokenFactory: getAccessTokenFactory, requestTimeout: 10000);
+      accessTokenFactory: getAccessTokenFactory, requestTimeout: 1000000000);
 
   static final chatHubConnection = HubConnectionBuilder()
       .withUrl(
@@ -39,11 +39,6 @@ class ChatHubConnection {
       chatHubConnection.onclose(({Exception? error}) {
         logger.w("Connection closed: ${error?.toString()}");
       });
-
-      if (chatHubConnection.state == HubConnectionState.Connected) {
-        chatHubConnection.on("ReceiveChat", _handleReceiveChat);
-        chatHubConnection.on("ReceiveProcess", _handleReceiveProcess);
-      }
     } catch (e) {
       logger.e(e);
     }
@@ -51,19 +46,6 @@ class ChatHubConnection {
 
   static Future<void> stopHubConnection() async {
     await chatHubConnection.stop();
-  }
-
-  static void _handleReceiveChat(List<Object?>? arguments) {
-    final message =
-        MessageResponseModel.fromJson(arguments![0] as Map<String, dynamic>);
-
-    navigatorKey.currentContext
-        ?.read<ReceiveChatCubit>()
-        .receiveMessage(message);
-  }
-
-  static void _handleReceiveProcess(List<Object?>? arguments) {
-    logger.i(arguments);
   }
 
   static Future<void> invokeSendItemChat(

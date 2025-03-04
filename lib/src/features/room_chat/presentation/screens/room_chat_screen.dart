@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:chatview/chatview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +9,15 @@ import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/url_image.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/send_chat_request_model.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/datasources/chat_hub_connection.dart';
-import 'package:hubtsocial_mobile/src/features/room_chat/presentation/bloc/get_room_chat_bloc.dart';
+import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/receive_chat/receive_chat_cubit.dart';
+import 'package:hubtsocial_mobile/src/features/room_chat/presentation/bloc/room_chat_bloc.dart';
+import 'package:signalr_netcore/signalr_client.dart';
+
+import '../../../../constants/end_point.dart';
+import '../../../../core/api/api_request.dart';
+import '../../../../core/api/errors/exceptions.dart';
+import '../../../auth/domain/entities/user_token.dart';
+import '../../../chat/data/models/message_response_model.dart';
 
 class RoomChatScreen extends StatefulWidget {
   const RoomChatScreen(
@@ -26,48 +36,27 @@ class RoomChatScreen extends StatefulWidget {
 class _RoomChatScreenState extends State<RoomChatScreen> {
   @override
   void initState() {
-    context.read<GetRoomChatBloc>().add(FetchRoomChatEvent(roomId: widget.id));
+    context.read<GetRoomChatBloc>().add(GetRoomMemberEvent(roomId: widget.id));
+
+    if (ChatHubConnection.chatHubConnection.state ==
+        HubConnectionState.Connected) {
+      ChatHubConnection.chatHubConnection.on("ReceiveChat", _handleReceiveChat);
+      ChatHubConnection.chatHubConnection
+          .on("ReceiveProcess", _handleReceiveProcess);
+    }
     super.initState();
   }
 
-  late ChatController _chatController;
+  @override
+  void dispose() {
+    ChatHubConnection.chatHubConnection
+        .off("ReceiveChat", method: _handleReceiveChat);
+    ChatHubConnection.chatHubConnection
+        .off("ReceiveProcess", method: _handleReceiveProcess);
+    super.dispose();
+  }
 
-  // final _chatController = ChatController(
-  //   initialMessageList: Data.messageList,
-  //   scrollController: ScrollController(),
-  //   currentUser: ChatUser(
-  //     id: '1',
-  //     name: 'Flutter',
-  //     profilePhoto:
-  //         "https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/480816762_1043042661197757_4178065905203841065_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGY1ONKSThlkWPFuK6-YgFbkMe4D5ESGJmQx7gPkRIYmTmCeWWw9-NXDBPzbY-6gSFZWsTsucDsGvNdhIsianX5&_nc_ohc=BmXfOds6S_EQ7kNvgGhxaOZ&_nc_oc=AdhFqGP4O_ti8nmZIs4ffqHYykybTg-HpTkdV_K2m91u4d7N3ZVVIjsHOR4w0oviGiQ&_nc_zt=23&_nc_ht=scontent.fhan14-1.fna&_nc_gid=A-b297pL8lFHDcAq3RO1bvu&oh=00_AYC8ECbuAU8jXuhV9XnViL6glgovJj9pSm5Qr8NDHLahfA&oe=67C5DF6A",
-  //   ),
-  //   otherUsers: [
-  //     ChatUser(
-  //       id: '2',
-  //       name: 'Simform',
-  //       profilePhoto:
-  //           "https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/480816762_1043042661197757_4178065905203841065_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGY1ONKSThlkWPFuK6-YgFbkMe4D5ESGJmQx7gPkRIYmTmCeWWw9-NXDBPzbY-6gSFZWsTsucDsGvNdhIsianX5&_nc_ohc=BmXfOds6S_EQ7kNvgGhxaOZ&_nc_oc=AdhFqGP4O_ti8nmZIs4ffqHYykybTg-HpTkdV_K2m91u4d7N3ZVVIjsHOR4w0oviGiQ&_nc_zt=23&_nc_ht=scontent.fhan14-1.fna&_nc_gid=A-b297pL8lFHDcAq3RO1bvu&oh=00_AYC8ECbuAU8jXuhV9XnViL6glgovJj9pSm5Qr8NDHLahfA&oe=67C5DF6A",
-  //     ),
-  //     ChatUser(
-  //       id: '3',
-  //       name: 'Jhon',
-  //       profilePhoto:
-  //           "https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/480816762_1043042661197757_4178065905203841065_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGY1ONKSThlkWPFuK6-YgFbkMe4D5ESGJmQx7gPkRIYmTmCeWWw9-NXDBPzbY-6gSFZWsTsucDsGvNdhIsianX5&_nc_ohc=BmXfOds6S_EQ7kNvgGhxaOZ&_nc_oc=AdhFqGP4O_ti8nmZIs4ffqHYykybTg-HpTkdV_K2m91u4d7N3ZVVIjsHOR4w0oviGiQ&_nc_zt=23&_nc_ht=scontent.fhan14-1.fna&_nc_gid=A-b297pL8lFHDcAq3RO1bvu&oh=00_AYC8ECbuAU8jXuhV9XnViL6glgovJj9pSm5Qr8NDHLahfA&oe=67C5DF6A",
-  //     ),
-  //     ChatUser(
-  //       id: '4',
-  //       name: 'Mike',
-  //       profilePhoto:
-  //           "https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/480816762_1043042661197757_4178065905203841065_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGY1ONKSThlkWPFuK6-YgFbkMe4D5ESGJmQx7gPkRIYmTmCeWWw9-NXDBPzbY-6gSFZWsTsucDsGvNdhIsianX5&_nc_ohc=BmXfOds6S_EQ7kNvgGhxaOZ&_nc_oc=AdhFqGP4O_ti8nmZIs4ffqHYykybTg-HpTkdV_K2m91u4d7N3ZVVIjsHOR4w0oviGiQ&_nc_zt=23&_nc_ht=scontent.fhan14-1.fna&_nc_gid=A-b297pL8lFHDcAq3RO1bvu&oh=00_AYC8ECbuAU8jXuhV9XnViL6glgovJj9pSm5Qr8NDHLahfA&oe=67C5DF6A",
-  //     ),
-  //     ChatUser(
-  //       id: '5',
-  //       name: 'Rich',
-  //       profilePhoto:
-  //           "https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/480816762_1043042661197757_4178065905203841065_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGY1ONKSThlkWPFuK6-YgFbkMe4D5ESGJmQx7gPkRIYmTmCeWWw9-NXDBPzbY-6gSFZWsTsucDsGvNdhIsianX5&_nc_ohc=BmXfOds6S_EQ7kNvgGhxaOZ&_nc_oc=AdhFqGP4O_ti8nmZIs4ffqHYykybTg-HpTkdV_K2m91u4d7N3ZVVIjsHOR4w0oviGiQ&_nc_zt=23&_nc_ht=scontent.fhan14-1.fna&_nc_gid=A-b297pL8lFHDcAq3RO1bvu&oh=00_AYC8ECbuAU8jXuhV9XnViL6glgovJj9pSm5Qr8NDHLahfA&oe=67C5DF6A",
-  //     ),
-  //   ],
-  // );
+  late ChatController _chatController;
 
   void _showHideTypingIndicator() {
     _chatController.setTypingIndicator = !_chatController.showTypingIndicator;
@@ -90,15 +79,73 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
     ]);
   }
 
+  bool _isLastPage = false;
+  int pageIndex = 0; // Số tin nhắn tải mỗi lần
+
+  Future<void> loadMoreData() async {
+    try {
+      if (_isLastPage) return;
+
+      final token = await ChatHubConnection.getAccessTokenFactory();
+
+      final response = await APIRequest.get(
+        url: EndPoint.roomHistory,
+        token: token,
+        queryParameters: {
+          "ChatRoomId": widget.id,
+          "Page": pageIndex,
+          "Limit": 15,
+        },
+      );
+
+      if (response.statusCode != 200) {
+        logger.e(
+            'Failed to Fetch RoomChat: statusCode: ${response.statusCode}: ${response.body.toString()}');
+        throw ServerException(
+          message: response.body.toString(),
+          statusCode: response.statusCode.toString(),
+        );
+      }
+
+      final List newItems = json.decode(response.body);
+
+      List<Message> items = [];
+
+      items.addAll(newItems.map<Message>((item) {
+        return Message.fromJson(item);
+      }).toList());
+
+      if (items.isEmpty) {
+        _isLastPage = true;
+      } else {
+        pageIndex++;
+        _chatController.loadMoreData(items);
+      }
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      logger.e(e.toString());
+      logger.d(s.toString());
+      throw const ServerException(
+        message: 'Failed to verify OTP password. Please try again later.',
+        statusCode: '505',
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<GetRoomChatBloc, GetRoomChatState>(
         builder: (context, state) {
-          if (state is RoomChatProfileLoaded) {
+          if (state is RoomMemberLoaded) {
+            loadMoreData();
+            _chatController = ChatController(
+                initialMessageList: [],
+                scrollController: ScrollController(),
+                otherUsers: state.roomMember.otherUsers,
+                currentUser: state.roomMember.currentUser);
             return ChatView(
-              chatController: _chatController,
-              onSendTap: _onSendTap,
               featureActiveConfig: const FeatureActiveConfig(
                 enableSwipeToReply: false,
                 enableSwipeToSeeTime: false,
@@ -115,6 +162,11 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
                 enableOtherUserName: true,
                 enableScrollToBottomButton: true,
               ),
+              isLastPage: false, // Trạng thái trang cuối
+
+              loadMoreData: loadMoreData,
+              chatController: _chatController,
+              onSendTap: _onSendTap,
               scrollToBottomButtonConfig: ScrollToBottomButtonConfig(
                 backgroundColor: context.colorScheme.surfaceContainerLow,
                 border: Border.all(color: Colors.transparent),
@@ -366,6 +418,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
       files: null,
       replyToMessageId: replyMessage.messageId,
     );
+
     ChatHubConnection.invokeSendItemChat(sendChatRequestModel);
     // _chatController.addMessage(
     //   Message(
@@ -385,4 +438,14 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
     //   _chatController.initialMessageList.last.setStatus = MessageStatus.read;
     // });
   }
+
+  void _handleReceiveChat(List<Object?>? arguments) {
+    final message =
+        MessageResponseModel.fromJson(arguments![0] as Map<String, dynamic>);
+    if (widget.id == message.groupId) {
+      _chatController.addMessage(message.message);
+    }
+  }
+
+  void _handleReceiveProcess(List<Object?>? arguments) {}
 }

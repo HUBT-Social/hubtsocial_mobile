@@ -1,4 +1,4 @@
-part of 'get_room_chat_bloc.dart';
+part of 'room_chat_bloc.dart';
 
 sealed class GetRoomChatState extends Equatable {
   const GetRoomChatState();
@@ -11,8 +11,16 @@ final class RoomChatProfileInitial extends GetRoomChatState {}
 
 class RoomChatProfileLoading extends GetRoomChatState {}
 
-class RoomChatProfileLoaded extends GetRoomChatState {
-  const RoomChatProfileLoaded(this.listMessage);
+class RoomMemberLoaded extends GetRoomChatState {
+  const RoomMemberLoaded(this.roomMember);
+  final RoomMemberModel roomMember;
+
+  @override
+  List<Object> get props => [];
+}
+
+class FetchRoomLoaded extends GetRoomChatState {
+  const FetchRoomLoaded(this.listMessage);
   final List<Message> listMessage;
 
   @override

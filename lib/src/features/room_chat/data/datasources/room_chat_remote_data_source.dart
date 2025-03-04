@@ -4,6 +4,7 @@ import 'package:chatview/chatview.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
+import 'package:hubtsocial_mobile/src/features/room_chat/data/models/room_member_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../constants/end_point.dart';
@@ -15,6 +16,9 @@ abstract class RoomChatRemoteDataSource {
   const RoomChatRemoteDataSource();
 
   Future<List<Message>> fetchRoomChat({
+    required String roomId,
+  });
+  Future<RoomMemberModel> getRoomMember({
     required String roomId,
   });
 }
@@ -36,8 +40,9 @@ class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
       UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
 
       final response = await APIRequest.get(
-        url: "${EndPoint.getHistoryChat}?ChatRoomId=$roomId",
+        url: EndPoint.roomHistory,
         token: userToken.accessToken,
+        queryParameters: {"ChatRoomId": roomId},
       );
 
       if (response.statusCode != 200) {
@@ -58,6 +63,41 @@ class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
       }).toList());
 
       return items;
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      logger.e(e.toString());
+      logger.d(s.toString());
+      throw const ServerException(
+        message: 'Failed to verify OTP password. Please try again later.',
+        statusCode: '505',
+      );
+    }
+  }
+
+  @override
+  Future<RoomMemberModel> getRoomMember({required String roomId}) async {
+    try {
+      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
+
+      final response = await APIRequest.get(
+        url: EndPoint.roomMember,
+        token: userToken.accessToken,
+        queryParameters: {"groupId": roomId},
+      );
+
+      if (response.statusCode != 200) {
+        logger.e(
+            'Failed to Fetch RoomChat: statusCode: ${response.statusCode}: ${response.body.toString()}');
+        throw ServerException(
+          message: response.body.toString(),
+          statusCode: response.statusCode.toString(),
+        );
+      }
+
+      var responseData = RoomMemberModel.fromMap(response.body);
+
+      return responseData;
     } on ServerException {
       rethrow;
     } catch (e, s) {

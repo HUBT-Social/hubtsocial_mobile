@@ -54,8 +54,6 @@ void main() async {
   // await ChatHubConnection.initHubConnection();
   // await ChatHubConnection.stopHubConnection();
 
-  runApp(const MyApp());
-
   // Thêm test thông báo lịch học sau 1 phút
   Future.delayed(const Duration(minutes: 1), () {
     LocalMessage().showNotification(
@@ -68,6 +66,8 @@ void main() async {
       }),
     );
   });
+
+  runApp(const MyApp());
 }
 
 Future<void> _initLocalStorage() async {

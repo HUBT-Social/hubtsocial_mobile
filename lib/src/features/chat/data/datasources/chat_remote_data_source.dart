@@ -36,8 +36,12 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
 
       final response = await APIRequest.get(
-        url: "${EndPoint.chatView}?page=$page&limit=10",
+        url: EndPoint.chatView,
         token: userToken.accessToken,
+        queryParameters: {
+          'page': page.toString(),
+          'limit': '10',
+        },
       );
 
       if (response.statusCode != 200) {
