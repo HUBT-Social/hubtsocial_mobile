@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/features/chat/data/datasources/chat_hub_connection.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
+import 'package:hubtsocial_mobile/src/features/chat/data/models/message_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/chat/presentation/widgets/chat_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
+import 'package:signalr_netcore/hub_connection.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 import '../bloc/chat_bloc.dart';
 
@@ -25,17 +27,60 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
       this.pageKey = pageKey;
-      context.read<ChatBloc>().add(FetchChatEvent(
-            page: pageKey,
-          ));
+      context.read<ChatBloc>().add(FetchChatEvent(page: pageKey));
     });
+
+    if (ChatHubConnection.chatHubConnection.state ==
+        HubConnectionState.Connected) {
+      ChatHubConnection.chatHubConnection.on("ReceiveChat", _handleReceiveChat);
+    }
     super.initState();
   }
 
   @override
   void dispose() {
     _pagingController.dispose();
+    ChatHubConnection.chatHubConnection
+        .off("ReceiveChat", method: _handleReceiveChat);
     super.dispose();
+  }
+
+  void _handleReceiveChat(List<Object?>? arguments) {
+    final message =
+        MessageResponseModel.fromJson(arguments![0] as Map<String, dynamic>);
+
+    final currentItems = _pagingController.itemList ?? [];
+
+    final indexToMove = currentItems.indexWhere(
+      (chat) => chat.id == message.groupId,
+    );
+
+    if (indexToMove != -1) {
+      moveItemToTop(indexToMove);
+    } else {
+      context.read<ChatBloc>().add(FetchChatEvent(page: 1));
+      _pagingController.refresh();
+    }
+  }
+
+  void moveItemToTop(int indexToMove) {
+    final currentItems = _pagingController.itemList ?? [];
+
+    if (indexToMove >= 0 && indexToMove < currentItems.length) {
+      final itemToMove = currentItems[indexToMove];
+      final updatedItems = List<ChatResponseModel>.from(currentItems)
+        ..removeAt(indexToMove)
+        ..insert(0, itemToMove);
+
+      if (_pagingController.nextPageKey == null) {
+        _pagingController.appendLastPage(updatedItems);
+      } else {
+        _pagingController.appendPage(
+            updatedItems, _pagingController.nextPageKey);
+      }
+
+      setState(() {});
+    }
   }
 
   @override
@@ -61,9 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
             )
           ],
           body: RefreshIndicator(
-            onRefresh: () => Future.sync(
-              () => _pagingController.refresh(),
-            ),
+            onRefresh: () => Future.sync(() => _pagingController.refresh()),
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: <Widget>[
@@ -83,9 +126,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         fillColor: Colors.grey.shade100,
                         contentPadding: EdgeInsets.all(8),
                         enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide:
-                                BorderSide(color: Colors.grey.shade100)),
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.grey.shade100),
+                        ),
                       ),
                     ),
                   ),
@@ -101,9 +144,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 100,
-                  ),
+                  child: SizedBox(height: 100),
                 ),
               ],
             ),
