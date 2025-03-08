@@ -80,7 +80,6 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
   }
 
   bool _isLastPage = false;
-  int pageIndex = 0; // Số tin nhắn tải mỗi lần
 
   Future<void> loadMoreData() async {
     try {
@@ -93,7 +92,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
         token: token,
         queryParameters: {
           "ChatRoomId": widget.id,
-          "Page": pageIndex,
+          "CurrentQuantity": _chatController.initialMessageList.length,
           "Limit": 15,
         },
       );
@@ -118,7 +117,6 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
       if (items.isEmpty) {
         _isLastPage = true;
       } else {
-        pageIndex++;
         _chatController.loadMoreData(items);
       }
     } on ServerException {
@@ -420,6 +418,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
     );
 
     ChatHubConnection.invokeSendItemChat(sendChatRequestModel);
+
     // _chatController.addMessage(
     //   Message(
     //     id: sendChatRequestModel.requestId!,
