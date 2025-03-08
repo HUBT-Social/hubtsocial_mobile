@@ -6,6 +6,7 @@ import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_mo
 import 'package:hubtsocial_mobile/src/features/chat/data/models/message_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/chat/presentation/widgets/chat_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:intl/intl.dart';
 import 'package:signalr_netcore/hub_connection.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 import '../bloc/chat_bloc.dart';
@@ -51,35 +52,28 @@ class _ChatScreenState extends State<ChatScreen> {
 
     final currentItems = _pagingController.itemList ?? [];
 
-    final indexToMove = currentItems.indexWhere(
-      (chat) => chat.id == message.groupId,
+    final index = currentItems.indexWhere(
+      (chat) {
+        return chat.id == message.groupId;
+      },
     );
 
-    if (indexToMove != -1) {
-      moveItemToTop(indexToMove);
-    } else {
-      context.read<ChatBloc>().add(FetchChatEvent(page: 1));
-      _pagingController.refresh();
-    }
-  }
+    if (index != -1) {
+      final chat = currentItems.removeAt(index);
 
-  void moveItemToTop(int indexToMove) {
-    final currentItems = _pagingController.itemList ?? [];
+      final vietnamTime = DateFormat('hh:mm a').format(
+        message.message.createdAt.toLocal(),
+      );
 
-    if (indexToMove >= 0 && indexToMove < currentItems.length) {
-      final itemToMove = currentItems[indexToMove];
-      final updatedItems = List<ChatResponseModel>.from(currentItems)
-        ..removeAt(indexToMove)
-        ..insert(0, itemToMove);
+      final newChat = new ChatResponseModel(
+          lastMessage: message.message.message,
+          lastInteractionTime: vietnamTime,
+          id: chat.id,
+          avatarUrl: chat.avatarUrl,
+          groupName: chat.groupName);
 
-      if (_pagingController.nextPageKey == null) {
-        _pagingController.appendLastPage(updatedItems);
-      } else {
-        _pagingController.appendPage(
-            updatedItems, _pagingController.nextPageKey);
-      }
-
-      setState(() {});
+      currentItems.insert(0, newChat);
+      _pagingController.itemList = List<ChatResponseModel>.from(currentItems);
     }
   }
 
@@ -109,7 +103,7 @@ class _ChatScreenState extends State<ChatScreen> {
             onRefresh: () => Future.sync(() => _pagingController.refresh()),
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
-              slivers: <Widget>[
+              slivers: [
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.only(top: 16, left: 16, right: 16),
