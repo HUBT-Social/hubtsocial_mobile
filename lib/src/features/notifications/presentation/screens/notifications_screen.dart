@@ -14,6 +14,8 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsState extends State<NotificationsScreen> {
+  String _selectedFilter = 'all'; // all, unread, system, chat, schedule
+
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
@@ -21,6 +23,10 @@ class _NotificationsState extends State<NotificationsScreen> {
         MainAppBar(
           title: context.loc.notifications,
           actions: [
+            IconButton(
+              icon: Icon(Icons.filter_list),
+              onPressed: () => _showFilterDialog(context),
+            ),
             TextButton.icon(
               onPressed: () => _markAllAsRead(context),
               icon: const Icon(Icons.done_all, color: Colors.blue),
@@ -54,19 +60,140 @@ class _NotificationsState extends State<NotificationsScreen> {
             );
           }
 
+          final filteredNotifications =
+              _filterNotifications(box.values.toList());
+
+          if (filteredNotifications.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.filter_list_off,
+                    size: 80,
+                    color: Colors.grey[400],
+                  ),
+                  SizedBox(height: 16),
+                  Text('Không có thông báo nào trong bộ lọc này',
+                      style: context.textTheme.bodyLarge),
+                ],
+              ),
+            );
+          }
+
           return ListView.separated(
             padding: EdgeInsets.all(12),
-            itemCount: box.length,
+            itemCount: filteredNotifications.length,
             separatorBuilder: (context, index) => SizedBox(height: 8),
             itemBuilder: (context, index) {
-              final notification = box.getAt(box.length - 1 - index);
+              final notification = filteredNotifications[index];
               return _NotificationItem(
-                notification: notification!,
+                notification: notification,
                 onTap: () => _handleNotificationTap(context, notification),
               );
             },
           );
         },
+      ),
+    );
+  }
+
+  List<NotificationModel> _filterNotifications(
+      List<NotificationModel> notifications) {
+    switch (_selectedFilter) {
+      case 'unread':
+        return notifications.where((n) => !n.isRead).toList();
+      case 'system':
+        return notifications
+            .where((n) =>
+                n.data == null ||
+                n.data!['type'] == 'system' ||
+                n.data!['isBroadcast'] == true)
+            .toList();
+      case 'chat':
+        return notifications
+            .where((n) =>
+                n.data != null &&
+                n.data!['type'] == 'chat' &&
+                n.data!['isBroadcast'] != true)
+            .toList();
+      case 'group':
+        return notifications
+            .where((n) => n.data != null && n.data!['isGroupMessage'] == true)
+            .toList();
+      case 'schedule':
+        return notifications
+            .where((n) => n.data != null && n.data!['type'] == 'timetable')
+            .toList();
+      default:
+        return notifications;
+    }
+  }
+
+  void _showFilterDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Lọc thông báo'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _FilterOption(
+              title: 'Tất cả',
+              icon: Icons.all_inbox,
+              isSelected: _selectedFilter == 'all',
+              onTap: () {
+                setState(() => _selectedFilter = 'all');
+                Navigator.pop(context);
+              },
+            ),
+            _FilterOption(
+              title: 'Chưa đọc',
+              icon: Icons.mark_email_unread,
+              isSelected: _selectedFilter == 'unread',
+              onTap: () {
+                setState(() => _selectedFilter = 'unread');
+                Navigator.pop(context);
+              },
+            ),
+            _FilterOption(
+              title: 'Hệ thống',
+              icon: Icons.campaign,
+              isSelected: _selectedFilter == 'system',
+              onTap: () {
+                setState(() => _selectedFilter = 'system');
+                Navigator.pop(context);
+              },
+            ),
+            _FilterOption(
+              title: 'Tin nhắn',
+              icon: Icons.chat_bubble,
+              isSelected: _selectedFilter == 'chat',
+              onTap: () {
+                setState(() => _selectedFilter = 'chat');
+                Navigator.pop(context);
+              },
+            ),
+            _FilterOption(
+              title: 'Nhóm',
+              icon: Icons.group,
+              isSelected: _selectedFilter == 'group',
+              onTap: () {
+                setState(() => _selectedFilter = 'group');
+                Navigator.pop(context);
+              },
+            ),
+            _FilterOption(
+              title: 'Lịch học',
+              icon: Icons.schedule,
+              isSelected: _selectedFilter == 'schedule',
+              onTap: () {
+                setState(() => _selectedFilter = 'schedule');
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -114,6 +241,36 @@ class _NotificationsState extends State<NotificationsScreen> {
   }
 }
 
+class _FilterOption extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _FilterOption({
+    required this.title,
+    required this.icon,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(icon,
+          color: isSelected ? Theme.of(context).primaryColor : Colors.grey),
+      title: Text(title,
+          style: TextStyle(
+              color:
+                  isSelected ? Theme.of(context).primaryColor : Colors.black)),
+      trailing: isSelected
+          ? Icon(Icons.check, color: Theme.of(context).primaryColor)
+          : null,
+      onTap: onTap,
+    );
+  }
+}
+
 class _NotificationItem extends StatelessWidget {
   final NotificationModel notification;
   final VoidCallback onTap;
@@ -127,6 +284,7 @@ class _NotificationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
+      color: notification.isRead ? null : Colors.blue.withOpacity(0.05),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
@@ -137,20 +295,13 @@ class _NotificationItem extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
-        child: Container(
+        child: Padding(
           padding: EdgeInsets.all(16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 8,
-                height: 8,
-                margin: EdgeInsets.only(top: 6, right: 12),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: notification.isRead ? Colors.transparent : Colors.blue,
-                ),
-              ),
+              _NotificationIcon(notification: notification),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,34 +313,20 @@ class _NotificationItem extends StatelessWidget {
                         fontWeight: notification.isRead
                             ? FontWeight.normal
                             : FontWeight.bold,
-                        color: Colors.black87,
                       ),
                     ),
-                    SizedBox(height: 4),
-                    Text(notification.body ?? '',
-                        style: context.textTheme.labelMedium),
-                    if (notification.data != null &&
-                        notification.data!.isNotEmpty)
-                      Padding(
-                        padding: EdgeInsets.only(top: 8),
-                        child: Container(
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: notification.data!.entries.map((entry) {
-                              return Text('${entry.key}: ${entry.value}',
-                                  style: context.textTheme.labelSmall);
-                            }).toList(),
-                          ),
-                        ),
+                    if (notification.body != null) ...[
+                      SizedBox(height: 4),
+                      Text(
+                        notification.body!,
+                        style: context.textTheme.bodyMedium,
                       ),
+                    ],
                     SizedBox(height: 8),
-                    Text(_formatTime(context, notification.time),
-                        style: context.textTheme.labelSmall),
+                    Text(
+                      _formatTime(context, notification.time),
+                      style: context.textTheme.labelSmall,
+                    ),
                   ],
                 ),
               ),
@@ -206,13 +343,64 @@ class _NotificationItem extends StatelessWidget {
     final difference = now.difference(dateTime);
 
     if (difference.inDays > 0) {
-      return DateFormat(context.loc.timeFormat).format(dateTime);
+      return DateFormat('dd/MM/yyyy HH:mm').format(dateTime);
     } else if (difference.inHours > 0) {
-      return context.loc.hoursAgo(difference.inHours);
+      return '${difference.inHours} giờ trước';
     } else if (difference.inMinutes > 0) {
-      return context.loc.minutesAgo(difference.inMinutes);
+      return '${difference.inMinutes} phút trước';
     } else {
-      return context.loc.justNow;
+      return 'Vừa xong';
     }
+  }
+}
+
+class _NotificationIcon extends StatelessWidget {
+  final NotificationModel notification;
+
+  const _NotificationIcon({required this.notification});
+
+  @override
+  Widget build(BuildContext context) {
+    final type = notification.data?['type'] ?? 'system';
+    final isGroupMessage = notification.data?['isGroupMessage'] == true;
+    final isBroadcast = notification.data?['isBroadcast'] == true;
+
+    IconData icon;
+    Color color;
+
+    if (isBroadcast) {
+      icon = Icons.campaign;
+      color = Colors.red;
+    } else if (isGroupMessage) {
+      icon = Icons.group;
+      color = Colors.green;
+    } else {
+      switch (type) {
+        case 'chat':
+          icon = Icons.chat_bubble;
+          color = Colors.blue;
+          break;
+        case 'timetable':
+          icon = Icons.schedule;
+          color = Colors.orange;
+          break;
+        case 'profile':
+          icon = Icons.person;
+          color = Colors.purple;
+          break;
+        default:
+          icon = Icons.notifications;
+          color = Colors.grey;
+      }
+    }
+
+    return Container(
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        shape: BoxShape.circle,
+      ),
+      child: Icon(icon, color: color, size: 24),
+    );
   }
 }

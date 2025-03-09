@@ -54,7 +54,7 @@ class HiveProvider {
   static void clearToken(VoidCallback callback) {
     var tokenBox = Hive.box(LocalStorageKey.token);
     AppDialog.showLoadingDialog(message: 'Logging out');
-    FirebaseMessage().deleteFMC();
+
     tokenBox.clear().then((_) {
       Timer(
         const Duration(seconds: 1),

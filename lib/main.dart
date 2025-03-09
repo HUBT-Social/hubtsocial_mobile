@@ -1,7 +1,10 @@
 //dev
 
+import 'package:hive_ce/hive.dart';
 import 'package:hive_ce_flutter/adapters.dart';
+
 import 'package:hubtsocial_mobile/hive_registrar.g.dart';
+
 import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_dev.dart'
     as firebaseDev;
 //prod
@@ -22,6 +25,7 @@ import 'package:hubtsocial_mobile/src/core/app/my_app.dart';
 import 'package:hubtsocial_mobile/src/constants/environment.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/models/class_schedule.dart';
 
 import 'src/core/injections/injections.dart';
 import 'src/core/local_storage/local_storage_key.dart';
@@ -29,6 +33,8 @@ import 'src/core/logger/logger.dart';
 import 'src/core/notification/firebase_message.dart';
 import 'src/core/notification/local_message.dart';
 import 'dart:convert';
+import 'src/core/notification/notification_service.dart';
+import 'src/features/timetable/services/timetable_service.dart';
 
 class NavigationService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -49,25 +55,9 @@ void main() async {
     _initLocalStorage(),
   ]);
 
+  runApp(MyApp());
+
   await _initNotification();
-
-  // await ChatHubConnection.initHubConnection();
-  // await ChatHubConnection.stopHubConnection();
-
-  // Thêm test thông báo lịch học sau 1 phút
-  Future.delayed(const Duration(minutes: 1), () {
-    LocalMessage().showNotification(
-      title: "Lịch học sắp tới",
-      body: "Bạn có môn Toán lúc 12:00",
-      payload: jsonEncode({
-        'type': 'class_schedule',
-        'classId': '1',
-        'className': 'Toán',
-      }),
-    );
-  });
-
-  runApp(const MyApp());
 }
 
 Future<void> _initLocalStorage() async {
@@ -75,19 +65,23 @@ Future<void> _initLocalStorage() async {
 
   Hive.registerAdapters();
 
-  // Mở các box cơ bản
-  await Hive.openBox(LocalStorageKey.localStorage);
-  await Hive.openBox(LocalStorageKey.token);
-
-  // Mở box notifications với compact mode
-  print("Đang mở box notifications");
-  try {
-    final box = await Hive.openBox<NotificationModel>('notifications',
-        compactionStrategy: (entries, deletedEntries) => deletedEntries > 50);
-    print("Đã mở box notifications thành công: ${box.name}");
-  } catch (e) {
-    print("Lỗi khi mở box notifications: $e");
-  }
+  // Mở các box
+  await Future.wait([
+    Hive.openBox(LocalStorageKey.localStorage),
+    Hive.openBox(LocalStorageKey.token),
+    Hive.openBox<NotificationModel>(
+      'notifications',
+      compactionStrategy: (entries, deletedEntries) => deletedEntries > 50,
+    ),
+    Hive.openBox<ClassSchedule>(
+      'class_schedules',
+      compactionStrategy: (entries, deletedEntries) => deletedEntries > 50,
+    ),
+  ]).then((_) {
+    print("Đã mở tất cả các box thành công");
+  }).catchError((error) {
+    print("Lỗi khi mở box: $error");
+  });
 }
 
 String _readAndroidDeviceInfo(AndroidDeviceInfo data) {
@@ -178,6 +172,29 @@ Future<void> _initFirebase() async {
 }
 
 Future<void> _initNotification() async {
-  FirebaseMessage().initNotification();
-  LocalMessage().initLocalNotifications();
+  try {
+    // Initialize FirebaseMessage first
+    final firebaseMessage = FirebaseMessage();
+    await firebaseMessage.initialize();
+    logger.i('Firebase message service initialized');
+
+    // Then initialize NotificationService
+    final notificationService = NotificationService();
+    if (NavigationService.navigatorKey.currentContext != null) {
+      await notificationService.initialize(
+        NavigationService.navigatorKey.currentContext!
+      );
+      logger.i('Notification service initialized');
+
+      // Initialize TimetableService
+      final timetableService = TimetableService();
+      await timetableService.initializeDefaultSchedule();
+      timetableService.startScheduleChecker();
+      logger.i('Timetable service initialized');
+    } else {
+      logger.e('Context not available for notification initialization');
+    }
+  } catch (e) {
+    logger.e('Error initializing notifications: $e');
+  }
 }

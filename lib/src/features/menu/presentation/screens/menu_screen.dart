@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/localization/bloc/localization_bloc.dart';
+import 'package:hubtsocial_mobile/src/core/notification/notification_service.dart';
 import 'package:hubtsocial_mobile/src/features/menu/presentation/widgets/user_card_in_menu.dart';
 
 import '../../../../core/localization/utils/change_language_bottom_sheet.dart';
@@ -191,24 +192,104 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             ),
           ),
-          FilledButton(
-            onPressed: () async {
-              try {
-                final String? textToCopy =
-                    await FirebaseMessaging.instance.getToken();
-                if (textToCopy != null) {
-                  await Clipboard.setData(ClipboardData(text: textToCopy));
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: FilledButton.icon(
+              onPressed: () async {
+                try {
+                  final String? token =
+                      await FirebaseMessaging.instance.getToken();
+                  if (token != null) {
+                    await Clipboard.setData(ClipboardData(text: token));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('FCM Token copied!'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  }
+                } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Copied to Clipboard!')),
+                    SnackBar(
+                      content: Text('Failed to copy FCM token'),
+                      backgroundColor: Colors.red,
+                    ),
                   );
                 }
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Failed to copy to clipboard.')),
-                );
-              }
-            },
-            child: Text("FCM"),
+              },
+              icon: Icon(Icons.copy),
+              label: Text("Copy FCM Token"),
+            ),
+          ),
+          SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Test Notifications',
+                  style: context.textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: FilledButton.icon(
+                        onPressed: () async {
+                          try {
+                            await NotificationService().testNotification();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Test notification sent!'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Failed to send notification'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+                        },
+                        icon: Icon(Icons.notifications),
+                        label: Text("Basic"),
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: FilledButton.icon(
+                        onPressed: () async {
+                          try {
+                            await NotificationService()
+                                .testScheduleNotification();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Schedule notification sent!'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    'Failed to send schedule notification'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+                        },
+                        icon: Icon(Icons.schedule),
+                        label: Text("Schedule"),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),

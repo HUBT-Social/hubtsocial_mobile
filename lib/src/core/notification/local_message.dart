@@ -32,34 +32,34 @@ class LocalMessage {
       android: initializationSettingsAndroid,
     );
 
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: _onDidReceiveNotificationResponse,
-    );
+    // await flutterLocalNotificationsPlugin.initialize(
+    //   initializationSettings,
+    //   onDidReceiveNotificationResponse: _onDidReceiveNotificationResponse,
+    // );
   }
 
-  void _onDidReceiveNotificationResponse(
-      NotificationResponse notificationResponse) {
-    final String? payload = notificationResponse.payload;
-    if (payload != null && payload.isNotEmpty) {
-      try {
-        final data = json.decode(payload) as Map<String, dynamic>;
-        if (data.containsKey('chatUserId')) {
-          router.go('/chat/${data['chatUserId']}');
-        } else if (data.containsKey('notificationId')) {
-          router.go(
-              '${AppRoute.notifications.path}?id=${data['notificationId']}');
-        } else {
-          router.go(AppRoute.notifications.path);
-        }
-      } catch (e) {
-        print('Lỗi khi xử lý payload: $e');
-        router.go(AppRoute.notifications.path);
-      }
-    } else {
-      router.go(AppRoute.notifications.path);
-    }
-  }
+  // void _onDidReceiveNotificationResponse(
+  //     NotificationResponse notificationResponse) {
+  //   final String? payload = notificationResponse.payload;
+  //   if (payload != null && payload.isNotEmpty) {
+  //     try {
+  //       final data = json.decode(payload) as Map<String, dynamic>;
+  //       if (data.containsKey('chatUserId')) {
+  //         router.go('/chat/${data['chatUserId']}');
+  //       } else if (data.containsKey('notificationId')) {
+  //         router.go(
+  //             '${AppRoute.notifications.path}?id=${data['notificationId']}');
+  //       } else {
+  //         router.go(AppRoute.notifications.path);
+  //       }
+  //     } catch (e) {
+  //       print('Lỗi khi xử lý payload: $e');
+  //       router.go(AppRoute.notifications.path);
+  //     }
+  //   } else {
+  //     router.go(AppRoute.notifications.path);
+  //   }
+  // }
 
   // Hàm để hiển thị thông báo ngay lập tức
   Future<void> showNotification({

@@ -24,6 +24,9 @@ class NotificationModel extends HiveObject {
   @HiveField(5)
   final Map<String, dynamic>? data;
 
+  @HiveField(6) // Thêm trường type vào Hive
+  final String? type;
+
   NotificationModel({
     required this.id,
     this.title,
@@ -31,6 +34,7 @@ class NotificationModel extends HiveObject {
     required this.time,
     this.isRead = false,
     this.data,
+    this.type, // Thêm type vào constructor
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +45,7 @@ class NotificationModel extends HiveObject {
       time: json['time'],
       isRead: json['isRead'] ?? false,
       data: json['data'],
+      type: json['type'], // Thêm type vào fromJson
     );
   }
 
@@ -51,6 +56,7 @@ class NotificationModel extends HiveObject {
     Map<String, dynamic>? data,
     String? time,
     bool? isRead,
+    String? type, // Thêm type vào copyWith
   }) {
     return NotificationModel(
       id: id ?? this.id,
@@ -59,6 +65,7 @@ class NotificationModel extends HiveObject {
       data: data ?? this.data,
       time: time ?? this.time,
       isRead: isRead ?? this.isRead,
+      type: type ?? this.type, // Thêm type vào copyWith
     );
   }
 
