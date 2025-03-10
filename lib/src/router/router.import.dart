@@ -32,6 +32,7 @@ import '../features/profile/presentation/screens/full_screens.dart';
 import '../features/profile/presentation/screens/profile_screen.dart';
 import '../features/room_chat/presentation/screens/room_chat_screen.dart';
 import '../features/timetable/presentation/screens/timetable_screen.dart';
+import '../features/timetable/presentation/screens/timetable_screen_new.dart';
 import '../features/user/presentation/bloc/user_bloc.dart';
 import '../core/injections/injections.dart';
 import '../core/local_storage/local_storage_key.dart';
