@@ -96,7 +96,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
   change_app_package_name: ^1.4.0
-  hive_ce_generator: 1.8.1
+  hive_ce_generator: ^1.8.2
   build_runner: ^2.1.11
   bloc_test: ^10.0.0
   mocktail: ^1.0.0

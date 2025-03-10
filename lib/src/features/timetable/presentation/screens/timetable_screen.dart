@@ -34,8 +34,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
     } catch (e) {
       print('Error initializing box: $e');
     }
-  }git add .
-  
+  }
 
   @override
   Widget build(BuildContext context) {
