@@ -9,14 +9,13 @@ import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/url_image.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/send_chat_request_model.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/datasources/chat_hub_connection.dart';
-import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/receive_chat/receive_chat_cubit.dart';
 import 'package:hubtsocial_mobile/src/features/room_chat/presentation/bloc/room_chat_bloc.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 
 import '../../../../constants/end_point.dart';
 import '../../../../core/api/api_request.dart';
 import '../../../../core/api/errors/exceptions.dart';
-import '../../../auth/domain/entities/user_token.dart';
 import '../../../chat/data/models/message_response_model.dart';
 
 class RoomChatScreen extends StatefulWidget {
@@ -60,6 +59,14 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
 
   void _showHideTypingIndicator() {
     _chatController.setTypingIndicator = !_chatController.showTypingIndicator;
+  }
+
+  void _showRoomInfo() {
+    AppRoute.roomChatInfo.push(context, queryParameters: {
+      "id": widget.id,
+      "title": widget.title,
+      "avatarUrl": widget.avatarUrl
+    });
   }
 
   void receiveMessage() async {
@@ -225,13 +232,21 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
                     ),
                   ),
                   IconButton(
-                    tooltip: 'Simulate Message receive',
-                    onPressed: receiveMessage,
+                    tooltip: 'Room Info',
+                    onPressed: _showRoomInfo,
                     icon: Icon(
-                      Icons.supervised_user_circle,
+                      Icons.info_outline_rounded,
                       color: context.colorScheme.onPrimary,
                     ),
                   ),
+                  // IconButton(
+                  //   tooltip: 'Simulate Message receive',
+                  //   onPressed: receiveMessage,
+                  //   icon: Icon(
+                  //     Icons.supervised_user_circle,
+                  //     color: context.colorScheme.onPrimary,
+                  //   ),
+                  // ),
                 ],
               ),
               chatBackgroundConfig: ChatBackgroundConfiguration(

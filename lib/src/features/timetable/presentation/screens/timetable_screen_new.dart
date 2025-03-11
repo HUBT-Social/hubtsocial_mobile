@@ -1,12 +1,6 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
-import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/features/timetable/models/class_schedule.dart';
-import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 import 'utils.dart';
 

@@ -165,7 +165,8 @@ class NotificationService {
       // Kiểm tra xem người dùng hiện tại có trong danh sách nhận không
       if (targetUsers != null) {
         final userList = List<String>.from(json.decode(targetUsers));
-        final currentUserId = 'GET_CURRENT_USER_ID'; // Thay bằng cách lấy ID người dùng hiện tại
+        final currentUserId =
+            'GET_CURRENT_USER_ID'; // Thay bằng cách lấy ID người dùng hiện tại
         if (!userList.contains(currentUserId)) {
           return; // Không hiển thị nếu không phải người nhận
         }
@@ -198,7 +199,8 @@ class NotificationService {
     }
   }
 
-  Future<void> _saveNotification(RemoteMessage message, {Map<String, dynamic>? additionalData}) async {
+  Future<void> _saveNotification(RemoteMessage message,
+      {Map<String, dynamic>? additionalData}) async {
     try {
       final notification = NotificationModel(
         id: message.messageId ?? DateTime.now().toString(),
@@ -207,7 +209,7 @@ class NotificationService {
         time: DateTime.now().toIso8601String(),
         isRead: false,
         data: {
-          ...?message.data,
+          ...message.data,
           ...?additionalData,
         },
       );
@@ -269,7 +271,8 @@ class NotificationService {
 
         case 'profile':
           final userId = data['userId']?.toString();
-          _context!.go(userId != null ? '/profile/$userId' : AppRoute.profile.path);
+          _context!
+              .go(userId != null ? '/profile/$userId' : AppRoute.profile.path);
           break;
 
         default:

@@ -116,7 +116,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
       child: Column(
         children: [
           _buildTableHeader(),
-          ...weekDays.map((day) => _buildDayRow(day, box)).toList(),
+          ...weekDays.map((day) => _buildDayRow(day, box)),
         ],
       ),
     );

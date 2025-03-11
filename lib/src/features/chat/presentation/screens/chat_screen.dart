@@ -65,7 +65,7 @@ class _ChatScreenState extends State<ChatScreen> {
         message.message.createdAt.toLocal(),
       );
 
-      final newChat = new ChatResponseModel(
+      final newChat = ChatResponseModel(
           lastMessage: message.message.message,
           lastInteractionTime: vietnamTime,
           id: chat.id,

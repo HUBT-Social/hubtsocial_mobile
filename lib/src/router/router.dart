@@ -46,34 +46,66 @@ final GoRouter router = GoRouter(
     _authRoute(),
 
     GoRoute(
-      path: AppRoute.roomChat.path,
-      pageBuilder: (context, state) {
-        return CustomTransitionPage(
-          key: state.pageKey,
-          transitionsBuilder: (
-            context,
-            animation,
-            secondaryAnimation,
-            child,
-          ) =>
-              FadeTransition(opacity: animation, child: child),
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (_) => getIt<GetRoomChatBloc>(),
+        path: AppRoute.roomChat.path,
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            transitionsBuilder: (
+              context,
+              animation,
+              secondaryAnimation,
+              child,
+            ) =>
+                FadeTransition(opacity: animation, child: child),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) => getIt<GetRoomChatBloc>(),
+                ),
+                BlocProvider(
+                  create: (_) => getIt<ReceiveChatCubit>(),
+                ),
+              ],
+              child: RoomChatScreen(
+                id: state.uri.queryParameters['id'].toString(),
+                title: state.uri.queryParameters['title'].toString(),
+                avatarUrl: state.uri.queryParameters['avatarUrl'].toString(),
               ),
-              BlocProvider(
-                create: (_) => getIt<ReceiveChatCubit>(),
-              ),
-            ],
-            child: RoomChatScreen(
-              id: state.uri.queryParameters['id'].toString(),
-              title: state.uri.queryParameters['title'].toString(),
-              avatarUrl: state.uri.queryParameters['avatarUrl'].toString(),
             ),
-          ),
-        );
-      },
-    ),
+          );
+        },
+        routes: [
+          GoRoute(
+              path: 'info',
+              pageBuilder: (context, state) {
+                return CustomTransitionPage(
+                  key: state.pageKey,
+                  transitionsBuilder: (
+                    context,
+                    animation,
+                    secondaryAnimation,
+                    child,
+                  ) =>
+                      FadeTransition(opacity: animation, child: child),
+                  child: MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (_) => getIt<GetRoomChatBloc>(),
+                      ),
+                      BlocProvider(
+                        create: (_) => getIt<ReceiveChatCubit>(),
+                      ),
+                    ],
+                    child: RoomChatInfoScreen(
+                      id: state.uri.queryParameters['id'].toString(),
+                      title: state.uri.queryParameters['title'].toString(),
+                      avatarUrl:
+                          state.uri.queryParameters['avatarUrl'].toString(),
+                    ),
+                  ),
+                );
+              },
+              routes: []),
+        ]),
   ],
 );
