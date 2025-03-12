@@ -367,7 +367,7 @@ class NotificationService {
       final body = '''
 Môn học: ${schedule.subject}
 Phòng: ${schedule.room}
-Thời gian: ${schedule.startHour.toString().padLeft(2, '0')}:${schedule.startMinute.toString().padLeft(2, '0')}
+Thời gian: ${schedule.startTime.hour.toString().padLeft(2, '0')}:${schedule.startTime.minute.toString().padLeft(2, '0')}
 Thời lượng: ${schedule.duration} phút
 ''';
 
@@ -399,15 +399,14 @@ Thời lượng: ${schedule.duration} phút
 
   Future<void> testScheduleNotification() async {
     try {
-      final now = DateTime.now();
+      final now = DateTime.now().add(Duration(minutes: 1));
       final testSchedule = ClassSchedule(
         id: now.millisecondsSinceEpoch.toString(),
         subject: 'Test Subject',
         room: 'A101',
         weekDay: now.weekday + 1,
         session: 'CHIỀU',
-        startHour: now.hour,
-        startMinute: now.minute + 1,
+        startTime: now,
         duration: 45,
       );
 
@@ -420,7 +419,7 @@ Thời lượng: ${schedule.duration} phút
         body: '''
 ${testSchedule.subject}
 Phòng: ${testSchedule.room}
-Thời gian bắt đầu: ${testSchedule.startHour}:${testSchedule.startMinute.toString().padLeft(2, '0')}''',
+Thời gian bắt đầu: ${testSchedule.startTime.hour}:${testSchedule.startTime.minute.toString().padLeft(2, '0')}''',
         payload: json.encode({
           'type': 'timetable',
           'classId': testSchedule.id,

@@ -1,30 +1,18 @@
 import 'package:hive_ce_flutter/adapters.dart';
 
-import '../../../core/local_storage/local_storage_type_id.dart';
-
-part 'notification_model.g.dart';
-
-@HiveType(typeId: LocalStorageTypeId.notification)
 class NotificationModel extends HiveObject {
-  @HiveField(0)
   final String id;
 
-  @HiveField(1)
   final String? title;
 
-  @HiveField(2)
   final String? body;
 
-  @HiveField(3)
   final String time;
 
-  @HiveField(4)
   bool isRead;
 
-  @HiveField(5)
   final Map<String, dynamic>? data;
 
-  @HiveField(6) // Thêm trường type vào Hive
   final String? type;
 
   NotificationModel({

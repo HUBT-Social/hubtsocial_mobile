@@ -1,13 +1,7 @@
 import 'dart:convert';
 
-import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_token.dart';
 
-import '../../../../core/local_storage/local_storage_type_id.dart';
-
-part 'user_token_model.g.dart';
-
-@HiveType(typeId: LocalStorageTypeId.userTokenModel)
 class UserTokenModel extends UserToken {
   UserTokenModel({
     required super.accessToken,

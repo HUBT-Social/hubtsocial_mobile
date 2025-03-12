@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
+import '../../models/class_schedule.dart';
 import 'utils.dart';
 
 class TimetableScreenNew extends StatefulWidget {
@@ -12,7 +13,7 @@ class TimetableScreenNew extends StatefulWidget {
 }
 
 class _TimetableScreenNewState extends State<TimetableScreenNew> {
-  late final ValueNotifier<List<Event>> _selectedEvents;
+  late final ValueNotifier<List<ClassSchedule>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
       .toggledOff; // Can be toggled on/off by longpressing a date
@@ -35,12 +36,12 @@ class _TimetableScreenNewState extends State<TimetableScreenNew> {
     super.dispose();
   }
 
-  List<Event> _getEventsForDay(DateTime day) {
+  List<ClassSchedule> _getEventsForDay(DateTime day) {
     // Implementation example
     return kEvents[day] ?? [];
   }
 
-  List<Event> _getEventsForRange(DateTime start, DateTime end) {
+  List<ClassSchedule> _getEventsForRange(DateTime start, DateTime end) {
     // Implementation example
     final days = daysInRange(start, end);
 
@@ -101,7 +102,7 @@ class _TimetableScreenNewState extends State<TimetableScreenNew> {
       ],
       body: Column(
         children: [
-          TableCalendar<Event>(
+          TableCalendar<ClassSchedule>(
             firstDay: kFirstDay,
             lastDay: kLastDay,
             focusedDay: _focusedDay,
@@ -131,10 +132,11 @@ class _TimetableScreenNewState extends State<TimetableScreenNew> {
           ),
           const SizedBox(height: 8.0),
           Expanded(
-            child: ValueListenableBuilder<List<Event>>(
+            child: ValueListenableBuilder<List<ClassSchedule>>(
               valueListenable: _selectedEvents,
               builder: (context, value, _) {
                 return ListView.builder(
+                  physics: BouncingScrollPhysics(),
                   itemCount: value.length,
                   itemBuilder: (context, index) {
                     return Container(
@@ -148,7 +150,7 @@ class _TimetableScreenNewState extends State<TimetableScreenNew> {
                       ),
                       child: ListTile(
                         onTap: () => print('${value[index]}'),
-                        title: Text('${value[index]}'),
+                        title: Text(value[index].room),
                       ),
                     );
                   },

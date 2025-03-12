@@ -1,9 +1,4 @@
 //dev
-
-import 'package:hive_ce_flutter/adapters.dart';
-
-import 'package:hubtsocial_mobile/hive_registrar.g.dart';
-
 import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_dev.dart'
     as firebaseDev;
 //prod
@@ -32,6 +27,8 @@ import 'src/core/logger/logger.dart';
 import 'src/core/notification/firebase_message.dart';
 import 'src/core/notification/notification_service.dart';
 import 'src/features/timetable/services/timetable_service.dart';
+import 'package:hive_ce_flutter/adapters.dart';
+import 'package:hubtsocial_mobile/hive/hive_registrar.g.dart';
 
 class NavigationService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
