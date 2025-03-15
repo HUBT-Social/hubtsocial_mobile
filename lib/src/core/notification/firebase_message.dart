@@ -170,7 +170,14 @@ class FirebaseMessage {
           router.go(AppRoute.profile.path);
         }
         break;
-
+      case 'home':
+        final userId = data['homeId']?.toString();
+        if (userId != null) {
+          router.go('/home/$userId');
+        } else {
+          router.go(AppRoute.home.path);
+        }
+        break;
       default:
         router.go(AppRoute.notifications.path);
     }

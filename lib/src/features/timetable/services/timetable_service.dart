@@ -81,8 +81,8 @@ class TimetableService {
       final now = DateTime.now();
 
       for (var schedule in box.values) {
-        if (!schedule.notified && 
-            schedule.weekDay == now.weekday + 1 && 
+        if (!schedule.notified &&
+            schedule.weekDay == now.weekday + 1 &&
             schedule.isUpcoming) {
           await _notificationService.showNotification(
             title: 'Sắp đến giờ học!',
