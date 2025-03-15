@@ -2,7 +2,7 @@ import 'environment.dart';
 
 class EndPoint {
   static String get apiUrl => "${Environment.getApiUrl}/api";
-  static String get chatHub => "${Environment.getApiUrl}/chatHub";
+  static String get chatHub => Environment.getChatHub;
 
   static String get _auth => "$apiUrl/auth";
   static String get authSignIn => "$_auth/sign-in";
@@ -21,7 +21,7 @@ class EndPoint {
   static String get authDeleteToken => "$_auth/delete-token";
 
   static String get _user => "$apiUrl/user";
-  static String get userGetUser => "$_user/get-user";
+  static String get userGetUser => _user;
   static String get informationUser => "$_user/add-info-user";
   static String get updateFcmToken => "$_user/update/fcm-token";
 

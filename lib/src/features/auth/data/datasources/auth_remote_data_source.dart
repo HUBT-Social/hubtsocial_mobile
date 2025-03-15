@@ -180,7 +180,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         final responseFcm = await APIRequest.put(
           url: EndPoint.updateFcmToken,
           token: userToken.accessToken,
-          body: {"fcmToken": await FirebaseMessaging.instance.getToken()},
+          queryParameters: {
+            "fcmToken": await FirebaseMessaging.instance.getToken()
+          },
         );
 
         if (responseFcm.statusCode != 200) {
@@ -369,8 +371,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final responseFcm = await APIRequest.put(
         url: EndPoint.updateFcmToken,
         token: userToken.accessToken,
-        body: {"fcmToken": await FirebaseMessaging.instance.getToken()},
+        queryParameters: {
+          "fcmToken": await FirebaseMessaging.instance.getToken()
+        },
       );
+
       return responseData;
     } on ServerException {
       rethrow;
@@ -421,6 +426,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         token: userToken.accessToken,
         body: {"fcmToken": await FirebaseMessaging.instance.getToken()},
       );
+      if (responseFcm.statusCode != 200) {
+        logger.e(
+            'Could not finalize api due to: statusCode: ${responseFcm.statusCode}:  ${responseFcm.body.toString()}');
+        throw ServerException(
+          message: responseFcm.body.toString(),
+          statusCode: responseFcm.statusCode.toString(),
+        );
+      }
       return responseData;
     } on ServerException {
       rethrow;

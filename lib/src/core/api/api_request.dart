@@ -17,7 +17,7 @@ import '../local_storage/local_storage_key.dart';
 class APIRequest {
   static Future<http.Response> post({
     required String url,
-    required Map<String, dynamic>? body,
+    Map<String, dynamic>? body,
     String? token,
     Map<String, dynamic>? queryParameters,
   }) async {
@@ -74,7 +74,7 @@ class APIRequest {
 
   static Future<http.Response> put({
     required String url,
-    required Map<String, dynamic>? body,
+    Map<String, dynamic>? body,
     String? token,
     Map<String, dynamic>? queryParameters,
   }) async {
