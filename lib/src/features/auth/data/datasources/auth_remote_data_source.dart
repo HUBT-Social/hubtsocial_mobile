@@ -152,17 +152,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         },
       );
 
-      var responseData = SignInResponseModel.fromJson(response.body);
-
       if (response.statusCode != 200) {
         logger.e(
-            'Could not finalize api due to: statusCode: ${response.statusCode}:  ${responseData.message.toString()}');
+            'Could not finalize api due to: statusCode: ${response.statusCode}:  ${response.body.toString()}');
         throw ServerException(
-          message: responseData.message.toString(),
+          message: response.body.toString(),
           statusCode: response.statusCode.toString(),
         );
       }
 
+      var responseData = SignInResponseModel.fromJson(response.body);
       var token = responseData.userToken;
       final responseFcm = await APIRequest.put(
         url: EndPoint.updateFcmToken,
