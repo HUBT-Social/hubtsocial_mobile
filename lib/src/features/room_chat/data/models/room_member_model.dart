@@ -4,7 +4,7 @@ import 'package:chatview/chatview.dart';
 import 'package:equatable/equatable.dart';
 
 class RoomMemberModel extends Equatable {
-  RoomMemberModel({
+  const RoomMemberModel({
     required this.groupId,
     required this.currentUser,
     required this.otherUsers,

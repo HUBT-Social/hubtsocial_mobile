@@ -17,7 +17,7 @@ import '../local_storage/local_storage_key.dart';
 class APIRequest {
   static Future<http.Response> post({
     required String url,
-    required Map<String, dynamic>? body,
+    Map<String, dynamic>? body,
     String? token,
     Map<String, dynamic>? queryParameters,
   }) async {
@@ -74,7 +74,7 @@ class APIRequest {
 
   static Future<http.Response> put({
     required String url,
-    required Map<String, dynamic>? body,
+    Map<String, dynamic>? body,
     String? token,
     Map<String, dynamic>? queryParameters,
   }) async {
@@ -158,7 +158,7 @@ class APIRequest {
     var payload = jwtDecode(token).payload;
     int expiredTime = payload['exp'];
     var currentTimestamp = DateTime.now()
-        .subtract(const Duration(minutes: 0))
+        .subtract(const Duration(minutes: 15))
         .millisecondsSinceEpoch;
     if (currentTimestamp ~/ 1000 > expiredTime) {
       return true;

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/features/chat/data/datasources/chat_hub_connection.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
+import 'package:hubtsocial_mobile/src/features/chat/data/models/message_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/chat/presentation/widgets/chat_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
+import 'package:intl/intl.dart';
+import 'package:signalr_netcore/hub_connection.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 import '../bloc/chat_bloc.dart';
 
@@ -25,17 +28,53 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
       this.pageKey = pageKey;
-      context.read<ChatBloc>().add(FetchChatEvent(
-            page: pageKey,
-          ));
+      context.read<ChatBloc>().add(FetchChatEvent(page: pageKey));
     });
+
+    if (ChatHubConnection.chatHubConnection.state ==
+        HubConnectionState.Connected) {
+      ChatHubConnection.chatHubConnection.on("ReceiveChat", _handleReceiveChat);
+    }
     super.initState();
   }
 
   @override
   void dispose() {
     _pagingController.dispose();
+    ChatHubConnection.chatHubConnection
+        .off("ReceiveChat", method: _handleReceiveChat);
     super.dispose();
+  }
+
+  void _handleReceiveChat(List<Object?>? arguments) {
+    final message =
+        MessageResponseModel.fromJson(arguments![0] as Map<String, dynamic>);
+
+    final currentItems = _pagingController.itemList ?? [];
+
+    final index = currentItems.indexWhere(
+      (chat) {
+        return chat.id == message.groupId;
+      },
+    );
+
+    if (index != -1) {
+      final chat = currentItems.removeAt(index);
+
+      final vietnamTime = DateFormat('hh:mm a').format(
+        message.message.createdAt.toLocal(),
+      );
+
+      final newChat = ChatResponseModel(
+          lastMessage: message.message.message,
+          lastInteractionTime: vietnamTime,
+          id: chat.id,
+          avatarUrl: chat.avatarUrl,
+          groupName: chat.groupName);
+
+      currentItems.insert(0, newChat);
+      _pagingController.itemList = List<ChatResponseModel>.from(currentItems);
+    }
   }
 
   @override
@@ -61,12 +100,10 @@ class _ChatScreenState extends State<ChatScreen> {
             )
           ],
           body: RefreshIndicator(
-            onRefresh: () => Future.sync(
-              () => _pagingController.refresh(),
-            ),
+            onRefresh: () => Future.sync(() => _pagingController.refresh()),
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
-              slivers: <Widget>[
+              slivers: [
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.only(top: 16, left: 16, right: 16),
@@ -83,9 +120,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         fillColor: Colors.grey.shade100,
                         contentPadding: EdgeInsets.all(8),
                         enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide:
-                                BorderSide(color: Colors.grey.shade100)),
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(color: Colors.grey.shade100),
+                        ),
                       ),
                     ),
                   ),
@@ -101,9 +138,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 100,
-                  ),
+                  child: SizedBox(height: 100),
                 ),
               ],
             ),

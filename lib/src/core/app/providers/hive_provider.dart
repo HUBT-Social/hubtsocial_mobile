@@ -1,9 +1,7 @@
 import 'dart:async';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/adapters.dart';
-import 'package:hubtsocial_mobile/src/core/notification/firebase_message.dart';
 
 import '../../local_storage/local_storage_key.dart';
 import '../../presentation/dialog/app_dialog.dart';

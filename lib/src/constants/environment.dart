@@ -13,4 +13,8 @@ class Environment {
   static String get getApiUrl {
     return dotenv.env['API_URL'] ?? "API_URL not specified";
   }
+
+  static String get getChatHub {
+    return dotenv.env['CHAT_HUB_URL'] ?? "API_URL not specified";
+  }
 }

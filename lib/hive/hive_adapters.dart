@@ -6,7 +6,9 @@ import 'package:hubtsocial_mobile/src/features/timetable/models/class_schedule.d
 import 'package:hubtsocial_mobile/src/features/user/data/models/user_model.dart';
 import 'package:hubtsocial_mobile/src/features/user/domain/entities/user.dart';
 
-// part 'hive_adapters.g.dart';
+import '../src/features/user/data/gender.dart';
+
+part 'hive_adapters.g.dart';
 
 @GenerateAdapters([
   AdapterSpec<UserToken>(),

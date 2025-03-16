@@ -21,8 +21,7 @@ class TimetableService {
             room: 'OL100',
             weekDay: 2,
             session: 'CHIỀU',
-            startHour: 13,
-            startMinute: 30,
+            startTime: DateTime.now(),
             duration: 180,
             zoomId: '4390658809',
           ),
@@ -32,8 +31,7 @@ class TimetableService {
             room: 'D607',
             weekDay: 3,
             session: 'CHIỀU',
-            startHour: 13,
-            startMinute: 30,
+            startTime: DateTime.now(),
             duration: 180,
           ),
           ClassSchedule(
@@ -42,8 +40,7 @@ class TimetableService {
             room: 'BAITAP',
             weekDay: 6,
             session: 'CHIỀU',
-            startHour: 13,
-            startMinute: 30,
+            startTime: DateTime.now(),
             duration: 180,
           ),
           ClassSchedule(
@@ -52,8 +49,7 @@ class TimetableService {
             room: 'OL108',
             weekDay: 7,
             session: 'CHIỀU',
-            startHour: 13,
-            startMinute: 30,
+            startTime: DateTime.now(),
             duration: 180,
             zoomId: '3555992492',
           ),
@@ -63,8 +59,7 @@ class TimetableService {
             room: 'D608',
             weekDay: 8,
             session: 'CHIỀU',
-            startHour: 13,
-            startMinute: 30,
+            startTime: DateTime.now(),
             duration: 180,
           ),
         ];
@@ -90,7 +85,7 @@ class TimetableService {
 ${schedule.subject}
 Phòng: ${schedule.room}
 ${schedule.zoomId != null ? 'ID Zoom: ${schedule.zoomId}\n' : ''}
-Thời gian bắt đầu: ${schedule.startHour}:${schedule.startMinute.toString().padLeft(2, '0')}''',
+Thời gian bắt đầu: ${schedule.startTime.hour}:${schedule.startTime.minute.toString().padLeft(2, '0')}''',
             payload: json.encode({
               'type': 'timetable',
               'classId': schedule.id,
@@ -122,8 +117,7 @@ Thời gian bắt đầu: ${schedule.startHour}:${schedule.startMinute.toString(
         room: 'A101',
         weekDay: DateTime.now().weekday + 1,
         session: 'CHIỀU',
-        startHour: DateTime.now().hour,
-        startMinute: DateTime.now().minute + 1,
+        startTime: DateTime.now().add(Duration(minutes: 100)),
         duration: 45,
       );
 

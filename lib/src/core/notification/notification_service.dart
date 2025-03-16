@@ -165,7 +165,8 @@ class NotificationService {
       // Kiểm tra xem người dùng hiện tại có trong danh sách nhận không
       if (targetUsers != null) {
         final userList = List<String>.from(json.decode(targetUsers));
-        final currentUserId = 'GET_CURRENT_USER_ID'; // Thay bằng cách lấy ID người dùng hiện tại
+        final currentUserId =
+            'GET_CURRENT_USER_ID'; // Thay bằng cách lấy ID người dùng hiện tại
         if (!userList.contains(currentUserId)) {
           return; // Không hiển thị nếu không phải người nhận
         }
@@ -198,7 +199,8 @@ class NotificationService {
     }
   }
 
-  Future<void> _saveNotification(RemoteMessage message, {Map<String, dynamic>? additionalData}) async {
+  Future<void> _saveNotification(RemoteMessage message,
+      {Map<String, dynamic>? additionalData}) async {
     try {
       final notification = NotificationModel(
         id: message.messageId ?? DateTime.now().toString(),
@@ -207,7 +209,7 @@ class NotificationService {
         time: DateTime.now().toIso8601String(),
         isRead: false,
         data: {
-          ...?message.data,
+          ...message.data,
           ...?additionalData,
         },
       );
@@ -269,7 +271,8 @@ class NotificationService {
 
         case 'profile':
           final userId = data['userId']?.toString();
-          _context!.go(userId != null ? '/profile/$userId' : AppRoute.profile.path);
+          _context!
+              .go(userId != null ? '/profile/$userId' : AppRoute.profile.path);
           break;
 
         default:
@@ -364,7 +367,7 @@ class NotificationService {
       final body = '''
 Môn học: ${schedule.subject}
 Phòng: ${schedule.room}
-Thời gian: ${schedule.startHour.toString().padLeft(2, '0')}:${schedule.startMinute.toString().padLeft(2, '0')}
+Thời gian: ${schedule.startTime.hour.toString().padLeft(2, '0')}:${schedule.startTime.minute.toString().padLeft(2, '0')}
 Thời lượng: ${schedule.duration} phút
 ''';
 
@@ -396,15 +399,14 @@ Thời lượng: ${schedule.duration} phút
 
   Future<void> testScheduleNotification() async {
     try {
-      final now = DateTime.now();
+      final now = DateTime.now().add(Duration(minutes: 1));
       final testSchedule = ClassSchedule(
         id: now.millisecondsSinceEpoch.toString(),
         subject: 'Test Subject',
         room: 'A101',
         weekDay: now.weekday + 1,
         session: 'CHIỀU',
-        startHour: now.hour,
-        startMinute: now.minute + 1,
+        startTime: now,
         duration: 45,
       );
 
@@ -417,7 +419,7 @@ Thời lượng: ${schedule.duration} phút
         body: '''
 ${testSchedule.subject}
 Phòng: ${testSchedule.room}
-Thời gian bắt đầu: ${testSchedule.startHour}:${testSchedule.startMinute.toString().padLeft(2, '0')}''',
+Thời gian bắt đầu: ${testSchedule.startTime.hour}:${testSchedule.startTime.minute.toString().padLeft(2, '0')}''',
         payload: json.encode({
           'type': 'timetable',
           'classId': testSchedule.id,

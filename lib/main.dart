@@ -1,10 +1,4 @@
 //dev
-
-import 'package:hive_ce/hive.dart';
-import 'package:hive_ce_flutter/adapters.dart';
-
-import 'package:hubtsocial_mobile/hive_registrar.g.dart';
-
 import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_dev.dart'
     as firebaseDev;
 //prod
@@ -31,10 +25,10 @@ import 'src/core/injections/injections.dart';
 import 'src/core/local_storage/local_storage_key.dart';
 import 'src/core/logger/logger.dart';
 import 'src/core/notification/firebase_message.dart';
-import 'src/core/notification/local_message.dart';
-import 'dart:convert';
 import 'src/core/notification/notification_service.dart';
 import 'src/features/timetable/services/timetable_service.dart';
+import 'package:hive_ce_flutter/adapters.dart';
+import 'package:hubtsocial_mobile/hive/hive_registrar.g.dart';
 
 class NavigationService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -181,9 +175,8 @@ Future<void> _initNotification() async {
     // Then initialize NotificationService
     final notificationService = NotificationService();
     if (NavigationService.navigatorKey.currentContext != null) {
-      await notificationService.initialize(
-        NavigationService.navigatorKey.currentContext!
-      );
+      await notificationService
+          .initialize(NavigationService.navigatorKey.currentContext!);
       logger.i('Notification service initialized');
 
       // Initialize TimetableService

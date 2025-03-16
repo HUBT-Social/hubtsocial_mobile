@@ -70,7 +70,7 @@ StatefulShellRoute _mainRoute() {
         routes: [
           GoRoute(
             path: AppRoute.timetable.path,
-            builder: (context, state) => const TimetableScreen(),
+            builder: (context, state) => const TimetableScreenNew(),
           ),
         ],
       ),

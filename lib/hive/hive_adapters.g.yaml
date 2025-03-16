@@ -83,7 +83,7 @@ types:
         index: 6
   ClassSchedule:
     typeId: 5
-    nextIndex: 10
+    nextIndex: 9
     fields:
       id:
         index: 0
@@ -95,13 +95,11 @@ types:
         index: 3
       session:
         index: 4
-      startHour:
+      startTime:
         index: 5
-      startMinute:
-        index: 6
       duration:
-        index: 7
+        index: 6
       zoomId:
-        index: 8
+        index: 7
       notified:
-        index: 9
+        index: 8
