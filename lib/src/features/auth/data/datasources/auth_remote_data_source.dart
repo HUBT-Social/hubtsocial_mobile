@@ -163,6 +163,21 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
+      var token = responseData.userToken;
+      final responseFcm = await APIRequest.put(
+        url: EndPoint.updateFcmToken,
+        token: token?.accessToken,
+        body: {"fcmToken": await FirebaseMessaging.instance.getToken()},
+      );
+
+      if (responseFcm.statusCode != 200) {
+        logger.e(
+            'Could not finalize api due to: statusCode: ${responseFcm.statusCode}:  ${responseFcm.body.toString()}');
+        throw ServerException(
+          message: responseFcm.body.toString(),
+          statusCode: responseFcm.statusCode.toString(),
+        );
+      }
       if (!responseData.requiresTwoFactor! && responseData.userToken != null) {
         if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
           await _hiveAuth.openBox(LocalStorageKey.token);
@@ -170,55 +185,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
           await _hiveAuth.openBox(LocalStorageKey.token);
         }
-        var token = responseData.userToken;
         var tokenBox = _hiveAuth.box(LocalStorageKey.token);
         await tokenBox.put(LocalStorageKey.userToken, token);
         logger.i('Sign in token : $token');
-
-        UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
-
-        final responseFcm = await APIRequest.put(
-          url: EndPoint.updateFcmToken,
-          token: userToken.accessToken,
-          queryParameters: {
-            "fcmToken": await FirebaseMessaging.instance.getToken()
-          },
-        );
-
-        if (responseFcm.statusCode != 200) {
-          logger.e(
-              'Could not finalize api due to: statusCode: ${responseFcm.statusCode}:  ${responseFcm.body.toString()}');
-          throw ServerException(
-            message: responseFcm.body.toString(),
-            statusCode: responseFcm.statusCode.toString(),
-          );
-        }
-        // if (tokenBox.containsKey('fcmToken')) {
-        //   String fcmToken = tokenBox.get('fcmToken');
-        //   final response = await APIRequest.post(
-        //     // url: ApiConstants.devicesEndpoint,
-        //     url: EndPoint.apiUrl,
-        //     body: {
-        //       LocalStorageKey.token: fcmToken,
-        //     },
-        //     token: token.accessToken,
-        //   );
-
-        //   logger.i('Devices response : $response');
-        // } else {
-        //   _messaging.getToken().then((value) async {
-        //     await tokenBox.put('fcmToken', value);
-        //     await APIRequest.post(
-        //       // url: ApiConstants.devicesEndpoint,
-        //       url: EndPoint.apiUrl,
-
-        //       body: {
-        //         LocalStorageKey.token: value,
-        //       },
-        //       token: token.accessToken,
-        //     );
-        //   });
-        // }
       }
 
       return responseData;
@@ -371,9 +340,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final responseFcm = await APIRequest.put(
         url: EndPoint.updateFcmToken,
         token: userToken.accessToken,
-        queryParameters: {
-          "fcmToken": await FirebaseMessaging.instance.getToken()
-        },
+        body: {"fcmToken": await FirebaseMessaging.instance.getToken()},
       );
 
       return responseData;
@@ -409,21 +376,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
-      if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
-        await _hiveAuth.openBox(LocalStorageKey.token);
-      }
-      if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
-        await _hiveAuth.openBox(LocalStorageKey.token);
-      }
       var token = responseData.userToken;
-      var tokenBox = _hiveAuth.box(LocalStorageKey.token);
-      await tokenBox.put(LocalStorageKey.userToken, token);
-      logger.i('Sign in token : $token');
-      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
-
       final responseFcm = await APIRequest.put(
         url: EndPoint.updateFcmToken,
-        token: userToken.accessToken,
+        token: token?.accessToken,
         body: {"fcmToken": await FirebaseMessaging.instance.getToken()},
       );
       if (responseFcm.statusCode != 200) {
@@ -434,6 +390,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           statusCode: responseFcm.statusCode.toString(),
         );
       }
+      if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
+      }
+      if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
+        await _hiveAuth.openBox(LocalStorageKey.token);
+      }
+      var tokenBox = _hiveAuth.box(LocalStorageKey.token);
+      await tokenBox.put(LocalStorageKey.userToken, token);
+      logger.i('Sign in token : $token');
+
       return responseData;
     } on ServerException {
       rethrow;
