@@ -9,46 +9,79 @@ import '../../router/route.dart';
 import '../../router/router.import.dart';
 import 'local_message.dart';
 
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // Initialize Firebase if needed
+  // await Firebase.initializeApp();
+  
+  logger.i('Handling a background message: ${message.messageId}');
+  logger.i('Title: ${message.notification?.title}');
+  logger.i('Body: ${message.notification?.body}');
+
+  // Store notification in Hive when received in background
+  final notification = NotificationModel(
+    id: message.messageId ?? DateTime.now().toString(),
+    title: message.notification?.title,
+    body: message.notification?.body,
+    time: DateTime.now().toIso8601String(),
+    isRead: false,
+    data: message.data,
+  );
+
+  final box = await Hive.openBox<NotificationModel>('notifications');
+  await box.add(notification);
+
+  // Show local notification
+  await flutterLocalNotificationsPlugin.show(
+    notification.hashCode,
+    notification.title ?? 'Thông báo mới',
+    notification.body ?? '',
+    NotificationDetails(
+      android: AndroidNotificationDetails(
+        'high_importance_channel',
+        'Thông báo quan trọng',
+        channelDescription: 'Kênh nhận thông báo từ server',
+        importance: Importance.max,
+        priority: Priority.high,
+        enableVibration: true,
+        playSound: true,
+        icon: '@mipmap/ic_launcher',
+      ),
+    ),
+    payload: json.encode(message.data),
+  );
+}
+
 class FirebaseMessage {
   final _firebaseMessaging = FirebaseMessaging.instance;
-
-  static Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-    logger.i('Handling a background message: ${message.messageId}');
-    logger.i('Title: ${message.notification?.title}');
-    logger.i('Body: ${message.notification?.body}');
-
-    // Store notification in Hive when received in background
-    final notification = NotificationModel(
-      id: message.messageId ?? DateTime.now().toString(),
-      title: message.notification?.title,
-      body: message.notification?.body,
-      time: DateTime.now().toIso8601String(),
-      isRead: false,
-      data: message.data,
-    );
-
-    final box = await Hive.openBox<NotificationModel>('notifications');
-    await box.add(notification);
-  }
 
   Future<void> initialize() async {
     try {
       // 1. Set background message handler
-      FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
+      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-      // 2. Request permission
+      // 2. Request permission with all options
       await _requestPermission();
 
-      // 3. Configure foreground notification
+      // 3. Configure notification settings
       await _configureForegroundNotification();
+      await _firebaseMessaging.setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
 
-      // 4. Set up foreground handler
+      // 4. Enable auto initialization
+      await _firebaseMessaging.setAutoInitEnabled(true);
+
+      // 5. Set up handlers
       _handleForegroundMessage();
+      FirebaseMessaging.onMessageOpenedApp.listen(_navigateToNotificationScreen);
 
-      // 5. Handle terminated state
+      // 6. Handle terminated state
       await _handleTerminatedState();
 
-      // 6. Setup notification tap handling
+      // 7. Setup notification tap handling
       await _setupNotificationTapHandling();
 
       logger.i('FirebaseMessage initialized successfully');
@@ -62,21 +95,25 @@ class FirebaseMessage {
   }
 
   Future<void> _requestPermission() async {
-    NotificationSettings settings = await _firebaseMessaging.requestPermission(
-      alert: true,
-      badge: true,
-      provisional: false,
-      sound: true,
-      criticalAlert: true,
-      announcement: true,
-    );
+    try {
+      NotificationSettings settings = await _firebaseMessaging.requestPermission(
+        alert: true,
+        badge: true,
+        provisional: false,
+        sound: true,
+        criticalAlert: true,
+        announcement: true,
+        carPlay: true,
+      );
 
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      String? token = await _firebaseMessaging.getToken();
-      logger.i('FCM Token: $token');
-    } else {
-      logger.w(
-          'User declined notification permission: ${settings.authorizationStatus}');
+      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+        String? token = await _firebaseMessaging.getToken();
+        logger.i('FCM Token: $token');
+      } else {
+        logger.w('User declined notification permission: ${settings.authorizationStatus}');
+      }
+    } catch (e) {
+      logger.e('Error requesting permission: $e');
     }
   }
 

@@ -62,6 +62,8 @@ class NotificationService {
           badge: true,
           sound: true,
           provisional: false,
+          criticalAlert: true,
+          announcement: true,
         );
         print(
             '[NotificationService] New permission status: ${newSettings.authorizationStatus}');
@@ -71,6 +73,12 @@ class NotificationService {
           return;
         }
       }
+
+      // Enable background message handling
+      await _firebaseMessaging.setAutoInitEnabled(true);
+      
+      // Configure background message handling
+      FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
 
       // Get and verify FCM token
       final token = await _firebaseMessaging.getToken();
@@ -428,6 +436,32 @@ Thời gian bắt đầu: ${testSchedule.startTime.hour}:${testSchedule.startTim
       );
     } catch (e) {
       print('Error testing schedule notification: $e');
+    }
+  }
+
+  // Add background message handler
+  @pragma('vm:entry-point')
+  Future<void> _handleBackgroundMessage(RemoteMessage message) async {
+    print('[NotificationService] Handling background message: ${message.messageId}');
+    print('Title: ${message.notification?.title}');
+    print('Body: ${message.notification?.body}');
+    print('Data: ${message.data}');
+    
+    // Handle background message
+    try {
+      final notification = NotificationModel(
+        id: message.messageId ?? DateTime.now().toString(),
+        title: message.notification?.title,
+        body: message.notification?.body,
+        time: DateTime.now().toIso8601String(),
+        isRead: false,
+        data: message.data,
+      );
+
+      final box = await Hive.openBox<NotificationModel>('notifications');
+      await box.add(notification);
+    } catch (e) {
+      print('[NotificationService] Error handling background message: $e');
     }
   }
 }

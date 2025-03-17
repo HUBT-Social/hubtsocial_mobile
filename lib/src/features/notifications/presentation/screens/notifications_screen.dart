@@ -100,6 +100,9 @@ class _NotificationsState extends State<NotificationsScreen> {
 
   List<NotificationModel> _filterNotifications(
       List<NotificationModel> notifications) {
+    // Sắp xếp thông báo theo thời gian mới nhất
+    notifications.sort((a, b) => DateTime.parse(b.time).compareTo(DateTime.parse(a.time)));
+    
     switch (_selectedFilter) {
       case 'unread':
         return notifications.where((n) => !n.isRead).toList();
