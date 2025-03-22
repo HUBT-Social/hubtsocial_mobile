@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../core/data/domain/usecases/usecases.dart';
 
-import '../../data/models/room_member_model.dart';
+import '../../data/models/room_info_model.dart';
 import '../repos/room_chat_repo.dart';
 
 @LazySingleton()
@@ -12,7 +12,7 @@ class GetRoomMemberUserCase extends UseCaseWithParams<void, GetRoomChatParams> {
   const GetRoomMemberUserCase(this._repo);
   final RoomChatRepo _repo;
   @override
-  ResultFuture<RoomMemberModel> call(GetRoomChatParams param) =>
+  ResultFuture<RoomInfoModel> call(GetRoomChatParams param) =>
       _repo.getRoomMember(roomId: param.roomId);
 }
 

@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../data/models/room_member_model.dart';
+import '../../data/models/room_info_model.dart';
 import '../../domain/usercases/fetch_room_chat_usercase.dart';
 import '../../domain/usercases/get_room_member_usercase.dart';
 

@@ -4,7 +4,7 @@ import 'package:chatview/chatview.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
-import 'package:hubtsocial_mobile/src/features/room_chat/data/models/room_member_model.dart';
+import 'package:hubtsocial_mobile/src/features/room_chat/data/models/room_info_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../constants/end_point.dart';
@@ -18,7 +18,7 @@ abstract class RoomChatRemoteDataSource {
   Future<List<Message>> fetchRoomChat({
     required String roomId,
   });
-  Future<RoomMemberModel> getRoomMember({
+  Future<RoomInfoModel> getRoomMember({
     required String roomId,
   });
 }
@@ -76,12 +76,12 @@ class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
   }
 
   @override
-  Future<RoomMemberModel> getRoomMember({required String roomId}) async {
+  Future<RoomInfoModel> getRoomMember({required String roomId}) async {
     try {
       UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
 
       final response = await APIRequest.get(
-        url: EndPoint.roomMember,
+        url: EndPoint.roomInfo,
         token: userToken.accessToken,
         queryParameters: {"groupId": roomId},
       );
@@ -95,7 +95,7 @@ class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
         );
       }
 
-      var responseData = RoomMemberModel.fromMap(response.body);
+      var responseData = RoomInfoModel.fromMap(response.body);
 
       return responseData;
     } on ServerException {
