@@ -3,37 +3,47 @@ import 'dart:convert';
 import 'package:chatview/chatview.dart';
 import 'package:equatable/equatable.dart';
 
-class RoomMemberModel extends Equatable {
-  const RoomMemberModel({
+class RoomInfoModel extends Equatable {
+  const RoomInfoModel({
     required this.groupId,
+    required this.title,
+    required this.avatarUrl,
     required this.currentUser,
     required this.otherUsers,
   });
 
   final String? groupId;
+  final String? title;
+  final String? avatarUrl;
   final ChatUser currentUser;
   final List<ChatUser> otherUsers;
 
-  RoomMemberModel copyWith({
+  RoomInfoModel copyWith({
     String? groupId,
+    String? title,
+    String? avatarUrl,
     ChatUser? currentUser,
     List<ChatUser>? otherUsers,
   }) {
-    return RoomMemberModel(
+    return RoomInfoModel(
       groupId: groupId ?? this.groupId,
+      title: title ?? this.title,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
       currentUser: currentUser ?? this.currentUser,
       otherUsers: otherUsers ?? this.otherUsers,
     );
   }
 
-  factory RoomMemberModel.fromJson(Map<String, dynamic> json) {
+  factory RoomInfoModel.fromJson(Map<String, dynamic> json) {
     final jsonCurrentUser = json["currentUser"];
     jsonCurrentUser.putIfAbsent("imageType", () => ImageType.network);
     jsonCurrentUser.putIfAbsent(
         "defaultAvatarImage", () => jsonCurrentUser["profilePhoto"]);
 
-    return RoomMemberModel(
+    return RoomInfoModel(
       groupId: json["groupId"],
+      title: json["title"],
+      avatarUrl: json["avatarUrl"],
       currentUser: ChatUser.fromJson(jsonCurrentUser),
       otherUsers: json["otherUsers"] == null
           ? []
@@ -48,23 +58,27 @@ class RoomMemberModel extends Equatable {
     );
   }
 
-  factory RoomMemberModel.fromMap(String source) =>
-      RoomMemberModel.fromJson(json.decode(source) as Map<String, dynamic>);
+  factory RoomInfoModel.fromMap(String source) =>
+      RoomInfoModel.fromJson(json.decode(source) as Map<String, dynamic>);
 
   Map<String, dynamic> toJson() => {
         "groupId": groupId,
+        "title": title,
+        "avatarUrl": avatarUrl,
         "currentUser": currentUser.toJson(),
         "otherUsers": otherUsers.map((x) => x.toJson()).toList(),
       };
 
   @override
   String toString() {
-    return "$groupId, $currentUser, $otherUsers, ";
+    return "$groupId,$title,$avatarUrl, $currentUser, $otherUsers, ";
   }
 
   @override
   List<Object?> get props => [
         groupId,
+        title,
+        avatarUrl,
         currentUser,
         otherUsers,
       ];

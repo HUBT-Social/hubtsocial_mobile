@@ -13,7 +13,7 @@ class RoomChatProfileLoading extends GetRoomChatState {}
 
 class RoomMemberLoaded extends GetRoomChatState {
   const RoomMemberLoaded(this.roomMember);
-  final RoomMemberModel roomMember;
+  final RoomInfoModel roomMember;
 
   @override
   List<Object> get props => [];

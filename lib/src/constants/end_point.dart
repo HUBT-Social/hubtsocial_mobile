@@ -28,5 +28,5 @@ class EndPoint {
   static String get _chat => "$apiUrl/chat";
   static String get chatView => "$_chat/load-rooms";
   static String get roomHistory => "$_chat/room/get-history";
-  static String get roomMember => "$_chat/room/get-member";
+  static String get roomInfo => "$_chat/room/info";
 }
