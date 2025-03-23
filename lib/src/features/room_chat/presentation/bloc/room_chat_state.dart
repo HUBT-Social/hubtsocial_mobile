@@ -12,8 +12,8 @@ final class RoomChatProfileInitial extends GetRoomChatState {}
 class RoomChatProfileLoading extends GetRoomChatState {}
 
 class RoomMemberLoaded extends GetRoomChatState {
-  const RoomMemberLoaded(this.roomMember);
-  final RoomInfoModel roomMember;
+  const RoomMemberLoaded(this.roomInfo);
+  final RoomInfoModel roomInfo;
 
   @override
   List<Object> get props => [];
