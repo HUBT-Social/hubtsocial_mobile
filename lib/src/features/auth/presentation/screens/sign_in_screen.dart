@@ -124,18 +124,18 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
               ),
               SizedBox(height: 12),
-              InkWell(
-                autofocus: false,
-                onTap: () {
-                  AppRoute.signUp.push(context);
-                },
-                child: Text(
-                  context.loc.do_not_have_an_account,
-                  style: context.textTheme.labelLarge?.copyWith(
-                    color: context.colorScheme.surfaceTint,
-                  ),
-                ),
-              ),
+              // InkWell(
+              //   autofocus: false,
+              //   onTap: () {
+              //     AppRoute.signUp.push(context);
+              //   },
+              //   child: Text(
+              //     context.loc.do_not_have_an_account,
+              //     style: context.textTheme.labelLarge?.copyWith(
+              //       color: context.colorScheme.surfaceTint,
+              //     ),
+              //   ),
+              // ),
             ],
           );
         },

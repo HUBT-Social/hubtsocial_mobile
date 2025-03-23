@@ -19,14 +19,8 @@ import '../../../../core/api/errors/exceptions.dart';
 import '../../../chat/data/models/message_response_model.dart';
 
 class RoomChatScreen extends StatefulWidget {
-  const RoomChatScreen(
-      {required this.id,
-      required this.title,
-      required this.avatarUrl,
-      super.key});
+  const RoomChatScreen({required this.id, super.key});
   final String id;
-  final String title;
-  final String avatarUrl;
 
   @override
   State<RoomChatScreen> createState() => _RoomChatScreenState();
@@ -64,8 +58,6 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
   void _showRoomInfo() {
     AppRoute.roomChatInfo.push(context, queryParameters: {
       "id": widget.id,
-      "title": widget.title,
-      "avatarUrl": widget.avatarUrl
     });
   }
 
@@ -148,8 +140,8 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
             _chatController = ChatController(
                 initialMessageList: [],
                 scrollController: ScrollController(),
-                otherUsers: state.roomMember.otherUsers,
-                currentUser: state.roomMember.currentUser);
+                otherUsers: state.roomInfo.otherUsers,
+                currentUser: state.roomInfo.currentUser);
             return ChatView(
               featureActiveConfig: const FeatureActiveConfig(
                 enableSwipeToReply: false,
@@ -200,14 +192,14 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 title: Row(
                   children: [
-                    UrlImage.circle(widget.avatarUrl, size: 36),
+                    UrlImage.circle(state.roomInfo.avatarUrl!, size: 36),
                     SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.title,
+                            state.roomInfo.title!,
                             style: context.textTheme.labelLarge?.copyWith(
                                 color: context.colorScheme.onPrimary),
                             overflow: TextOverflow.ellipsis,
