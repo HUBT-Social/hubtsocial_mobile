@@ -73,10 +73,10 @@ abstract class Validators {
       return navigatorKey.currentContext?.loc.password_must_be_at_least(8);
     }
 
-    if (!password.contains(RegExp('[A-Z]'))) {
-      return navigatorKey.currentContext?.loc
-          .password_must_contain_at_least_one_capital_letter;
-    }
+    // if (!password.contains(RegExp('[A-Z]'))) {
+    //   return navigatorKey.currentContext?.loc
+    //       .password_must_contain_at_least_one_capital_letter;
+    // }
 
     return null;
   }
