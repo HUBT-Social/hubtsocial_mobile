@@ -11,7 +11,7 @@ class User extends HiveObject {
   final String? phoneNumber;
   final String? email;
 
-  String get fullname => "$firstName $lastName";
+  String get fullname => "$lastName $firstName";
 
   User({
     // required this.idUser,

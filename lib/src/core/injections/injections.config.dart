@@ -61,6 +61,16 @@ import 'package:hubtsocial_mobile/src/features/room_chat/domain/usercases/get_ro
     as _i892;
 import 'package:hubtsocial_mobile/src/features/room_chat/presentation/bloc/room_chat_bloc.dart'
     as _i285;
+import 'package:hubtsocial_mobile/src/features/timetable/data/datasources/timetable_remote_data_source.dart'
+    as _i806;
+import 'package:hubtsocial_mobile/src/features/timetable/data/repos/timetable_repo_impl.dart'
+    as _i576;
+import 'package:hubtsocial_mobile/src/features/timetable/domain/repos/timetable_repo.dart'
+    as _i113;
+import 'package:hubtsocial_mobile/src/features/timetable/domain/usercases/init_timetable_usercase.dart'
+    as _i753;
+import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_bloc.dart'
+    as _i786;
 import 'package:hubtsocial_mobile/src/features/user/data/datasources/user_profile_remote_datasource.dart'
     as _i592;
 import 'package:hubtsocial_mobile/src/features/user/data/repos/user_repo_impl.dart'
@@ -96,8 +106,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i592.UserProfileRemoteDataSource>(() =>
         _i592.UserProfileRemoteDataSourceImpl(
             hiveAuth: gh<_i170.HiveInterface>()));
+    gh.lazySingleton<_i806.TimetableRemoteDataSource>(
+        () => _i806.TimetableRemoteDataSourceImpl(
+              hiveAuth: gh<_i170.HiveInterface>(),
+              messaging: gh<_i892.FirebaseMessaging>(),
+            ));
     gh.lazySingleton<_i1042.UserRepo>(
         () => _i674.UserRepoImpl(gh<_i592.UserProfileRemoteDataSource>()));
+    gh.lazySingleton<_i113.TimetableRepo>(
+        () => _i576.TimetableRepoImpl(gh<_i806.TimetableRemoteDataSource>()));
     gh.lazySingleton<_i745.ChatRemoteDataSource>(
         () => _i745.ChatRemoteDataSourceImpl(
               hiveAuth: gh<_i170.HiveInterface>(),
@@ -115,6 +132,8 @@ extension GetItInjectableX on _i174.GetIt {
             ));
     gh.lazySingleton<_i133.RoomChatRepo>(
         () => _i942.RoomChatRepoImpl(gh<_i311.RoomChatRemoteDataSource>()));
+    gh.lazySingleton<_i753.InitTimetableUserCase>(
+        () => _i753.InitTimetableUserCase(gh<_i113.TimetableRepo>()));
     gh.lazySingleton<_i936.AuthRepo>(
         () => _i457.AuthRepoImpl(gh<_i953.AuthRemoteDataSource>()));
     gh.lazySingleton<_i1063.FetchRoomChatUserCase>(
@@ -142,6 +161,8 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i359.ChatBloc>(
         () => _i359.ChatBloc(fetchChat: gh<_i1020.FetchChatUserCase>()));
+    gh.factory<_i786.TimetableBloc>(() =>
+        _i786.TimetableBloc(fetchTimetable: gh<_i753.InitTimetableUserCase>()));
     gh.lazySingleton<_i411.ForgotPasswordUserCase>(
         () => _i411.ForgotPasswordUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i556.InformationUserCase>(

@@ -70,7 +70,14 @@ StatefulShellRoute _mainRoute() {
         routes: [
           GoRoute(
             path: AppRoute.timetable.path,
-            builder: (context, state) => const TimetableScreenNew(),
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) => getIt<TimetableBloc>(),
+                ),
+              ],
+              child: const TimetableScreen(),
+            ),
           ),
         ],
       ),

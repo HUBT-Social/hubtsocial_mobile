@@ -70,9 +70,9 @@ Future<void> _initLocalStorage() async {
       compactionStrategy: (entries, deletedEntries) => deletedEntries > 50,
     ),
   ]).then((_) {
-    print("Đã mở tất cả các box thành công");
+    logger.d("Đã mở tất cả các box thành công");
   }).catchError((error) {
-    print("Lỗi khi mở box: $error");
+    logger.e("Lỗi khi mở box: $error");
   });
 }
 

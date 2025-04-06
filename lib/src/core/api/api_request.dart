@@ -40,7 +40,7 @@ class APIRequest {
       body: body != null ? jsonEncode(body) : null,
     );
 
-    logger.d(response.body);
+    logger.d("post: $url : ${response.body}");
     return response;
   }
 
@@ -68,7 +68,8 @@ class APIRequest {
       },
       body: body != null ? jsonEncode(body) : null,
     );
-    logger.d(response.body);
+
+    logger.d("patch: $url : ${response.body}");
     return response;
   }
 
@@ -95,7 +96,8 @@ class APIRequest {
       },
       body: body != null ? jsonEncode(body) : null,
     );
-    logger.d(response.body);
+
+    logger.d("put: $url : ${response.body}");
     return response;
   }
 
@@ -122,7 +124,8 @@ class APIRequest {
         'Authorization': token != null ? 'Bearer $token' : '',
       },
     );
-    logger.d(response.body);
+
+    logger.d("get: $url : ${response.body}");
     return response;
   }
 
@@ -150,7 +153,8 @@ class APIRequest {
       },
       body: body != null ? jsonEncode(body) : null,
     );
-    logger.d(response.toString());
+
+    logger.d("delete: $url : ${response.body}");
     return response;
   }
 
@@ -158,7 +162,7 @@ class APIRequest {
     var payload = jwtDecode(token).payload;
     int expiredTime = payload['exp'];
     var currentTimestamp = DateTime.now()
-        .subtract(const Duration(minutes: 15))
+        // .subtract(const Duration(minutes: 2))
         .millisecondsSinceEpoch;
     if (currentTimestamp ~/ 1000 > expiredTime) {
       return true;

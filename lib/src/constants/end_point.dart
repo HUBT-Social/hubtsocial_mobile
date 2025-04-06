@@ -29,4 +29,8 @@ class EndPoint {
   static String get chatView => "$_chat/load-rooms";
   static String get roomHistory => "$_chat/room/get-history";
   static String get roomInfo => "$_chat/room/info";
+
+  static String get _schooldata => "$_user/schooldata";
+  static String get checkVersion => "$_schooldata/check-version";
+  static String get timetable => "$_schooldata/timetable";
 }
