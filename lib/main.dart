@@ -174,7 +174,7 @@ Future<void> _initNotification() async {
 
       logger.i('Timetable service initialized');
     } else {
-      logger.e('Context not available for notification initialization');
+      logger.w('Context not available for notification initialization');
     }
   } catch (e) {
     logger.e('Error initializing notifications: $e');
