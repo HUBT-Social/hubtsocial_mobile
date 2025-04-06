@@ -7,8 +7,7 @@ import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_time
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
-import '../../models/class_schedule.dart';
-import 'utils.dart';
+import '../widgets/timetable_card.dart';
 
 class TimetableScreen extends StatefulWidget {
   const TimetableScreen({super.key});
@@ -18,15 +17,16 @@ class TimetableScreen extends StatefulWidget {
 }
 
 class _TimetableScreenState extends State<TimetableScreen> {
-  late final ValueNotifier<List<ReformTimetable>> _selectedEvents;
+  late final ValueNotifier<List<ReformTimetable>> _selectedEvents =
+      ValueNotifier([]);
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
-      .toggledOff; // Can be toggled on/off by longpressing a date
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
-
+  late LinkedHashMap<DateTime, List<ReformTimetable>> eventsForDay;
+  bool _isEventsInitialized = false;
   @override
   void initState() {
     context.read<TimetableBloc>().add(const InitTimetableEvent());
@@ -38,8 +38,6 @@ class _TimetableScreenState extends State<TimetableScreen> {
     _selectedEvents.dispose();
     super.dispose();
   }
-
-  late LinkedHashMap<DateTime, List<ReformTimetable>> eventsForDay;
 
   List<ReformTimetable> _getEventsForDay(DateTime day) {
     return eventsForDay[day] ?? [];
@@ -59,7 +57,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
       setState(() {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
-        _rangeStart = null; // Important to clean those
+        _rangeStart = null;
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
@@ -77,7 +75,6 @@ class _TimetableScreenState extends State<TimetableScreen> {
       _rangeSelectionMode = RangeSelectionMode.toggledOn;
     });
 
-    // `start` or `end` could be null
     if (start != null && end != null) {
       // _selectedEvents.value = _getEventsForRange(start, end);
     } else if (start != null) {
@@ -151,7 +148,11 @@ class _TimetableScreenState extends State<TimetableScreen> {
           )..addAll(
               convertTimetableListToMap(state.timetableModel.reformTimetables));
           _selectedDay = _focusedDay;
-          _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+
+          if (!_isEventsInitialized) {
+            _selectedEvents.value = _getEventsForDay(_selectedDay!);
+            _isEventsInitialized = true;
+          }
           return Column(
             children: [
               TableCalendar<ReformTimetable>(
@@ -166,7 +167,6 @@ class _TimetableScreenState extends State<TimetableScreen> {
                 eventLoader: _getEventsForDay,
                 startingDayOfWeek: StartingDayOfWeek.monday,
                 calendarStyle: const CalendarStyle(
-                  // Use `CalendarStyle` to customize the UI
                   outsideDaysVisible: false,
                 ),
                 onDaySelected: _onDaySelected,
@@ -188,22 +188,11 @@ class _TimetableScreenState extends State<TimetableScreen> {
                   valueListenable: _selectedEvents,
                   builder: (context, value, _) {
                     return ListView.builder(
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       itemCount: value.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 12.0,
-                            vertical: 4.0,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(),
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: ListTile(
-                            onTap: () => print('${value[index]}'),
-                            title: Text(value[index].room.toString()),
-                          ),
+                        return TimetableCard(
+                          reformTimetable: value[index],
                         );
                       },
                     );
