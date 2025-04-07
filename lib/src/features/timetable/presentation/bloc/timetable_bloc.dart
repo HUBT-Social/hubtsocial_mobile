@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/domain/usercases/init_timetable_usercase.dart';
 import 'package:injectable/injectable.dart';
 

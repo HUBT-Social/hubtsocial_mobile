@@ -1,4 +1,5 @@
 import 'package:hive_ce_flutter/adapters.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/data/timetable_type.dart';
 
 class ReformTimetable extends HiveObject {
   ReformTimetable({
@@ -19,7 +20,7 @@ class ReformTimetable extends HiveObject {
   final String? subject;
   final String? room;
   final String? zoomId;
-  final int? type;
+  final TimetableType? type;
 
   ReformTimetable copyWith({
     String? id,
@@ -29,7 +30,7 @@ class ReformTimetable extends HiveObject {
     String? subject,
     String? room,
     String? zoomId,
-    int? type,
+    TimetableType? type,
   }) {
     return ReformTimetable(
       id: id ?? this.id,
@@ -52,7 +53,7 @@ class ReformTimetable extends HiveObject {
       subject: json["subject"],
       room: json["room"],
       zoomId: json["zoomID"],
-      type: json["type"],
+      type: TimetableType.values[json["type"]],
     );
   }
 
