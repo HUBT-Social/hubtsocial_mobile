@@ -158,6 +158,201 @@ class _MenuScreenState extends State<MenuScreen> {
               Radius.circular(12),
             ),
             onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Tính năng đang phát triển'),
+                  backgroundColor: Colors.orange,
+                ),
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 6),
+              child: Container(
+                height: 48,
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.lock_outline_rounded,
+                          size: 28,
+                        ),
+                        SizedBox(width: 12),
+                        Text(
+                          "Đổi mật khẩu",
+                          style: context.textTheme.titleSmall,
+                        ),
+                      ],
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 16,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 6),
+          InkWell(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Tính năng đang phát triển'),
+                  backgroundColor: Colors.orange,
+                ),
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 6),
+              child: Container(
+                height: 48,
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.support_agent_rounded,
+                          size: 28,
+                        ),
+                        SizedBox(width: 12),
+                        Text(
+                          "Trung tâm hỗ trợ",
+                          style: context.textTheme.titleSmall,
+                        ),
+                      ],
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 16,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 6),
+          InkWell(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Tính năng đang phát triển'),
+                  backgroundColor: Colors.orange,
+                ),
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 6),
+              child: Container(
+                height: 48,
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.feedback_rounded,
+                          size: 28,
+                        ),
+                        SizedBox(width: 12),
+                        Text(
+                          "Phản hồi cho nhà phát triển",
+                          style: context.textTheme.titleSmall,
+                        ),
+                      ],
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 16,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 6),
+          InkWell(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Tính năng đang phát triển'),
+                  backgroundColor: Colors.orange,
+                ),
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 6),
+              child: Container(
+                height: 48,
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.errorContainer,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.delete_forever_rounded,
+                          size: 28,
+                          color: context.colorScheme.error,
+                        ),
+                        SizedBox(width: 12),
+                        Text(
+                          "Xóa tài khoản",
+                          style: context.textTheme.titleSmall?.copyWith(
+                            color: context.colorScheme.error,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 6),
+          InkWell(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+            onTap: () {
               context.read<AuthBloc>().add(const SignOutEvent());
             },
             child: Padding(
@@ -190,105 +385,6 @@ class _MenuScreenState extends State<MenuScreen> {
                   ],
                 ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: FilledButton.icon(
-              onPressed: () async {
-                try {
-                  final String? token =
-                      await FirebaseMessaging.instance.getToken();
-                  if (token != null) {
-                    await Clipboard.setData(ClipboardData(text: token));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('FCM Token copied!'),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                  }
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Failed to copy FCM token'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                }
-              },
-              icon: Icon(Icons.copy),
-              label: Text("Copy FCM Token"),
-            ),
-          ),
-          SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Test Notifications',
-                  style: context.textTheme.titleMedium,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: FilledButton.icon(
-                        onPressed: () async {
-                          try {
-                            await NotificationService().testNotification();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Test notification sent!'),
-                                backgroundColor: Colors.green,
-                              ),
-                            );
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Failed to send notification'),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          }
-                        },
-                        icon: Icon(Icons.notifications),
-                        label: Text("Basic"),
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: FilledButton.icon(
-                        onPressed: () async {
-                          try {
-                            await NotificationService()
-                                .testScheduleNotification();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Schedule notification sent!'),
-                                backgroundColor: Colors.green,
-                              ),
-                            );
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    'Failed to send schedule notification'),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          }
-                        },
-                        icon: Icon(Icons.schedule),
-                        label: Text("Schedule"),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
             ),
           ),
         ],

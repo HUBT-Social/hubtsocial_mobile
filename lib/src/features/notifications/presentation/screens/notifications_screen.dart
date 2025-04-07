@@ -100,9 +100,6 @@ class _NotificationsState extends State<NotificationsScreen> {
 
   List<NotificationModel> _filterNotifications(
       List<NotificationModel> notifications) {
-    // Sắp xếp thông báo theo thời gian mới nhất
-    notifications.sort((a, b) => DateTime.parse(b.time).compareTo(DateTime.parse(a.time)));
-    
     switch (_selectedFilter) {
       case 'unread':
         return notifications.where((n) => !n.isRead).toList();
@@ -285,21 +282,23 @@ class _NotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasImage = notification.data?['image'] != null;
+    
     return Card(
       elevation: 0,
-      color: notification.isRead ? null : Colors.blue.withOpacity(0.05),
+      margin: EdgeInsets.zero,
+      color: notification.isRead ? Colors.white : Colors.blue.withOpacity(0.05),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(0),
         side: BorderSide(
-          color: Colors.grey.withOpacity(0.2),
-          width: 1,
+          color: Colors.grey.withOpacity(0.1),
+          width: 0.5,
         ),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -312,27 +311,45 @@ class _NotificationItem extends StatelessWidget {
                     Text(
                       notification.title ?? '',
                       style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: notification.isRead
-                            ? FontWeight.normal
-                            : FontWeight.bold,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     if (notification.body != null) ...[
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
                         notification.body!,
-                        style: context.textTheme.bodyMedium,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.black87,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
-                    SizedBox(height: 8),
+                    SizedBox(height: 4),
                     Text(
                       _formatTime(context, notification.time),
-                      style: context.textTheme.labelSmall,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey[600],
+                      ),
                     ),
                   ],
                 ),
               ),
+              if (hasImage) ...[
+                SizedBox(width: 12),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    notification.data!['image'],
+                    width: 48,
+                    height: 48,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
             ],
           ),
         ),
@@ -346,7 +363,7 @@ class _NotificationItem extends StatelessWidget {
     final difference = now.difference(dateTime);
 
     if (difference.inDays > 0) {
-      return DateFormat('dd/MM/yyyy HH:mm').format(dateTime);
+      return '${difference.inDays} ngày trước';
     } else if (difference.inHours > 0) {
       return '${difference.inHours} giờ trước';
     } else if (difference.inMinutes > 0) {
@@ -368,42 +385,45 @@ class _NotificationIcon extends StatelessWidget {
     final isGroupMessage = notification.data?['isGroupMessage'] == true;
     final isBroadcast = notification.data?['isBroadcast'] == true;
 
-    IconData icon;
-    Color color;
+    String imagePath;
+    Color backgroundColor;
 
     if (isBroadcast) {
-      icon = Icons.campaign;
-      color = Colors.red;
+      imagePath = 'assets/images/notifications/canhbao.png';
+      backgroundColor = Colors.red.withOpacity(0.1);
     } else if (isGroupMessage) {
-      icon = Icons.group;
-      color = Colors.green;
+      imagePath = 'assets/images/notifications/logotruong.png';
+      backgroundColor = Colors.green.withOpacity(0.1);
     } else {
       switch (type) {
         case 'chat':
-          icon = Icons.chat_bubble;
-          color = Colors.blue;
+          imagePath = 'assets/images/notifications/logotruong.png';
+          backgroundColor = Colors.blue.withOpacity(0.1);
           break;
         case 'timetable':
-          icon = Icons.schedule;
-          color = Colors.orange;
+          imagePath = 'assets/images/notifications/lichthi.png';
+          backgroundColor = Colors.orange.withOpacity(0.1);
           break;
-        case 'profile':
-          icon = Icons.person;
-          color = Colors.purple;
+        case 'academic_warning':
+          imagePath = 'assets/images/notifications/canh_bao_hoc_tap.png';
+          backgroundColor = Colors.purple.withOpacity(0.1);
           break;
         default:
-          icon = Icons.notifications;
-          color = Colors.grey;
+          imagePath = 'assets/images/notifications/logotruong.png';
+          backgroundColor = Colors.grey.withOpacity(0.1);
       }
     }
 
     return Container(
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        shape: BoxShape.circle,
+      width: 40,
+      height: 40,
+      padding: EdgeInsets.all(0),
+      child: Image.asset(
+        imagePath,
+        width: 40,
+        height: 40,
+        fit: BoxFit.cover,
       ),
-      child: Icon(icon, color: color, size: 24),
     );
   }
 }

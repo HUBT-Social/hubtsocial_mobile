@@ -24,9 +24,7 @@ import 'package:hubtsocial_mobile/src/features/timetable/models/class_schedule.d
 import 'src/core/injections/injections.dart';
 import 'src/core/local_storage/local_storage_key.dart';
 import 'src/core/logger/logger.dart';
-import 'src/core/notification/firebase_message.dart';
 import 'src/core/notification/notification_service.dart';
-import 'src/features/timetable/services/timetable_service.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/hive/hive_registrar.g.dart';
 
@@ -167,22 +165,13 @@ Future<void> _initFirebase() async {
 
 Future<void> _initNotification() async {
   try {
-    // Initialize FirebaseMessage first
-    final firebaseMessage = FirebaseMessage();
-    await firebaseMessage.initialize();
-    logger.i('Firebase message service initialized');
-
-    // Then initialize NotificationService
+    // Initialize NotificationService
     final notificationService = NotificationService();
     if (NavigationService.navigatorKey.currentContext != null) {
       await notificationService
           .initialize(NavigationService.navigatorKey.currentContext!);
       logger.i('Notification service initialized');
 
-      // Initialize TimetableService
-      final timetableService = TimetableService();
-      await timetableService.initializeDefaultSchedule();
-      timetableService.startScheduleChecker();
       logger.i('Timetable service initialized');
     } else {
       logger.e('Context not available for notification initialization');

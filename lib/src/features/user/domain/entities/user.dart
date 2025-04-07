@@ -24,6 +24,8 @@ class User extends HiveObject {
     required this.email,
   });
 
+  get idUser => null;
+
   @override
   String toString() {
     return "user model[firstName: $firstName, lastName: $lastName, gender: $gender, avatarUrl: $avatarUrl,birthDay: $birthDay,phoneNumber: $phoneNumber,]";

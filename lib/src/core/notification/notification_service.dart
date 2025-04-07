@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_ce/hive.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/models/class_schedule.dart';
@@ -47,69 +48,39 @@ class NotificationService {
     try {
       print('[NotificationService] Initializing...');
 
-      // Check notification permission status first
-      final NotificationSettings settings =
-          await _firebaseMessaging.getNotificationSettings();
-      print(
-          '[NotificationService] Current permission status: ${settings.authorizationStatus}');
-
-      if (settings.authorizationStatus == AuthorizationStatus.denied) {
-        print('[NotificationService] Notifications are denied by user');
-        // Request permission again
-        final NotificationSettings newSettings =
-            await _firebaseMessaging.requestPermission(
-          alert: true,
-          badge: true,
-          sound: true,
-          provisional: false,
-          criticalAlert: true,
-          announcement: true,
-        );
-        print(
-            '[NotificationService] New permission status: ${newSettings.authorizationStatus}');
-
-        if (newSettings.authorizationStatus == AuthorizationStatus.denied) {
-          print('[NotificationService] User denied notifications permission');
-          return;
-        }
-      }
-
-      // Enable background message handling
-      await _firebaseMessaging.setAutoInitEnabled(true);
-      
-      // Configure background message handling
+      // 1. Set background message handler
       FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
 
-      // Get and verify FCM token
-      final token = await _firebaseMessaging.getToken();
-      if (token == null) {
-        print('[NotificationService] Failed to get FCM token');
-        return;
-      }
-      print('[NotificationService] FCM Token: $token');
+      // 2. Request permission with all options
+      await _requestPermission();
 
-      // Set up handlers
-      FirebaseMessaging.onMessage.listen((message) {
-        print('[NotificationService] Received foreground message:');
-        print('Title: ${message.notification?.title}');
-        print('Body: ${message.notification?.body}');
-        print('Data: ${message.data}');
-        _handleMessage(message, context);
-      });
+      // 3. Configure notification settings
+      await _configureForegroundNotification();
 
-      FirebaseMessaging.onMessageOpenedApp.listen((message) {
-        print('[NotificationService] App opened from background message:');
-        print('Data: ${message.data}');
-        _handleMessage(message, context);
-      });
+      // 4. Enable auto initialization
+      await _firebaseMessaging.setAutoInitEnabled(true);
 
-      // 1. Setup time zones
+      // 5. Subscribe to broadcast topic
+      await _firebaseMessaging.subscribeToTopic('broadcast');
+
+      // 6. Set up handlers
+      _handleForegroundMessage();
+      FirebaseMessaging.onMessageOpenedApp
+          .listen(_navigateToNotificationScreen);
+
+      // 7. Handle terminated state
+      await _handleTerminatedState();
+
+      // 8. Setup notification tap handling
+      await _setupNotificationTapHandling();
+
+      // 9. Setup time zones
       await _setupTimeZones();
 
-      // 2. Setup notifications
+      // 10. Setup notifications
       await _setupNotifications();
 
-      // 3. Start schedule checker
+      // 11. Start schedule checker
       _startScheduleChecker();
 
       logger.i('NotificationService initialized successfully');
@@ -117,6 +88,161 @@ class NotificationService {
       print('[NotificationService] Initialization error: $e');
       print(stackTrace);
       logger.e('Error initializing NotificationService: $e');
+    }
+  }
+
+  Future<void> _requestPermission() async {
+    try {
+      NotificationSettings settings =
+          await _firebaseMessaging.requestPermission(
+        alert: true,
+        badge: true,
+        provisional: false,
+        sound: true,
+        criticalAlert: true,
+        announcement: true,
+        carPlay: true,
+      );
+
+      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+        String? token = await _firebaseMessaging.getToken();
+        logger.i('FCM Token: $token');
+      } else {
+        logger.w(
+            'User declined notification permission: ${settings.authorizationStatus}');
+      }
+    } catch (e) {
+      logger.e('Error requesting permission: $e');
+    }
+  }
+
+  Future<void> _configureForegroundNotification() async {
+    await _firebaseMessaging.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+  }
+
+  void _handleForegroundMessage() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      logger.i('Got a message whilst in the foreground!');
+      logger.i('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        logger.i(
+            'Message also contained a notification: ${message.notification}');
+
+        // Save to storage with additional metadata
+        await _saveNotification(
+          message,
+          additionalData: {
+            'type': message.data['type'] ?? 'notification',
+          },
+        );
+
+        // Show local notification
+        // await _showLocalNotification(message);
+      }
+    });
+  }
+
+  Future<void> _setupNotificationTapHandling() async {
+    const androidSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    final initSettings = InitializationSettings(android: androidSettings);
+
+    await _localNotifications.initialize(
+      initSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        logger.i('Notification tapped with payload: ${response.payload}');
+        if (response.payload != null) {
+          try {
+            final data = json.decode(response.payload!) as Map<String, dynamic>;
+            _handleNavigation(data);
+          } catch (e) {
+            logger.e('Error handling notification tap: $e');
+          }
+        }
+      },
+    );
+  }
+
+  void _navigateToNotificationScreen(RemoteMessage message) {
+    if (_context == null) return;
+
+    final type = message.data['type']?.toString().toLowerCase();
+    final isGroupMessage = message.data['isGroupMessage'] == true;
+    final isBroadcast = message.data['isBroadcast'] == true;
+
+    if (isBroadcast) {
+      _context!.go(AppRoute.notifications.path);
+      return;
+    }
+
+    switch (type) {
+      case 'chat':
+        final roomId = message.data['id']?.toString();
+        final title = message.data['title']?.toString();
+        final avatarUrl = message.data['avatarUrl']?.toString();
+        if (roomId != null) {
+          AppRoute.roomChat.push(_context!, queryParameters: {
+            "id": roomId,
+            "title": title,
+            "avatarUrl": avatarUrl
+          });
+        } else {
+          _context!.go(AppRoute.chat.path);
+        }
+        break;
+
+      case 'profile':
+        final userId = message.data['userId']?.toString();
+        _context!
+            .go(userId != null ? '/profile/$userId' : AppRoute.profile.path);
+        break;
+
+      default:
+        _context!.go(AppRoute.notifications.path);
+    }
+  }
+
+  Future<void> _handleTerminatedState() async {
+    RemoteMessage? initialMessage =
+        await _firebaseMessaging.getInitialMessage();
+    if (initialMessage != null) {
+      _navigateToNotificationScreen(initialMessage);
+    }
+  }
+
+  void _showLocalNotification(RemoteMessage message) {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+
+    if (notification != null) {
+      logger.i('Showing local notification: ${message.data}');
+
+      _localNotifications.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            mainChannel.id,
+            mainChannel.name,
+            channelDescription: mainChannel.description,
+            importance: Importance.max,
+            priority: Priority.high,
+            enableVibration: true,
+            playSound: true,
+            icon: '@mipmap/ic_launcher',
+          ),
+        ),
+        payload: json.encode({
+          ...message.data,
+          'type': message.data['type'] ?? 'notification',
+        }),
+      );
     }
   }
 
@@ -167,15 +293,15 @@ class NotificationService {
       logger.i('Received foreground message: ${message.messageId}');
 
       final notificationType = message.data['type'] ?? 'system';
+      final isBroadcast = notificationType == 'broadcast';
       final targetUsers = message.data['targetUsers'];
       final groupId = message.data['groupId'];
 
-      // Kiểm tra xem người dùng hiện tại có trong danh sách nhận không
-      if (targetUsers != null) {
+      // Nếu là thông báo broadcast, không cần kiểm tra targetUsers
+      if (!isBroadcast && targetUsers != null) {
         final userList = List<String>.from(json.decode(targetUsers));
-        final currentUserId =
-            'GET_CURRENT_USER_ID'; // Thay bằng cách lấy ID người dùng hiện tại
-        if (!userList.contains(currentUserId)) {
+        final currentUserId = context.userProvider.user?.idUser;
+        if (currentUserId == null || !userList.contains(currentUserId)) {
           return; // Không hiển thị nếu không phải người nhận
         }
       }
@@ -186,7 +312,7 @@ class NotificationService {
         additionalData: {
           'groupId': groupId,
           'isGroupMessage': groupId != null,
-          'isBroadcast': notificationType == 'broadcast',
+          'isBroadcast': isBroadcast,
         },
       );
 
@@ -198,7 +324,7 @@ class NotificationService {
           ...message.data,
           'groupId': groupId,
           'isGroupMessage': groupId != null,
-          'isBroadcast': notificationType == 'broadcast',
+          'isBroadcast': isBroadcast,
         }),
       );
     } catch (e) {
@@ -223,7 +349,17 @@ class NotificationService {
       );
 
       final box = await Hive.openBox<NotificationModel>('notifications');
+      // Thêm thông báo mới vào đầu danh sách
       await box.add(notification);
+
+      // Sắp xếp lại box để thông báo mới nhất lên đầu
+      final notifications = box.values.toList()
+        ..sort(
+            (a, b) => DateTime.parse(b.time).compareTo(DateTime.parse(a.time)));
+
+      // Xóa toàn bộ và thêm lại theo thứ tự mới
+      await box.clear();
+      await box.addAll(notifications);
     } catch (e) {
       logger.e('Error saving notification: $e');
     }
@@ -256,24 +392,31 @@ class NotificationService {
       }
 
       switch (type) {
-        case 'timetable':
-          final classId = data['classId']?.toString();
-          _context!.go(classId != null
-              ? '${AppRoute.timetable.path}?classId=$classId'
-              : AppRoute.timetable.path);
-          break;
-
         case 'chat':
-          if (isGroupMessage) {
-            final groupId = data['groupId']?.toString();
-            if (groupId != null) {
-              _context!.go('/chat/group/$groupId');
-            } else {
-              _context!.go(AppRoute.chat.path);
-            }
+          // if (isGroupMessage) {
+          //   final groupId = data['groupId']?.toString();
+          //   if (groupId != null) {
+          //     // _context!.go('/chat/group/$groupId');
+
+          //     _context!.push('/room?id=${groupId}');
+          //   } else {
+          //     _context!.go(AppRoute.chat.path);
+          //   }
+          // } else {
+          //   final chatId = data['chatId']?.toString();
+          //   _context!.go(chatId != null ? '/chat/$chatId' : AppRoute.chat.path);
+          // }
+          final roomId = data['id']?.toString();
+          final title = data['title']?.toString();
+          final avatarUrl = data['avatarUrl']?.toString();
+          if (roomId != null) {
+            AppRoute.roomChat.push(_context!, queryParameters: {
+              "id": roomId,
+              "title": title,
+              "avatarUrl": avatarUrl
+            });
           } else {
-            final chatId = data['chatId']?.toString();
-            _context!.go(chatId != null ? '/chat/$chatId' : AppRoute.chat.path);
+            _context!.go(AppRoute.chat.path);
           }
           break;
 
@@ -442,11 +585,12 @@ Thời gian bắt đầu: ${testSchedule.startTime.hour}:${testSchedule.startTim
   // Add background message handler
   @pragma('vm:entry-point')
   Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-    print('[NotificationService] Handling background message: ${message.messageId}');
+    print(
+        '[NotificationService] Handling background message: ${message.messageId}');
     print('Title: ${message.notification?.title}');
     print('Body: ${message.notification?.body}');
     print('Data: ${message.data}');
-    
+
     // Handle background message
     try {
       final notification = NotificationModel(
