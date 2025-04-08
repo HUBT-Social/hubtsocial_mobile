@@ -29,7 +29,7 @@ types:
         index: 3
   User:
     typeId: 2
-    nextIndex: 7
+    nextIndex: 8
     fields:
       firstName:
         index: 0
@@ -45,9 +45,11 @@ types:
         index: 5
       email:
         index: 6
+      userName:
+        index: 7
   UserModel:
     typeId: 3
-    nextIndex: 7
+    nextIndex: 8
     fields:
       firstName:
         index: 0
@@ -63,6 +65,8 @@ types:
         index: 5
       email:
         index: 6
+      userName:
+        index: 7
   NotificationModel:
     typeId: 4
     nextIndex: 7

@@ -6,6 +6,7 @@ import '../gender.dart';
 
 class UserModel extends User {
   UserModel({
+    required super.userName,
     required super.firstName,
     required super.lastName,
     required super.gender,
@@ -16,6 +17,7 @@ class UserModel extends User {
   });
 
   UserModel copyWith({
+    String? userName,
     String? firstName,
     String? lastName,
     Gender? gender,
@@ -25,6 +27,7 @@ class UserModel extends User {
     String? email,
   }) {
     return UserModel(
+      userName: userName ?? this.userName,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       gender: gender ?? this.gender,
@@ -36,6 +39,7 @@ class UserModel extends User {
   }
 
   Map<String, dynamic> toMap() => {
+        "userName": userName,
         "firstName": firstName,
         "lastName": lastName,
         "gender": gender,
@@ -46,6 +50,7 @@ class UserModel extends User {
 
   factory UserModel.fromMap(Map<String, dynamic> json) {
     return UserModel(
+      userName: json["userName"],
       firstName: json["firstName"],
       lastName: json["lastName"],
       gender: Gender.values[json["gender"]],

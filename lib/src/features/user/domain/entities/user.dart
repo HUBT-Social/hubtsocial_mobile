@@ -3,6 +3,7 @@ import 'package:hive_ce_flutter/adapters.dart';
 import '../../data/gender.dart';
 
 class User extends HiveObject {
+  final String userName;
   final String firstName;
   final String lastName;
   final Gender gender;
@@ -14,7 +15,7 @@ class User extends HiveObject {
   String get fullname => "$lastName $firstName";
 
   User({
-    // required this.idUser,
+    required this.userName,
     required this.firstName,
     required this.lastName,
     required this.gender,
@@ -23,8 +24,6 @@ class User extends HiveObject {
     required this.phoneNumber,
     required this.email,
   });
-
-  get idUser => null;
 
   @override
   String toString() {

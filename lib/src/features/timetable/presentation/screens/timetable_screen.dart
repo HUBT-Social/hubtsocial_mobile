@@ -6,7 +6,7 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_timetable_model.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
-import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
+import '../../../main_wrapper/presentation/widgets/main_app_bar.dart';
 import '../widgets/timetable_card.dart';
 
 class TimetableScreen extends StatefulWidget {

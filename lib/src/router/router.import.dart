@@ -27,7 +27,7 @@ import '../features/auth/presentation/screens/set_new_password_screen.dart';
 import '../features/auth/presentation/screens/sign_up_information_screen.dart';
 import '../features/auth/presentation/screens/sign_up_screen.dart';
 import '../features/chat/presentation/screens/chat_screen.dart';
-import '../features/main_wrapper/ui/main_wrapper.dart';
+import '../features/main_wrapper/presentation/main_wrapper.dart';
 import '../features/notification/presentation/screens/notifications_screen.dart';
 import '../features/notification/presentation/screens/screens/edit_profile_screens.dart';
 import '../features/notification/presentation/screens/screens/full_screens.dart';

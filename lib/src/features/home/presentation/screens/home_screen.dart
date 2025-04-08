@@ -7,7 +7,7 @@ import 'package:lottie/lottie.dart';
 import '../../../../constants/assets.dart';
 import '../../../../router/route.dart';
 import '../../../../core/presentation/widget/url_image.dart';
-import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
+import '../../../main_wrapper/presentation/widgets/main_app_bar.dart';
 import '../../../user/domain/entities/user.dart';
 import '../../../user/presentation/bloc/user_bloc.dart';
 
