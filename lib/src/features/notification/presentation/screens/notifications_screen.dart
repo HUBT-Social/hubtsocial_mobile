@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:intl/intl.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
@@ -223,18 +224,39 @@ class _NotificationsState extends State<NotificationsScreen> {
     }
 
     if (notification.data != null) {
-      switch (notification.data!['type']) {
+      final type = notification.data!['type']?.toString().toLowerCase();
+
+      switch (type) {
         case 'chat':
-          router.go('/chat');
+          final roomId = notification.data!['id']?.toString();
+          final title = notification.data!['title']?.toString();
+          final avatarUrl = notification.data!['avatarUrl']?.toString();
+          if (roomId != null) {
+            AppRoute.roomChat.push(context, queryParameters: {
+              "id": roomId,
+              "title": title,
+              "avatarUrl": avatarUrl
+            });
+          } else {
+            router.go('/chat');
+          }
           break;
+
+        case 'profile':
+          final userId = notification.data!['userId']?.toString();
+          if (userId != null) {
+            router.go('/profile/$userId');
+          } else {
+            router.go('/menu/profile');
+          }
+          break;
+
         case 'timetable':
           router.go('/timetable');
           break;
-        case 'profile':
-          router.go('/menu/profile');
-          break;
+
         default:
-          router.go('/chat');
+          router.go('/notifications');
           break;
       }
     }
@@ -283,7 +305,7 @@ class _NotificationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasImage = notification.data?['image'] != null;
-    
+
     return Card(
       elevation: 0,
       margin: EdgeInsets.zero,

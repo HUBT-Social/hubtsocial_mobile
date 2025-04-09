@@ -33,47 +33,82 @@ class NavigationService {
 }
 
 void main() async {
+  // Ensure Flutter is initialized
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Configure basic app settings
   GoRouter.optionURLReflectsImperativeAPIs = true;
 
+  // Initialize core services in parallel
   await Future.wait([
+    Firebase.initializeApp(
+      options: kReleaseMode
+          ? firebaseProd.DefaultFirebaseOptions.currentPlatform
+          : firebaseDev.DefaultFirebaseOptions.currentPlatform,
+    ),
     dotenv.load(fileName: Environment.fileName),
-    configureDependencies(),
-  ]);
-
-  await Future.wait([
-    _initUniqueDeviceId(),
-    _initFirebase(),
     _initLocalStorage(),
   ]);
 
+  // Initialize dependencies after Firebase
+  await configureDependencies();
+
+  // Run app
   runApp(MyApp());
 
-  await _initNotification();
+  // Initialize notifications on a separate isolate
+  Future.microtask(() async {
+    try {
+      final notificationService = NotificationService();
+
+      // Wait for context with timeout
+      bool hasContext = false;
+      int attempts = 0;
+
+      while (!hasContext && attempts < 50) {
+        await Future.delayed(Duration(milliseconds: 100));
+        hasContext = NavigationService.navigatorKey.currentContext != null;
+        attempts++;
+      }
+
+      if (hasContext) {
+        await notificationService
+            .initialize(NavigationService.navigatorKey.currentContext!);
+        print('Notification service initialized successfully');
+      } else {
+        print(
+            'Failed to initialize notifications: context not available after timeout');
+      }
+    } catch (e, stack) {
+      print('Error initializing notifications: $e');
+      print(stack);
+    }
+  });
 }
 
 Future<void> _initLocalStorage() async {
-  await Hive.initFlutter();
+  try {
+    await Hive.initFlutter();
+    Hive.registerAdapters();
 
-  Hive.registerAdapters();
+    // Open boxes in parallel
+    await Future.wait([
+      Hive.openBox(LocalStorageKey.localStorage),
+      Hive.openBox(LocalStorageKey.token),
+      Hive.openBox<NotificationModel>(
+        'notifications',
+        compactionStrategy: (entries, deletedEntries) => deletedEntries > 50,
+      ),
+      Hive.openBox<ClassSchedule>(
+        'class_schedules',
+        compactionStrategy: (entries, deletedEntries) => deletedEntries > 50,
+      ),
+    ]);
 
-  // Mở các box
-  await Future.wait([
-    Hive.openBox(LocalStorageKey.localStorage),
-    Hive.openBox(LocalStorageKey.token),
-    Hive.openBox<NotificationModel>(
-      'notifications',
-      compactionStrategy: (entries, deletedEntries) => deletedEntries > 50,
-    ),
-    Hive.openBox<ClassSchedule>(
-      'class_schedules',
-      compactionStrategy: (entries, deletedEntries) => deletedEntries > 50,
-    ),
-  ]).then((_) {
-    logger.d("Đã mở tất cả các box thành công");
-  }).catchError((error) {
-    logger.e("Lỗi khi mở box: $error");
-  });
+    print('Local storage initialized successfully');
+  } catch (e) {
+    print('Error initializing local storage: $e');
+  }
 }
 
 String _readAndroidDeviceInfo(AndroidDeviceInfo data) {
@@ -165,18 +200,26 @@ Future<void> _initFirebase() async {
 
 Future<void> _initNotification() async {
   try {
-    // Initialize NotificationService
     final notificationService = NotificationService();
-    if (NavigationService.navigatorKey.currentContext != null) {
-      await notificationService
-          .initialize(NavigationService.navigatorKey.currentContext!);
-      logger.i('Notification service initialized');
 
-      logger.i('Timetable service initialized');
-    } else {
-      logger.w('Context not available for notification initialization');
+    // Wait for context to be available with timeout
+    int attempts = 0;
+    while (NavigationService.navigatorKey.currentContext == null &&
+        attempts < 50) {
+      await Future.delayed(Duration(milliseconds: 100));
+      attempts++;
     }
+
+    if (NavigationService.navigatorKey.currentContext == null) {
+      print(
+          'Failed to initialize notifications: context not available after timeout');
+      return;
+    }
+
+    await notificationService
+        .initialize(NavigationService.navigatorKey.currentContext!);
+    print('Notification service initialized successfully');
   } catch (e) {
-    logger.e('Error initializing notifications: $e');
+    print('Error initializing notifications: $e');
   }
 }

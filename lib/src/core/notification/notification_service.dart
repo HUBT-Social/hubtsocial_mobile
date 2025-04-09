@@ -4,13 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_ce/hive.dart';
-import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
-import 'package:hubtsocial_mobile/src/features/timetable/models/class_schedule.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:android_intent_plus/android_intent.dart';
+import 'package:platform/platform.dart';
+
+@pragma('vm:entry-point')
+Future<void> _handleBackgroundMessage(RemoteMessage message) async {
+  // Ensure you can handle background messages
+  print('Handling background message: ${message.messageId}');
+}
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
@@ -21,22 +26,11 @@ class NotificationService {
   final _localNotifications = FlutterLocalNotificationsPlugin();
   BuildContext? _context;
 
-  // Notification channels
-  static const mainChannel = AndroidNotificationChannel(
-    'main_channel',
-    'Main Notifications',
-    description: 'Main channel for all notifications',
+  static const _channel = AndroidNotificationChannel(
+    'high_importance_channel',
+    'High Importance Notifications',
+    description: 'This channel is used for important notifications.',
     importance: Importance.max,
-    playSound: true,
-    enableVibration: true,
-    showBadge: true,
-  );
-
-  static const scheduleChannel = AndroidNotificationChannel(
-    'schedule_channel',
-    'Schedule Notifications',
-    description: 'Channel for class schedule notifications',
-    importance: Importance.high,
     playSound: true,
     enableVibration: true,
     showBadge: true,
@@ -46,366 +40,206 @@ class NotificationService {
     _context = context;
 
     try {
-      print('[NotificationService] Initializing...');
+      // 1. Create notification channel first
+      await _createNotificationChannel();
 
-      // 1. Set background message handler
-      FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
-
-      // 2. Request permission with all options
+      // 2. Request permission
       await _requestPermission();
 
-      // 3. Configure notification settings
-      await _configureForegroundNotification();
+      // 3. Set up message handlers
+      _setupMessageHandlers();
 
-      // 4. Enable auto initialization
-      await _firebaseMessaging.setAutoInitEnabled(true);
-
-      // 5. Subscribe to broadcast topic
-      await _firebaseMessaging.subscribeToTopic('broadcast');
-
-      // 6. Set up handlers
-      _handleForegroundMessage();
-      FirebaseMessaging.onMessageOpenedApp
-          .listen(_navigateToNotificationScreen);
-
-      // 7. Handle terminated state
-      await _handleTerminatedState();
-
-      // 8. Setup notification tap handling
-      await _setupNotificationTapHandling();
-
-      // 9. Setup time zones
-      await _setupTimeZones();
-
-      // 10. Setup notifications
-      await _setupNotifications();
-
-      // 11. Start schedule checker
-      _startScheduleChecker();
-
-      logger.i('NotificationService initialized successfully');
-    } catch (e, stackTrace) {
-      print('[NotificationService] Initialization error: $e');
-      print(stackTrace);
-      logger.e('Error initializing NotificationService: $e');
-    }
-  }
-
-  Future<void> _requestPermission() async {
-    try {
-      NotificationSettings settings =
-          await _firebaseMessaging.requestPermission(
-        alert: true,
-        badge: true,
-        provisional: false,
-        sound: true,
-        criticalAlert: true,
-        announcement: true,
-        carPlay: true,
-      );
-
-      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-        String? token = await _firebaseMessaging.getToken();
-        logger.i('FCM Token: $token');
-      } else {
-        logger.w(
-            'User declined notification permission: ${settings.authorizationStatus}');
-      }
+      print('NotificationService initialized successfully');
     } catch (e) {
-      logger.e('Error requesting permission: $e');
+      print('Error initializing NotificationService: $e');
     }
   }
 
-  Future<void> _configureForegroundNotification() async {
-    await _firebaseMessaging.setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-  }
+  Future<void> _createNotificationChannel() async {
+    final platform = _localNotifications.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
 
-  void _handleForegroundMessage() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      logger.i('Got a message whilst in the foreground!');
-      logger.i('Message data: ${message.data}');
+    // Remove existing channel if it exists
+    await platform?.deleteNotificationChannel(_channel.id);
 
-      if (message.notification != null) {
-        logger.i(
-            'Message also contained a notification: ${message.notification}');
+    // Create new channel
+    await platform?.createNotificationChannel(_channel);
 
-        // Save to storage with additional metadata
-        await _saveNotification(
-          message,
-          additionalData: {
-            'type': message.data['type'] ?? 'notification',
-          },
-        );
-
-        // Show local notification
-        // await _showLocalNotification(message);
-      }
-    });
-  }
-
-  Future<void> _setupNotificationTapHandling() async {
+    // Initialize local notifications
     const androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     final initSettings = InitializationSettings(android: androidSettings);
 
     await _localNotifications.initialize(
       initSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) {
-        logger.i('Notification tapped with payload: ${response.payload}');
-        if (response.payload != null) {
-          try {
-            final data = json.decode(response.payload!) as Map<String, dynamic>;
-            _handleNavigation(data);
-          } catch (e) {
-            logger.e('Error handling notification tap: $e');
-          }
-        }
+      onDidReceiveNotificationResponse: (response) {
+        _handleNotificationTap(response.payload);
       },
     );
   }
 
-  void _navigateToNotificationScreen(RemoteMessage message) {
-    if (_context == null) return;
+  Future<void> _requestPermission() async {
+    try {
+      // Kiểm tra quyền hiện tại trước
+      final currentSettings =
+          await _firebaseMessaging.getNotificationSettings();
+      print(
+          'Current notification settings: ${currentSettings.authorizationStatus}');
 
-    final type = message.data['type']?.toString().toLowerCase();
-    final isGroupMessage = message.data['isGroupMessage'] == true;
-    final isBroadcast = message.data['isBroadcast'] == true;
+      // Luôn hiển thị dialog xin quyền khi khởi động app
+      final settings = await _firebaseMessaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+        provisional: false,
+        announcement: true,
+        carPlay: true,
+        criticalAlert: true,
+      );
 
-    if (isBroadcast) {
-      _context!.go(AppRoute.notifications.path);
-      return;
-    }
+      print('User notification settings: ${settings.authorizationStatus}');
 
-    switch (type) {
-      case 'chat':
-        final roomId = message.data['id']?.toString();
-        final title = message.data['title']?.toString();
-        final avatarUrl = message.data['avatarUrl']?.toString();
-        if (roomId != null) {
-          AppRoute.roomChat.push(_context!, queryParameters: {
-            "id": roomId,
-            "title": title,
-            "avatarUrl": avatarUrl
-          });
-        } else {
-          _context!.go(AppRoute.chat.path);
+      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+        print('User granted permission');
+        final token = await _firebaseMessaging.getToken();
+        print('FCM Token: $token');
+      } else if (settings.authorizationStatus == AuthorizationStatus.denied) {
+        print('User denied permission');
+
+        // Hiển thị dialog tùy chỉnh khi user từ chối
+        if (_context != null) {
+          showDialog(
+            context: _context!,
+            barrierDismissible: false,
+            builder: (context) => AlertDialog(
+              title: Text('Cần quyền thông báo'),
+              content: Text(
+                'Ứng dụng cần quyền thông báo để gửi cho bạn các thông tin quan trọng về lịch học, điểm danh và tin nhắn mới.\n\nVui lòng cấp quyền thông báo trong cài đặt để không bỏ lỡ thông tin quan trọng.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text('Để sau'),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    try {
+                      if (const LocalPlatform().isAndroid) {
+                        final packageInfo = await PackageInfo.fromPlatform();
+                        final intent = AndroidIntent(
+                          action: 'android.settings.APP_NOTIFICATION_SETTINGS',
+                          arguments: <String, dynamic>{
+                            'android.provider.extra.APP_PACKAGE':
+                                packageInfo.packageName,
+                          },
+                        );
+                        await intent.launch();
+                      }
+                    } catch (e) {
+                      print('Error opening settings: $e');
+                    }
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Mở cài đặt',
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
+              ],
+            ),
+          );
         }
-        break;
+      } else if (settings.authorizationStatus ==
+          AuthorizationStatus.provisional) {
+        print('User granted provisional permission');
+      } else {
+        print(
+            'User declined permission with status: ${settings.authorizationStatus}');
+      }
 
-      case 'profile':
-        final userId = message.data['userId']?.toString();
-        _context!
-            .go(userId != null ? '/profile/$userId' : AppRoute.profile.path);
-        break;
-
-      default:
-        _context!.go(AppRoute.notifications.path);
+      // Kiểm tra lại quyền sau khi xử lý
+      final finalSettings = await _firebaseMessaging.getNotificationSettings();
+      print(
+          'Final notification settings: ${finalSettings.authorizationStatus}');
+    } catch (e) {
+      print('Error requesting permission: $e');
     }
   }
 
-  Future<void> _handleTerminatedState() async {
-    RemoteMessage? initialMessage =
-        await _firebaseMessaging.getInitialMessage();
-    if (initialMessage != null) {
-      _navigateToNotificationScreen(initialMessage);
-    }
+  void _setupMessageHandlers() {
+    // Handle foreground messages
+    FirebaseMessaging.onMessage.listen((message) {
+      print('Got foreground message: ${message.messageId}');
+      _showNotification(message);
+    });
+
+    // Handle background messages
+    FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
+
+    // Handle notification taps
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('Notification tapped in background: ${message.messageId}');
+      _handleNotificationTap(json.encode(message.data));
+    });
+
+    // Configure foreground presentation
+    _firebaseMessaging.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
   }
 
-  void _showLocalNotification(RemoteMessage message) {
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
+  Future<void> _showNotification(RemoteMessage message) async {
+    if (message.notification == null) return;
 
-    if (notification != null) {
-      logger.i('Showing local notification: ${message.data}');
+    try {
+      // Save notification in background
+      _saveNotification(message);
 
-      _localNotifications.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
+      // Show notification immediately
+      await _localNotifications.show(
+        message.hashCode,
+        message.notification!.title,
+        message.notification!.body,
         NotificationDetails(
           android: AndroidNotificationDetails(
-            mainChannel.id,
-            mainChannel.name,
-            channelDescription: mainChannel.description,
+            _channel.id,
+            _channel.name,
+            channelDescription: _channel.description,
             importance: Importance.max,
             priority: Priority.high,
+            ticker: 'ticker',
+            enableLights: true,
             enableVibration: true,
             playSound: true,
             icon: '@mipmap/ic_launcher',
+            styleInformation: BigTextStyleInformation(
+              message.notification!.body ?? '',
+              htmlFormatBigText: true,
+              contentTitle: message.notification!.title,
+              htmlFormatContentTitle: true,
+            ),
           ),
         ),
-        payload: json.encode({
-          ...message.data,
-          'type': message.data['type'] ?? 'notification',
-        }),
-      );
-    }
-  }
-
-  Future<void> _setupTimeZones() async {
-    try {
-      tz.initializeTimeZones();
-      tz.setLocalLocation(tz.getLocation('Asia/Ho_Chi_Minh'));
-    } catch (e) {
-      logger.e('Error setting up timezones: $e');
-    }
-  }
-
-  Future<void> _setupNotifications() async {
-    try {
-      // Android settings
-      const androidSettings =
-          AndroidInitializationSettings('@mipmap/ic_launcher');
-
-      // iOS settings if needed
-      // final iOSSettings = IOSInitializationSettings();
-
-      // Combined settings
-      final initSettings = InitializationSettings(android: androidSettings);
-
-      // Initialize
-      await _localNotifications.initialize(
-        initSettings,
-        onDidReceiveNotificationResponse: _onNotificationTap,
+        payload: json.encode(message.data),
       );
 
-      // Create channels
-      final android = _localNotifications.resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>();
-
-      await android?.createNotificationChannel(mainChannel);
-      await android?.createNotificationChannel(scheduleChannel);
-
-      logger.i('Notification setup completed');
+      print('Notification shown successfully');
     } catch (e) {
-      logger.e('Error setting up notifications: $e');
+      print('Error showing notification: $e');
     }
   }
 
-  Future<void> _handleMessage(
-      RemoteMessage message, BuildContext context) async {
-    try {
-      print('[NotificationService] Handling message...');
-      logger.i('Received foreground message: ${message.messageId}');
-
-      final notificationType = message.data['type'] ?? 'system';
-      final isBroadcast = notificationType == 'broadcast';
-      final targetUsers = message.data['targetUsers'];
-      final groupId = message.data['groupId'];
-
-      // Nếu là thông báo broadcast, không cần kiểm tra targetUsers
-      if (!isBroadcast && targetUsers != null) {
-        final userList = List<String>.from(json.decode(targetUsers));
-        final currentUserId = context.userProvider.user?.idUser;
-        if (currentUserId == null || !userList.contains(currentUserId)) {
-          return; // Không hiển thị nếu không phải người nhận
-        }
-      }
-
-      // Save to storage with additional metadata
-      await _saveNotification(
-        message,
-        additionalData: {
-          'groupId': groupId,
-          'isGroupMessage': groupId != null,
-          'isBroadcast': isBroadcast,
-        },
-      );
-
-      // Show notification
-      await showNotification(
-        title: message.notification?.title ?? 'New Message',
-        body: message.notification?.body ?? '',
-        payload: json.encode({
-          ...message.data,
-          'groupId': groupId,
-          'isGroupMessage': groupId != null,
-          'isBroadcast': isBroadcast,
-        }),
-      );
-    } catch (e) {
-      print('[NotificationService] Error handling message: $e');
-      logger.e('Error handling foreground message: $e');
-    }
-  }
-
-  Future<void> _saveNotification(RemoteMessage message,
-      {Map<String, dynamic>? additionalData}) async {
-    try {
-      final notification = NotificationModel(
-        id: message.messageId ?? DateTime.now().toString(),
-        title: message.notification?.title,
-        body: message.notification?.body,
-        time: DateTime.now().toIso8601String(),
-        isRead: false,
-        data: {
-          ...message.data,
-          ...?additionalData,
-        },
-      );
-
-      final box = await Hive.openBox<NotificationModel>('notifications');
-      // Thêm thông báo mới vào đầu danh sách
-      await box.add(notification);
-
-      // Sắp xếp lại box để thông báo mới nhất lên đầu
-      final notifications = box.values.toList()
-        ..sort(
-            (a, b) => DateTime.parse(b.time).compareTo(DateTime.parse(a.time)));
-
-      // Xóa toàn bộ và thêm lại theo thứ tự mới
-      await box.clear();
-      await box.addAll(notifications);
-    } catch (e) {
-      logger.e('Error saving notification: $e');
-    }
-  }
-
-  void _onNotificationTap(NotificationResponse response) {
-    try {
-      if (response.payload != null) {
-        final data = json.decode(response.payload!) as Map<String, dynamic>;
-        _handleNavigation(data);
-      }
-    } catch (e) {
-      logger.e('Error handling notification tap: $e');
-    }
-  }
-
-  void _handleNavigation(Map<String, dynamic> data) {
-    if (_context == null) return;
+  void _handleNotificationTap(String? payload) {
+    if (_context == null || payload == null) return;
 
     try {
-      final type = data['type']?.toString().toLowerCase() ?? 'notification';
-      final isGroupMessage = data['isGroupMessage'] == true;
-      final isBroadcast = data['isBroadcast'] == true;
-
-      // Xử lý điều hướng dựa trên loại thông báo
-      if (isBroadcast) {
-        // Thông báo broadcast luôn đưa về màn notifications
-        _context!.go(AppRoute.notifications.path);
-        return;
-      }
+      final data = json.decode(payload) as Map<String, dynamic>;
+      final type = data['type']?.toString().toLowerCase();
 
       switch (type) {
         case 'chat':
-          // if (isGroupMessage) {
-          //   final groupId = data['groupId']?.toString();
-          //   if (groupId != null) {
-          //     // _context!.go('/chat/group/$groupId');
-
-          //     _context!.push('/room?id=${groupId}');
-          //   } else {
-          //     _context!.go(AppRoute.chat.path);
-          //   }
-          // } else {
-          //   final chatId = data['chatId']?.toString();
-          //   _context!.go(chatId != null ? '/chat/$chatId' : AppRoute.chat.path);
-          // }
           final roomId = data['id']?.toString();
           final title = data['title']?.toString();
           final avatarUrl = data['avatarUrl']?.toString();
@@ -422,176 +256,27 @@ class NotificationService {
 
         case 'profile':
           final userId = data['userId']?.toString();
-          _context!
-              .go(userId != null ? '/profile/$userId' : AppRoute.profile.path);
+          if (userId != null) {
+            _context!.go('/profile/$userId');
+          } else {
+            _context!.go(AppRoute.profile.path);
+          }
+          break;
+
+        case 'timetable':
+          _context!.go(AppRoute.timetable.path);
           break;
 
         default:
           _context!.go(AppRoute.notifications.path);
       }
     } catch (e) {
-      logger.e('Error navigating: $e');
-      if (_context != null) {
-        _context!.go(AppRoute.notifications.path);
-      }
+      print('Error handling notification tap: $e');
+      _context?.go(AppRoute.notifications.path);
     }
   }
 
-  Future<void> showNotification({
-    required String title,
-    required String body,
-    String? payload,
-    AndroidNotificationChannel channel = mainChannel,
-  }) async {
-    try {
-      print('[NotificationService] Attempting to show notification');
-      print('[NotificationService] Title: $title');
-      print('[NotificationService] Body: $body');
-      print('[NotificationService] Channel: ${channel.id}');
-
-      // Check if notifications are enabled
-      final android = _localNotifications.resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>();
-
-      final areNotificationsEnabled = await android?.areNotificationsEnabled();
-      print(
-          '[NotificationService] Notifications enabled: $areNotificationsEnabled');
-
-      if (areNotificationsEnabled != true) {
-        print(
-            '[NotificationService] Notifications are disabled in system settings');
-        return;
-      }
-
-      final androidDetails = AndroidNotificationDetails(
-        channel.id,
-        channel.name,
-        channelDescription: channel.description,
-        importance: Importance.max,
-        priority: Priority.high,
-        enableVibration: true,
-        playSound: true,
-        styleInformation: BigTextStyleInformation(body),
-        icon: '@mipmap/ic_launcher', // Make sure this icon exists
-      );
-
-      await _localNotifications.show(
-        DateTime.now().millisecond,
-        title,
-        body,
-        NotificationDetails(android: androidDetails),
-        payload: payload,
-      );
-      print('[NotificationService] Notification sent successfully');
-    } catch (e) {
-      print('[NotificationService] Error showing notification: $e');
-      logger.e('Error showing notification: $e');
-    }
-  }
-
-  void _startScheduleChecker() {
-    Future.delayed(const Duration(minutes: 1), () async {
-      await _checkSchedules();
-      _startScheduleChecker();
-    });
-  }
-
-  Future<void> _checkSchedules() async {
-    try {
-      final box = await Hive.openBox<ClassSchedule>('class_schedules');
-      final now = DateTime.now();
-
-      for (var schedule in box.values) {
-        if (!schedule.notified &&
-            schedule.startTime.isAfter(now) &&
-            schedule.startTime.difference(now).inMinutes <= 30) {
-          await _scheduleNotification(schedule);
-        }
-      }
-    } catch (e) {
-      logger.e('Error checking schedules: $e');
-    }
-  }
-
-  Future<void> _scheduleNotification(ClassSchedule schedule) async {
-    try {
-      final body = '''
-Môn học: ${schedule.subject}
-Phòng: ${schedule.room}
-Thời gian: ${schedule.startTime.hour.toString().padLeft(2, '0')}:${schedule.startTime.minute.toString().padLeft(2, '0')}
-Thời lượng: ${schedule.duration} phút
-''';
-
-      await showNotification(
-        title: 'Sắp đến giờ học!',
-        body: body,
-        channel: scheduleChannel,
-        payload: json.encode({
-          'type': 'timetable',
-          'classId': schedule.id,
-        }),
-      );
-
-      schedule.notified = true;
-      await schedule.save();
-    } catch (e) {
-      logger.e('Error scheduling notification: $e');
-    }
-  }
-
-  // Test functions
-  Future<void> testNotification() async {
-    await showNotification(
-      title: 'Test Notification',
-      body: 'This is a test notification',
-      payload: json.encode({'type': 'notification', 'test': true}),
-    );
-  }
-
-  Future<void> testScheduleNotification() async {
-    try {
-      final now = DateTime.now().add(Duration(minutes: 1));
-      final testSchedule = ClassSchedule(
-        id: now.millisecondsSinceEpoch.toString(),
-        subject: 'Test Subject',
-        room: 'A101',
-        weekDay: now.weekday + 1,
-        session: 'CHIỀU',
-        startTime: now,
-        duration: 45,
-      );
-
-      final box = await Hive.openBox<ClassSchedule>('class_schedules');
-      await box.add(testSchedule);
-
-      // Show notification immediately for testing
-      await showNotification(
-        title: 'Sắp đến giờ học!',
-        body: '''
-${testSchedule.subject}
-Phòng: ${testSchedule.room}
-Thời gian bắt đầu: ${testSchedule.startTime.hour}:${testSchedule.startTime.minute.toString().padLeft(2, '0')}''',
-        payload: json.encode({
-          'type': 'timetable',
-          'classId': testSchedule.id,
-        }),
-        channel: scheduleChannel,
-      );
-    } catch (e) {
-      print('Error testing schedule notification: $e');
-    }
-  }
-
-  // Add background message handler
-  @pragma('vm:entry-point')
-  Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-    print(
-        '[NotificationService] Handling background message: ${message.messageId}');
-    print('Title: ${message.notification?.title}');
-    print('Body: ${message.notification?.body}');
-    print('Data: ${message.data}');
-
-    // Handle background message
+  Future<void> _saveNotification(RemoteMessage message) async {
     try {
       final notification = NotificationModel(
         id: message.messageId ?? DateTime.now().toString(),
@@ -605,7 +290,7 @@ Thời gian bắt đầu: ${testSchedule.startTime.hour}:${testSchedule.startTim
       final box = await Hive.openBox<NotificationModel>('notifications');
       await box.add(notification);
     } catch (e) {
-      print('[NotificationService] Error handling background message: $e');
+      print('Error saving notification: $e');
     }
   }
 }
