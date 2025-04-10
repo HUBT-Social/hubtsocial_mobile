@@ -400,7 +400,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
             );
           } else if (state is RoomChatProfileLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is RoomChaLoadedError) {
+          } else if (state is RoomChatLoadedError) {
             return Center(child: Text(state.message));
           } else {
             return const Center(child: CircularProgressIndicator());

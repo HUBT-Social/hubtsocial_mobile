@@ -1,4 +1,4 @@
-import 'package:hive_ce_flutter/adapters.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/timetable_type.dart';
 
 class ReformTimetable extends HiveObject {

@@ -173,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           onTap: () {
                             if (user.avatarUrl.isNotEmpty) {
                               navigatorKey.currentContext?.push(
-                                AppRoute.fullprofile.path,
+                                AppRoute.fullProfile.path,
                                 extra: {
                                   'imageUrl': user.avatarUrl,
                                   'heroTag': 'profile-image',

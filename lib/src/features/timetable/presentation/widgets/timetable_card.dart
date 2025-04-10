@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_timetable_model.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:intl/intl.dart';
 
 class TimetableCard extends StatefulWidget {
@@ -24,7 +25,7 @@ class _TimetableCardState extends State<TimetableCard> {
         color: context.colorScheme.surfaceContainerHighest,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: () => {},
+          onTap: () => AppRoute.timetableInfo.push(context),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Row(

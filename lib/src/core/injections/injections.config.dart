@@ -130,16 +130,20 @@ extension GetItInjectableX on _i174.GetIt {
               hiveAuth: gh<_i170.HiveInterface>(),
               messaging: gh<_i892.FirebaseMessaging>(),
             ));
+    gh.factory<_i285.GetRoomChatBloc>(() => _i285.GetRoomChatBloc(
+          fetchRoomChat: gh<_i1063.FetchRoomChatUserCase>(),
+          getRoomChat: gh<_i892.GetRoomMemberUserCase>(),
+        ));
+    gh.lazySingleton<FetchRoomChatUserCase>(
+        () => FetchRoomChatUserCase(gh<RoomChatRepo>()));
+    gh.lazySingleton<GetRoomMemberUserCase>(
+        () => GetRoomMemberUserCase(gh<RoomChatRepo>()));
     gh.lazySingleton<_i133.RoomChatRepo>(
         () => _i942.RoomChatRepoImpl(gh<_i311.RoomChatRemoteDataSource>()));
     gh.lazySingleton<_i753.InitTimetableUserCase>(
         () => _i753.InitTimetableUserCase(gh<_i113.TimetableRepo>()));
     gh.lazySingleton<_i936.AuthRepo>(
         () => _i457.AuthRepoImpl(gh<_i953.AuthRemoteDataSource>()));
-    gh.lazySingleton<_i1063.FetchRoomChatUserCase>(
-        () => _i1063.FetchRoomChatUserCase(gh<_i133.RoomChatRepo>()));
-    gh.lazySingleton<_i892.GetRoomMemberUserCase>(
-        () => _i892.GetRoomMemberUserCase(gh<_i133.RoomChatRepo>()));
     gh.lazySingleton<_i789.ChangePasswordUserCase>(
         () => _i789.ChangePasswordUserCase(gh<_i1042.UserRepo>()));
     gh.lazySingleton<_i477.InitUserUserCase>(
@@ -155,10 +159,6 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.lazySingleton<_i1020.FetchChatUserCase>(
         () => _i1020.FetchChatUserCase(gh<_i965.ChatRepo>()));
-    gh.factory<_i285.GetRoomChatBloc>(() => _i285.GetRoomChatBloc(
-          fetchRoomChat: gh<_i1063.FetchRoomChatUserCase>(),
-          getRoomChat: gh<_i892.GetRoomMemberUserCase>(),
-        ));
     gh.factory<_i359.ChatBloc>(
         () => _i359.ChatBloc(fetchChat: gh<_i1020.FetchChatUserCase>()));
     gh.factory<_i786.TimetableBloc>(() =>

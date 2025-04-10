@@ -5,4 +5,5 @@ class LocalStorageKey {
   static const token = "token";
   static const userToken = "userToken";
   static const notification = "notifications";
+  static const timeTable = "timeTable";
 }

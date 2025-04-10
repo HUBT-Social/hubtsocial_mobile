@@ -29,8 +29,8 @@ class FetchRoomLoaded extends GetRoomChatState {
 
 class UpdatedRoomChatProfile extends GetRoomChatState {}
 
-class RoomChaLoadedError extends GetRoomChatState {
-  const RoomChaLoadedError(this.message);
+class RoomChatLoadedError extends GetRoomChatState {
+  const RoomChatLoadedError(this.message);
 
   final String message;
 

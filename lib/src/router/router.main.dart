@@ -30,18 +30,6 @@ StatefulShellRoute _mainRoute() {
           GoRoute(
             path: AppRoute.home.path,
             builder: (context, state) => const HomeScreen(),
-            routes: [
-              GoRoute(
-                path: 'subHome',
-                pageBuilder: (context, state) => CustomTransitionPage(
-                  key: state.pageKey,
-                  child: const HomeScreen(),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(opacity: animation, child: child),
-                ),
-              ),
-            ],
           ),
         ],
       ),
@@ -78,6 +66,12 @@ StatefulShellRoute _mainRoute() {
               ],
               child: const TimetableScreen(),
             ),
+            routes: [
+              GoRoute(
+                path: 'info',
+                builder: (context, state) => TimetableInfoScreen(),
+              ),
+            ],
           ),
         ],
       ),
@@ -119,7 +113,7 @@ StatefulShellRoute _mainRoute() {
                 ),
                 routes: [
                   GoRoute(
-                    path: 'editprofile',
+                    path: 'edit',
                     pageBuilder: (context, state) => CustomTransitionPage(
                       key: state.pageKey,
                       child: const EditProfileScreen(),
@@ -129,7 +123,7 @@ StatefulShellRoute _mainRoute() {
                     ),
                   ),
                   GoRoute(
-                    path: 'fullscreen',
+                    path: 'fullScreen',
                     pageBuilder: (context, state) {
                       final extra = state.extra as Map<String, dynamic>?;
                       final imageUrl = extra?['imageUrl'] as String?;

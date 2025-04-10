@@ -64,13 +64,10 @@ Future<void> _initLocalStorage() async {
     Hive.openBox(LocalStorageKey.localStorage),
     Hive.openBox(LocalStorageKey.token),
     Hive.openBox<NotificationModel>(
-      'notifications',
+      LocalStorageKey.notification,
       compactionStrategy: (entries, deletedEntries) => deletedEntries > 50,
     ),
-    Hive.openBox<ClassSchedule>(
-      'class_schedules',
-      compactionStrategy: (entries, deletedEntries) => deletedEntries > 50,
-    ),
+    Hive.openBox<ClassSchedule>(LocalStorageKey.timeTable),
   ]).then((_) {
     print("Đã mở tất cả các box thành công");
   }).catchError((error) {

@@ -7,6 +7,7 @@ import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/receive_ch
 import 'package:hubtsocial_mobile/src/features/room_chat/presentation/bloc/room_chat_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/room_chat/presentation/screens/room_chat_info.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_bloc.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/presentation/screens/timetable_info_screen.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/screens/not_found_screen.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/screens/email_verify_screen.dart';

@@ -1,8 +1,8 @@
 import 'dart:convert';
-
+import 'package:hive_ce/hive.dart';
 import 'reform_timetable_model.dart';
 
-class TimetableResponseModel {
+class TimetableResponseModel extends HiveObject {
   TimetableResponseModel({
     required this.versionKey,
     required this.starttime,

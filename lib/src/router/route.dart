@@ -34,6 +34,7 @@ enum AppRoute {
 
   // timetable
   timetable('/timetable'),
+  timetableInfo('/timetable/info'),
   // timetable
 
   // notifications
@@ -44,9 +45,9 @@ enum AppRoute {
   menu('/menu'),
   profile('/menu/profile'),
   profile2('/menu/profile/profile2'),
-  aboutprofile('/menu/profile/about'),
-  fullprofile('/menu/profile/fullscreen'),
-  editprofile('/menu/profile/editprofile'),
+  aboutProfile('/menu/profile/about'),
+  fullProfile('/menu/profile/fullScreen'),
+  editProfile('/menu/profile/edit'),
   // menu
 
   ;
