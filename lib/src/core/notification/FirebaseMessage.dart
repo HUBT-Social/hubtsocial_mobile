@@ -3,21 +3,27 @@ import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_ce_flutter/adapters.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/notification/LocalMessage.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
+import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_type_id.dart';
+import 'package:hubtsocial_mobile/hive/hive_adapters.dart';
 import '../../router/route.dart';
 import '../../router/router.import.dart';
 
-class FirebaseMessage {
-  final _firebaseMessaging = FirebaseMessaging.instance;
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  try {
+    // Initialize Hive
+    await Hive.initFlutter();
 
-  static Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-    logger.i('Handling a background message: ${message.messageId}');
-    logger.i('Title: ${message.notification?.title}');
-    logger.i('Body: ${message.notification?.body}');
+    // Register the adapter if not registered
+    if (!Hive.isAdapterRegistered(LocalStorageTypeId.notification)) {
+      Hive.registerAdapter(NotificationModelAdapter());
+    }
 
-    // Store notification in Hive when received in background
+    // Store notification in Hive
     final notification = NotificationModel(
       id: message.messageId ?? DateTime.now().toString(),
       title: message.notification?.title,
@@ -25,16 +31,26 @@ class FirebaseMessage {
       time: DateTime.now().toIso8601String(),
       isRead: false,
       data: message.data,
+      type: message.data['type']?.toString(),
     );
 
     final box = await Hive.openBox<NotificationModel>('notifications');
     await box.add(notification);
+
+    logger
+        .i('Background notification saved successfully: ${message.messageId}');
+  } catch (e) {
+    logger.e('Error saving background notification: $e');
   }
+}
+
+class FirebaseMessage {
+  final _firebaseMessaging = FirebaseMessaging.instance;
 
   Future<void> initialize() async {
     try {
       // 1. Set background message handler
-      FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
+      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
       // 2. Request permission
       await _requestPermission();
@@ -109,8 +125,24 @@ class FirebaseMessage {
         data: message.data,
       );
 
+      // Kiểm tra xem thông báo đã tồn tại chưa
       final box = await Hive.openBox<NotificationModel>('notifications');
-      await box.add(notification);
+      bool notificationExists = false;
+
+      for (var existingNotification in box.values) {
+        if (existingNotification.id == notification.id) {
+          notificationExists = true;
+          break;
+        }
+      }
+
+      // Chỉ lưu nếu thông báo chưa tồn tại
+      if (!notificationExists) {
+        await box.add(notification);
+        logger.i('Foreground notification saved: ${notification.id}');
+      } else {
+        logger.i('Notification already exists: ${notification.id}');
+      }
 
       // Hiển thị local notification
       _showLocalNotification(message);
@@ -141,38 +173,112 @@ class FirebaseMessage {
 
   void _handleNotificationTap(Map<String, dynamic> data) {
     logger.i('Handling notification tap with data: $data');
-    final type = data['type']?.toString().toLowerCase();
 
-    switch (type) {
-      case 'timetable':
-        final classId = data['classId']?.toString();
-        if (classId != null) {
-          router.go('${AppRoute.timetable.path}?classId=$classId');
-        } else {
-          router.go(AppRoute.timetable.path);
+    // Ensure Hive is initialized and box is opened before navigation
+    _initializeAndNavigate(data);
+  }
+
+  Future<void> _initializeAndNavigate(Map<String, dynamic> data) async {
+    try {
+      // Initialize Hive
+      await Hive.initFlutter();
+
+      // Register adapter if needed
+      if (!Hive.isAdapterRegistered(LocalStorageTypeId.notification)) {
+        Hive.registerAdapter(NotificationModelAdapter());
+      }
+
+      // Now handle navigation based on notification type
+      final type = data['type']?.toString().toLowerCase();
+
+      // Các loại thông báo cần điều hướng trực tiếp
+      switch (type) {
+        case 'chat':
+          final roomId = data['id']?.toString();
+          final isGroupMessage = data['isGroupMessage'] == true;
+          final title = data['title']?.toString();
+          final avatarUrl = data['avatarUrl']?.toString();
+
+          if (isGroupMessage) {
+            if (roomId != null) {
+              router.go('/chat/group/$roomId');
+            } else {
+              router.go(AppRoute.chat.path);
+            }
+          } else {
+            if (roomId != null) {
+              router.go(
+                  '/chat/$roomId?title=${Uri.encodeComponent(title ?? '')}&avatarUrl=${Uri.encodeComponent(avatarUrl ?? '')}');
+            } else {
+              router.go(AppRoute.chat.path);
+            }
+          }
+          return;
+
+        case 'timetable':
+          final classId = data['classId']?.toString();
+          if (classId != null) {
+            router.go('${AppRoute.timetable.path}?classId=$classId');
+          } else {
+            router.go(AppRoute.timetable.path);
+          }
+          return;
+
+        case 'home':
+          router.go(AppRoute.home.path);
+          return;
+
+        case 'profile':
+          final userId = data['userId']?.toString();
+          if (userId != null) {
+            router.go('/profile/$userId');
+          } else {
+            router.go(AppRoute.profile.path);
+          }
+          return;
+      }
+
+      // Đối với các loại thông báo khác (maintenance, academic_warning, exam, broadcast, v.v.)
+      // Đảm bảo thông báo được lưu và box được mở trước khi điều hướng
+      final notificationId = data['messageId'] ?? DateTime.now().toString();
+
+      // Kiểm tra xem thông báo đã tồn tại chưa
+      final box = await Hive.openBox<NotificationModel>('notifications');
+      bool notificationExists = false;
+
+      for (var existingNotification in box.values) {
+        if (existingNotification.id == notificationId) {
+          notificationExists = true;
+          break;
         }
-        break;
+      }
 
-      case 'chat':
-        final chatId = data['chatUserId']?.toString();
-        if (chatId != null) {
-          router.go('/chat/$chatId');
-        } else {
-          router.go(AppRoute.chat.path);
-        }
-        break;
+      // Chỉ lưu nếu thông báo chưa tồn tại
+      if (!notificationExists) {
+        final notification = NotificationModel(
+          id: notificationId,
+          title: data['title'],
+          body: data['body'],
+          time: DateTime.now().toIso8601String(),
+          isRead: false,
+          data: data,
+          type: type,
+        );
 
-      case 'profile':
-        final userId = data['userId']?.toString();
-        if (userId != null) {
-          router.go('/profile/$userId');
-        } else {
-          router.go(AppRoute.profile.path);
-        }
-        break;
+        await box.add(notification);
+        logger.i('Notification saved: ${notification.id}');
+      } else {
+        logger.i('Notification already exists: ${notificationId}');
+      }
 
-      default:
-        router.go(AppRoute.notifications.path);
+      // Đợi một chút để đảm bảo dữ liệu được lưu
+      await Future.delayed(Duration(milliseconds: 500));
+
+      // Điều hướng đến màn thông báo
+      router.go(AppRoute.notifications.path);
+    } catch (e) {
+      logger.e('Error initializing and navigating: $e');
+      router.go(AppRoute.notifications.path);
     }
   }
 
@@ -182,6 +288,22 @@ class FirebaseMessage {
 
     if (notification != null) {
       logger.i('Showing local notification: ${message.data}');
+
+      // Xác định loại thông báo để điều hướng
+      final type =
+          message.data['type']?.toString().toLowerCase() ?? 'notification';
+      final isNavigationType =
+          ['timetable', 'home', 'profile', 'chat'].contains(type);
+
+      // Tạo payload với đầy đủ thông tin
+      final payload = json.encode({
+        ...message.data,
+        'type': type,
+        'isNavigationType': isNavigationType,
+        'messageId': message.messageId,
+        'title': notification.title,
+        'body': notification.body,
+      });
 
       flutterLocalNotificationsPlugin.show(
         notification.hashCode,
@@ -199,10 +321,7 @@ class FirebaseMessage {
             icon: '@mipmap/ic_launcher',
           ),
         ),
-        payload: json.encode({
-          ...message.data,
-          'type': message.data['type'] ?? 'notification',
-        }),
+        payload: payload,
       );
     }
   }
@@ -245,7 +364,58 @@ class FirebaseMessage {
     RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
+      // Đảm bảo thông báo được lưu vào Hive trước khi điều hướng
+      await _saveNotificationToHive(initialMessage);
       _navigateToNotificationScreen(initialMessage);
+    }
+  }
+
+  Future<void> _saveNotificationToHive(RemoteMessage message) async {
+    try {
+      // Initialize Hive
+      await Hive.initFlutter();
+
+      // Register adapter if needed
+      if (!Hive.isAdapterRegistered(LocalStorageTypeId.notification)) {
+        Hive.registerAdapter(NotificationModelAdapter());
+      }
+
+      // Create notification model
+      final notificationId = message.messageId ?? DateTime.now().toString();
+      final notification = NotificationModel(
+        id: notificationId,
+        title: message.notification?.title,
+        body: message.notification?.body,
+        time: DateTime.now().toIso8601String(),
+        isRead: false,
+        data: message.data,
+        type: message.data['type']?.toString(),
+      );
+
+      // Open box and check if notification already exists
+      final box = await Hive.openBox<NotificationModel>('notifications');
+      bool notificationExists = false;
+
+      for (var existingNotification in box.values) {
+        if (existingNotification.id == notificationId) {
+          notificationExists = true;
+          break;
+        }
+      }
+
+      // Only save if notification doesn't exist
+      if (!notificationExists) {
+        await box.add(notification);
+        logger.i('Terminated state notification saved: ${notification.id}');
+      } else {
+        logger.i(
+            'Terminated state notification already exists: ${notification.id}');
+      }
+
+      // Wait to ensure data is saved
+      await Future.delayed(Duration(milliseconds: 500));
+    } catch (e) {
+      logger.e('Error saving terminated state notification: $e');
     }
   }
 }
