@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -101,6 +102,10 @@ class _NotificationsState extends State<NotificationsScreen> {
 
   List<NotificationModel> _filterNotifications(
       List<NotificationModel> notifications) {
+    // Sắp xếp thông báo theo thời gian mới nhất
+    notifications.sort(
+        (a, b) => DateTime.parse(b.time).compareTo(DateTime.parse(a.time)));
+
     switch (_selectedFilter) {
       case 'unread':
         return notifications.where((n) => !n.isRead).toList();
@@ -108,7 +113,7 @@ class _NotificationsState extends State<NotificationsScreen> {
         return notifications
             .where((n) =>
                 n.data == null ||
-                n.data!['type'] == 'system' ||
+                n.data!['type'] == 'broadcast' ||
                 n.data!['isBroadcast'] == true)
             .toList();
       case 'chat':
@@ -124,7 +129,10 @@ class _NotificationsState extends State<NotificationsScreen> {
             .toList();
       case 'schedule':
         return notifications
-            .where((n) => n.data != null && n.data!['type'] == 'timetable')
+            .where((n) =>
+                n.data != null &&
+                (n.data!['type'] == 'timetable' ||
+                    n.data!['type'] == 'schedule'))
             .toList();
       default:
         return notifications;
@@ -304,14 +312,15 @@ class _NotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasImage = notification.data?['image'] != null;
+    final hasImage = notification.data?['imageUrl'] != null;
+    final imageUrl = notification.data?['imageUrl'];
 
     return Card(
       elevation: 0,
       margin: EdgeInsets.zero,
       color: notification.isRead ? Colors.white : Colors.blue.withOpacity(0.05),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0),
+        borderRadius: BorderRadius.circular(8),
         side: BorderSide(
           color: Colors.grey.withOpacity(0.1),
           width: 0.5,
@@ -320,7 +329,7 @@ class _NotificationItem extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: EdgeInsets.all(12),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -338,7 +347,7 @@ class _NotificationItem extends StatelessWidget {
                       ),
                     ),
                     if (notification.body != null) ...[
-                      SizedBox(height: 2),
+                      SizedBox(height: 4),
                       Text(
                         notification.body!,
                         style: TextStyle(
@@ -351,7 +360,7 @@ class _NotificationItem extends StatelessWidget {
                     ],
                     SizedBox(height: 4),
                     Text(
-                      _formatTime(context, notification.time),
+                      _formatTime(notification.time),
                       style: TextStyle(
                         fontSize: 13,
                         color: Colors.grey[600],
@@ -365,10 +374,19 @@ class _NotificationItem extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.network(
-                    notification.data!['image'],
-                    width: 48,
-                    height: 48,
+                    imageUrl!,
+                    width: 60,
+                    height: 60,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: 60,
+                        height: 60,
+                        color: Colors.grey[200],
+                        child:
+                            Icon(Icons.image_not_supported, color: Colors.grey),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -379,7 +397,7 @@ class _NotificationItem extends StatelessWidget {
     );
   }
 
-  String _formatTime(BuildContext context, String time) {
+  String _formatTime(String time) {
     final dateTime = DateTime.parse(time);
     final now = DateTime.now();
     final difference = now.difference(dateTime);
@@ -403,48 +421,82 @@ class _NotificationIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final type = notification.data?['type'] ?? 'system';
+    final type =
+        notification.data?['type']?.toString().toLowerCase() ?? 'system';
     final isGroupMessage = notification.data?['isGroupMessage'] == true;
     final isBroadcast = notification.data?['isBroadcast'] == true;
+    final avatarUrl = notification.data?['avatarUrl'];
+
+    // Nếu là tin nhắn và có avatar
+    if (type == 'chat' && avatarUrl != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Image.network(
+          avatarUrl,
+          width: 40,
+          height: 40,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Icon(Icons.person, color: Colors.grey[400]),
+            );
+          },
+        ),
+      );
+    }
 
     String imagePath;
     Color backgroundColor;
 
-    if (isBroadcast) {
-      imagePath = 'assets/images/notifications/canhbao.png';
-      backgroundColor = Colors.red.withOpacity(0.1);
-    } else if (isGroupMessage) {
-      imagePath = 'assets/images/notifications/logotruong.png';
-      backgroundColor = Colors.green.withOpacity(0.1);
-    } else {
-      switch (type) {
-        case 'chat':
-          imagePath = 'assets/images/notifications/logotruong.png';
-          backgroundColor = Colors.blue.withOpacity(0.1);
-          break;
-        case 'timetable':
-          imagePath = 'assets/images/notifications/lichthi.png';
-          backgroundColor = Colors.orange.withOpacity(0.1);
-          break;
-        case 'academic_warning':
-          imagePath = 'assets/images/notifications/canh_bao_hoc_tap.png';
-          backgroundColor = Colors.purple.withOpacity(0.1);
-          break;
-        default:
-          imagePath = 'assets/images/notifications/logotruong.png';
-          backgroundColor = Colors.grey.withOpacity(0.1);
-      }
+    switch (type) {
+      case 'chat':
+        imagePath = 'assets/images/logotruong.png';
+        backgroundColor = Colors.blue.withOpacity(0.1);
+        break;
+      case 'timetable':
+      case 'schedule':
+        imagePath = 'assets/images/lich_hoc.png';
+        backgroundColor = Colors.orange.withOpacity(0.1);
+        break;
+      case 'academic_warning':
+        imagePath = 'assets/images/canh_bao.png';
+        backgroundColor = Colors.red.withOpacity(0.1);
+        break;
+      case 'maintenance':
+        imagePath = 'assets/images/bao_tri_he_thong.png';
+        backgroundColor = Colors.yellow.withOpacity(0.1);
+        break;
+      case 'exam':
+        imagePath = 'assets/images/lich_thi.png';
+        backgroundColor = Colors.purple.withOpacity(0.1);
+        break;
+      default:
+        imagePath = 'assets/images/logotruong.png';
+        backgroundColor = Colors.grey.withOpacity(0.1);
     }
-
     return Container(
       width: 40,
       height: 40,
-      padding: EdgeInsets.all(0),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(6), // bo nhẹ góc vuông
+      ),
+      clipBehavior: Clip.antiAlias,
       child: Image.asset(
         imagePath,
         width: 40,
         height: 40,
         fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          print('Error loading image: $imagePath');
+          return Icon(Icons.error_outline, color: Colors.red);
+        },
       ),
     );
   }

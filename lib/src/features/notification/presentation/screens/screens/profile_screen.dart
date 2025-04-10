@@ -145,7 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             Padding(
                               padding: EdgeInsets.only(left: 18),
                               child: Text(
-                                '@${user.lastName}',
+                                '@${user.firstName}',
                                 style: context.textTheme.labelLarge?.copyWith(
                                   color: context.colorScheme.onSurfaceVariant,
                                   fontWeight: FontWeight.w500,

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/app/providers/user_provider.dart';
 import '../../../../router/route.dart';
 import '../../../../router/router.import.dart';
-import '../../../profile/presentation/screens/about_profile_screens.dart';
+import '../../../notification/presentation/screens/screens/about_profile_screens.dart';
 import '../../../profile/presentation/widgets/profile_action_buttons.dart';
 
 class RoomChatInfoScreen extends StatefulWidget {
