@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,7 +12,6 @@ import '../../../../core/theme/bloc/theme_bloc.dart';
 import '../../../../core/theme/utils/change_theme_bottom_sheet.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../main_wrapper/presentation/widgets/main_app_bar.dart';
-import 'package:flutter/services.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});

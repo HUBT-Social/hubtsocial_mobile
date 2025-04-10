@@ -7,8 +7,9 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_type_id.dart';
 import 'package:hubtsocial_mobile/hive/hive_adapters.dart';
-import '../../../main_wrapper/ui/widgets/main_app_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../../main_wrapper/presentation/widgets/main_app_bar.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -86,7 +87,7 @@ class _NotificationItem extends StatelessWidget {
               children: [
                 _NotificationIcon(notification: notification),
                 SizedBox(width: 12),
-                Container(
+                SizedBox(
                   width: 242,
                   height: 75,
                   child: Column(

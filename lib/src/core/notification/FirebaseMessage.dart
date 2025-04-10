@@ -268,7 +268,7 @@ class FirebaseMessage {
         await box.add(notification);
         logger.i('Notification saved: ${notification.id}');
       } else {
-        logger.i('Notification already exists: ${notificationId}');
+        logger.i('Notification already exists: $notificationId');
       }
 
       // Đợi một chút để đảm bảo dữ liệu được lưu
