@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_ce/hive.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/models/class_schedule.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_type_id.dart';
+import 'package:hubtsocial_mobile/hive/hive_adapters.dart';
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
@@ -169,15 +172,32 @@ class NotificationService {
         }
       }
 
-      // Save to storage with additional metadata
-      await _saveNotification(
-        message,
-        additionalData: {
-          'groupId': groupId,
-          'isGroupMessage': groupId != null,
-          'isBroadcast': notificationType == 'broadcast',
-        },
-      );
+      // Kiểm tra xem thông báo đã tồn tại chưa
+      final box = await Hive.openBox<NotificationModel>('notifications');
+      bool notificationExists = false;
+
+      for (var existingNotification in box.values) {
+        if (existingNotification.id == message.messageId) {
+          notificationExists = true;
+          break;
+        }
+      }
+
+      // Chỉ lưu nếu thông báo chưa tồn tại
+      if (!notificationExists) {
+        // Save to storage with additional metadata
+        await _saveNotification(
+          message,
+          additionalData: {
+            'groupId': groupId,
+            'isGroupMessage': groupId != null,
+            'isBroadcast': notificationType == 'broadcast',
+          },
+        );
+        logger.i('Notification saved: ${message.messageId}');
+      } else {
+        logger.i('Notification already exists: ${message.messageId}');
+      }
 
       // Show notification
       await showNotification(
@@ -188,6 +208,9 @@ class NotificationService {
           'groupId': groupId,
           'isGroupMessage': groupId != null,
           'isBroadcast': notificationType == 'broadcast',
+          'messageId': message.messageId,
+          'title': message.notification?.title,
+          'body': message.notification?.body,
         }),
       );
     } catch (e) {
@@ -218,21 +241,82 @@ class NotificationService {
     }
   }
 
-  void _onNotificationTap(NotificationResponse response) {
+  void _onNotificationTap(NotificationResponse response) async {
     try {
       if (response.payload != null) {
         final data = json.decode(response.payload!) as Map<String, dynamic>;
-        _handleNavigation(data);
+
+        // Đảm bảo thông báo được lưu vào Hive trước khi điều hướng
+        await _saveNotificationToHive(data);
+
+        // Sau đó mới điều hướng
+        _initializeAndNavigate(data);
       }
     } catch (e) {
       logger.e('Error handling notification tap: $e');
     }
   }
 
-  void _handleNavigation(Map<String, dynamic> data) {
+  Future<void> _saveNotificationToHive(Map<String, dynamic> data) async {
+    try {
+      // Initialize Hive
+      await Hive.initFlutter();
+
+      // Register adapter if needed
+      if (!Hive.isAdapterRegistered(LocalStorageTypeId.notification)) {
+        Hive.registerAdapter(NotificationModelAdapter());
+      }
+
+      // Create notification model
+      final notificationId = data['messageId'] ?? DateTime.now().toString();
+      final notification = NotificationModel(
+        id: notificationId,
+        title: data['title'],
+        body: data['body'],
+        time: DateTime.now().toIso8601String(),
+        isRead: false,
+        data: data,
+        type: data['type']?.toString(),
+      );
+
+      // Open box and check if notification already exists
+      final box = await Hive.openBox<NotificationModel>('notifications');
+      bool notificationExists = false;
+
+      for (var existingNotification in box.values) {
+        if (existingNotification.id == notificationId) {
+          notificationExists = true;
+          break;
+        }
+      }
+
+      // Only save if notification doesn't exist
+      if (!notificationExists) {
+        await box.add(notification);
+        logger.i('Notification saved to Hive: ${notification.id}');
+      } else {
+        logger.i('Notification already exists in Hive: ${notification.id}');
+      }
+
+      // Wait to ensure data is saved
+      await Future.delayed(Duration(milliseconds: 500));
+    } catch (e) {
+      logger.e('Error saving notification to Hive: $e');
+    }
+  }
+
+  Future<void> _initializeAndNavigate(Map<String, dynamic> data) async {
     if (_context == null) return;
 
     try {
+      // Initialize Hive
+      await Hive.initFlutter();
+
+      // Register adapter if needed
+      if (!Hive.isAdapterRegistered(LocalStorageTypeId.notification)) {
+        Hive.registerAdapter(NotificationModelAdapter());
+      }
+
       final type = data['type']?.toString().toLowerCase() ?? 'notification';
       final isGroupMessage = data['isGroupMessage'] == true;
       final isBroadcast = data['isBroadcast'] == true;
@@ -273,6 +357,42 @@ class NotificationService {
           break;
 
         default:
+          // Đối với các loại thông báo khác (maintenance, academic_warning, exam, v.v.)
+          // Đảm bảo thông báo được lưu và box được mở trước khi điều hướng
+          final notificationId = data['messageId'] ?? DateTime.now().toString();
+
+          // Kiểm tra xem thông báo đã tồn tại chưa
+          final box = await Hive.openBox<NotificationModel>('notifications');
+          bool notificationExists = false;
+
+          for (var existingNotification in box.values) {
+            if (existingNotification.id == notificationId) {
+              notificationExists = true;
+              break;
+            }
+          }
+
+          // Chỉ lưu nếu thông báo chưa tồn tại
+          if (!notificationExists) {
+            final notification = NotificationModel(
+              id: notificationId,
+              title: data['title'],
+              body: data['body'],
+              time: DateTime.now().toIso8601String(),
+              isRead: false,
+              data: data,
+              type: type,
+            );
+
+            await box.add(notification);
+            logger.i('Notification saved: ${notification.id}');
+          } else {
+            logger.i('Notification already exists: ${notificationId}');
+          }
+
+          // Đợi một chút để đảm bảo dữ liệu được lưu
+          await Future.delayed(Duration(milliseconds: 500));
+
           _context!.go(AppRoute.notifications.path);
       }
     } catch (e) {
@@ -309,6 +429,9 @@ class NotificationService {
         return;
       }
 
+      // Tạo ID duy nhất cho thông báo
+      final notificationId = DateTime.now().millisecondsSinceEpoch % 100000;
+
       final androidDetails = AndroidNotificationDetails(
         channel.id,
         channel.name,
@@ -322,7 +445,7 @@ class NotificationService {
       );
 
       await _localNotifications.show(
-        DateTime.now().millisecond,
+        notificationId,
         title,
         body,
         NotificationDetails(android: androidDetails),
