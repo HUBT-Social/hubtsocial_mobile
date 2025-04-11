@@ -173,7 +173,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String enter_otp_message(String maskMail) {
-    return 'Enter the 6-digit code we sent you at Email $maskMail ';
+    return 'Nhập mã 6 chữ số mà chúng tôi đã gửi cho bạn tại email $maskMail ';
   }
 
   @override

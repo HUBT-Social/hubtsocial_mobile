@@ -118,7 +118,7 @@
   "@theme_dark": {},
   "forgot_password_message": "Vui lòng nhập Tên đăng nhập hoặc Email của bạn để đặt lại mật khẩu",
   "@forgot_password_message": {},
-  "enter_otp_message": "Enter the 6-digit code we sent you at Email {maskMail} ",
+  "enter_otp_message": "Nhập mã 6 chữ số mà chúng tôi đã gửi cho bạn tại email {maskMail} ",
   "@enter_otp_message": {
     "placeholders": {
       "maskMail": {

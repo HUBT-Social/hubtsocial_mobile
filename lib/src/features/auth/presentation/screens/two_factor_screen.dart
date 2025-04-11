@@ -56,7 +56,7 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
           } else if (state is VerifyTwoFactorSuccess) {
             countdownTimerController.dispose();
             AppDialog.showMessageDialog(
-                AppDialog.successMessage('wellcomeBack', context));
+                AppDialog.successMessage(context.loc.welcome, context));
             AppDialog.closeDialog();
             AppRoute.home.go(context);
           } else if (state is AuthLoading) {
