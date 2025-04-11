@@ -118,13 +118,12 @@ class _TimetableScreenState extends State<TimetableScreen> {
         MainAppBar(
           title: context.loc.timetable,
           actions: [
-            // IconButton(
-            //   icon: Icon(Icons.refresh),
-            //   onPressed: () async {
-            //     await _initBox();
-            //     setState(() {});
-            //   },
-            // ),
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () async {
+                context.read<TimetableBloc>().add(const InitTimetableEvent());
+              },
+            ),
           ],
         )
       ],

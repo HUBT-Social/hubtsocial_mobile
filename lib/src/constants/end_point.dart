@@ -33,5 +33,5 @@ class EndPoint {
   static String get _schooldata => "$_user/schooldata";
   static String get checkVersion => "$_schooldata/check-version";
   static String get timetable => "$_schooldata/timetable";
-  static String get timetableInfo => "$_schooldata/timetable";
+  static String get timetableInfo => "$_schooldata/timetable-info";
 }

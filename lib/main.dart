@@ -20,7 +20,7 @@ import 'package:hubtsocial_mobile/src/constants/environment.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/core/notification/NotificationService.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
-import 'package:hubtsocial_mobile/src/features/timetable/models/class_schedule.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/data/models/timetable_response_model.dart';
 
 import 'src/core/injections/injections.dart';
 import 'src/core/local_storage/local_storage_key.dart';
@@ -67,11 +67,11 @@ Future<void> _initLocalStorage() async {
       LocalStorageKey.notification,
       compactionStrategy: (entries, deletedEntries) => deletedEntries > 50,
     ),
-    Hive.openBox<ClassSchedule>(LocalStorageKey.timeTable),
+    Hive.openBox<TimetableResponseModel>(LocalStorageKey.timeTable),
   ]).then((_) {
-    print("Đã mở tất cả các box thành công");
+    logger.d("Đã mở tất cả các box thành công");
   }).catchError((error) {
-    print("Lỗi khi mở box: $error");
+    logger.e("Lỗi khi mở box: $error");
   });
 }
 
