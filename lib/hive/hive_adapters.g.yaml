@@ -85,28 +85,6 @@ types:
         index: 5
       type:
         index: 6
-  ClassSchedule:
-    typeId: 5
-    nextIndex: 9
-    fields:
-      id:
-        index: 0
-      subject:
-        index: 1
-      room:
-        index: 2
-      weekDay:
-        index: 3
-      session:
-        index: 4
-      startTime:
-        index: 5
-      duration:
-        index: 6
-      zoomId:
-        index: 7
-      notified:
-        index: 8
   TimetableResponseModel:
     typeId: 6
     nextIndex: 4

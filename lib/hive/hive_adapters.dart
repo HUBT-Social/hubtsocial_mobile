@@ -5,7 +5,6 @@ import 'package:hubtsocial_mobile/src/features/notification/model/notification_m
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_timetable_model.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/timetable_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/timetable_type.dart';
-import 'package:hubtsocial_mobile/src/features/timetable/models/class_schedule.dart';
 import 'package:hubtsocial_mobile/src/features/user/data/gender.dart';
 import 'package:hubtsocial_mobile/src/features/user/data/models/user_model.dart';
 import 'package:hubtsocial_mobile/src/features/user/domain/entities/user.dart';
@@ -18,7 +17,6 @@ part 'hive_adapters.g.dart';
   AdapterSpec<User>(),
   AdapterSpec<UserModel>(),
   AdapterSpec<NotificationModel>(),
-  AdapterSpec<ClassSchedule>(),
   AdapterSpec<ReformTimetable>(),
   AdapterSpec<TimetableResponseModel>(),
   AdapterSpec<TimetableType>(),
