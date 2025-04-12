@@ -43,7 +43,7 @@ class LocalizationBloc extends Bloc<LocalizationEvent, AppLocalizationState> {
     Language language = Language.values.firstWhere(
         (item) =>
             item.value.languageCode == LanguageCode.code.locale.languageCode,
-        orElse: () => Language.english);
+        orElse: () => Language.en);
     AppLocalStorage.update(
         LocalStorageKey.languagePrefs, language.value.languageCode);
     return language;

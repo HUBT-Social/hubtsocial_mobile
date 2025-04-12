@@ -230,4 +230,25 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get camera => 'Máy ảnh';
+
+  @override
+  String get change_theme => 'Đổi chủ đề giao diện';
+
+  @override
+  String get change_language => 'Đổi ngôn ngữ';
+
+  @override
+  String get change_password => 'Đổi mật khẩu';
+
+  @override
+  String get support_center => 'Trung tâm hỗ trợ';
+
+  @override
+  String get feedback_for_developers => 'Góp ý cho nhà phát triển';
+
+  @override
+  String get delete_account => 'Xóa tài khoản';
+
+  @override
+  String get sign_out => 'Đăng xuất';
 }

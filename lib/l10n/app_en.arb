@@ -171,5 +171,19 @@
   "repost": "Repost",
   "@repost": {},
   "camera": "Camera",
-  "@camera": {}
+  "@camera": {},
+  "change_theme": "Change theme",
+  "@change_theme": {},
+  "change_language": "Change language",
+  "@change_language": {},
+  "change_password": "Change password",
+  "@change_password": {},
+  "support_center": "Support Center",
+  "@support_center": {},
+  "feedback_for_developers": "Feedback for developers",
+  "@feedback_for_developers": {},
+  "delete_account": "Delete account",
+  "@delete_account": {},
+  "sign_out": "Sign out",
+  "@sign_out": {}
 }

@@ -171,5 +171,19 @@
   "repost": "Chia sẻ lại",
   "@repost": {},
   "camera": "Máy ảnh",
-  "@camera": {}
+  "@camera": {},
+  "change_theme": "Đổi chủ đề giao diện",
+  "@change_theme": {},
+  "change_language": "Đổi ngôn ngữ",
+  "@change_language": {},
+  "change_password": "Đổi mật khẩu",
+  "@change_password": {},
+  "support_center": "Trung tâm hỗ trợ",
+  "@support_center": {},
+  "feedback_for_developers": "Góp ý cho nhà phát triển",
+  "@feedback_for_developers": {},
+  "delete_account": "Xóa tài khoản",
+  "@delete_account": {},
+  "sign_out": "Đăng xuất",
+  "@sign_out": {}
 }

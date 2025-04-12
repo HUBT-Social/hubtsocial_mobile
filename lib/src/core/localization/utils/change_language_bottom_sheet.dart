@@ -20,7 +20,7 @@ final class LocalizatioUtils {
       ),
       builder: (context) {
         return Padding(
-          padding: EdgeInsets.all(12),
+          padding: EdgeInsets.symmetric(horizontal: 12),
           child: SafeArea(
             left: false,
             right: false,
@@ -31,70 +31,81 @@ final class LocalizatioUtils {
                 SizedBox(
                   width: double.infinity,
                   child: Text(
-                    textAlign: TextAlign.left,
                     context.loc.choose_language,
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    textAlign: TextAlign.left,
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                 ),
-                SizedBox(height: 12),
-                BlocBuilder<LocalizationBloc, AppLocalizationState>(
-                  builder: (context, state) {
-                    return ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: Language.values.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          onTap: () {
-                            context.read<LocalizationBloc>().add(ChangeLanguage(
-                                selectedLanguage: Language.values[index]));
-                            Future.delayed(const Duration(milliseconds: 300))
-                                .then((value) => context.pop());
-                          },
-                          leading: Image.asset(
-                            Language.values[index].image,
-                            height: 32,
-                            fit: BoxFit.contain,
-                          ),
-                          title: Text(
-                            Language.values[index].text,
-                            style: context.textTheme.titleMedium?.copyWith(
-                              color: Language.values[index] ==
+                SizedBox(height: 24),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.4,
+                  ),
+                  child: Material(
+                    child: BlocBuilder<LocalizationBloc, AppLocalizationState>(
+                      builder: (context, state) {
+                        return ListView.separated(
+                          padding: EdgeInsets.only(bottom: 24),
+                          shrinkWrap: true,
+                          itemCount: Language.values.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              onTap: () {
+                                context.read<LocalizationBloc>().add(
+                                    ChangeLanguage(
+                                        selectedLanguage:
+                                            Language.values[index]));
+                                Future.delayed(
+                                        const Duration(milliseconds: 300))
+                                    .then((value) => context.pop());
+                              },
+                              leading: Image.asset(
+                                Language.values[index].image,
+                                height: 32,
+                                width: 32,
+                                fit: BoxFit.contain,
+                              ),
+                              title: Text(
+                                Language.values[index].text,
+                                style: context.textTheme.titleMedium?.copyWith(
+                                  color: Language.values[index] ==
+                                          state.selectedLanguage
+                                      ? context.colorScheme.primary
+                                      : context.colorScheme.outline,
+                                ),
+                              ),
+                              trailing: Language.values[index] ==
                                       state.selectedLanguage
-                                  ? context.colorScheme.primary
-                                  : context.colorScheme.outline,
-                            ),
-                          ),
-                          trailing:
-                              Language.values[index] == state.selectedLanguage
                                   ? Icon(
                                       Icons.check_circle_rounded,
                                       color: context.colorScheme.primary,
                                     )
                                   : null,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side:
-                                Language.values[index] == state.selectedLanguage
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: Language.values[index] ==
+                                        state.selectedLanguage
                                     ? BorderSide(
                                         color: context.colorScheme.primary,
                                       )
                                     : BorderSide(
                                         color: context.colorScheme.outline,
                                       ),
-                          ),
-                          tileColor: Language.values[index] ==
-                                  state.selectedLanguage
-                              ? context.colorScheme.primary.withOpacity(0.05)
-                              : null,
+                              ),
+                              tileColor: Language.values[index] ==
+                                      state.selectedLanguage
+                                  ? context.colorScheme.primary
+                                      .withOpacity(0.05)
+                                  : null,
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 12),
                         );
                       },
-                      separatorBuilder: (context, index) {
-                        return SizedBox(height: 12);
-                      },
-                    );
-                  },
+                    ),
+                  ),
                 ),
-                SizedBox(height: 24),
               ],
             ),
           ),

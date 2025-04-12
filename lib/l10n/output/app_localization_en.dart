@@ -230,4 +230,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get camera => 'Camera';
+
+  @override
+  String get change_theme => 'Change theme';
+
+  @override
+  String get change_language => 'Change language';
+
+  @override
+  String get change_password => 'Change password';
+
+  @override
+  String get support_center => 'Support Center';
+
+  @override
+  String get feedback_for_developers => 'Feedback for developers';
+
+  @override
+  String get delete_account => 'Delete account';
+
+  @override
+  String get sign_out => 'Sign out';
 }

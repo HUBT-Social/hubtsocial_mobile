@@ -3,7 +3,7 @@ part of 'localization_bloc.dart';
 class AppLocalizationState extends Equatable {
   const AppLocalizationState({
     Language? selectedLanguage,
-  }) : selectedLanguage = selectedLanguage ?? Language.english;
+  }) : selectedLanguage = selectedLanguage ?? Language.en;
 
   final Language selectedLanguage;
 

@@ -1,7 +1,11 @@
 synthetic-package: false
 arb-dir: lib/l10n
 English-arb-file: app_en.arb
+Japanese-arb-file: app_ja.arb
+Korean-arb-file: app_ko.arb
+Russian-arb-file: app_ru.arb
 Vietnamese-arb-file: app_vi.arb
+Chinese-arb-file: app_zh.arb
 output-dir: lib/l10n/output
 output-localization-file: app_localization.dart
 use-escaping: true

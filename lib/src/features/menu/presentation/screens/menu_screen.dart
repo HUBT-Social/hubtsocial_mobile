@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/localization/bloc/localization_bloc.dart';
+import 'package:hubtsocial_mobile/src/features/menu/presentation/widgets/button_in_menu.dart';
+import 'package:hubtsocial_mobile/src/features/menu/presentation/widgets/line_in_menu.dart';
 
 import 'package:hubtsocial_mobile/src/features/menu/presentation/widgets/user_card_in_menu.dart';
 
@@ -41,263 +43,114 @@ class _MenuScreenState extends State<MenuScreen> {
             color: context.colorScheme.surfaceContainerHighest,
           ),
           SizedBox(height: 6),
-          InkWell(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12),
-              topRight: Radius.circular(12),
+          ButtonInMenu(
+            borderRadiusTop: 12,
+            icon: BlocBuilder<ThemeBloc, AppThemeState>(
+              builder: (context, state) {
+                return SvgPicture.asset(
+                  colorFilter: ColorFilter.mode(
+                      context.colorScheme.onSurface, BlendMode.srcIn),
+                  state.selectedTheme.image,
+                  fit: BoxFit.fitHeight,
+                  height: 28,
+                );
+              },
             ),
+            label: context.loc.change_theme,
+            iconArrow: Icon(Icons.arrow_drop_down_rounded),
             onTap: () => ThemeUtils.showThemeBottomSheet(
                 navigatorKey.currentContext ?? context),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 6),
-              child: Container(
-                height: 48,
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: context.colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        BlocBuilder<ThemeBloc, AppThemeState>(
-                          builder: (context, state) {
-                            return SvgPicture.asset(
-                              colorFilter: ColorFilter.mode(
-                                  context.colorScheme.onSurface,
-                                  BlendMode.srcIn),
-                              state.selectedTheme.image,
-                              fit: BoxFit.fitHeight,
-                              height: 28,
-                            );
-                          },
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "Đổi giao diện",
-                          style: context.textTheme.titleSmall,
-                        ),
-                      ],
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down_rounded,
-                      color: context.colorScheme.onSurface,
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ),
           SizedBox(height: 6),
-          InkWell(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(12),
-              bottomRight: Radius.circular(12),
+          ButtonInMenu(
+            borderRadiusBottom: 12,
+            icon: BlocBuilder<LocalizationBloc, AppLocalizationState>(
+              builder: (context, state) {
+                return Image.asset(
+                  state.selectedLanguage.image,
+                  fit: BoxFit.fitHeight,
+                  height: 28,
+                  width: 28,
+                );
+              },
             ),
+            label: context.loc.change_language,
+            iconArrow: Icon(Icons.arrow_drop_down_rounded),
             onTap: () => LocalizatioUtils.showLanguageBottomSheet(
                 navigatorKey.currentContext ?? context),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 6),
-              child: Container(
-                height: 48,
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: context.colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(12),
-                    bottomRight: Radius.circular(12),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        BlocBuilder<LocalizationBloc, AppLocalizationState>(
-                          builder: (context, state) {
-                            return Image.asset(
-                              state.selectedLanguage.image,
-                              fit: BoxFit.fitHeight,
-                              height: 28,
-                              width: 28,
-                            );
-                          },
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "Đổi ngôn ngữ",
-                          style: context.textTheme.titleSmall,
-                        ),
-                      ],
-                    ),
-                    Icon(
-                      Icons.arrow_drop_down_rounded,
-                      color: context.colorScheme.onSurface,
-                    ),
-                  ],
-                ),
-              ),
+          ),
+          LineInMenu(),
+          ButtonInMenu(
+            borderRadiusTop: 12,
+            icon: Icon(
+              Icons.lock_outline_rounded,
+              size: 28,
             ),
-          ),
-          SizedBox(height: 6),
-          Container(
-            color: context.colorScheme.outlineVariant,
-            height: 2,
-            width: double.infinity,
-          ),
-          SizedBox(height: 6),
-          InkWell(
-            borderRadius: BorderRadius.all(
-              Radius.circular(12),
+            label: context.loc.change_password,
+            iconArrow: Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 16,
             ),
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Tính năng đang phát triển'),
-                  backgroundColor: Colors.orange,
+                  content: Text(
+                    'Tính năng đang phát triển',
+                    style: context.textTheme.bodyMedium,
+                  ),
+                  backgroundColor: context.colorScheme.surfaceDim,
                 ),
               );
             },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 6),
-              child: Container(
-                height: 48,
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: context.colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.lock_outline_rounded,
-                          size: 28,
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "Đổi mật khẩu",
-                          style: context.textTheme.titleSmall,
-                        ),
-                      ],
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 16,
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ),
           SizedBox(height: 6),
-          InkWell(
-            borderRadius: BorderRadius.all(
-              Radius.circular(12),
+          ButtonInMenu(
+            icon: Icon(
+              Icons.support_agent_rounded,
+              size: 28,
+            ),
+            label: context.loc.support_center,
+            iconArrow: Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 16,
             ),
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Tính năng đang phát triển'),
-                  backgroundColor: Colors.orange,
+                  content: Text(
+                    'Tính năng đang phát triển',
+                    style: context.textTheme.bodyMedium,
+                  ),
+                  backgroundColor: context.colorScheme.surfaceDim,
                 ),
               );
             },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 6),
-              child: Container(
-                height: 48,
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: context.colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.support_agent_rounded,
-                          size: 28,
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "Trung tâm hỗ trợ",
-                          style: context.textTheme.titleSmall,
-                        ),
-                      ],
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 16,
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ),
           SizedBox(height: 6),
-          InkWell(
-            borderRadius: BorderRadius.all(
-              Radius.circular(12),
+          ButtonInMenu(
+            borderRadiusBottom: 12,
+            icon: Icon(
+              Icons.feedback_rounded,
+              size: 28,
+            ),
+            label: context.loc.feedback_for_developers,
+            iconArrow: Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 16,
             ),
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Tính năng đang phát triển'),
-                  backgroundColor: Colors.orange,
+                  content: Text(
+                    'Tính năng đang phát triển',
+                    style: context.textTheme.bodyMedium,
+                  ),
+                  backgroundColor: context.colorScheme.surfaceDim,
                 ),
               );
             },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 6),
-              child: Container(
-                height: 48,
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: context.colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.feedback_rounded,
-                          size: 28,
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          "Phản hồi cho nhà phát triển",
-                          style: context.textTheme.titleSmall,
-                        ),
-                      ],
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 16,
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ),
-          SizedBox(height: 6),
+          LineInMenu(),
           InkWell(
             borderRadius: BorderRadius.all(
               Radius.circular(12),
@@ -305,8 +158,11 @@ class _MenuScreenState extends State<MenuScreen> {
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Tính năng đang phát triển'),
-                  backgroundColor: Colors.orange,
+                  content: Text(
+                    'Tính năng đang phát triển',
+                    style: context.textTheme.bodyMedium,
+                  ),
+                  backgroundColor: context.colorScheme.surfaceDim,
                 ),
               );
             },
@@ -333,7 +189,7 @@ class _MenuScreenState extends State<MenuScreen> {
                         ),
                         SizedBox(width: 12),
                         Text(
-                          "Xóa tài khoản",
+                          context.loc.delete_account,
                           style: context.textTheme.titleSmall?.copyWith(
                             color: context.colorScheme.error,
                           ),
@@ -375,7 +231,7 @@ class _MenuScreenState extends State<MenuScreen> {
                         ),
                         SizedBox(width: 12),
                         Text(
-                          "Sign Out",
+                          context.loc.sign_out,
                           style: context.textTheme.titleSmall,
                         ),
                       ],

@@ -6,7 +6,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localization_en.dart';
+import 'app_localization_ja.dart';
+import 'app_localization_ko.dart';
+import 'app_localization_ru.dart';
 import 'app_localization_vi.dart';
+import 'app_localization_zh.dart';
 
 // ignore_for_file: type=lint
 
@@ -92,7 +96,11 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('vi')
+    Locale('ja'),
+    Locale('ko'),
+    Locale('ru'),
+    Locale('vi'),
+    Locale('zh')
   ];
 
   /// No description provided for @language.
@@ -520,6 +528,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Camera'**
   String get camera;
+
+  /// No description provided for @change_theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Change theme'**
+  String get change_theme;
+
+  /// No description provided for @change_language.
+  ///
+  /// In en, this message translates to:
+  /// **'Change language'**
+  String get change_language;
+
+  /// No description provided for @change_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get change_password;
+
+  /// No description provided for @support_center.
+  ///
+  /// In en, this message translates to:
+  /// **'Support Center'**
+  String get support_center;
+
+  /// No description provided for @feedback_for_developers.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback for developers'**
+  String get feedback_for_developers;
+
+  /// No description provided for @delete_account.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get delete_account;
+
+  /// No description provided for @sign_out.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get sign_out;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
@@ -531,7 +581,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'vi'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'ja', 'ko', 'ru', 'vi', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -543,7 +593,11 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'en': return AppLocalizationsEn();
+    case 'ja': return AppLocalizationsJa();
+    case 'ko': return AppLocalizationsKo();
+    case 'ru': return AppLocalizationsRu();
     case 'vi': return AppLocalizationsVi();
+    case 'zh': return AppLocalizationsZh();
   }
 
   throw FlutterError(

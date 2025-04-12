@@ -122,6 +122,8 @@ flutter:
     - assets/lottie/
     - assets/images/
     - assets/icons/
+    - assets/icons/localizations/
+    - assets/icons/menu/
 
     - .env.development
     - .env.production

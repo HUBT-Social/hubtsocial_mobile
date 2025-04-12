@@ -4,8 +4,12 @@ class Assets {
   static const String appIcon = "assets/icons/app_icon.png";
   static const String startedBg = "assets/images/started_bg.jpg";
 
-  static const String localizationVi = "assets/icons/localization_vi.png";
-  static const String localizationEn = "assets/icons/localization_en.png";
+  static const String localizationEn = "assets/icons/localizations/en.png";
+  static const String localizationJa = "assets/icons/localizations/ja.png";
+  static const String localizationKo = "assets/icons/localizations/ko.png";
+  static const String localizationRu = "assets/icons/localizations/ru.png";
+  static const String localizationVi = "assets/icons/localizations/vi.png";
+  static const String localizationZh = "assets/icons/localizations/zh.png";
 
   static const String themeSystem = "assets/icons/theme_system.svg";
   static const String themeLight = "assets/icons/theme_light.svg";
