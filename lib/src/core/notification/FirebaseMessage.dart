@@ -382,13 +382,21 @@ class FirebaseMessage {
 
       // Create notification model
       final notificationId = message.messageId ?? DateTime.now().toString();
+
+      // Combine data with imageUrl if it exists
+      final Map<String, dynamic> data = Map.from(message.data);
+      if (!data.containsKey('imageUrl') &&
+          message.notification?.android?.imageUrl != null) {
+        data['imageUrl'] = message.notification?.android?.imageUrl;
+      }
+
       final notification = NotificationModel(
         id: notificationId,
         title: message.notification?.title,
         body: message.notification?.body,
         time: DateTime.now().toIso8601String(),
         isRead: false,
-        data: message.data,
+        data: data,
         type: message.data['type']?.toString(),
       );
 

@@ -425,16 +425,98 @@ class _NotificationsState extends State<NotificationsScreen> {
                 }
 
                 return Container(
-                  color: Colors.grey[50],
+                  color: Colors.white,
                   child: ListView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: EdgeInsets.zero,
                     itemCount: filteredNotifications.length,
                     itemBuilder: (context, index) {
                       final notification = filteredNotifications[index];
-                      return _NotificationItem(
-                        notification: notification,
+                      final imageUrl = notification.data?['imageUrl'];
+
+                      return InkWell(
                         onTap: () =>
                             _handleNotificationTap(context, notification),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                color: Colors.grey.withOpacity(0.1),
+                                width: 0.5,
+                              ),
+                            ),
+                          ),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Left icon
+                              SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: _NotificationIcon(
+                                    notification: notification),
+                              ),
+                              SizedBox(width: 12),
+                              // Content in the middle
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      notification.title ?? '',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    if (notification.body != null) ...[
+                                      SizedBox(height: 2),
+                                      Text(
+                                        notification.body ?? '',
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.grey[600],
+                                          height: 1.2,
+                                        ),
+                                      ),
+                                    ],
+                                    SizedBox(height: 2),
+                                    Text(
+                                      _formatTime(notification.time),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey[500],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 12),
+                              // Right image or empty space
+                              Container(
+                                width: 50,
+                                height: 50,
+                                child: imageUrl?.toString().isNotEmpty == true
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(4),
+                                        child: Image.network(
+                                          imageUrl!,
+                                          width: 50,
+                                          height: 50,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : null,
+                              ),
+                            ],
+                          ),
+                        ),
                       );
                     },
                   ),
@@ -565,6 +647,22 @@ class _NotificationsState extends State<NotificationsScreen> {
         behavior: SnackBarBehavior.floating,
       ),
     );
+  }
+
+  String _formatTime(String time) {
+    final dateTime = DateTime.parse(time);
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inDays > 0) {
+      return '${difference.inDays} ngày trước';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} giờ trước';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes} phút trước';
+    } else {
+      return 'Vừa xong';
+    }
   }
 }
 

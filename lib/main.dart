@@ -75,6 +75,8 @@ Future<void> _initLocalStorage() async {
   });
 }
 
+
+
 String _readAndroidDeviceInfo(AndroidDeviceInfo data) {
   return data.version.release +
       data.version.previewSdkInt.toString() +

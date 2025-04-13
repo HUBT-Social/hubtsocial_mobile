@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: 256,
                       ),
                       Center(
-                          child: Text("UserProfileLoaded: ${user.lastName}")),
+                          child: Text("UserProfileLoaded: ${user.firstName}")),
                     ],
                   );
                 } else if (state is UserProfileLoading) {
