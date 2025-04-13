@@ -59,11 +59,14 @@ class _NotificationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final hasImage = notification.data?['imageUrl'] != null;
     final imageUrl = notification.data?['imageUrl'];
+    final type = notification.type?.toLowerCase() ??
+        notification.data?['type']?.toString().toLowerCase() ??
+        '';
 
     return Container(
-      height: 85,
-      width: 360,
-      margin: EdgeInsets.only(bottom: 8),
+      height: 75,
+      width: double.infinity,
+      margin: EdgeInsets.only(bottom: 4),
       decoration: BoxDecoration(
         color:
             notification.isRead ? Colors.white : Colors.blue.withOpacity(0.05),
@@ -76,26 +79,41 @@ class _NotificationItem extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onTap,
+          onTap: () {
+            if ([
+              'learning_alerts',
+              'academic_warning',
+              'broadcast',
+              'exam',
+              'maintenance'
+            ].contains(type)) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      NotificationDetailScreen(notification: notification),
+                ),
+              );
+            } else {
+              onTap();
+            }
+          },
           borderRadius: BorderRadius.circular(8),
           child: Padding(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _NotificationIcon(notification: notification),
-                SizedBox(width: 12),
-                SizedBox(
-                  width: 242,
-                  height: 75,
+                SizedBox(width: 8),
+                Expanded(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         notification.title ?? '',
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
                         ),
@@ -103,18 +121,18 @@ class _NotificationItem extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       if (notification.body != null) ...[
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
                           notification.body!,
                           style: TextStyle(
                             fontSize: 13,
                             color: Colors.black87,
                           ),
-                          maxLines: 2,
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
-                      SizedBox(height: 4),
+                      Spacer(),
                       Text(
                         _formatTime(notification.time),
                         style: TextStyle(
@@ -126,18 +144,18 @@ class _NotificationItem extends StatelessWidget {
                   ),
                 ),
                 if (hasImage) ...[
-                  SizedBox(width: 12),
+                  SizedBox(width: 8),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.network(
                       imageUrl!,
-                      width: 50,
-                      height: 50,
+                      width: 45,
+                      height: 45,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
-                          width: 50,
-                          height: 50,
+                          width: 45,
+                          height: 45,
                           decoration: BoxDecoration(
                             color: Colors.grey[200],
                             borderRadius: BorderRadius.circular(8),
@@ -262,22 +280,81 @@ class _NotificationsState extends State<NotificationsScreen> {
 
   Future<void> _initializeHive() async {
     try {
-      // Initialize Hive
       await Hive.initFlutter();
 
-      // Register adapter if needed
       if (!Hive.isAdapterRegistered(LocalStorageTypeId.notification)) {
         Hive.registerAdapter(NotificationModelAdapter());
       }
 
-      // Open notifications box
       _notificationsBox =
           await Hive.openBox<NotificationModel>('notifications');
-
-      // Force rebuild to show notifications
       setState(() {});
     } catch (e) {
       print('Error initializing Hive in NotificationsScreen: $e');
+    }
+  }
+
+  void _handleNotificationTap(
+      BuildContext context, NotificationModel notification) async {
+    if (!notification.isRead) {
+      notification.isRead = true;
+      await notification.save();
+    }
+
+    final type = notification.type?.toLowerCase() ??
+        notification.data?['type']?.toString().toLowerCase() ??
+        '';
+
+    if ([
+      'learning_alerts',
+      'academic_warning',
+      'broadcast',
+      'exam',
+      'maintenance'
+    ].contains(type)) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              NotificationDetailScreen(notification: notification),
+        ),
+      );
+      return;
+    }
+
+    if (notification.data != null) {
+      switch (type) {
+        case 'chat':
+          final roomId = notification.data!['id']?.toString();
+          final title = notification.data!['title']?.toString();
+          final avatarUrl = notification.data!['avatarUrl']?.toString();
+          if (roomId != null) {
+            AppRoute.roomChat.push(context, queryParameters: {
+              "id": roomId,
+              "title": title,
+              "avatarUrl": avatarUrl
+            });
+          } else {
+            router.go('/chat');
+          }
+          break;
+
+        case 'profile':
+          final userId = notification.data!['userId']?.toString();
+          if (userId != null) {
+            router.go('/profile/$userId');
+          } else {
+            router.go('/menu/profile');
+          }
+          break;
+
+        case 'timetable':
+          router.go('/timetable');
+          break;
+
+        default:
+          router.go(AppRoute.notifications.path);
+      }
     }
   }
 
@@ -489,55 +566,189 @@ class _NotificationsState extends State<NotificationsScreen> {
       ),
     );
   }
+}
 
-  void _handleNotificationTap(
-      BuildContext context, NotificationModel notification) async {
-    if (!notification.isRead) {
-      notification.isRead = true;
-      await notification.save();
+class NotificationDetailScreen extends StatelessWidget {
+  final NotificationModel notification;
+
+  const NotificationDetailScreen({super.key, required this.notification});
+
+  @override
+  Widget build(BuildContext context) {
+    final type = notification.type?.toLowerCase() ??
+        notification.data?['type']?.toString().toLowerCase() ??
+        '';
+    String title = 'Chi tiết thông báo';
+
+    // Xác định tiêu đề dựa trên loại thông báo
+    switch (type) {
+      case 'learning_alerts':
+        title = 'Cảnh báo học tập';
+        break;
+      case 'academic_warning':
+        title = 'Cảnh báo học vụ';
+        break;
+      case 'broadcast':
+        title = 'Thông báo chung';
+        break;
+      case 'exam':
+        title = 'Thông báo thi';
+        break;
+      case 'maintenance':
+        title = 'Thông báo bảo trì';
+        break;
     }
 
-    if (notification.data != null) {
-      final type = notification.data!['type']?.toString().toLowerCase();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+      ),
+      body: Container(
+        color: Colors.white,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Tiêu đề thông báo
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.blue.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    _NotificationIcon(notification: notification),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            notification.title ?? '',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            _formatTime(notification.time),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 24),
 
-      switch (type) {
-        case 'chat':
-          final roomId = notification.data!['id']?.toString();
-          final title = notification.data!['title']?.toString();
-          final avatarUrl = notification.data!['avatarUrl']?.toString();
-          if (roomId != null) {
-            AppRoute.roomChat.push(context, queryParameters: {
-              "id": roomId,
-              "title": title,
-              "avatarUrl": avatarUrl
-            });
-          } else {
-            router.go('/chat');
-          }
-          break;
+              // Nội dung thông báo
+              Text(
+                'Nội dung',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+              SizedBox(height: 8),
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[50],
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Colors.grey.withOpacity(0.1),
+                    width: 1,
+                  ),
+                ),
+                child: Text(
+                  notification.body ?? '',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black87,
+                    height: 1.5,
+                  ),
+                ),
+              ),
+              SizedBox(height: 24),
 
-        case 'profile':
-          final userId = notification.data!['userId']?.toString();
-          if (userId != null) {
-            router.go('/profile/$userId');
-          } else {
-            router.go('/menu/profile');
-          }
-          break;
+              // Hình ảnh (nếu có)
+              if (notification.data?['imageUrl'] != null) ...[
+                Text(
+                  'Hình ảnh',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+                SizedBox(height: 8),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    notification.data!['imageUrl'],
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.image_not_supported,
+                              color: Colors.grey,
+                              size: 40,
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'Không thể tải hình ảnh',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-        case 'timetable':
-          router.go('/timetable');
-          break;
+  String _formatTime(String time) {
+    final dateTime = DateTime.parse(time);
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
 
-        case 'academic_warning':
-        case 'maintenance':
-        case 'broadcast':
-        case 'exam':
-        default:
-          // Không cần điều hướng, chỉ cần đánh dấu là đã đọc
-          // Vì chúng ta đã ở màn hình thông báo rồi
-          break;
-      }
+    if (difference.inDays > 0) {
+      return '${difference.inDays} ngày trước';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} giờ trước';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes} phút trước';
+    } else {
+      return 'Vừa xong';
     }
   }
 }
