@@ -251,4 +251,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get sign_out => 'Đăng xuất';
+
+  @override
+  String get see_your_personal_page => 'Xem trang cá nhân của bạn!';
 }

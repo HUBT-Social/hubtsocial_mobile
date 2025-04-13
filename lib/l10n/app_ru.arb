@@ -185,5 +185,7 @@
   "delete_account": "Удалить аккаунт",
   "@delete_account": {},
   "sign_out": "Выйти",
-  "@sign_out": {}
+  "@sign_out": {},
+  "see_your_personal_page": "Посмотреть свою личную страницу!",
+  "@see_your_personal_page": {}
 }

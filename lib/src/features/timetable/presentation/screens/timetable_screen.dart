@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_timetable_model.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -155,6 +156,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
           return Column(
             children: [
               TableCalendar<ReformTimetable>(
+                locale: AppLocalStorage.currentLanguageCode,
                 firstDay: state.timetableModel.starttime,
                 lastDay: state.timetableModel.endtime,
                 focusedDay: _focusedDay,
@@ -165,9 +167,38 @@ class _TimetableScreenState extends State<TimetableScreen> {
                 rangeSelectionMode: _rangeSelectionMode,
                 eventLoader: _getEventsForDay,
                 startingDayOfWeek: StartingDayOfWeek.monday,
-                calendarStyle: const CalendarStyle(
+                calendarStyle: CalendarStyle(
                   outsideDaysVisible: false,
+                  canMarkersOverflow: false,
+                  selectedDecoration: BoxDecoration(
+                    color: context.colorScheme.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  todayDecoration: BoxDecoration(
+                    color: context.colorScheme.primaryFixed,
+                    shape: BoxShape.circle,
+                  ),
                 ),
+                // calendarBuilders: CalendarBuilders(
+                //   markerBuilder: (context, date, events) {
+                //     if (events.isNotEmpty) {
+                //       return Container(
+                //         padding: const EdgeInsets.all(4),
+                //         decoration: BoxDecoration(
+                //           color: context.colorScheme.primary,
+                //           shape: BoxShape.circle,
+                //         ),
+                //         child: Text(
+                //           events.length.toString(),
+                //           style: context.textTheme.titleSmall?.copyWith(
+                //             color: context.colorScheme.onPrimary,
+                //           ),
+                //         ),
+                //       );
+                //     }
+                //     return const SizedBox.shrink();
+                //   },
+                // ),
                 onDaySelected: _onDaySelected,
                 onRangeSelected: _onRangeSelected,
                 onFormatChanged: (format) {
@@ -187,6 +218,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
                   valueListenable: _selectedEvents,
                   builder: (context, value, _) {
                     return ListView.builder(
+                      padding: const EdgeInsets.only(bottom: 24),
                       physics: const BouncingScrollPhysics(),
                       itemCount: value.length,
                       itemBuilder: (context, index) {

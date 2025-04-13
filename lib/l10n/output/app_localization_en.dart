@@ -251,4 +251,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sign_out => 'Sign out';
+
+  @override
+  String get see_your_personal_page => 'See your personal page!';
 }

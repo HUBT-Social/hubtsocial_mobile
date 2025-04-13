@@ -251,4 +251,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sign_out => '退出登录';
+
+  @override
+  String get see_your_personal_page => '查看您的个人页面！';
 }

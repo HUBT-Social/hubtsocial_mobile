@@ -251,4 +251,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get sign_out => 'Выйти';
+
+  @override
+  String get see_your_personal_page => 'Посмотреть свою личную страницу!';
 }

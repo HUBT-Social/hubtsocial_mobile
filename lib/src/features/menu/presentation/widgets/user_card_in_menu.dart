@@ -50,7 +50,7 @@ class _UserCardInMenuState extends State<UserCardInMenu> {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          "Xem trang cá nhân",
+                          context.loc.see_your_personal_page,
                           style: context.textTheme.bodySmall?.copyWith(
                               color: context.colorScheme.onSurfaceVariant),
                         ),

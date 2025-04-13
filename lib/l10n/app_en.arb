@@ -185,5 +185,7 @@
   "delete_account": "Delete account",
   "@delete_account": {},
   "sign_out": "Sign out",
-  "@sign_out": {}
+  "@sign_out": {},
+  "see_your_personal_page": "See your personal page!",
+  "@see_your_personal_page": {}
 }

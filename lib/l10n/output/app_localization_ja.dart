@@ -251,4 +251,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get sign_out => 'サインアウト';
+
+  @override
+  String get see_your_personal_page => 'あなたの個人ページを見る!';
 }

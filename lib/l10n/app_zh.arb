@@ -185,5 +185,7 @@
   "delete_account": "删除帐户",
   "@delete_account": {},
   "sign_out": "退出登录",
-  "@sign_out": {}
+  "@sign_out": {},
+  "see_your_personal_page": "查看您的个人页面！",
+  "@see_your_personal_page": {}
 }

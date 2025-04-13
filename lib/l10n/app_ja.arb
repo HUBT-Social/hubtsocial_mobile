@@ -185,5 +185,7 @@
   "delete_account": "アカウントを削除",
   "@delete_account": {},
   "sign_out": "サインアウト",
-  "@sign_out": {}
+  "@sign_out": {},
+  "see_your_personal_page": "あなたの個人ページを見る!",
+  "@see_your_personal_page": {}
 }

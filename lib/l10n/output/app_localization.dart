@@ -570,6 +570,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign out'**
   String get sign_out;
+
+  /// No description provided for @see_your_personal_page.
+  ///
+  /// In en, this message translates to:
+  /// **'See your personal page!'**
+  String get see_your_personal_page;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

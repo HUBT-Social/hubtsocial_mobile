@@ -251,4 +251,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get sign_out => '로그아웃';
+
+  @override
+  String get see_your_personal_page => '개인 페이지 보기!';
 }

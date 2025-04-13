@@ -185,5 +185,7 @@
   "delete_account": "Xóa tài khoản",
   "@delete_account": {},
   "sign_out": "Đăng xuất",
-  "@sign_out": {}
+  "@sign_out": {},
+  "see_your_personal_page": "Xem trang cá nhân của bạn!",
+  "@see_your_personal_page": {}
 }
