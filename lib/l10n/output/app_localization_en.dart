@@ -254,4 +254,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get see_your_personal_page => 'See your personal page!';
+
+  @override
+  String get try_again => 'Try again';
+
+  @override
+  String get no_messages => 'No messages';
+
+  @override
+  String get click_to_try_again => 'Click to try again';
+
+  @override
+  String get calender_format_month => 'Month';
+
+  @override
+  String get calender_format_2_week => '2 Week';
+
+  @override
+  String get calender_format_week => 'Week';
 }

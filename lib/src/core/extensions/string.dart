@@ -15,4 +15,8 @@ extension StringExtension on String {
         String.fromCharCodes(Iterable.generate(
             count, (_) => chars.codeUnitAt(rnd.nextInt(chars.length))));
   }
+
+  String capitalizeFirst() {
+    return replaceFirst(this[0], this[0].toUpperCase());
+  }
 }

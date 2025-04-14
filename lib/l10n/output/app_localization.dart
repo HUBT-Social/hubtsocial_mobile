@@ -576,6 +576,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'See your personal page!'**
   String get see_your_personal_page;
+
+  /// No description provided for @try_again.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get try_again;
+
+  /// No description provided for @no_messages.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages'**
+  String get no_messages;
+
+  /// No description provided for @click_to_try_again.
+  ///
+  /// In en, this message translates to:
+  /// **'Click to try again'**
+  String get click_to_try_again;
+
+  /// No description provided for @calender_format_month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get calender_format_month;
+
+  /// No description provided for @calender_format_2_week.
+  ///
+  /// In en, this message translates to:
+  /// **'2 Week'**
+  String get calender_format_2_week;
+
+  /// No description provided for @calender_format_week.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get calender_format_week;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

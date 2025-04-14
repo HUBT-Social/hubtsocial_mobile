@@ -254,4 +254,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get see_your_personal_page => '查看您的个人页面！';
+
+  @override
+  String get try_again => '请再试一次';
+
+  @override
+  String get no_messages => '没有消息';
+
+  @override
+  String get click_to_try_again => '点击重试';
+
+  @override
+  String get calender_format_month => '月份';
+
+  @override
+  String get calender_format_2_week => '2 星期';
+
+  @override
+  String get calender_format_week => '星期';
 }

@@ -254,4 +254,22 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get see_your_personal_page => '개인 페이지 보기!';
+
+  @override
+  String get try_again => '다시 시도';
+
+  @override
+  String get no_messages => '메시지가 없습니다';
+
+  @override
+  String get click_to_try_again => '다시 시도하려면 클릭하세요';
+
+  @override
+  String get calender_format_month => '월';
+
+  @override
+  String get calender_format_2_week => '2 주';
+
+  @override
+  String get calender_format_week => '주';
 }

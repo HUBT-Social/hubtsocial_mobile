@@ -187,5 +187,17 @@
   "sign_out": "Đăng xuất",
   "@sign_out": {},
   "see_your_personal_page": "Xem trang cá nhân của bạn!",
-  "@see_your_personal_page": {}
+  "@see_your_personal_page": {},
+  "try_again": "Thử lại",
+  "@try_again": {},
+  "no_messages": "Không có tin nhắn",
+  "@no_messages": {},
+  "click_to_try_again": "Nhấn để thử lại",
+  "@click_to_try_again": {},
+  "calender_format_month": "Tháng",
+  "@calender_format_month": {},
+  "calender_format_2_week": "2 Tuần",
+  "@calender_format_2_week": {},
+  "calender_format_week": "Tuần",
+  "@calender_format_week": {}
 }

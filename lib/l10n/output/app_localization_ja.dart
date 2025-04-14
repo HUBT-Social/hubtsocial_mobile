@@ -254,4 +254,22 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get see_your_personal_page => 'あなたの個人ページを見る!';
+
+  @override
+  String get try_again => '再試行';
+
+  @override
+  String get no_messages => 'メッセージはありません';
+
+  @override
+  String get click_to_try_again => '再試行するにはクリックしてください';
+
+  @override
+  String get calender_format_month => '月';
+
+  @override
+  String get calender_format_2_week => '2週間';
+
+  @override
+  String get calender_format_week => '週';
 }

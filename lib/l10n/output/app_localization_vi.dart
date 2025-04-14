@@ -254,4 +254,22 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get see_your_personal_page => 'Xem trang cá nhân của bạn!';
+
+  @override
+  String get try_again => 'Thử lại';
+
+  @override
+  String get no_messages => 'Không có tin nhắn';
+
+  @override
+  String get click_to_try_again => 'Nhấn để thử lại';
+
+  @override
+  String get calender_format_month => 'Tháng';
+
+  @override
+  String get calender_format_2_week => '2 Tuần';
+
+  @override
+  String get calender_format_week => 'Tuần';
 }

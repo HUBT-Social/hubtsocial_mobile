@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/string.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_timetable_model.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:intl/intl.dart';
@@ -63,8 +64,10 @@ class _TimetableCardState extends State<TimetableCard> {
                                 )),
                             Expanded(
                               child: Text(
-                                widget.reformTimetable.subject ??
-                                    widget.reformTimetable.type.toString(),
+                                widget.reformTimetable.subject == null
+                                    ? widget.reformTimetable.type.toString()
+                                    : widget.reformTimetable.subject!
+                                        .capitalizeFirst(),
                                 style: context.textTheme.titleLarge,
                               ),
                             ),
@@ -96,7 +99,8 @@ class _TimetableCardState extends State<TimetableCard> {
                                   color: context.colorScheme.secondary,
                                 ),
                                 Text(
-                                  widget.reformTimetable.room ?? "",
+                                  widget.reformTimetable.room!
+                                      .capitalizeFirst(),
                                   style: context.textTheme.titleMedium,
                                 ),
                               ],
@@ -109,7 +113,8 @@ class _TimetableCardState extends State<TimetableCard> {
                                   color: context.colorScheme.secondary,
                                 ),
                                 Text(
-                                  widget.reformTimetable.className ?? '',
+                                  widget.reformTimetable.className!
+                                      .capitalizeFirst(),
                                   style: context.textTheme.titleMedium,
                                 ),
                               ],
@@ -129,7 +134,8 @@ class _TimetableCardState extends State<TimetableCard> {
                                     color: context.colorScheme.secondary,
                                   ),
                                   Text(
-                                    widget.reformTimetable.zoomId ?? "",
+                                    widget.reformTimetable.zoomId!
+                                        .capitalizeFirst(),
                                     style: context.textTheme.titleMedium,
                                   ),
                                 ],

@@ -187,5 +187,17 @@
   "sign_out": "로그아웃",
   "@sign_out": {},
   "see_your_personal_page": "개인 페이지 보기!",
-  "@see_your_personal_page": {}
+  "@see_your_personal_page": {},
+  "try_again": "다시 시도",
+  "@try_again": {},
+  "no_messages": "메시지가 없습니다",
+  "@no_messages": {},
+  "click_to_try_again": "다시 시도하려면 클릭하세요",
+  "@click_to_try_again": {},
+  "calender_format_month": "월",
+  "@calender_format_month": {},
+  "calender_format_2_week": "2 주",
+  "@calender_format_2_week": {},
+  "calender_format_week": "주",
+  "@calender_format_week": {}
 }

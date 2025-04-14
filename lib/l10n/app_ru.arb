@@ -187,5 +187,17 @@
   "sign_out": "Выйти",
   "@sign_out": {},
   "see_your_personal_page": "Посмотреть свою личную страницу!",
-  "@see_your_personal_page": {}
+  "@see_your_personal_page": {},
+  "try_again": "Попробовать снова",
+  "@try_again": {},
+  "no_messages": "Нет сообщений",
+  "@no_messages": {},
+  "click_to_try_again": "Нажмите, чтобы попробовать снова",
+  "@click_to_try_again": {},
+  "calender_format_month": "Месяц",
+  "@calender_format_month": {},
+  "calender_format_2_week": "2 недели",
+  "@calender_format_2_week": {},
+  "calender_format_week": "Неделя",
+  "@calender_format_week": {}
 }

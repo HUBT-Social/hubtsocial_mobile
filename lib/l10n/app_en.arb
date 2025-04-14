@@ -187,5 +187,17 @@
   "sign_out": "Sign out",
   "@sign_out": {},
   "see_your_personal_page": "See your personal page!",
-  "@see_your_personal_page": {}
+  "@see_your_personal_page": {},
+  "try_again": "Try again",
+  "@try_again": {},
+  "no_messages": "No messages",
+  "@no_messages": {},
+  "click_to_try_again": "Click to try again",
+  "@click_to_try_again": {},
+  "calender_format_month": "Month",
+  "@calender_format_month": {},
+  "calender_format_2_week": "2 Week",
+  "@calender_format_2_week": {},
+  "calender_format_week": "Week",
+  "@calender_format_week": {}
 }

@@ -187,5 +187,17 @@
   "sign_out": "退出登录",
   "@sign_out": {},
   "see_your_personal_page": "查看您的个人页面！",
-  "@see_your_personal_page": {}
+  "@see_your_personal_page": {},
+  "try_again": "请再试一次",
+  "@try_again": {},
+  "no_messages": "没有消息",
+  "@no_messages": {},
+  "click_to_try_again": "点击重试",
+  "@click_to_try_again": {},
+  "calender_format_month": "月份",
+  "@calender_format_month": {},
+  "calender_format_2_week": "2 星期",
+  "@calender_format_2_week": {},
+  "calender_format_week": "星期",
+  "@calender_format_week": {}
 }

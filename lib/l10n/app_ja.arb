@@ -187,5 +187,17 @@
   "sign_out": "サインアウト",
   "@sign_out": {},
   "see_your_personal_page": "あなたの個人ページを見る!",
-  "@see_your_personal_page": {}
+  "@see_your_personal_page": {},
+  "try_again": "再試行",
+  "@try_again": {},
+  "no_messages": "メッセージはありません",
+  "@no_messages": {},
+  "click_to_try_again": "再試行するにはクリックしてください",
+  "@click_to_try_again": {},
+  "calender_format_month": "月",
+  "@calender_format_month": {},
+  "calender_format_2_week": "2週間",
+  "@calender_format_2_week": {},
+  "calender_format_week": "週",
+  "@calender_format_week": {}
 }

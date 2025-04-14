@@ -254,4 +254,22 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get see_your_personal_page => 'Посмотреть свою личную страницу!';
+
+  @override
+  String get try_again => 'Попробовать снова';
+
+  @override
+  String get no_messages => 'Нет сообщений';
+
+  @override
+  String get click_to_try_again => 'Нажмите, чтобы попробовать снова';
+
+  @override
+  String get calender_format_month => 'Месяц';
+
+  @override
+  String get calender_format_2_week => '2 недели';
+
+  @override
+  String get calender_format_week => 'Неделя';
 }

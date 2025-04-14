@@ -130,6 +130,48 @@ class _ChatScreenState extends State<ChatScreen> {
                 PagedSliverList(
                   pagingController: _pagingController,
                   builderDelegate: PagedChildBuilderDelegate<ChatResponseModel>(
+                    firstPageErrorIndicatorBuilder: (context) => Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 32,
+                          horizontal: 16,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              context.loc.no_messages,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                              context.loc.click_to_try_again,
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(
+                              height: 48,
+                            ),
+                            SizedBox(
+                              width: 200,
+                              child: ElevatedButton.icon(
+                                onPressed:
+                                    _pagingController.retryLastFailedRequest,
+                                icon: const Icon(Icons.refresh),
+                                label: Text(
+                                  context.loc.try_again,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     animateTransitions: true,
                     transitionDuration: const Duration(milliseconds: 500),
                     itemBuilder: (context, item, index) => ChatCard(

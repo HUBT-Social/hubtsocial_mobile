@@ -156,6 +156,11 @@ class _TimetableScreenState extends State<TimetableScreen> {
           return Column(
             children: [
               TableCalendar<ReformTimetable>(
+                availableCalendarFormats: {
+                  CalendarFormat.month: context.loc.calender_format_month,
+                  CalendarFormat.twoWeeks: context.loc.calender_format_2_week,
+                  CalendarFormat.week: context.loc.calender_format_week,
+                },
                 locale: AppLocalStorage.currentLanguageCode,
                 firstDay: state.timetableModel.starttime,
                 lastDay: state.timetableModel.endtime,
