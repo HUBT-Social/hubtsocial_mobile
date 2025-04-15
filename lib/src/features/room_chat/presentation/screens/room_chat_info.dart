@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/profile/screens/about_profile_screens.dart';
@@ -44,14 +45,14 @@ class _RoomChatInfoScreenState extends State<RoomChatInfoScreen> {
             top: 2,
             left: 2,
             child: Container(
-              width: 20,
-              height: 20,
+              width: 20.w,
+              height: 20.h,
               decoration: BoxDecoration(
                 color: context.colorScheme.primary,
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: context.colorScheme.onPrimary,
-                  width: 2,
+                  width: 2.r,
                 ),
               ),
               child: Stack(

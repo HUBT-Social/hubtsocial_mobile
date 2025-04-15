@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/string.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_timetable_model.dart';
@@ -20,7 +21,7 @@ class _TimetableCardState extends State<TimetableCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+      padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 12.w),
       child: Card(
         elevation: 2,
         color: context.colorScheme.surfaceContainerLow,
@@ -28,22 +29,22 @@ class _TimetableCardState extends State<TimetableCard> {
           borderRadius: BorderRadius.circular(12),
           onTap: () => AppRoute.timetableInfo.push(context),
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 12),
+            padding: EdgeInsets.symmetric(vertical: 12.h),
             child: Row(
               // crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  width: 12,
+                  width: 12.w,
                   decoration: BoxDecoration(
                     color: context.colorScheme.primary,
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadius.circular(100.r),
                   ),
                 ),
                 Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
                     child: Column(
-                      spacing: 12,
+                      spacing: 12.h,
                       children: [
                         Row(
                           spacing: 12,
@@ -51,12 +52,12 @@ class _TimetableCardState extends State<TimetableCard> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                                width: 48,
-                                height: 48,
+                                width: 48.r,
+                                height: 48.r,
                                 decoration: BoxDecoration(
                                   color: context
                                       .colorScheme.surfaceContainerHighest,
-                                  borderRadius: BorderRadius.circular(4),
+                                  borderRadius: BorderRadius.circular(4.r),
                                 ),
                                 child: Icon(
                                   Icons.book_rounded,
@@ -68,16 +69,16 @@ class _TimetableCardState extends State<TimetableCard> {
                                     ? widget.reformTimetable.type.toString()
                                     : widget.reformTimetable.subject!
                                         .capitalizeFirst(),
-                                style: context.textTheme.titleLarge,
+                                style: context.textTheme.bodyLarge,
                               ),
                             ),
                             if (widget.reformTimetable.type != null)
                               Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 2),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12.w, vertical: 2.h),
                                 decoration: BoxDecoration(
                                   color: context.colorScheme.primary,
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 child: Text(
                                   widget.reformTimetable.type!.name,
@@ -88,11 +89,11 @@ class _TimetableCardState extends State<TimetableCard> {
                           ],
                         ),
                         Row(
-                          spacing: 12,
+                          spacing: 12.w,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
-                              spacing: 6,
+                              spacing: 6.w,
                               children: [
                                 Icon(
                                   Icons.room,
@@ -101,12 +102,12 @@ class _TimetableCardState extends State<TimetableCard> {
                                 Text(
                                   widget.reformTimetable.room!
                                       .capitalizeFirst(),
-                                  style: context.textTheme.titleMedium,
+                                  style: context.textTheme.bodyMedium,
                                 ),
                               ],
                             ),
                             Row(
-                              spacing: 6,
+                              spacing: 6.w,
                               children: [
                                 Icon(
                                   Icons.school_rounded,
@@ -115,7 +116,7 @@ class _TimetableCardState extends State<TimetableCard> {
                                 Text(
                                   widget.reformTimetable.className!
                                       .capitalizeFirst(),
-                                  style: context.textTheme.titleMedium,
+                                  style: context.textTheme.bodyMedium,
                                 ),
                               ],
                             )
@@ -123,11 +124,11 @@ class _TimetableCardState extends State<TimetableCard> {
                         ),
                         if (widget.reformTimetable.zoomId!.isNotEmpty)
                           Row(
-                            spacing: 12,
+                            spacing: 12.w,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
-                                spacing: 6,
+                                spacing: 6.w,
                                 children: [
                                   Icon(
                                     Icons.voice_chat_rounded,
@@ -136,7 +137,7 @@ class _TimetableCardState extends State<TimetableCard> {
                                   Text(
                                     widget.reformTimetable.zoomId!
                                         .capitalizeFirst(),
-                                    style: context.textTheme.titleMedium,
+                                    style: context.textTheme.bodyMedium,
                                   ),
                                 ],
                               ),
@@ -144,11 +145,11 @@ class _TimetableCardState extends State<TimetableCard> {
                           ),
                         if (widget.reformTimetable.startTime != null)
                           Row(
-                            spacing: 12,
+                            spacing: 12.w,
                             children: [
                               Expanded(
                                 child: Row(
-                                  spacing: 6,
+                                  spacing: 6.w,
                                   children: [
                                     Icon(
                                       Icons.timer_rounded,
@@ -158,19 +159,19 @@ class _TimetableCardState extends State<TimetableCard> {
                                       DateFormat.jm().format(
                                           widget.reformTimetable.startTime ??
                                               DateTime.now()),
-                                      style: context.textTheme.titleMedium,
+                                      style: context.textTheme.bodyMedium,
                                     ),
                                     if (widget.reformTimetable.endTime != null)
                                       Text(
                                         "-",
-                                        style: context.textTheme.titleMedium,
+                                        style: context.textTheme.bodyMedium,
                                       ),
                                     if (widget.reformTimetable.endTime != null)
                                       Text(
                                         DateFormat.jm().format(
                                             widget.reformTimetable.endTime ??
                                                 DateTime.now()),
-                                        style: context.textTheme.titleMedium,
+                                        style: context.textTheme.bodyMedium,
                                       ),
                                   ],
                                 ),

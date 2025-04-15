@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
@@ -74,7 +75,6 @@ class _PasswordVerifiCationScreenState
                   color: context.colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: 12),
               Text(
                 context.loc.enter_otp_message(widget.maskEmail),
                 textAlign: TextAlign.center,
@@ -82,13 +82,12 @@ class _PasswordVerifiCationScreenState
                   color: context.colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: 12),
               Form(
                 key: _formKey,
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 6),
+                      padding: EdgeInsets.symmetric(vertical: 6.h),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -106,7 +105,6 @@ class _PasswordVerifiCationScreenState
                   ],
                 ),
               ),
-              SizedBox(height: 12),
               FilledButton(
                 onPressed: () {
                   _onVerifyButtonClicked();
@@ -121,7 +119,6 @@ class _PasswordVerifiCationScreenState
                   ),
                 ),
               ),
-              SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

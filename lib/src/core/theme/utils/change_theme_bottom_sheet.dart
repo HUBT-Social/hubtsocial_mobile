@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
@@ -15,13 +16,13 @@ final class ThemeUtils {
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
+          topLeft: Radius.circular(24.r),
+          topRight: Radius.circular(24.r),
         ),
       ),
       builder: (context) {
         return Padding(
-          padding: EdgeInsets.all(12),
+          padding: EdgeInsets.all(12.r),
           child: SafeArea(
             left: false,
             right: false,
@@ -37,7 +38,7 @@ final class ThemeUtils {
                     style: context.textTheme.headlineSmall,
                   ),
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 12.r),
                 BlocBuilder<ThemeBloc, AppThemeState>(
                   builder: (context, state) {
                     return ListView.separated(
@@ -55,7 +56,7 @@ final class ThemeUtils {
                             colorFilter: ColorFilter.mode(
                                 context.colorScheme.onSurface, BlendMode.srcIn),
                             ThemeModel.values[index].image,
-                            height: 32,
+                            height: 32.h,
                             fit: BoxFit.contain,
                           ),
                           title: Text(
@@ -79,7 +80,7 @@ final class ThemeUtils {
                                     )
                                   : null,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10.r),
                             side:
                                 ThemeModel.values[index] == state.selectedTheme
                                     ? BorderSide(
@@ -96,12 +97,12 @@ final class ThemeUtils {
                         );
                       },
                       separatorBuilder: (context, index) {
-                        return SizedBox(height: 12);
+                        return SizedBox(height: 12.h);
                       },
                     );
                   },
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: 24.h),
               ],
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:lottie/lottie.dart';
 
@@ -18,17 +19,17 @@ class _PasswordSuccessfulScreenState extends State<PasswordSuccessfulScreen> {
   Widget build(BuildContext context) {
     return Container(
       color: context.colorScheme.surface,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: 347,
-            width: 360,
+            height: 347.h,
+            width: 360.w,
             child: Lottie.asset(AppLotties.passwordSuccessful),
           ),
-          SizedBox(height: 30),
+          SizedBox(height: 30.h),
           Text(
             context.loc.password_change_successful,
             style: context.textTheme.headlineMedium?.copyWith(
@@ -36,7 +37,7 @@ class _PasswordSuccessfulScreenState extends State<PasswordSuccessfulScreen> {
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 38),
+          SizedBox(height: 38.h),
           SizedBox(
             width: double.infinity,
             child: FilledButton(

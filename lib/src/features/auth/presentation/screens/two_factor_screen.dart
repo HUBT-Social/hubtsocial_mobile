@@ -75,7 +75,6 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                   color: context.colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: 12),
               Text(
                 context.loc.enter_otp_message(widget.maskEmail),
                 textAlign: TextAlign.center,
@@ -83,7 +82,6 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                   color: context.colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: 12),
               Form(
                 key: _formKey,
                 child: InputAuthOTP(
@@ -93,7 +91,6 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                   },
                 ),
               ),
-              SizedBox(height: 12),
               FilledButton(
                 onPressed: () {
                   _onTwoFactorButtonClicked();
@@ -108,7 +105,6 @@ class _TwoFactorPageState extends State<TwoFactorPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

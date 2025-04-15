@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_timetable_model.dart';
@@ -156,6 +157,8 @@ class _TimetableScreenState extends State<TimetableScreen> {
           return Column(
             children: [
               TableCalendar<ReformTimetable>(
+                rowHeight: 52.h,
+                daysOfWeekHeight: 16.h,
                 availableCalendarFormats: {
                   CalendarFormat.month: context.loc.calender_format_month,
                   CalendarFormat.twoWeeks: context.loc.calender_format_2_week,
@@ -217,13 +220,13 @@ class _TimetableScreenState extends State<TimetableScreen> {
                   _focusedDay = focusedDay;
                 },
               ),
-              const SizedBox(height: 8.0),
+              SizedBox(height: 8.h),
               Expanded(
                 child: ValueListenableBuilder<List<ReformTimetable>>(
                   valueListenable: _selectedEvents,
                   builder: (context, value, _) {
                     return ListView.builder(
-                      padding: const EdgeInsets.only(bottom: 24),
+                      padding: EdgeInsets.only(bottom: 24.h),
                       physics: const BouncingScrollPhysics(),
                       itemCount: value.length,
                       itemBuilder: (context, index) {

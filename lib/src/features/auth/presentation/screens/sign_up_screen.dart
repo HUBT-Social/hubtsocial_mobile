@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/input_field.dart';
@@ -53,67 +54,54 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 color: context.colorScheme.onSurface,
               ),
             ),
-            SizedBox(height: 12),
             Form(
               key: _formKey,
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6),
+                    padding: EdgeInsets.symmetric(vertical: 6.h),
                     child: InputField.name(
                       hintText: context.loc.user_name,
                       controller: _userNameController,
                       textInputAction: TextInputAction.next,
-                      prefixIcon: Align(
-                        widthFactor: 1.0,
-                        heightFactor: 1.0,
-                        child: Icon(
-                          Icons.person,
-                        ),
+                      prefixIcon: Icon(
+                        Icons.person,
+                        size: 32.r,
                       ),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6),
+                    padding: EdgeInsets.symmetric(vertical: 6.h),
                     child: InputField.email(
                       controller: _emailController,
                       textInputAction: TextInputAction.next,
-                      prefixIcon: Align(
-                        widthFactor: 1.0,
-                        heightFactor: 1.0,
-                        child: Icon(
-                          Icons.email,
-                        ),
+                      prefixIcon: Icon(
+                        Icons.email,
+                        size: 32.r,
                       ),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6),
+                    padding: EdgeInsets.symmetric(vertical: 6.h),
                     child: InputField.password(
                       hintText: context.loc.password,
                       controller: _passwordController,
                       textInputAction: TextInputAction.next,
-                      prefixIcon: Align(
-                        widthFactor: 1.0,
-                        heightFactor: 1.0,
-                        child: Icon(
-                          Icons.lock,
-                        ),
+                      prefixIcon: Icon(
+                        Icons.lock,
+                        size: 32.r,
                       ),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6),
+                    padding: EdgeInsets.symmetric(vertical: 6.h),
                     child: InputField.password(
                       hintText: context.loc.confirm_password,
                       controller: _confirmPasswordController,
                       textInputAction: TextInputAction.done,
-                      prefixIcon: Align(
-                        widthFactor: 1.0,
-                        heightFactor: 1.0,
-                        child: Icon(
-                          Icons.lock,
-                        ),
+                      prefixIcon: Icon(
+                        Icons.lock,
+                        size: 32.r,
                       ),
                     ),
                   ),
@@ -124,7 +112,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: [
                 Checkbox(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(5.r),
                   ),
                   value: isAgreePolicy,
                   onChanged: (value) {
@@ -148,8 +136,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         builder: (BuildContext context) {
                           return Center(
                             child: Container(
-                              height: 300,
-                              width: 300,
+                              height: 300.r,
+                              width: 300.r,
                               color: context.colorScheme.surface,
                               child: Text("data"),
                             ),
@@ -165,7 +153,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 12),
             FilledButton(
               onPressed: () {
                 _onSignUpButtonClicked();
@@ -180,7 +167,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 12),
             InkWell(
               autofocus: false,
               onTap: () {

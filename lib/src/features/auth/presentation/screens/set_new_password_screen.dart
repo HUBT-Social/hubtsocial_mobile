@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/auth/presentation/bloc/auth_bloc.dart';
 
@@ -50,45 +51,37 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                   color: context.colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: 12),
               Form(
                 key: _formKey,
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 6),
+                      padding: EdgeInsets.symmetric(vertical: 6.h),
                       child: InputField.password(
                         controller: _newPasswordController,
                         textInputAction: TextInputAction.done,
                         hintText: context.loc.password,
-                        prefixIcon: Align(
-                          widthFactor: 1.0,
-                          heightFactor: 1.0,
-                          child: Icon(
-                            Icons.lock_rounded,
-                          ),
+                        prefixIcon: Icon(
+                          Icons.lock_rounded,
+                          size: 32.r,
                         ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 6),
+                      padding: EdgeInsets.symmetric(vertical: 6.h),
                       child: InputField.password(
                         controller: _confirmNewPasswordController,
                         textInputAction: TextInputAction.done,
                         hintText: context.loc.password,
-                        prefixIcon: Align(
-                          widthFactor: 1.0,
-                          heightFactor: 1.0,
-                          child: Icon(
-                            Icons.lock_rounded,
-                          ),
+                        prefixIcon: Icon(
+                          Icons.lock_rounded,
+                          size: 32.r,
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 12),
               FilledButton(
                 onPressed: () {
                   _onVerifyButtonClicked();
@@ -103,7 +96,6 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 12),
             ],
           );
         },

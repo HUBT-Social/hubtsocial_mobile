@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/constants/assets.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
@@ -47,6 +48,7 @@ class _MainWrapperState extends State<MainWrapper> {
       extendBody: true,
       body: widget.navigationShell,
       bottomNavigationBar: CurvedNavigationBar(
+        height: 60.h >= 75 ? 75 : 60.h,
         key: bottomNavigationKey,
         index: widget.navigationShell.currentIndex,
         items: const [

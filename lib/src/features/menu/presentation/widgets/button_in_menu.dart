@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 class ButtonInMenu extends StatefulWidget {
@@ -27,9 +28,9 @@ class _ButtonInMenuState extends State<ButtonInMenu> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 6),
+      padding: EdgeInsets.symmetric(horizontal: 6.w),
       child: Container(
-        height: 48,
+        height: 48.h,
         decoration: BoxDecoration(
           color: context.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.only(
@@ -50,14 +51,14 @@ class _ButtonInMenuState extends State<ButtonInMenu> {
             ),
             onTap: widget.onTap,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
                       widget.icon,
-                      SizedBox(width: 12),
+                      SizedBox(width: 12.w),
                       Text(
                         widget.label,
                         style: context.textTheme.titleSmall,

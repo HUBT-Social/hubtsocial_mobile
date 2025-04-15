@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
@@ -14,13 +15,13 @@ final class LocalizatioUtils {
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
+          topLeft: Radius.circular(24.r),
+          topRight: Radius.circular(24.r),
         ),
       ),
       builder: (context) {
         return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12),
+          padding: EdgeInsets.symmetric(horizontal: 12.w),
           child: SafeArea(
             left: false,
             right: false,
@@ -36,16 +37,16 @@ final class LocalizatioUtils {
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: 24.h),
                 ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.4,
+                    maxHeight: 0.3.sh,
                   ),
                   child: Material(
                     child: BlocBuilder<LocalizationBloc, AppLocalizationState>(
                       builder: (context, state) {
                         return ListView.separated(
-                          padding: EdgeInsets.only(bottom: 24),
+                          padding: EdgeInsets.only(bottom: 24.h),
                           shrinkWrap: true,
                           itemCount: Language.values.length,
                           itemBuilder: (context, index) {
@@ -61,8 +62,8 @@ final class LocalizatioUtils {
                               },
                               leading: Image.asset(
                                 Language.values[index].image,
-                                height: 32,
-                                width: 32,
+                                height: 32.r,
+                                width: 32.r,
                                 fit: BoxFit.contain,
                               ),
                               title: Text(
@@ -100,7 +101,7 @@ final class LocalizatioUtils {
                             );
                           },
                           separatorBuilder: (context, index) =>
-                              const SizedBox(height: 12),
+                              SizedBox(height: 12.h),
                         );
                       },
                     ),

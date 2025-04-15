@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
@@ -57,41 +58,37 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                 color: context.colorScheme.onSurface,
               ),
             ),
-            SizedBox(height: 12),
             Form(
               key: _formKey,
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6),
+                    padding: EdgeInsets.symmetric(vertical: 6.h),
                     child: InputField.name(
                       hintText: context.loc.first_name,
                       controller: _firstNameController,
                       textInputAction: TextInputAction.next,
-                      prefixIcon: Align(
-                        widthFactor: 1.0,
-                        heightFactor: 1.0,
-                        child: SvgPicture.asset(AppIcons.iconFirstName),
+                      prefixIcon: SvgPicture.asset(
+                        AppIcons.iconFirstName,
+                        width: 32.w,
+                        height: 32.h,
                       ),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6),
+                    padding: EdgeInsets.symmetric(vertical: 6.h),
                     child: InputField.name(
                       hintText: context.loc.last_name,
                       controller: _lastNameController,
                       textInputAction: TextInputAction.next,
-                      prefixIcon: Align(
-                        widthFactor: 1.0,
-                        heightFactor: 1.0,
-                        child: Icon(
-                          Icons.person,
-                        ),
+                      prefixIcon: Icon(
+                        Icons.person,
+                        size: 32.r,
                       ),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6),
+                    padding: EdgeInsets.symmetric(vertical: 6.h),
                     child: GestureDetector(
                       onTap: () async {
                         DateTime? pickedDate = await showDatePicker(
@@ -115,17 +112,17 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                           hintText: context.loc.birth_of_date,
                           controller: _birthOfDateController,
                           textInputAction: TextInputAction.next,
-                          prefixIcon: Align(
-                            widthFactor: 1.0,
-                            heightFactor: 1.0,
-                            child: SvgPicture.asset(AppIcons.iconBirthdate),
+                          prefixIcon: SvgPicture.asset(
+                            AppIcons.iconBirthdate,
+                            width: 24.w,
+                            height: 24.h,
                           ),
                         ),
                       ),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6),
+                    padding: EdgeInsets.symmetric(vertical: 6.h),
                     child: DropdownButtonFormField<Gender>(
                       value: _genderValue,
                       validator: Validators.requiredTyped,
@@ -143,14 +140,14 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           gapPadding: 0,
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                          borderRadius: BorderRadius.all(Radius.circular(12.r)),
                           borderSide:
                               BorderSide(color: context.colorScheme.outline),
                         ),
-                        prefixIcon: Align(
-                          widthFactor: 1.0,
-                          heightFactor: 1.0,
-                          child: SvgPicture.asset(AppIcons.iconGender),
+                        prefixIcon: SvgPicture.asset(
+                          AppIcons.iconGender,
+                          width: 32.r,
+                          height: 32.r,
                         ),
                       ),
                       items: Gender.values.map((Gender classType) {
@@ -164,22 +161,21 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6),
+                    padding: EdgeInsets.symmetric(vertical: 6.h),
                     child: InputField.phone(
                       hintText: context.loc.phone_number,
                       controller: _phoneNumberController,
                       textInputAction: TextInputAction.done,
-                      prefixIcon: Align(
-                        widthFactor: 1.0,
-                        heightFactor: 1.0,
-                        child: SvgPicture.asset(AppIcons.iconPhoneNumber),
+                      prefixIcon: SvgPicture.asset(
+                        AppIcons.iconPhoneNumber,
+                        width: 32.r,
+                        height: 32.r,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 12),
             FilledButton(
               onPressed: () {
                 _onSignUpButtonClicked();
@@ -194,7 +190,6 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 12),
             InkWell(
               onTap: () {
                 AppRoute.home.go(context);

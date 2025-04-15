@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/router/router.import.dart';
@@ -13,23 +14,23 @@ class ButtonChangeTheme extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 35,
-      width: 60,
+      height: 35.h,
+      // width: 60.w,
       child: OutlinedButton(
         onPressed: () => ThemeUtils.showThemeBottomSheet(
             navigatorKey.currentContext ?? context),
         style: OutlinedButton.styleFrom(
-          padding: EdgeInsets.symmetric(horizontal: 6),
+          padding: EdgeInsets.symmetric(horizontal: 6.w),
           backgroundColor: context.colorScheme.surface,
           foregroundColor: context.colorScheme.onSurface,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
           ),
         ),
         child: Row(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 6),
+              padding: EdgeInsets.symmetric(vertical: 6.h),
               child: BlocBuilder<ThemeBloc, AppThemeState>(
                 builder: (context, state) {
                   return SvgPicture.asset(
@@ -37,16 +38,16 @@ class ButtonChangeTheme extends StatelessWidget {
                         context.colorScheme.onSurface, BlendMode.srcIn),
                     state.selectedTheme.image,
                     fit: BoxFit.fitHeight,
-                    height: 32,
+                    height: 32.r,
+                    width: 32.r,
                   );
                 },
               ),
             ),
-            Expanded(
-              child: Icon(
-                Icons.arrow_drop_down_rounded,
-                color: context.colorScheme.onSurface,
-              ),
+            Icon(
+              Icons.arrow_drop_down_rounded,
+              color: context.colorScheme.onSurface,
+              size: 18.r,
             ),
           ],
         ),

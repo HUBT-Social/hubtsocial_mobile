@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/datasources/chat_hub_connection.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
@@ -144,27 +145,24 @@ class _ChatScreenState extends State<ChatScreen> {
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
-                            const SizedBox(
-                              height: 16,
+                            SizedBox(
+                              height: 16.h,
                             ),
                             Text(
                               context.loc.click_to_try_again,
                               textAlign: TextAlign.center,
                             ),
-                            const SizedBox(
-                              height: 48,
+                            SizedBox(
+                              height: 48.h,
                             ),
                             SizedBox(
-                              width: 200,
+                              width: 200.w,
                               child: ElevatedButton.icon(
                                 onPressed:
                                     _pagingController.retryLastFailedRequest,
                                 icon: const Icon(Icons.refresh),
                                 label: Text(
                                   context.loc.try_again,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
                                 ),
                               ),
                             ),
@@ -180,7 +178,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: SizedBox(height: 100),
+                  child: SizedBox(height: 100.h),
                 ),
               ],
             ),

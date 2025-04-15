@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:chatview/chatview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/string.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
@@ -171,7 +172,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
                   Icons.keyboard_arrow_down_rounded,
                   color: context.colorScheme.primary,
                   weight: 10,
-                  size: 30,
+                  size: 30.r,
                 ),
               ),
               chatViewState: ChatViewState.hasMessages,
@@ -186,14 +187,14 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
                 flashingCircleDarkColor: context.colorScheme.primaryFixedDim,
               ),
               appBar: AppBar(
-                toolbarHeight: 52,
-                leadingWidth: 36,
+                toolbarHeight: 52.h,
+                leadingWidth: 36.w,
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 title: Row(
                   children: [
-                    UrlImage.circle(state.roomInfo.avatarUrl!, size: 36),
-                    SizedBox(width: 12),
+                    UrlImage.circle(state.roomInfo.avatarUrl!, size: 36.r),
+                    SizedBox(width: 12.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -345,12 +346,13 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
                     ),
                     reactionWidgetDecoration: BoxDecoration(
                       color: context.colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                   ),
                 ),
                 imageMessageConfig: ImageMessageConfiguration(
-                  margin: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+                  margin:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 15.h),
                   shareIconConfig: ShareIconConfiguration(
                     defaultIconBackgroundColor:
                         context.colorScheme.surfaceContainer,
@@ -385,7 +387,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
                 itemConfig: SuggestionItemConfig(
                   decoration: BoxDecoration(
                     color: context.colorScheme.surface,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(8.r),
                     border: Border.all(
                       color: context.colorScheme.outline,
                     ),
