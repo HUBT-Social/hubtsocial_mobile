@@ -19,4 +19,8 @@ extension StringExtension on String {
   String capitalizeFirst() {
     return replaceFirst(this[0], this[0].toUpperCase());
   }
+
+  String removeSpecialCharacters() {
+    return replaceAll(RegExp(r"[^a-zA-Z0-9\s]"), "");
+  }
 }

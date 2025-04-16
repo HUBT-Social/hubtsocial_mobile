@@ -46,36 +46,13 @@ void main() async {
   await Future.wait([
     _initUniqueDeviceId(),
     _initFirebase(),
-    _initLocalStorage(),
+    AppLocalStorage().initLocalStorage(),
   ]);
 
   runApp(MyApp());
 
   await _initNotification();
 }
-
-Future<void> _initLocalStorage() async {
-  await Hive.initFlutter();
-
-  Hive.registerAdapters();
-
-  // Mở các box
-  await Future.wait([
-    Hive.openBox(LocalStorageKey.localStorage),
-    Hive.openBox(LocalStorageKey.token),
-    Hive.openBox<NotificationModel>(
-      LocalStorageKey.notification,
-      compactionStrategy: (entries, deletedEntries) => deletedEntries > 50,
-    ),
-    Hive.openBox<TimetableResponseModel>(LocalStorageKey.timeTable),
-  ]).then((_) {
-    logger.d("Đã mở tất cả các box thành công");
-  }).catchError((error) {
-    logger.e("Lỗi khi mở box: $error");
-  });
-}
-
-
 
 String _readAndroidDeviceInfo(AndroidDeviceInfo data) {
   return data.version.release +

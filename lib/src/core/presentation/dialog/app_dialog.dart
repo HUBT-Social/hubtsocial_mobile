@@ -266,6 +266,8 @@ sealed class AppDialog {
     );
 
     if (confirmed && context.mounted) {
+      AppDialog.showLoadingDialog(message: 'Logging out');
+
       context.read<AuthBloc>().add(const SignOutEvent());
     }
   }

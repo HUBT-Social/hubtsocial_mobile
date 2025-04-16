@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 
-import '../../local_storage/local_storage_key.dart';
+import '../../../../main.dart';
+import '../../local_storage/app_local_storage.dart';
 import '../../presentation/dialog/app_dialog.dart';
 
 class HiveProvider {
@@ -50,10 +51,11 @@ class HiveProvider {
   }
 
   static void clearToken(VoidCallback callback) {
-    var tokenBox = Hive.box(LocalStorageKey.token);
     AppDialog.showLoadingDialog(message: 'Logging out');
 
-    tokenBox.clear().then((_) {
+    Hive.deleteFromDisk().then((_) {
+      AppLocalStorage().initLocalStorage();
+
       Timer(
         const Duration(seconds: 1),
         () {
