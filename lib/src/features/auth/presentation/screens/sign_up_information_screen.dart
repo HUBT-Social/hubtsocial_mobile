@@ -70,8 +70,8 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                       textInputAction: TextInputAction.next,
                       prefixIcon: SvgPicture.asset(
                         AppIcons.iconFirstName,
-                        width: 32.w,
-                        height: 32.h,
+                        width: 28.w,
+                        height: 28.h,
                       ),
                     ),
                   ),
@@ -83,7 +83,7 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                       textInputAction: TextInputAction.next,
                       prefixIcon: Icon(
                         Icons.person,
-                        size: 32.r,
+                        size: 28.r,
                       ),
                     ),
                   ),
@@ -146,8 +146,8 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                         ),
                         prefixIcon: SvgPicture.asset(
                           AppIcons.iconGender,
-                          width: 32.r,
-                          height: 32.r,
+                          width: 28.r,
+                          height: 28.r,
                         ),
                       ),
                       items: Gender.values.map((Gender classType) {
@@ -168,8 +168,8 @@ class _SignUpInformationScreenState extends State<SignUpInformationScreen> {
                       textInputAction: TextInputAction.done,
                       prefixIcon: SvgPicture.asset(
                         AppIcons.iconPhoneNumber,
-                        width: 32.r,
-                        height: 32.r,
+                        width: 28.r,
+                        height: 28.r,
                       ),
                     ),
                   ),

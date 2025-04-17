@@ -66,7 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       textInputAction: TextInputAction.next,
                       prefixIcon: Icon(
                         Icons.person,
-                        size: 32.r,
+                        size: 28.r,
                       ),
                     ),
                   ),
@@ -77,7 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       textInputAction: TextInputAction.next,
                       prefixIcon: Icon(
                         Icons.email,
-                        size: 32.r,
+                        size: 28.r,
                       ),
                     ),
                   ),
@@ -89,7 +89,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       textInputAction: TextInputAction.next,
                       prefixIcon: Icon(
                         Icons.lock,
-                        size: 32.r,
+                        size: 28.r,
                       ),
                     ),
                   ),
@@ -101,7 +101,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       textInputAction: TextInputAction.done,
                       prefixIcon: Icon(
                         Icons.lock,
-                        size: 32.r,
+                        size: 28.r,
                       ),
                     ),
                   ),

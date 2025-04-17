@@ -499,7 +499,7 @@ class _NotificationsState extends State<NotificationsScreen> {
                               ),
                               SizedBox(width: 12),
                               // Right image or empty space
-                              Container(
+                              SizedBox(
                                 width: 50,
                                 height: 50,
                                 child: imageUrl?.toString().isNotEmpty == true

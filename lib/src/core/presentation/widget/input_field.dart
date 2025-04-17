@@ -220,11 +220,11 @@ class _InputFieldState extends State<InputField> {
                 icon: _obscureText
                     ? Icon(
                         Icons.visibility_off,
-                        size: 32.r,
+                        size: 28.r,
                       )
                     : Icon(
                         Icons.visibility_sharp,
-                        size: 32.r,
+                        size: 28.r,
                       ),
               )
             : null,

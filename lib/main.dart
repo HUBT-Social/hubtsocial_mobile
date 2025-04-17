@@ -19,15 +19,10 @@ import 'package:hubtsocial_mobile/src/core/app/my_app.dart';
 import 'package:hubtsocial_mobile/src/constants/environment.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/core/notification/NotificationService.dart';
-import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
-import 'package:hubtsocial_mobile/src/features/timetable/data/models/timetable_response_model.dart';
 
 import 'src/core/injections/injections.dart';
-import 'src/core/local_storage/local_storage_key.dart';
 import 'src/core/logger/logger.dart';
 
-import 'package:hive_ce_flutter/adapters.dart';
-import 'package:hubtsocial_mobile/hive/hive_registrar.g.dart';
 import 'package:hubtsocial_mobile/src/core/notification/FirebaseMessage.dart';
 
 class NavigationService {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 class TimetableInfoScreen extends StatefulWidget {

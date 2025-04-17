@@ -14,7 +14,6 @@ import '../../../../core/localization/utils/change_language_bottom_sheet.dart';
 import '../../../../router/router.import.dart';
 import '../../../../core/theme/bloc/theme_bloc.dart';
 import '../../../../core/theme/utils/change_theme_bottom_sheet.dart';
-import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../main_wrapper/presentation/widgets/main_app_bar.dart';
 
 class MenuScreen extends StatefulWidget {

@@ -68,7 +68,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         hintText: context.loc.username_or_email,
                         prefixIcon: Icon(
                           Icons.person,
-                          size: 32.r,
+                          size: 28.r,
                         ),
                       ),
                     ),

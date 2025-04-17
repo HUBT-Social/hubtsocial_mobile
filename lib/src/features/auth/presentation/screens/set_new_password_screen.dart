@@ -63,7 +63,7 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                         hintText: context.loc.password,
                         prefixIcon: Icon(
                           Icons.lock_rounded,
-                          size: 32.r,
+                          size: 28.r,
                         ),
                       ),
                     ),
@@ -75,7 +75,7 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                         hintText: context.loc.password,
                         prefixIcon: Icon(
                           Icons.lock_rounded,
-                          size: 32.r,
+                          size: 28.r,
                         ),
                       ),
                     ),

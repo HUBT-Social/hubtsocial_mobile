@@ -30,6 +30,19 @@ StatefulShellRoute _mainRoute() {
           GoRoute(
             path: AppRoute.home.path,
             builder: (context, state) => const HomeScreen(),
+            routes: [
+              GoRoute(
+                path: 'quiz',
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (_) => getIt<ChatBloc>(),
+                    ),
+                  ],
+                  child: QuizScreen(),
+                ),
+              ),
+            ],
           ),
         ],
       ),
