@@ -4,9 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../../chat/data/models/chat_response_model.dart';
-import '../../../chat/presentation/bloc/chat_bloc.dart';
-import '../../../chat/presentation/widgets/chat_card.dart';
+import '../../data/models/quiz_response_model.dart';
+import '../bloc/quiz_bloc.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -17,7 +16,7 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   int pageKey = 0;
-  final _pagingController = PagingController<int, ChatResponseModel>(
+  final _pagingController = PagingController<int, QuizResponseModel>(
     firstPageKey: 1,
   );
 
@@ -25,7 +24,7 @@ class _QuizScreenState extends State<QuizScreen> {
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
       this.pageKey = pageKey;
-      context.read<ChatBloc>().add(FetchChatEvent(page: pageKey));
+      context.read<QuizBloc>().add(FetchQuizEvent(page: pageKey));
     });
 
     super.initState();
@@ -83,7 +82,7 @@ class _QuizScreenState extends State<QuizScreen> {
               // ),
               PagedSliverList(
                 pagingController: _pagingController,
-                builderDelegate: PagedChildBuilderDelegate<ChatResponseModel>(
+                builderDelegate: PagedChildBuilderDelegate<QuizResponseModel>(
                   firstPageErrorIndicatorBuilder: (context) => Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -125,9 +124,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   ),
                   animateTransitions: true,
                   transitionDuration: const Duration(milliseconds: 500),
-                  itemBuilder: (context, item, index) => ChatCard(
-                    chatModel: item,
-                  ),
+                  itemBuilder: (context, item, index) => Text(item.id),
                 ),
               ),
               SliverToBoxAdapter(

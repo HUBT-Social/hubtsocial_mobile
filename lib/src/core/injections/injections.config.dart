@@ -49,6 +49,16 @@ import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/chat_bloc.
     as _i359;
 import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/receive_chat/receive_chat_cubit.dart'
     as _i441;
+import 'package:hubtsocial_mobile/src/features/quiz/data/datasources/quiz_remote_data_source.dart'
+    as _i250;
+import 'package:hubtsocial_mobile/src/features/quiz/data/repos/quiz_repo_impl.dart'
+    as _i129;
+import 'package:hubtsocial_mobile/src/features/quiz/domain/repos/quiz_repo.dart'
+    as _i13;
+import 'package:hubtsocial_mobile/src/features/quiz/domain/usercases/fetch_quiz_usercase.dart'
+    as _i35;
+import 'package:hubtsocial_mobile/src/features/quiz/presentation/bloc/quiz_bloc.dart'
+    as _i1023;
 import 'package:hubtsocial_mobile/src/features/room_chat/data/datasources/room_chat_remote_data_source.dart'
     as _i311;
 import 'package:hubtsocial_mobile/src/features/room_chat/data/repos/room_chat_repo_impl.dart'
@@ -111,6 +121,11 @@ extension GetItInjectableX on _i174.GetIt {
               hiveAuth: gh<_i170.HiveInterface>(),
               messaging: gh<_i892.FirebaseMessaging>(),
             ));
+    gh.lazySingleton<_i250.QuizRemoteDataSource>(
+        () => _i250.QuizRemoteDataSourceImpl(
+              hiveAuth: gh<_i170.HiveInterface>(),
+              messaging: gh<_i892.FirebaseMessaging>(),
+            ));
     gh.lazySingleton<_i1042.UserRepo>(
         () => _i674.UserRepoImpl(gh<_i592.UserProfileRemoteDataSource>()));
     gh.lazySingleton<_i113.TimetableRepo>(
@@ -146,13 +161,19 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i477.InitUserUserCase(gh<_i1042.UserRepo>()));
     gh.lazySingleton<_i925.UpdateUserUserCase>(
         () => _i925.UpdateUserUserCase(gh<_i1042.UserRepo>()));
+    gh.lazySingleton<_i13.QuizRepo>(
+        () => _i129.QuizRepoImpl(gh<_i250.QuizRemoteDataSource>()));
     gh.lazySingleton<_i965.ChatRepo>(
         () => _i293.ChatRepoImpl(gh<_i745.ChatRemoteDataSource>()));
+    gh.lazySingleton<_i35.FetchQuizUserCase>(
+        () => _i35.FetchQuizUserCase(gh<_i13.QuizRepo>()));
     gh.factory<_i527.UserBloc>(() => _i527.UserBloc(
           initUserProfile: gh<_i477.InitUserUserCase>(),
           updateUserProfile: gh<_i925.UpdateUserUserCase>(),
           changedPassword: gh<_i789.ChangePasswordUserCase>(),
         ));
+    gh.factory<_i1023.QuizBloc>(
+        () => _i1023.QuizBloc(fetchQuiz: gh<_i35.FetchQuizUserCase>()));
     gh.lazySingleton<_i1020.FetchChatUserCase>(
         () => _i1020.FetchChatUserCase(gh<_i965.ChatRepo>()));
     gh.factory<_i285.GetRoomChatBloc>(() => _i285.GetRoomChatBloc(

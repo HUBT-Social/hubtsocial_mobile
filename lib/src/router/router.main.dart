@@ -36,7 +36,7 @@ StatefulShellRoute _mainRoute() {
                 builder: (context, state) => MultiBlocProvider(
                   providers: [
                     BlocProvider(
-                      create: (_) => getIt<ChatBloc>(),
+                      create: (_) => getIt<QuizBloc>(),
                     ),
                   ],
                   child: QuizScreen(),
