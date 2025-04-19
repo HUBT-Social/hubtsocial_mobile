@@ -250,19 +250,19 @@ abstract class AppLocalizations {
   /// No description provided for @save_changes.
   ///
   /// In en, this message translates to:
-  /// **'save_changes'**
+  /// **'Save changes'**
   String get save_changes;
 
   /// No description provided for @edit_profile.
   ///
   /// In en, this message translates to:
-  /// **'edit_profile'**
+  /// **'Edit profile'**
   String get edit_profile;
 
   /// No description provided for @change_photo.
   ///
   /// In en, this message translates to:
-  /// **'change_photo'**
+  /// **'Change photo'**
   String get change_photo;
 
   /// No description provided for @about_this_profile.
@@ -612,6 +612,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Week'**
   String get calender_format_week;
+
+  /// No description provided for @the_day_before.
+  ///
+  /// In en, this message translates to:
+  /// **'The day before'**
+  String get the_day_before;
+
+  /// No description provided for @the_time_before.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours ago'**
+  String get the_time_before;
+
+  /// No description provided for @the_muniest_before.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes ago'**
+  String get the_muniest_before;
+
+  /// No description provided for @just_finished.
+  ///
+  /// In en, this message translates to:
+  /// **'Just finished'**
+  String get just_finished;
+
+  /// No description provided for @all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
+  /// No description provided for @unread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get unread;
+
+  /// No description provided for @system.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get system;
+
+  /// No description provided for @messages.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get messages;
+
+  /// No description provided for @groups.
+  ///
+  /// In en, this message translates to:
+  /// **'Groups'**
+  String get groups;
+
+  /// No description provided for @schedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule'**
+  String get schedule;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

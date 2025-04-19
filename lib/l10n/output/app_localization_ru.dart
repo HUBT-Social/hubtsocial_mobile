@@ -272,4 +272,34 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get calender_format_week => 'Неделя';
+
+  @override
+  String get the_day_before => 'день назад';
+
+  @override
+  String get the_time_before => 'час назад';
+
+  @override
+  String get the_muniest_before => 'минуту назад';
+
+  @override
+  String get just_finished => 'Только что завершено';
+
+  @override
+  String get all => 'Все';
+
+  @override
+  String get unread => 'Непрочитанные';
+
+  @override
+  String get system => 'Система';
+
+  @override
+  String get messages => 'Сообщения';
+
+  @override
+  String get groups => 'Группы';
+
+  @override
+  String get schedule => 'Расписание';
 }

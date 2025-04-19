@@ -83,13 +83,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get email => 'Email';
 
   @override
-  String get save_changes => 'save_changes';
+  String get save_changes => 'Save changes';
 
   @override
-  String get edit_profile => 'edit_profile';
+  String get edit_profile => 'Edit profile';
 
   @override
-  String get change_photo => 'change_photo';
+  String get change_photo => 'Change photo';
 
   @override
   String get about_this_profile => 'About this profile';
@@ -272,4 +272,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calender_format_week => 'Week';
+
+  @override
+  String get the_day_before => 'The day before';
+
+  @override
+  String get the_time_before => 'Hours ago';
+
+  @override
+  String get the_muniest_before => 'Minutes ago';
+
+  @override
+  String get just_finished => 'Just finished';
+
+  @override
+  String get all => 'All';
+
+  @override
+  String get unread => 'Unread';
+
+  @override
+  String get system => 'System';
+
+  @override
+  String get messages => 'Messages';
+
+  @override
+  String get groups => 'Groups';
+
+  @override
+  String get schedule => 'Schedule';
 }

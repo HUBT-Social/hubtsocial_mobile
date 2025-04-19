@@ -272,4 +272,34 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get calender_format_week => '週';
+
+  @override
+  String get the_day_before => '前日';
+
+  @override
+  String get the_time_before => '数時間前';
+
+  @override
+  String get the_muniest_before => '数分前';
+
+  @override
+  String get just_finished => 'ちょうど終わった';
+
+  @override
+  String get all => 'すべて';
+
+  @override
+  String get unread => '未読';
+
+  @override
+  String get system => 'システム';
+
+  @override
+  String get messages => 'メッセージ';
+
+  @override
+  String get groups => 'グループ';
+
+  @override
+  String get schedule => 'スケジュール';
 }

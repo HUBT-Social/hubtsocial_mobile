@@ -134,7 +134,7 @@ class _NotificationItem extends StatelessWidget {
                       ],
                       Spacer(),
                       Text(
-                        _formatTime(notification.time),
+                        _formatTime(notification.time,context),
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey[600],
@@ -174,22 +174,22 @@ class _NotificationItem extends StatelessWidget {
       ),
     );
   }
+String _formatTime(String time, BuildContext context) {
+  // Chuyển đổi chuỗi thời gian thành DateTime
+  final dateTime = DateTime.parse(time);
+  final now = DateTime.now();
+  final difference = now.difference(dateTime);
 
-  String _formatTime(String time) {
-    final dateTime = DateTime.parse(time);
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
-
-    if (difference.inDays > 0) {
-      return '${difference.inDays} ngày trước';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours} giờ trước';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} phút trước';
-    } else {
-      return 'Vừa xong';
-    }
+  if (difference.inDays > 0) {
+    return '${difference.inDays} ${context.loc.the_day_before}';
+  } else if (difference.inHours > 0) {
+    return '${difference.inHours} ${context.loc.the_time_before}';
+  } else if (difference.inMinutes > 0) {
+    return '${difference.inMinutes} ${context.loc.the_muniest_before}';
+  } else {
+    return context.loc.just_finished;
   }
+}
 }
 
 class _NotificationIcon extends StatelessWidget {
@@ -488,7 +488,7 @@ class _NotificationsState extends State<NotificationsScreen> {
                                     ],
                                     SizedBox(height: 2),
                                     Text(
-                                      _formatTime(notification.time),
+                                      _formatTime(notification.time,context),
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.grey[500],
@@ -568,12 +568,13 @@ class _NotificationsState extends State<NotificationsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Lọc thông báo'),
+        title: Text('lọc thông báo'),
+        contentPadding: EdgeInsets.all(16),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             _FilterOption(
-              title: 'Tất cả',
+              title: context.loc.all,
               icon: Icons.all_inbox,
               isSelected: _selectedFilter == 'all',
               onTap: () {
@@ -582,7 +583,7 @@ class _NotificationsState extends State<NotificationsScreen> {
               },
             ),
             _FilterOption(
-              title: 'Chưa đọc',
+              title: context.loc.unread,
               icon: Icons.mark_email_unread,
               isSelected: _selectedFilter == 'unread',
               onTap: () {
@@ -591,7 +592,7 @@ class _NotificationsState extends State<NotificationsScreen> {
               },
             ),
             _FilterOption(
-              title: 'Hệ thống',
+              title: context.loc.system,
               icon: Icons.campaign,
               isSelected: _selectedFilter == 'system',
               onTap: () {
@@ -600,7 +601,7 @@ class _NotificationsState extends State<NotificationsScreen> {
               },
             ),
             _FilterOption(
-              title: 'Tin nhắn',
+              title: context.loc.chat,
               icon: Icons.chat_bubble,
               isSelected: _selectedFilter == 'chat',
               onTap: () {
@@ -609,7 +610,7 @@ class _NotificationsState extends State<NotificationsScreen> {
               },
             ),
             _FilterOption(
-              title: 'Nhóm',
+              title: context.loc.groups,
               icon: Icons.group,
               isSelected: _selectedFilter == 'group',
               onTap: () {
@@ -618,7 +619,7 @@ class _NotificationsState extends State<NotificationsScreen> {
               },
             ),
             _FilterOption(
-              title: 'Lịch học',
+              title: context.loc.schedule,
               icon: Icons.schedule,
               isSelected: _selectedFilter == 'schedule',
               onTap: () {
@@ -649,21 +650,22 @@ class _NotificationsState extends State<NotificationsScreen> {
     );
   }
 
-  String _formatTime(String time) {
-    final dateTime = DateTime.parse(time);
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
+ String _formatTime(String time, BuildContext context) {
+  // Chuyển đổi chuỗi thời gian thành DateTime
+  final dateTime = DateTime.parse(time);
+  final now = DateTime.now();
+  final difference = now.difference(dateTime);
 
-    if (difference.inDays > 0) {
-      return '${difference.inDays} ngày trước';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours} giờ trước';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} phút trước';
-    } else {
-      return 'Vừa xong';
-    }
+  if (difference.inDays > 0) {
+    return '${difference.inDays} ${context.loc.the_day_before}';
+  } else if (difference.inHours > 0) {
+    return '${difference.inHours} ${context.loc.the_time_before}';
+  } else if (difference.inMinutes > 0) {
+    return '${difference.inMinutes} ${context.loc.the_muniest_before}';
+  } else {
+    return context.loc.just_finished;
   }
+}
 }
 
 class NotificationDetailScreen extends StatelessWidget {
@@ -736,7 +738,7 @@ class NotificationDetailScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            _formatTime(notification.time),
+                            _formatTime(notification.time,context),
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey[600],
@@ -834,19 +836,20 @@ class NotificationDetailScreen extends StatelessWidget {
     );
   }
 
-  String _formatTime(String time) {
-    final dateTime = DateTime.parse(time);
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
+  String _formatTime(String time, BuildContext context) {
+  // Chuyển đổi chuỗi thời gian thành DateTime
+  final dateTime = DateTime.parse(time);
+  final now = DateTime.now();
+  final difference = now.difference(dateTime);
 
-    if (difference.inDays > 0) {
-      return '${difference.inDays} ngày trước';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours} giờ trước';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} phút trước';
-    } else {
-      return 'Vừa xong';
-    }
+  if (difference.inDays > 0) {
+    return '${difference.inDays} ${context.loc.the_day_before}';
+  } else if (difference.inHours > 0) {
+    return '${difference.inHours} ${context.loc.the_time_before}';
+  } else if (difference.inMinutes > 0) {
+    return '${difference.inMinutes} ${context.loc.the_muniest_before}';
+  } else {
+    return context.loc.just_finished;
   }
+}
 }
