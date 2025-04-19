@@ -33,7 +33,7 @@ StatefulShellRoute _mainRoute() {
           ),
         ],
       ),
-
+   
       // Brach Chat
       StatefulShellBranch(
         // navigatorKey: _shellNavigatorChat,
@@ -111,6 +111,7 @@ StatefulShellRoute _mainRoute() {
                       (context, animation, secondaryAnimation, child) =>
                           FadeTransition(opacity: animation, child: child),
                 ),
+                
                 routes: [
                   GoRoute(
                     path: 'edit',
@@ -144,6 +145,25 @@ StatefulShellRoute _mainRoute() {
                 ],
               ),
             ],
+          ),
+        ],
+      ),
+
+      /// Brach Teacher Evaluation
+      StatefulShellBranch(
+        routes: [
+          GoRoute(
+            path: AppRoute.teacherevalua.path,
+            builder: (context, state) => TeacherEvaluationScreen(),
+          ),
+        ],
+      ),
+        /// Brach Teacher Evaluation
+      StatefulShellBranch(
+        routes: [
+          GoRoute(
+            path: AppRoute.teacherCode.path,
+            builder: (context, state) =>TeacherCodeInputScreen(),
           ),
         ],
       ),

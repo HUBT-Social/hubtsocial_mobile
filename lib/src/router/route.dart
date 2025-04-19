@@ -48,6 +48,8 @@ enum AppRoute {
   aboutProfile('/menu/profile/about'),
   fullProfile('/menu/profile/fullScreen'),
   editProfile('/menu/profile/edit'),
+  teacherevalua('/menu/teacherevaluation'), 
+  teacherCode('/menu/teacherCode'),
   // menu
 
   ;

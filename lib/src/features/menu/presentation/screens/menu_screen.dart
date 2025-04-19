@@ -114,6 +114,23 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
             onTap: () {
               context.showSnackBarMessage('Tính năng đang phát triển');
+             
+              
+            },
+          ),
+          SizedBox(height: 6.h),
+            ButtonInMenu(
+            icon: Icon(
+              Icons.star_border_rounded,
+              size: 28.r,
+            ),
+            label: 'Đánh Giá Giảng Viên',
+            iconArrow: Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 16.r,
+            ),
+            onTap: () {
+              AppRoute.teacherCode.push(context);
             },
           ),
           SizedBox(height: 6.h),
