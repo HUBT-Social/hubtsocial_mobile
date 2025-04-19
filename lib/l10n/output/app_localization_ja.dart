@@ -272,4 +272,36 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get calender_format_week => '週';
+
+  @override
+  String get screen_not_found => '画面が見つかりません';
+
+  @override
+  String get screen_not_found_oh_no => 'ああ！';
+
+  @override
+  String get screen_not_found_message => '見つかりません';
+
+  @override
+  String get screen_not_found_back => '戻る';
+
+  @override
+  String question_value(int value) {
+    return '質問 $value';
+  }
+
+  @override
+  String question_count(int value) {
+    return '$value 問題';
+  }
+
+  @override
+  String duration_minutes(int value) {
+    return '$value 分';
+  }
+
+  @override
+  String credits(int value) {
+    return 'クレジット $value';
+  }
 }

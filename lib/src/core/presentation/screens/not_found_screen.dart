@@ -25,7 +25,7 @@ class _NotFoundScreenState extends State<NotFoundScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Screen not found",
+            context.loc.screen_not_found,
             style: context.textTheme.displaySmall,
           ),
           Lottie.asset(
@@ -35,11 +35,11 @@ class _NotFoundScreenState extends State<NotFoundScreen> {
             width: 360.r,
           ),
           Text(
-            "Oh no!",
+            context.loc.screen_not_found_oh_no,
             style: context.textTheme.displaySmall,
           ),
           Text(
-            "May be bigfoot has broken this page",
+            context.loc.screen_not_found_message,
             style: context.textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
@@ -57,7 +57,7 @@ class _NotFoundScreenState extends State<NotFoundScreen> {
                   AppRoute.home.go(context);
                 }
               },
-              child: Text("Go Home"))
+              child: Text(context.loc.screen_not_found_back))
         ],
       )),
     );

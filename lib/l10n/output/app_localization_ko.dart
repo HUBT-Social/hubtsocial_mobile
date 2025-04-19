@@ -272,4 +272,36 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get calender_format_week => '주';
+
+  @override
+  String get screen_not_found => '화면을 찾을 수 없습니다';
+
+  @override
+  String get screen_not_found_oh_no => '오, 안돼!';
+
+  @override
+  String get screen_not_found_message => '찾을 수 없습니다';
+
+  @override
+  String get screen_not_found_back => '뒤로';
+
+  @override
+  String question_value(int value) {
+    return '질문 $value';
+  }
+
+  @override
+  String question_count(int value) {
+    return '$value 문제';
+  }
+
+  @override
+  String duration_minutes(int value) {
+    return '$value 분';
+  }
+
+  @override
+  String credits(int value) {
+    return '크레딧 $value';
+  }
 }

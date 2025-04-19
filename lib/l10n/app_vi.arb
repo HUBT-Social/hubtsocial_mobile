@@ -199,5 +199,45 @@
   "calender_format_2_week": "2 Tuần",
   "@calender_format_2_week": {},
   "calender_format_week": "Tuần",
-  "@calender_format_week": {}
+  "@calender_format_week": {},
+  "screen_not_found": "Không tìm thấy",
+  "@screen_not_found": {},
+  "screen_not_found_oh_no": "Ôi không!",
+  "@screen_not_found_oh_no": {},
+  "screen_not_found_message": "Không tìm thấy",
+  "@screen_not_found_message": {},
+  "screen_not_found_back": "Quay lại",
+  "@screen_not_found_back": {},
+  "question_value": "Câu hỏi {value}",
+  "@question_value": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "question_count": "{value} câu hỏi",
+  "@question_count": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "duration_minutes": "{value} phút",
+  "@duration_minutes": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "credits": "{value} tín chỉ",
+  "@credits": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  }
 }

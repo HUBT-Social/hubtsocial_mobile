@@ -272,4 +272,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calender_format_week => 'Week';
+
+  @override
+  String get screen_not_found => 'Screen not found';
+
+  @override
+  String get screen_not_found_oh_no => 'Oh no!';
+
+  @override
+  String get screen_not_found_message => 'May be bigfoot has broken this page';
+
+  @override
+  String get screen_not_found_back => 'Back';
+
+  @override
+  String question_value(int value) {
+    return 'Question $value';
+  }
+
+  @override
+  String question_count(int value) {
+    return '$value questions';
+  }
+
+  @override
+  String duration_minutes(int value) {
+    return '$value minutes';
+  }
+
+  @override
+  String credits(int value) {
+    return 'Credits $value';
+  }
 }

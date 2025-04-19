@@ -2,14 +2,12 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_ce_flutter/adapters.dart';
-import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../constants/end_point.dart';
 import '../../../../core/api/errors/exceptions.dart';
 import '../../../../core/logger/logger.dart';
-import '../../../auth/domain/entities/user_token.dart';
 import '../models/quiz_response_model.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 abstract class QuizRemoteDataSource {
   const QuizRemoteDataSource();
@@ -32,44 +30,31 @@ class QuizRemoteDataSourceImpl implements QuizRemoteDataSource {
 
   @override
   Future<List<QuizResponseModel>> fetchQuiz({required int page}) async {
+    const int limit = 10;
     try {
-      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
+      final String jsonString =
+          await rootBundle.loadString('assets/data/quiz/quiz.json');
+      final List<dynamic> jsonList = json.decode(jsonString);
 
-      final response = await APIRequest.get(
-        url: EndPoint.apiUrl,
-        token: userToken.accessToken,
-        queryParameters: {
-          'page': page.toString(),
-          'limit': '10',
-        },
+      final int startIndex = (page - 1) * limit;
+      final int endIndex = startIndex + limit;
+
+      if (startIndex >= jsonList.length) return [];
+
+      final pageItems = jsonList.sublist(
+        startIndex,
+        endIndex > jsonList.length ? jsonList.length : endIndex,
       );
 
-      if (response.statusCode != 200) {
-        logger.e(
-            'Failed to Fetch Quiz: statusCode: ${response.statusCode}: ${response.body.toString()}');
-        throw ServerException(
-          message: response.body.toString(),
-          statusCode: response.statusCode.toString(),
-        );
-      }
-
-      final List newItems = json.decode(response.body);
-
-      List<QuizResponseModel> items = [];
-
-      items.addAll(newItems.map<QuizResponseModel>((item) {
-        return QuizResponseModel.fromJson(item);
-      }).toList());
-
-      return items;
-    } on ServerException {
-      rethrow;
+      return pageItems
+          .map<QuizResponseModel>((item) => QuizResponseModel.fromJson(item))
+          .toList();
     } catch (e, s) {
-      logger.e(e.toString());
+      logger.e('Error reading paginated local JSON: $e');
       logger.d(s.toString());
       throw const ServerException(
-        message: 'Failed to verify OTP password. Please try again later.',
-        statusCode: '505',
+        message: 'Failed to read paginated local quiz data.',
+        statusCode: '500',
       );
     }
   }

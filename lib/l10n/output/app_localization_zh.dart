@@ -272,4 +272,36 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get calender_format_week => '星期';
+
+  @override
+  String get screen_not_found => '未找到屏幕';
+
+  @override
+  String get screen_not_found_oh_no => '哦不！';
+
+  @override
+  String get screen_not_found_message => '未找到';
+
+  @override
+  String get screen_not_found_back => '返回';
+
+  @override
+  String question_value(int value) {
+    return '问题 $value';
+  }
+
+  @override
+  String question_count(int value) {
+    return '$value 个问题';
+  }
+
+  @override
+  String duration_minutes(int value) {
+    return '$value 分钟';
+  }
+
+  @override
+  String credits(int value) {
+    return '积分 $value';
+  }
 }

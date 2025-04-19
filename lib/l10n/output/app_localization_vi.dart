@@ -272,4 +272,36 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get calender_format_week => 'Tuần';
+
+  @override
+  String get screen_not_found => 'Không tìm thấy';
+
+  @override
+  String get screen_not_found_oh_no => 'Ôi không!';
+
+  @override
+  String get screen_not_found_message => 'Không tìm thấy';
+
+  @override
+  String get screen_not_found_back => 'Quay lại';
+
+  @override
+  String question_value(int value) {
+    return 'Câu hỏi $value';
+  }
+
+  @override
+  String question_count(int value) {
+    return '$value câu hỏi';
+  }
+
+  @override
+  String duration_minutes(int value) {
+    return '$value phút';
+  }
+
+  @override
+  String credits(int value) {
+    return '$value tín chỉ';
+  }
 }

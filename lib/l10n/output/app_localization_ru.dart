@@ -272,4 +272,36 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get calender_format_week => 'Неделя';
+
+  @override
+  String get screen_not_found => 'Экран не найден';
+
+  @override
+  String get screen_not_found_oh_no => 'Oй нет!';
+
+  @override
+  String get screen_not_found_message => 'Не найдено';
+
+  @override
+  String get screen_not_found_back => 'Назад';
+
+  @override
+  String question_value(int value) {
+    return 'Вопрос $value';
+  }
+
+  @override
+  String question_count(int value) {
+    return '$value вопросов';
+  }
+
+  @override
+  String duration_minutes(int value) {
+    return '$value минут';
+  }
+
+  @override
+  String credits(int value) {
+    return 'Кредиты $value';
+  }
 }

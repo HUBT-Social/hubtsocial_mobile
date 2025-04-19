@@ -199,5 +199,45 @@
   "calender_format_2_week": "2 주",
   "@calender_format_2_week": {},
   "calender_format_week": "주",
-  "@calender_format_week": {}
+  "@calender_format_week": {},
+  "screen_not_found": "화면을 찾을 수 없습니다",
+  "@screen_not_found": {},
+  "screen_not_found_oh_no": "오, 안돼!",
+  "@screen_not_found_oh_no": {},
+  "screen_not_found_message": "찾을 수 없습니다",
+  "@screen_not_found_message": {},
+  "screen_not_found_back": "뒤로",
+  "@screen_not_found_back": {},
+  "question_value": "질문 {value}",
+  "@question_value": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "question_count": "{value} 문제",
+  "@question_count": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "duration_minutes": "{value} 분",
+  "@duration_minutes": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "credits": "크레딧 {value}",
+  "@credits": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  }
 }

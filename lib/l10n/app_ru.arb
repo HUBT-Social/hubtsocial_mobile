@@ -199,5 +199,45 @@
   "calender_format_2_week": "2 недели",
   "@calender_format_2_week": {},
   "calender_format_week": "Неделя",
-  "@calender_format_week": {}
+  "@calender_format_week": {},
+  "screen_not_found": "Экран не найден",
+  "@screen_not_found": {},
+  "screen_not_found_oh_no": "Oй нет!",
+  "@screen_not_found_oh_no": {},
+  "screen_not_found_message": "Не найдено",
+  "@screen_not_found_message": {},
+  "screen_not_found_back": "Назад",
+  "@screen_not_found_back": {},
+  "question_value": "Вопрос {value}",
+  "@question_value": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "question_count": "{value} вопросов",
+  "@question_count": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "duration_minutes": "{value} минут",
+  "@duration_minutes": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "credits": "Кредиты {value}",
+  "@credits": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  }
 }

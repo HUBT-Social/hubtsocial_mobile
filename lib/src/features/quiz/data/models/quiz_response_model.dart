@@ -2,64 +2,71 @@ import 'package:equatable/equatable.dart';
 
 class QuizResponseModel extends Equatable {
   const QuizResponseModel({
-    required this.lastMessage,
-    required this.lastInteractionTime,
     required this.id,
-    required this.avatarUrl,
-    required this.groupName,
+    required this.title,
+    required this.questionCount,
+    required this.durationMinutes,
+    required this.major,
+    required this.credits,
   });
 
-  final String? lastMessage;
-  final String? lastInteractionTime;
   final String id;
-  final String avatarUrl;
-  final String groupName;
+  final String? title;
+  final int? questionCount;
+  final int? durationMinutes;
+  final String? major;
+  final int? credits;
 
   QuizResponseModel copyWith({
-    String? lastMessage,
-    String? lastInteractionTime,
-    String? id,
-    String? avatarUrl,
-    String? groupName,
+    required String id,
+    String? title,
+    int? questionCount,
+    int? durationMinutes,
+    String? major,
+    int? credits,
   }) {
     return QuizResponseModel(
-      lastMessage: lastMessage ?? this.lastMessage,
-      lastInteractionTime: lastInteractionTime ?? this.lastInteractionTime,
-      id: id ?? this.id,
-      avatarUrl: avatarUrl ?? this.avatarUrl,
-      groupName: groupName ?? this.groupName,
+      id: id,
+      title: title ?? this.title,
+      questionCount: questionCount ?? this.questionCount,
+      durationMinutes: durationMinutes ?? this.durationMinutes,
+      major: major ?? this.major,
+      credits: credits ?? this.credits,
     );
   }
 
   factory QuizResponseModel.fromJson(Map<String, dynamic> json) {
     return QuizResponseModel(
-      lastMessage: json["lastMessage"],
-      lastInteractionTime: json["lastInteractionTime"],
       id: json["id"],
-      avatarUrl: json["avatarUrl"],
-      groupName: json["groupName"],
+      title: json["title"],
+      questionCount: json["questionCount"],
+      durationMinutes: json["durationMinutes"],
+      major: json["major"],
+      credits: json["credits"],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        "lastMessage": lastMessage,
-        "lastInteractionTime": lastInteractionTime,
         "id": id,
-        "avatarUrl": avatarUrl,
-        "groupName": groupName,
+        "title": title,
+        "questionCount": questionCount,
+        "durationMinutes": durationMinutes,
+        "major": major,
+        "credits": credits,
       };
 
   @override
   String toString() {
-    return "$lastMessage, $lastInteractionTime, $id, $avatarUrl, $groupName, ";
+    return "$id, $title, $questionCount, $durationMinutes, $major, $credits ";
   }
 
   @override
   List<Object?> get props => [
-        lastMessage,
-        lastInteractionTime,
         id,
-        avatarUrl,
-        groupName,
+        title,
+        questionCount,
+        durationMinutes,
+        major,
+        credits,
       ];
 }

@@ -612,6 +612,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Week'**
   String get calender_format_week;
+
+  /// No description provided for @screen_not_found.
+  ///
+  /// In en, this message translates to:
+  /// **'Screen not found'**
+  String get screen_not_found;
+
+  /// No description provided for @screen_not_found_oh_no.
+  ///
+  /// In en, this message translates to:
+  /// **'Oh no!'**
+  String get screen_not_found_oh_no;
+
+  /// No description provided for @screen_not_found_message.
+  ///
+  /// In en, this message translates to:
+  /// **'May be bigfoot has broken this page'**
+  String get screen_not_found_message;
+
+  /// No description provided for @screen_not_found_back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get screen_not_found_back;
+
+  /// No description provided for @question_value.
+  ///
+  /// In en, this message translates to:
+  /// **'Question {value}'**
+  String question_value(int value);
+
+  /// No description provided for @question_count.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} questions'**
+  String question_count(int value);
+
+  /// No description provided for @duration_minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} minutes'**
+  String duration_minutes(int value);
+
+  /// No description provided for @credits.
+  ///
+  /// In en, this message translates to:
+  /// **'Credits {value}'**
+  String credits(int value);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

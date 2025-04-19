@@ -199,5 +199,45 @@
   "calender_format_2_week": "2週間",
   "@calender_format_2_week": {},
   "calender_format_week": "週",
-  "@calender_format_week": {}
+  "@calender_format_week": {},
+  "screen_not_found": "画面が見つかりません",
+  "@screen_not_found": {},
+  "screen_not_found_oh_no": "ああ！",
+  "@screen_not_found_oh_no": {},
+  "screen_not_found_message": "見つかりません",
+  "@screen_not_found_message": {},
+  "screen_not_found_back": "戻る",
+  "@screen_not_found_back": {},
+  "question_value": "質問 {value}",
+  "@question_value": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "question_count": "{value} 問題",
+  "@question_count": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "duration_minutes": "{value} 分",
+  "@duration_minutes": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "credits": "クレジット {value}",
+  "@credits": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -32,16 +32,28 @@ StatefulShellRoute _mainRoute() {
             builder: (context, state) => const HomeScreen(),
             routes: [
               GoRoute(
-                path: 'quiz',
-                builder: (context, state) => MultiBlocProvider(
-                  providers: [
-                    BlocProvider(
-                      create: (_) => getIt<QuizBloc>(),
+                  path: 'quiz',
+                  builder: (context, state) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (_) => getIt<QuizBloc>(),
+                          ),
+                        ],
+                        child: QuizScreen(),
+                      ),
+                  routes: [
+                    GoRoute(
+                      path: 'info',
+                      builder: (context, state) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (_) => getIt<QuizBloc>(),
+                          ),
+                        ],
+                        child: QuizScreen(),
+                      ),
                     ),
-                  ],
-                  child: QuizScreen(),
-                ),
-              ),
+                  ]),
             ],
           ),
         ],
