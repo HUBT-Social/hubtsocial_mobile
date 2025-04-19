@@ -114,61 +114,55 @@ class _ProfileScreenState extends State<ProfileScreen>
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            InkWell(
-                              borderRadius: BorderRadius.circular(12),
-                              onTap: () =>
-                                  AboutProfileUtils.showAboutProfileBottomSheet(
-                                      navigatorKey.currentContext ?? context),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 6),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              InkWell(
+                                borderRadius: BorderRadius.circular(12),
+                                onTap: () => AboutProfileUtils.showAboutProfileBottomSheet(
+                                    navigatorKey.currentContext ?? context),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 6),
+                                  child: Row(
+                                    children: [
+                                      Flexible(
+                                        child: Text(
                                           user!.fullname,
-                                          style:
-                                              context.textTheme.headlineMedium,
+                                          style: context.textTheme.headlineMedium?.copyWith(
+                                            fontSize: (context.textTheme.headlineMedium?.fontSize ?? 16) - 4,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
                                         ),
-                                      ],
-                                    ),
-                                  ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 4),
-                            Padding(
-                              padding: EdgeInsets.only(left: 18),
-                              child: Text(
-                                '@${user.userName}',
+                              SizedBox(height: 6),
+                              Padding(
+                                padding: EdgeInsets.only(left: 18),
+                                child: Text(
+                                  '@${user.userName}',
+                                  style: context.textTheme.labelLarge?.copyWith(
+                                    color: context.colorScheme.onSurfaceVariant,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                'status...', // Temporary static text
                                 style: context.textTheme.labelLarge?.copyWith(
-                                  color: context.colorScheme.onSurfaceVariant,
+                                  color: context.colorScheme.onSurface,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 8),
-                            // TODO: Implement status feature when User model is updated
-                            // ProfileStatus(
-                            //   status: user?.status ?? '',
-                            //   onTap: () {
-                            //     debugPrint('Tap on status');
-                            //   },
-                            // ),
-                            Text(
-                              'status...', // Temporary static text
-                              style: context.textTheme.labelLarge?.copyWith(
-                                color: context.colorScheme.onSurface,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
+                        SizedBox(width: 8),
                         GestureDetector(
                           onTap: () {
                             if (user.avatarUrl.isNotEmpty) {

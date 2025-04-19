@@ -9,6 +9,7 @@ import 'package:hubtsocial_mobile/src/features/menu/presentation/widgets/button_
 import 'package:hubtsocial_mobile/src/features/menu/presentation/widgets/line_in_menu.dart';
 
 import 'package:hubtsocial_mobile/src/features/menu/presentation/widgets/user_card_in_menu.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
 
 import '../../../../core/localization/utils/change_language_bottom_sheet.dart';
 import '../../../../router/router.import.dart';
@@ -93,7 +94,10 @@ class _MenuScreenState extends State<MenuScreen> {
               size: 16.r,
             ),
             onTap: () {
-              context.showSnackBarMessage('Tính năng đang phát triển');
+            //  context.showSnackBarMessage('Tính năng đang phát triển')
+            // ;
+           AppRoute.setNewPassword.push(context); 
+           
             },
           ),
           SizedBox(height: 6.h),
@@ -109,6 +113,23 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
             onTap: () {
               context.showSnackBarMessage('Tính năng đang phát triển');
+             
+              
+            },
+          ),
+          SizedBox(height: 6.h),
+            ButtonInMenu(
+            icon: Icon(
+              Icons.star_border_rounded,
+              size: 28.r,
+            ),
+            label: 'Đánh Giá Giảng Viên',
+            iconArrow: Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 16.r,
+            ),
+            onTap: () {
+              AppRoute.teacherCode.push(context);
             },
           ),
           SizedBox(height: 6.h),

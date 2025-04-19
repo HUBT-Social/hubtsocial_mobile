@@ -192,7 +192,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get notifications => 'Thông báo';
 
   @override
-  String get markAllAsRead => 'Đánh dấu đã đọc';
+  String get markAllAsRead => 'Đánh dấu tất cả là đã đọc';
 
   @override
   String get noNotifications => 'Không có thông báo nào';
@@ -272,6 +272,36 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get calender_format_week => 'Tuần';
+
+  @override
+  String get the_day_before => 'ngày trước';
+
+  @override
+  String get the_time_before => 'giờ trước';
+
+  @override
+  String get the_muniest_before => 'phút trước';
+
+  @override
+  String get just_finished => 'Vừa xong';
+
+  @override
+  String get all => 'Tất cả';
+
+  @override
+  String get unread => 'Chưa đọc';
+
+  @override
+  String get system => 'Hệ thống';
+
+  @override
+  String get messages => 'Tin nhắn';
+
+  @override
+  String get groups => 'Nhóm';
+
+  @override
+  String get schedule => 'Lịch học';
 
   @override
   String get screen_not_found => 'Không tìm thấy';

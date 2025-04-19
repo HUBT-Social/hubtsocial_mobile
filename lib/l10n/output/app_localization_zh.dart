@@ -192,7 +192,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get notifications => '通知';
 
   @override
-  String get markAllAsRead => '全部标记为已读';
+  String get markAllAsRead => '标记全部为已读';
 
   @override
   String get noNotifications => '没有通知';
@@ -272,6 +272,36 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get calender_format_week => '星期';
+
+  @override
+  String get the_day_before => '前一天';
+
+  @override
+  String get the_time_before => '几小时前';
+
+  @override
+  String get the_muniest_before => '几分钟前';
+
+  @override
+  String get just_finished => '刚刚结束';
+
+  @override
+  String get all => '全部';
+
+  @override
+  String get unread => '未读';
+
+  @override
+  String get system => '系统';
+
+  @override
+  String get messages => '消息';
+
+  @override
+  String get groups => '群组';
+
+  @override
+  String get schedule => '日程';
 
   @override
   String get screen_not_found => '未找到屏幕';

@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/chat_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/receive_chat/receive_chat_cubit.dart';
+import 'package:hubtsocial_mobile/src/features/menu/presentation/screens/teacher_screen.dart';
+import 'package:hubtsocial_mobile/src/features/menu/presentation/screens/teachercode_screen.dart';
 import 'package:hubtsocial_mobile/src/features/profile/screens/edit_profile_screens.dart';
 import 'package:hubtsocial_mobile/src/features/profile/screens/full_screens.dart';
 import 'package:hubtsocial_mobile/src/features/profile/screens/profile_screen.dart';

@@ -274,6 +274,36 @@ class AppLocalizationsKo extends AppLocalizations {
   String get calender_format_week => '주';
 
   @override
+  String get the_day_before => '하루 전';
+
+  @override
+  String get the_time_before => '몇 시간 전';
+
+  @override
+  String get the_muniest_before => '몇 분 전';
+
+  @override
+  String get just_finished => '방금 끝났습니다';
+
+  @override
+  String get all => '모두';
+
+  @override
+  String get unread => '읽지 않음';
+
+  @override
+  String get system => '시스템';
+
+  @override
+  String get messages => '메시지';
+
+  @override
+  String get groups => '그룹';
+
+  @override
+  String get schedule => '일정';
+
+  @override
   String get screen_not_found => '화면을 찾을 수 없습니다';
 
   @override
