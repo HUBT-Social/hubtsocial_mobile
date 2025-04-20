@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/constants/assets.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/features/menu/presentation/widgets/line_in_menu.dart';
 import 'package:hubtsocial_mobile/src/features/quiz/data/models/question_model.dart';
 import 'package:hubtsocial_mobile/src/features/quiz/data/models/quiz_response_model.dart';
+import 'package:hubtsocial_mobile/src/features/quiz/presentation/widgets/quiz_info_question.dart';
 
 import '../bloc/quiz_info_bloc.dart';
 
@@ -22,8 +24,8 @@ class QuizInfoScreen extends StatefulWidget {
 class _QuizInfoScreenState extends State<QuizInfoScreen> {
   @override
   void initState() {
-    context.read<QuizInfoBloc>().add(GetQuizInfoEvent(id: widget.id));
     super.initState();
+    context.read<QuizInfoBloc>().add(GetQuizInfoEvent(id: widget.id));
   }
 
   @override
@@ -51,30 +53,30 @@ class _QuizInfoScreenState extends State<QuizInfoScreen> {
               slivers: [
                 SliverToBoxAdapter(
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    padding: EdgeInsets.symmetric(horizontal: 8.w),
                     margin: EdgeInsets.symmetric(horizontal: 6.w),
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: context.colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(12.r),
+                      color: context.colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(24.r),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
-                          child: Container(
-                            margin: EdgeInsets.only(top: 12.h),
-                            height: 200.h,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8.r),
+                            child: ClipRRect(
                               borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(12.r),
-                                topRight: Radius.circular(12.r),
+                                topLeft: Radius.circular(16.r),
+                                topRight: Radius.circular(16.r),
                               ),
-                            ),
-                            child: Image.asset(
-                              Assets.startedBg,
-                              fit: BoxFit.cover,
+                              child: Image.asset(
+                                Assets.startedBg,
+                                fit: BoxFit.cover,
+                                height: 200.h,
+                                width: double.infinity,
+                              ),
                             ),
                           ),
                         ),
@@ -85,11 +87,22 @@ class _QuizInfoScreenState extends State<QuizInfoScreen> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        Text(
-                          state.quizInfo.description ?? "",
-                          style: context.textTheme.bodyMedium?.copyWith(
-                            color: context.colorScheme.onSurface,
+                        if (state.quizInfo.description != null)
+                          Text(
+                            state.quizInfo.description ?? "",
+                            style: context.textTheme.bodyMedium?.copyWith(
+                              color: context.colorScheme.onSurface,
+                            ),
                           ),
+                        SizedBox(height: 12.h),
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: true,
+                              onChanged: (value) {},
+                            ),
+                            Text("Đảo câu hỏi"),
+                          ],
                         ),
                         Row(
                           children: [
@@ -97,12 +110,14 @@ class _QuizInfoScreenState extends State<QuizInfoScreen> {
                               value: true,
                               onChanged: (value) {},
                             ),
-                            Text("data"),
+                            Text("Đảo câu trả lời"),
                           ],
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(
-                              vertical: 20.h, horizontal: 12.w),
+                            vertical: 12.h,
+                            horizontal: 12.w,
+                          ),
                           child: FilledButton(
                             onPressed: () {},
                             child: Text("Bắt đầu"),
@@ -142,62 +157,6 @@ class _QuizInfoScreenState extends State<QuizInfoScreen> {
           }
           return const Center();
         },
-      ),
-    );
-  }
-}
-
-class QuizInfoQuestion extends StatefulWidget {
-  const QuizInfoQuestion({
-    super.key,
-    required this.index,
-    required this.item,
-  });
-  final int index;
-  final QuestionModel item;
-
-  @override
-  State<QuizInfoQuestion> createState() => _QuizInfoQuestionState();
-}
-
-class _QuizInfoQuestionState extends State<QuizInfoQuestion> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(12.r),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              "${context.loc.question_value(widget.index + 1)}: ${widget.item.title}",
-              style: context.textTheme.bodyMedium,
-            ),
-          ),
-          // widget.item.answers.map(
-          //   (e) {
-          //     return Text("data");
-          //   },
-          // ),
-
-          // SizedBox(
-          //   height: 300,
-          //   child: ListView.builder(
-          //     itemCount: widget.item.answers.length,
-          //     itemBuilder: (context, index) =>
-          //         Text(widget.item.answers[index].content.toString()),
-          //   ),
-          // ),
-
-          // Container()..
-
-          IntrinsicHeight(
-            child: ListView.builder(
-              itemCount: widget.item.answers.length,
-              itemBuilder: (context, index) =>
-                  Text(widget.item.answers[index].content.toString()),
-            ),
-          )
-        ],
       ),
     );
   }
