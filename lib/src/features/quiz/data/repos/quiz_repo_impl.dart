@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
+import 'package:hubtsocial_mobile/src/features/quiz/data/models/quiz_info_response_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/api/errors/exceptions.dart';
@@ -23,6 +24,18 @@ class QuizRepoImpl implements QuizRepo {
         page: page,
       );
 
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
+
+  @override
+  ResultFuture<QuizInfoResponseModel> getQuiz({required String id}) async {
+    try {
+      final result = await _remoteDataSource.getQuiz(
+        id: id,
+      );
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message, statusCode: e.statusCode));

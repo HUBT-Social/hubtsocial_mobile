@@ -54,85 +54,81 @@ class _QuizScreenState extends State<QuizScreen> {
         ),
         actions: [],
       ),
-      body: SafeArea(
-        bottom: false,
-        child: BlocConsumer<QuizBloc, QuizState>(
-          listener: (_, state) async {
-            if (state is QuizError) {
-              _pagingController.error = state.message;
-            } else if (state is FetchQuizSuccess) {
-              if (state.listQuiz.isEmpty) {
-                _pagingController.error = "items isEmpty";
-              } else {
-                pageKey++;
-                _pagingController.appendPage(state.listQuiz, pageKey);
-              }
+      body: BlocConsumer<QuizBloc, QuizState>(
+        listener: (_, state) async {
+          if (state is QuizError) {
+            _pagingController.error = state.message;
+          } else if (state is FetchQuizSuccess) {
+            if (state.listQuiz.isEmpty) {
+              _pagingController.error = "items isEmpty";
+            } else {
+              pageKey++;
+              _pagingController.appendPage(state.listQuiz, pageKey);
             }
-          },
-          builder: (context, state) {
-            return RefreshIndicator(
-              onRefresh: () => Future.sync(() => _pagingController.refresh()),
-              child: CustomScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                slivers: [
-                  PagedSliverList(
-                    pagingController: _pagingController,
-                    builderDelegate:
-                        PagedChildBuilderDelegate<QuizResponseModel>(
-                      firstPageErrorIndicatorBuilder: (context) => Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 32,
-                            horizontal: 16,
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                context.loc.no_messages,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
-                              SizedBox(
-                                height: 16.h,
-                              ),
-                              Text(
-                                context.loc.click_to_try_again,
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(
-                                height: 48.h,
-                              ),
-                              SizedBox(
-                                width: 200.w,
-                                child: ElevatedButton.icon(
-                                  onPressed:
-                                      _pagingController.retryLastFailedRequest,
-                                  icon: const Icon(Icons.refresh),
-                                  label: Text(
-                                    context.loc.try_again,
-                                  ),
+          }
+        },
+        builder: (context, state) {
+          return RefreshIndicator(
+            onRefresh: () => Future.sync(() => _pagingController.refresh()),
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                PagedSliverList(
+                  pagingController: _pagingController,
+                  builderDelegate: PagedChildBuilderDelegate<QuizResponseModel>(
+                    firstPageErrorIndicatorBuilder: (context) => Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 32,
+                          horizontal: 16,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              context.loc.no_messages,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            SizedBox(
+                              height: 16.h,
+                            ),
+                            Text(
+                              context.loc.click_to_try_again,
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 48.h,
+                            ),
+                            SizedBox(
+                              width: 200.w,
+                              child: ElevatedButton.icon(
+                                onPressed:
+                                    _pagingController.retryLastFailedRequest,
+                                icon: const Icon(Icons.refresh),
+                                label: Text(
+                                  context.loc.try_again,
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                      animateTransitions: true,
-                      transitionDuration: const Duration(milliseconds: 500),
-                      itemBuilder: (context, item, index) => QuizCard(
-                        item: item,
-                      ),
+                    ),
+                    animateTransitions: true,
+                    transitionDuration: const Duration(milliseconds: 500),
+                    itemBuilder: (context, item, index) => QuizCard(
+                      item: item,
                     ),
                   ),
-                  SliverToBoxAdapter(
-                    child: SizedBox(height: 100.h),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: 100.h),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

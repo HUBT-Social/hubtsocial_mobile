@@ -25,10 +25,6 @@ class QuizFailure extends QuizState {
   const QuizFailure();
 }
 
-class QuizSuccess extends QuizState {
-  const QuizSuccess();
-}
-
 class QuizError extends QuizState {
   const QuizError(this.message);
 

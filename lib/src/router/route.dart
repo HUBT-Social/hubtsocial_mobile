@@ -50,7 +50,7 @@ enum AppRoute {
   aboutProfile('/menu/profile/about'),
   fullProfile('/menu/profile/fullScreen'),
   editProfile('/menu/profile/edit'),
-  teacherevalua('/menu/teacherevaluation'), 
+  teacherevalua('/menu/teacherevaluation'),
   teacherCode('/menu/teacherCode'),
   // menu
 
@@ -63,7 +63,6 @@ enum AppRoute {
 
 extension AppRouteNavigation on AppRoute {
   String parseRoute({
-    // Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic>? queryParameters,
   }) {
     var uri = Uri(path: path, queryParameters: queryParameters);
@@ -72,7 +71,6 @@ extension AppRouteNavigation on AppRoute {
 
   void go(
     BuildContext context, {
-    Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Object? extra,
   }) {
@@ -84,7 +82,6 @@ extension AppRouteNavigation on AppRoute {
 
   void push(
     BuildContext context, {
-    Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Object? extra,
   }) {
@@ -96,7 +93,6 @@ extension AppRouteNavigation on AppRoute {
 
   void pushReplacement(
     BuildContext context, {
-    Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Object? extra,
   }) {

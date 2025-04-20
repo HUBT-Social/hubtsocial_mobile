@@ -47,10 +47,12 @@ StatefulShellRoute _mainRoute() {
                       builder: (context, state) => MultiBlocProvider(
                         providers: [
                           BlocProvider(
-                            create: (_) => getIt<QuizBloc>(),
+                            create: (_) => getIt<QuizInfoBloc>(),
                           ),
                         ],
-                        child: QuizScreen(),
+                        child: QuizInfoScreen(
+                          id: state.uri.queryParameters['id'].toString(),
+                        ),
                       ),
                     ),
                   ]),
@@ -58,7 +60,7 @@ StatefulShellRoute _mainRoute() {
           ),
         ],
       ),
-   
+
       // Brach Chat
       StatefulShellBranch(
         // navigatorKey: _shellNavigatorChat,
@@ -136,7 +138,6 @@ StatefulShellRoute _mainRoute() {
                       (context, animation, secondaryAnimation, child) =>
                           FadeTransition(opacity: animation, child: child),
                 ),
-                
                 routes: [
                   GoRoute(
                     path: 'edit',
@@ -183,12 +184,13 @@ StatefulShellRoute _mainRoute() {
           ),
         ],
       ),
-        /// Brach Teacher Evaluation
+
+      /// Brach Teacher Evaluation
       StatefulShellBranch(
         routes: [
           GoRoute(
             path: AppRoute.teacherCode.path,
-            builder: (context, state) =>TeacherCodeInputScreen(),
+            builder: (context, state) => TeacherCodeInputScreen(),
           ),
         ],
       ),

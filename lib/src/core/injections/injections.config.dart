@@ -57,8 +57,12 @@ import 'package:hubtsocial_mobile/src/features/quiz/domain/repos/quiz_repo.dart'
     as _i13;
 import 'package:hubtsocial_mobile/src/features/quiz/domain/usercases/fetch_quiz_usercase.dart'
     as _i35;
+import 'package:hubtsocial_mobile/src/features/quiz/domain/usercases/get_quiz_info_usercase.dart'
+    as _i572;
 import 'package:hubtsocial_mobile/src/features/quiz/presentation/bloc/quiz_bloc.dart'
     as _i1023;
+import 'package:hubtsocial_mobile/src/features/quiz/presentation/bloc/quiz_info_bloc.dart'
+    as _i251;
 import 'package:hubtsocial_mobile/src/features/room_chat/data/datasources/room_chat_remote_data_source.dart'
     as _i311;
 import 'package:hubtsocial_mobile/src/features/room_chat/data/repos/room_chat_repo_impl.dart'
@@ -167,6 +171,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i293.ChatRepoImpl(gh<_i745.ChatRemoteDataSource>()));
     gh.lazySingleton<_i35.FetchQuizUserCase>(
         () => _i35.FetchQuizUserCase(gh<_i13.QuizRepo>()));
+    gh.lazySingleton<_i572.GetQuizInfoUserCase>(
+        () => _i572.GetQuizInfoUserCase(gh<_i13.QuizRepo>()));
     gh.factory<_i527.UserBloc>(() => _i527.UserBloc(
           initUserProfile: gh<_i477.InitUserUserCase>(),
           updateUserProfile: gh<_i925.UpdateUserUserCase>(),
@@ -174,6 +180,8 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i1023.QuizBloc>(
         () => _i1023.QuizBloc(fetchQuiz: gh<_i35.FetchQuizUserCase>()));
+    gh.factory<_i251.QuizInfoBloc>(
+        () => _i251.QuizInfoBloc(getQuizInfo: gh<_i572.GetQuizInfoUserCase>()));
     gh.lazySingleton<_i1020.FetchChatUserCase>(
         () => _i1020.FetchChatUserCase(gh<_i965.ChatRepo>()));
     gh.factory<_i285.GetRoomChatBloc>(() => _i285.GetRoomChatBloc(

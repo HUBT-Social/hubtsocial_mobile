@@ -26,7 +26,10 @@ class _QuizCardState extends State<QuizCard> {
         color: context.colorScheme.surfaceContainerLow,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: () => AppRoute.quizInfo.push(context),
+          onTap: () => AppRoute.quizInfo.push(context, queryParameters: {
+            'id': widget.item.id,
+            'title': widget.item.title
+          }),
           child: IntrinsicHeight(
             child: Row(
               children: [

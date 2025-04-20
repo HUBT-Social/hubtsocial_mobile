@@ -1,5 +1,13 @@
 [
     {
+        "id": "he_dieu_hanh_unix",
+        "title": "Hệ điều hành Unix - Đỗ Như Thuận",
+        "questionCount": 235,
+        "durationMinutes": 60,
+        "major": "CNTT",
+        "credits": 2
+    },
+    {
         "id": "quiz_001",
         "title": "Đề thi Toán lớp 12 - Chuyên đề Hàm số",
         "questionCount": 40,

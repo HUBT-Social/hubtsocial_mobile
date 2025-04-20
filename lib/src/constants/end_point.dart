@@ -6,17 +6,16 @@ class EndPoint {
 
   static String get _auth => "$apiUrl/auth";
   static String get authSignIn => "$_auth/sign-in";
-  static String get authSignInTwoFactor => "$_auth/sign-in/verify-two-factor";
-  static String get twoFactorPassword => "$_auth/sign-in/verify-two-factor";
+  static String get authSignInTwoFactor => "$authSignIn/verify-two-factor";
+  static String get twoFactorPassword => "$authSignIn/verify-two-factor";
   static String get authSignUp => "$_auth/sign-up";
-  static String get authSignUpVerifyEmail => "$_auth/sign-up/verify-otp";
+  static String get authSignUpVerifyEmail => "$authSignUp/verify-otp";
+  static String get authForgotPassword => "$_auth/forgot-password";
   static String get authVerifyPassword =>
-      "$_auth/forgot-password/password-verification";
-  static String get authSetNewPassword =>
-      "$_auth/forgot-password/change-password";
+      "$authForgotPassword/password-verification";
+  static String get authSetNewPassword => "$authForgotPassword/change-password";
   static String get authRegister => "$_auth/register";
   static String get authConfirmCode => "$_auth/confirm-code";
-  static String get authForgotPassword => "$_auth/forgot-password";
   static String get authRefreshToken => "$_auth/refresh-token";
   static String get authDeleteToken => "$_auth/delete-token";
 

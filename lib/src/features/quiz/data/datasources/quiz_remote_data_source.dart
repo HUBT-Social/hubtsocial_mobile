@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../core/api/errors/exceptions.dart';
 import '../../../../core/logger/logger.dart';
+import '../models/quiz_info_response_model.dart';
 import '../models/quiz_response_model.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -14,6 +15,10 @@ abstract class QuizRemoteDataSource {
 
   Future<List<QuizResponseModel>> fetchQuiz({
     required int page,
+  });
+
+  Future<QuizInfoResponseModel> getQuiz({
+    required String id,
   });
 }
 
@@ -55,6 +60,28 @@ class QuizRemoteDataSourceImpl implements QuizRemoteDataSource {
       throw const ServerException(
         message: 'Failed to read paginated local quiz data.',
         statusCode: '500',
+      );
+    }
+  }
+
+  @override
+  Future<QuizInfoResponseModel> getQuiz({required String id}) async {
+    try {
+      final String jsonString =
+          await rootBundle.loadString('assets/data/quiz/$id.json');
+
+      var responseData =
+          QuizInfoResponseModel.fromJson(json.decode(jsonString));
+
+      return responseData;
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      logger.e(e.toString());
+      logger.d(s.toString());
+      throw const ServerException(
+        message: 'Failed to verify OTP password. Please try again later.',
+        statusCode: '505',
       );
     }
   }
