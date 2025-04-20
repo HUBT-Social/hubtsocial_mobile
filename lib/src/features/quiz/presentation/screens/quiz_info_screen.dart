@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hubtsocial_mobile/src/constants/assets.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/features/quiz/data/models/question_model.dart';
 import 'package:hubtsocial_mobile/src/features/quiz/data/models/quiz_response_model.dart';
 
 import '../bloc/quiz_info_bloc.dart';
@@ -49,54 +51,81 @@ class _QuizInfoScreenState extends State<QuizInfoScreen> {
               slivers: [
                 SliverToBoxAdapter(
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 12.w),
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    margin: EdgeInsets.symmetric(horizontal: 6.w),
                     width: double.infinity,
-                    height: 200.h,
                     decoration: BoxDecoration(
                       color: context.colorScheme.secondary,
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.all(12.w),
-                          child: Text(
-                            state.quizInfo.title ?? widget.id,
-                            style: context.textTheme.headlineSmall?.copyWith(
-                              color: context.colorScheme.onSurface,
-                              fontWeight: FontWeight.w600,
+                        Center(
+                          child: Container(
+                            margin: EdgeInsets.only(top: 12.h),
+                            height: 200.h,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(12.r),
+                                topRight: Radius.circular(12.r),
+                              ),
+                            ),
+                            child: Image.asset(
+                              Assets.startedBg,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12.w),
-                          child: Text(
-                            state.quizInfo.description ?? "",
-                            style: context.textTheme.bodyMedium?.copyWith(
-                              color: context.colorScheme.onSurface,
+                        Text(
+                          state.quizInfo.title ?? widget.id,
+                          style: context.textTheme.headlineSmall?.copyWith(
+                            color: context.colorScheme.onSurface,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          state.quizInfo.description ?? "",
+                          style: context.textTheme.bodyMedium?.copyWith(
+                            color: context.colorScheme.onSurface,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: true,
+                              onChanged: (value) {},
                             ),
+                            Text("data"),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 20.h, horizontal: 12.w),
+                          child: FilledButton(
+                            onPressed: () {},
+                            child: Text("Bắt đầu"),
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 12.w),
-                    child: FilledButton(
-                      onPressed: () {},
-                      child: Text("Bắt đầu"),
-                    ),
-                  ),
+                SliverList.builder(
+                  itemCount: state.quizInfo.questions.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return QuizInfoQuestion(
+                      index: index,
+                      item: state.quizInfo.questions[index],
+                    );
+                  },
                 ),
                 SliverToBoxAdapter(
-                    child: Container(
-                  color: Colors.amber,
-                  height: 100000,
-                  width: 300,
-                )),
+                  child: SizedBox(
+                    height: 100.h,
+                  ),
+                )
               ],
             );
           } else if (state is QuizInfoLoading) {
@@ -113,6 +142,62 @@ class _QuizInfoScreenState extends State<QuizInfoScreen> {
           }
           return const Center();
         },
+      ),
+    );
+  }
+}
+
+class QuizInfoQuestion extends StatefulWidget {
+  const QuizInfoQuestion({
+    super.key,
+    required this.index,
+    required this.item,
+  });
+  final int index;
+  final QuestionModel item;
+
+  @override
+  State<QuizInfoQuestion> createState() => _QuizInfoQuestionState();
+}
+
+class _QuizInfoQuestionState extends State<QuizInfoQuestion> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(12.r),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              "${context.loc.question_value(widget.index + 1)}: ${widget.item.title}",
+              style: context.textTheme.bodyMedium,
+            ),
+          ),
+          // widget.item.answers.map(
+          //   (e) {
+          //     return Text("data");
+          //   },
+          // ),
+
+          // SizedBox(
+          //   height: 300,
+          //   child: ListView.builder(
+          //     itemCount: widget.item.answers.length,
+          //     itemBuilder: (context, index) =>
+          //         Text(widget.item.answers[index].content.toString()),
+          //   ),
+          // ),
+
+          // Container()..
+
+          IntrinsicHeight(
+            child: ListView.builder(
+              itemCount: widget.item.answers.length,
+              itemBuilder: (context, index) =>
+                  Text(widget.item.answers[index].content.toString()),
+            ),
+          )
+        ],
       ),
     );
   }
