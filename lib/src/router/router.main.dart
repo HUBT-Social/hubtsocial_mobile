@@ -54,6 +54,36 @@ StatefulShellRoute _mainRoute() {
                           id: state.uri.queryParameters['id'].toString(),
                         ),
                       ),
+                      routes: [
+                        GoRoute(
+                          path: 'question',
+                          builder: (context, state) {
+                            final questions =
+                                state.extra as List<QuestionModel>;
+                            return MultiBlocProvider(
+                              providers: [
+                                BlocProvider(
+                                  create: (context) => getIt<QuizQuestionBloc>()
+                                    ..add(LoadQuizQuestions(questions)),
+                                  // create: (_) => getIt<QuizQuestionBloc>(),
+                                ),
+                              ],
+                              child: QuizQuestionScreen(),
+                            );
+                          },
+                        ),
+                        GoRoute(
+                          path: 'result',
+                          builder: (context, state) {
+                            final extra = state.extra as Map;
+                            return QuizResultScreen(
+                              score: extra["score"],
+                              total: extra["total"],
+                              time: extra["time"],
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ]),
             ],

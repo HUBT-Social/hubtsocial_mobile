@@ -4,7 +4,6 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../core/data/domain/usecases/usecases.dart';
 import '../../data/models/quiz_info_response_model.dart';
-import '../../data/models/quiz_response_model.dart';
 import '../repos/quiz_repo.dart';
 
 @LazySingleton()

@@ -1,12 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/constants/assets.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/features/menu/presentation/widgets/line_in_menu.dart';
 import 'package:hubtsocial_mobile/src/features/quiz/data/models/question_model.dart';
-import 'package:hubtsocial_mobile/src/features/quiz/data/models/quiz_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/quiz/presentation/widgets/quiz_info_question.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
 
 import '../bloc/quiz_info_bloc.dart';
 
@@ -22,6 +23,8 @@ class QuizInfoScreen extends StatefulWidget {
 }
 
 class _QuizInfoScreenState extends State<QuizInfoScreen> {
+  final Random _random = Random();
+
   @override
   void initState() {
     super.initState();
@@ -119,7 +122,17 @@ class _QuizInfoScreenState extends State<QuizInfoScreen> {
                             horizontal: 12.w,
                           ),
                           child: FilledButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              final List<QuestionModel> questions =
+                                  List.from(state.quizInfo.questions);
+                              questions.shuffle(_random);
+                              for (var question in questions) {
+                                question.answers.shuffle(_random);
+                              }
+
+                              AppRoute.quizQuestion
+                                  .pushReplacement(context, extra: questions);
+                            },
                             child: Text("Bắt đầu"),
                           ),
                         ),

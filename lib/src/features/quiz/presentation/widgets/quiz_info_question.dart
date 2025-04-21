@@ -5,7 +5,7 @@ import 'package:hubtsocial_mobile/src/features/quiz/data/models/question_model.d
 
 import '../../../menu/presentation/widgets/line_in_menu.dart';
 
-class QuizInfoQuestion extends StatefulWidget {
+class QuizInfoQuestion extends StatelessWidget {
   const QuizInfoQuestion({
     super.key,
     required this.index,
@@ -15,11 +15,6 @@ class QuizInfoQuestion extends StatefulWidget {
   final QuestionModel item;
 
   @override
-  State<QuizInfoQuestion> createState() => _QuizInfoQuestionState();
-}
-
-class _QuizInfoQuestionState extends State<QuizInfoQuestion> {
-  @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 12.w),
@@ -28,11 +23,11 @@ class _QuizInfoQuestionState extends State<QuizInfoQuestion> {
         children: [
           LineInMenu(),
           Text(
-            "${context.loc.question_value(widget.index + 1)}: ${widget.item.title}",
+            "${context.loc.question_value(index + 1)}: ${item.title}",
             style: context.textTheme.bodyLarge,
           ),
           SizedBox(height: 4.h),
-          ...widget.item.answers.map(
+          ...item.answers.map(
             (answer) {
               return Row(
                 spacing: 6.w,

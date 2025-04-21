@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -11,8 +9,8 @@ import 'package:hubtsocial_mobile/src/features/menu/presentation/screens/teacher
 import 'package:hubtsocial_mobile/src/features/profile/screens/edit_profile_screens.dart';
 import 'package:hubtsocial_mobile/src/features/profile/screens/full_screens.dart';
 import 'package:hubtsocial_mobile/src/features/profile/screens/profile_screen.dart';
-import 'package:hubtsocial_mobile/src/features/quiz/data/models/quiz_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/quiz/presentation/bloc/quiz_bloc.dart';
+import 'package:hubtsocial_mobile/src/features/quiz/presentation/bloc/quiz_question_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/quiz/presentation/screens/quiz_info_screen.dart';
 import 'package:hubtsocial_mobile/src/features/quiz/presentation/screens/quiz_screen.dart';
 import 'package:hubtsocial_mobile/src/features/room_chat/presentation/bloc/room_chat_bloc.dart';
@@ -42,7 +40,10 @@ import '../features/chat/presentation/screens/chat_screen.dart';
 import '../features/main_wrapper/presentation/main_wrapper.dart';
 import '../features/notification/presentation/screens/notifications_screen.dart';
 
+import '../features/quiz/data/models/question_model.dart';
 import '../features/quiz/presentation/bloc/quiz_info_bloc.dart';
+import '../features/quiz/presentation/screens/quiz_question_screen.dart';
+import '../features/quiz/presentation/screens/quiz_result_screen.dart';
 import '../features/room_chat/presentation/screens/room_chat_screen.dart';
 import '../features/timetable/presentation/screens/timetable_screen.dart';
 import '../features/user/presentation/bloc/user_bloc.dart';

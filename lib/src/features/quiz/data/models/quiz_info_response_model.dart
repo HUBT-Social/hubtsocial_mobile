@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hubtsocial_mobile/src/features/quiz/data/models/question_model.dart';
 
 class QuizInfoResponseModel extends Equatable {
-  QuizInfoResponseModel({
+  const QuizInfoResponseModel({
     required this.title,
     required this.description,
     required this.image,

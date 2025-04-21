@@ -37,7 +37,7 @@ class QuestionModel extends Equatable {
 
   Map<String, dynamic> toJson() => {
         "title": title,
-        "answers": answers.map((x) => x?.toJson()).toList(),
+        "answers": answers.map((x) => x.toJson()).toList(),
         "correctAnswer": correctAnswer,
       };
 
