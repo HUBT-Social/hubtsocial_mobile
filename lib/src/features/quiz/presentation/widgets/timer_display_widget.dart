@@ -1,12 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 class TimerDisplayWidget extends StatelessWidget {
-  final int seconds;
+  final TimerController controller;
 
-  const TimerDisplayWidget({
-    Key? key,
-    required this.seconds,
-  }) : super(key: key);
+  const TimerDisplayWidget({Key? key, required this.controller})
+      : super(key: key);
 
   String _formatTime(int seconds) {
     final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
@@ -16,19 +17,51 @@ class TimerDisplayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Icon(Icons.timer, size: 20, color: Colors.orange),
-        const SizedBox(width: 4),
-        Text(
-          _formatTime(seconds),
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.orange,
-          ),
-        ),
-      ],
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, _) {
+        return Text(
+          _formatTime(controller.elapsedSeconds),
+          style: context.textTheme.bodyLarge
+              ?.copyWith(color: context.colorScheme.primary),
+        );
+      },
     );
+  }
+}
+
+class TimerController extends ChangeNotifier {
+  bool _isRunning = false;
+  int _elapsedSeconds = 0;
+  Timer? _timer;
+
+  int get elapsedSeconds => _elapsedSeconds;
+
+  void start() {
+    if (_isRunning) return;
+    _isRunning = true;
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _elapsedSeconds++;
+      notifyListeners();
+    });
+  }
+
+  void pause() {
+    _timer?.cancel();
+    _isRunning = false;
+    notifyListeners();
+  }
+
+  void reset() {
+    _timer?.cancel();
+    _elapsedSeconds = 0;
+    _isRunning = false;
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 }

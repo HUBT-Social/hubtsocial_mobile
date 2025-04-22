@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hubtsocial_mobile/src/features/quiz/data/models/question_model.dart';
+import 'package:injectable/injectable.dart';
 
 part 'quiz_question_event.dart';
 part 'quiz_question_state.dart';
@@ -13,7 +14,6 @@ class QuizQuestionBloc extends Bloc<QuizQuestionEvent, QuizQuestionState> {
     on<AnswerQuestion>(_onAnswerSelected);
     on<NextQuestion>(_onNextQuestion);
     on<JumpToQuestion>(_onJumpToQuestion);
-    on<TimerTicked>(_onTimerTicked);
   }
 
   Timer? _timer;
@@ -21,7 +21,7 @@ class QuizQuestionBloc extends Bloc<QuizQuestionEvent, QuizQuestionState> {
   void _onLoadQuestions(
       LoadQuizQuestions event, Emitter<QuizQuestionState> emit) {
     _timer?.cancel();
-    _startTimer();
+    // _startTimer();
 
     emit(QuizQuestionState(
       questions: event.questions,
@@ -29,7 +29,6 @@ class QuizQuestionBloc extends Bloc<QuizQuestionEvent, QuizQuestionState> {
       selectedAnswer: null,
       answered: false,
       score: 0,
-      elapsedSeconds: 0,
       isFinished: false,
       history: List<int?>.filled(event.questions.length, null),
     ));
@@ -81,18 +80,6 @@ class QuizQuestionBloc extends Bloc<QuizQuestionEvent, QuizQuestionState> {
         answered: state.history[event.index] != null,
       ));
     }
-  }
-
-  void _startTimer() {
-    int seconds = 0;
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      seconds++;
-      add(TimerTicked(seconds));
-    });
-  }
-
-  void _onTimerTicked(TimerTicked event, Emitter<QuizQuestionState> emit) {
-    emit(state.copyWith(elapsedSeconds: event.elapsedSeconds));
   }
 
   @override

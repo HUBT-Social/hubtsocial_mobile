@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TeacherEvaluationScreen extends StatefulWidget {
+  const TeacherEvaluationScreen({super.key});
+
   @override
   _TeacherEvaluationScreenState createState() =>
       _TeacherEvaluationScreenState();
@@ -58,7 +60,8 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                             ),
                             onPressed: () {
                               setState(() {
-                                ratings[index] = starIndex + 1; // Cập nhật số sao
+                                ratings[index] =
+                                    starIndex + 1; // Cập nhật số sao
                               });
                             },
                           );
@@ -100,11 +103,11 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                     },
                   );
                 },
-                child: Text('Xem kết quả'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
+                child: Text('Xem kết quả'),
               ),
             ),
           ],
@@ -113,4 +116,3 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
     );
   }
 }
-

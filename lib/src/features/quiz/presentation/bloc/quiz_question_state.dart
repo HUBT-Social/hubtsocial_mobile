@@ -6,7 +6,6 @@ class QuizQuestionState extends Equatable {
   final int? selectedAnswer;
   final bool answered;
   final int score;
-  final int elapsedSeconds;
   final bool isFinished;
   final List<int?> history; // lưu đáp án đã chọn theo index câu hỏi
 
@@ -16,7 +15,6 @@ class QuizQuestionState extends Equatable {
     this.selectedAnswer,
     this.answered = false,
     this.score = 0,
-    this.elapsedSeconds = 0,
     this.isFinished = false,
     this.history = const [],
   });
@@ -37,7 +35,6 @@ class QuizQuestionState extends Equatable {
       selectedAnswer: selectedAnswer,
       answered: answered ?? this.answered,
       score: score ?? this.score,
-      elapsedSeconds: elapsedSeconds ?? this.elapsedSeconds,
       isFinished: isFinished ?? this.isFinished,
       history: history ?? this.history,
     );
@@ -50,7 +47,6 @@ class QuizQuestionState extends Equatable {
         selectedAnswer,
         answered,
         score,
-        elapsedSeconds,
         isFinished,
       ];
 }

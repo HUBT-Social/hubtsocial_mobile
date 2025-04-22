@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/features/menu/presentation/screens/teacher_screen.dart';
+
 class TeacherCodeInputScreen extends StatelessWidget {
   final TextEditingController _codeController = TextEditingController();
+
+  TeacherCodeInputScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +47,11 @@ class TeacherCodeInputScreen extends StatelessWidget {
                     );
                   }
                 },
-                child: Text('Tiếp tục'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
+                child: Text('Tiếp tục'),
               ),
             ),
           ],

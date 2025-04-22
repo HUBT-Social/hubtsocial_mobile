@@ -29,15 +29,6 @@ class NextQuestion extends QuizQuestionEvent {
   const NextQuestion();
 }
 
-class TimerTicked extends QuizQuestionEvent {
-  final int elapsedSeconds;
-
-  const TimerTicked(this.elapsedSeconds);
-
-  @override
-  List<Object?> get props => [elapsedSeconds];
-}
-
 class JumpToQuestion extends QuizQuestionEvent {
   final int index;
 

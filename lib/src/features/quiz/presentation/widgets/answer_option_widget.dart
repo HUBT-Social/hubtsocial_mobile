@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
-class AnswerOptionWidget extends StatelessWidget {
+class AnswerOptionWidget extends StatefulWidget {
   final String text;
   final int index;
   final int? selectedIndex;
@@ -16,20 +18,31 @@ class AnswerOptionWidget extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
-  Color _getColor() {
-    if (correctIndex == null) return Colors.grey[800]!;
+  @override
+  State<AnswerOptionWidget> createState() => _AnswerOptionWidgetState();
+}
 
-    if (index == correctIndex) return Colors.green;
-    if (index == selectedIndex && index != correctIndex) return Colors.red;
+class _AnswerOptionWidgetState extends State<AnswerOptionWidget> {
+  Color _getColor() {
+    if (widget.correctIndex == null) return Colors.grey[800]!;
+
+    if (widget.index == widget.correctIndex) return context.colorScheme.primary;
+    if (widget.index == widget.selectedIndex &&
+        widget.index != widget.correctIndex) {
+      return context.colorScheme.error;
+    }
 
     return Colors.grey[700]!;
   }
 
   IconData? _getIcon() {
-    if (correctIndex == null) return null;
+    if (widget.correctIndex == null) return null;
 
-    if (index == correctIndex) return Icons.check;
-    if (index == selectedIndex && index != correctIndex) return Icons.close;
+    if (widget.index == widget.correctIndex) return Icons.check;
+    if (widget.index == widget.selectedIndex &&
+        widget.index != widget.correctIndex) {
+      return Icons.close;
+    }
 
     return null;
   }
@@ -39,10 +52,10 @@ class AnswerOptionWidget extends StatelessWidget {
     final color = _getColor();
     final icon = _getIcon();
 
-    return GestureDetector(
-      onTap: onTap,
+    return InkWell(
+      onTap: widget.onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 6),
+        margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12.w),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: color.withOpacity(0.15),
@@ -53,7 +66,7 @@ class AnswerOptionWidget extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                text,
+                widget.text,
                 style: TextStyle(
                   color: color,
                   fontSize: 16,

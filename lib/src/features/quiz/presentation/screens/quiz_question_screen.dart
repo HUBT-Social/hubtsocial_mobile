@@ -1,12 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_countdown_timer/index.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../bloc/quiz_question_bloc.dart';
 import '../widgets/answer_option_widget.dart';
 import '../widgets/timer_display_widget.dart';
 
-class QuizQuestionScreen extends StatelessWidget {
+class QuizQuestionScreen extends StatefulWidget {
   const QuizQuestionScreen({super.key});
+
+  @override
+  State<QuizQuestionScreen> createState() => _QuizQuestionScreenState();
+}
+
+class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
+  final _timerController = TimerController();
+
+  @override
+  void initState() {
+    _timerController.start();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timerController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +38,7 @@ class QuizQuestionScreen extends StatelessWidget {
             context.go('/quiz/result', extra: {
               "score": state.score,
               "total": state.questions.length,
-              "time": state.elapsedSeconds,
+              "time": _timerController.elapsedSeconds,
             });
           });
         }
@@ -41,61 +62,82 @@ class QuizQuestionScreen extends StatelessWidget {
             title: Text('Câu ${index + 1}/${questions.length}'),
             actions: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: TimerDisplayWidget(seconds: state.elapsedSeconds),
+                padding: EdgeInsets.only(right: 12.w),
+                child: TimerDisplayWidget(
+                  controller: _timerController,
+                ),
               ),
             ],
           ),
-          body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(question.title ?? '',
-                      style: Theme.of(context).textTheme.titleLarge),
-                  const SizedBox(height: 20),
-                  ...List.generate(question.answers.length, (i) {
-                    final answer = question.answers[i];
-                    return AnswerOptionWidget(
-                      text: answer.content ?? '',
-                      index: i,
-                      selectedIndex: selected,
-                      correctIndex: state.answered ? correctIndex : null,
-                      onTap: () {
-                        if (!state.answered) {
-                          context
-                              .read<QuizQuestionBloc>()
-                              .add(AnswerQuestion(i));
-                        }
-                      },
-                    );
-                  }),
-                  const Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        onPressed: index > 0
-                            ? () => context
+          body: Stack(
+            children: [
+              CustomScrollView(
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.all(12.h),
+                      child: Text(question.title ?? '',
+                          style: Theme.of(context).textTheme.titleLarge),
+                    ),
+                  ),
+                  SliverList.builder(
+                    itemCount: question.answers.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final answer = question.answers[index];
+
+                      return AnswerOptionWidget(
+                        text: answer.content ?? '',
+                        index: index,
+                        selectedIndex: selected,
+                        correctIndex: state.answered ? correctIndex : null,
+                        onTap: () {
+                          if (!state.answered) {
+                            context
                                 .read<QuizQuestionBloc>()
-                                .add(JumpToQuestion(index - 1))
-                            : null,
-                        icon: const Icon(Icons.arrow_back),
-                      ),
-                      IconButton(
-                        onPressed: index < questions.length - 1
-                            ? () => context
-                                .read<QuizQuestionBloc>()
-                                .add(JumpToQuestion(index + 1))
-                            : null,
-                        icon: const Icon(Icons.arrow_forward),
-                      ),
-                    ],
+                                .add(AnswerQuestion(index));
+                          }
+                        },
+                      );
+                    },
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 120.h,
+                    ),
                   ),
                 ],
               ),
-            ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 80.h),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: index > 0
+                              ? () => context
+                                  .read<QuizQuestionBloc>()
+                                  .add(JumpToQuestion(index - 1))
+                              : null,
+                          icon: const Icon(Icons.arrow_back),
+                        ),
+                        IconButton(
+                          onPressed: index < questions.length - 1
+                              ? () => context
+                                  .read<QuizQuestionBloc>()
+                                  .add(JumpToQuestion(index + 1))
+                              : null,
+                          icon: const Icon(Icons.arrow_forward),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
         );
       },
