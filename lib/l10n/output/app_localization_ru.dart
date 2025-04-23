@@ -66,10 +66,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get first_name => 'Имя';
 
   @override
+  String get first_name_hint => 'Пожалуйста, введите ваше имя';
+
+  @override
   String get next => 'Далее';
 
   @override
   String get last_name => 'Фамилия';
+
+  @override
+  String get last_name_hint => 'Пожалуйста, введите вашу фамилию';
 
   @override
   String get otp_expired => 'Срок действия OTP истек';

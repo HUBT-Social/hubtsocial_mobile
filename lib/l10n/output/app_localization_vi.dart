@@ -66,10 +66,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get first_name => 'Tên của bạn';
 
   @override
+  String get first_name_hint => 'Vui lòng nhập tên của bạn';
+
+  @override
   String get next => 'Tiếp Theo';
 
   @override
   String get last_name => 'Họ của bạn';
+
+  @override
+  String get last_name_hint => 'Vui lòng nhập họ của bạn';
 
   @override
   String get otp_expired => 'OTP đã hết hạn';

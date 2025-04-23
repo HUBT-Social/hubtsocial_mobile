@@ -66,10 +66,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get first_name => '名';
 
   @override
+  String get first_name_hint => '名前を入力してください';
+
+  @override
   String get next => '次へ';
 
   @override
   String get last_name => '姓';
+
+  @override
+  String get last_name_hint => '苗字を入力してください';
 
   @override
   String get otp_expired => 'OTPの有効期限が切れました';

@@ -66,10 +66,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get first_name => '이름';
 
   @override
+  String get first_name_hint => '이름을 입력하세요';
+
+  @override
   String get next => '다음';
 
   @override
   String get last_name => '성';
+
+  @override
+  String get last_name_hint => '성을 입력하세요';
 
   @override
   String get otp_expired => 'OTP 만료됨';

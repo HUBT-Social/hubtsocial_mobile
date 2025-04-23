@@ -66,10 +66,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get first_name => 'First name';
 
   @override
+  String get first_name_hint => 'Please enter your first name';
+
+  @override
   String get next => 'Next';
 
   @override
   String get last_name => 'Last name';
+
+  @override
+  String get last_name_hint => 'Please enter your last name';
 
   @override
   String get otp_expired => 'OTP Expired';

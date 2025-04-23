@@ -66,10 +66,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get first_name => '名字';
 
   @override
+  String get first_name_hint => '请输入您的名字';
+
+  @override
   String get next => '下一步';
 
   @override
   String get last_name => '姓氏';
+
+  @override
+  String get last_name_hint => '请输入您的姓氏';
 
   @override
   String get otp_expired => 'OTP 已过期';
