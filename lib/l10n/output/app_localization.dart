@@ -701,7 +701,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Question {value}'**
-  String question_value(int value);
+  String question_value(String value);
 
   /// No description provided for @question_count.
   ///
@@ -720,6 +720,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Credits {value}'**
   String credits(int value);
+
+  /// No description provided for @congratulation.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulation!'**
+  String get congratulation;
+
+  /// No description provided for @youHaveCompletedQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'You have completed Quiz.'**
+  String get youHaveCompletedQuiz;
+
+  /// No description provided for @score.
+  ///
+  /// In en, this message translates to:
+  /// **'Score'**
+  String get score;
+
+  /// No description provided for @testTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Test time'**
+  String get testTime;
+
+  /// No description provided for @backToHomepage.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to homepage'**
+  String get backToHomepage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

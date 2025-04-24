@@ -316,7 +316,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get screen_not_found_back => '戻る';
 
   @override
-  String question_value(int value) {
+  String question_value(String value) {
     return '質問 $value';
   }
 
@@ -334,4 +334,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String credits(int value) {
     return 'クレジット $value';
   }
+
+  @override
+  String get congratulation => 'おめでとうございます！';
+
+  @override
+  String get youHaveCompletedQuiz => 'あなたはクイズを完了しました';
+
+  @override
+  String get score => 'スコア';
+
+  @override
+  String get testTime => 'テスト時間';
+
+  @override
+  String get backToHomepage => 'ホームページに戻る';
 }

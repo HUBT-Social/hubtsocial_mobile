@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
 
 class QuizResultScreen extends StatelessWidget {
   final int score;
@@ -21,71 +24,59 @@ class QuizResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final earnedCoins = score * 25;
-
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.emoji_events, size: 80, color: Colors.amber),
-                const SizedBox(height: 24),
-                const Text(
-                  'Chúc mừng bạn!',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 12),
+                Icon(Icons.emoji_events, size: 80.r, color: Colors.amber),
+                SizedBox(height: 24.h),
                 Text(
-                  'Bạn đã hoàn thành bài quiz.',
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  context.loc.congratulation,
+                  style: context.textTheme.headlineLarge,
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 12.h),
+                Text(
+                  context.loc.youHaveCompletedQuiz,
+                  style: context.textTheme.bodyLarge,
+                ),
+                SizedBox(height: 24.h),
                 Card(
                   elevation: 4,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 16),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
                     child: Column(
                       children: [
-                        Text("Điểm số",
-                            style: Theme.of(context).textTheme.titleMedium),
+                        Text(context.loc.score,
+                            style: context.textTheme.titleMedium),
                         Text(
                           "$score / $total",
-                          style: const TextStyle(
-                              fontSize: 32, fontWeight: FontWeight.bold),
+                          style: context.textTheme.headlineLarge,
                         ),
-                        const SizedBox(height: 12),
-                        Text("Thời gian làm bài",
-                            style: Theme.of(context).textTheme.titleMedium),
+                        SizedBox(height: 12.h),
+                        Text(context.loc.testTime,
+                            style: context.textTheme.titleMedium),
                         Text(
                           _formatTime(time),
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(height: 12),
-                        Text("Xu thưởng",
-                            style: Theme.of(context).textTheme.titleMedium),
-                        Text(
-                          "💰 $earnedCoins",
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w600),
+                          style: context.textTheme.titleSmall,
                         ),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 40),
+                SizedBox(height: 40.h),
                 ElevatedButton.icon(
-                  onPressed: () => context.go('/'),
+                  onPressed: () => AppRoute.home.go(context),
                   icon: const Icon(Icons.home),
-                  label: const Text("Về trang chính"),
+                  label: Text(context.loc.backToHomepage),
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(48),
+                    minimumSize: Size.fromHeight(48.h),
                   ),
                 ),
               ],

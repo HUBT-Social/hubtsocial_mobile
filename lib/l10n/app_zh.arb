@@ -232,7 +232,7 @@
   "@question_value": {
     "placeholders": {
       "value": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -259,5 +259,15 @@
         "type": "int"
       }
     }
-  }
+  },
+  "congratulation": "恭喜！",
+  "@congratulation": {},
+  "youHaveCompletedQuiz": "您已完成测验",
+  "@youHaveCompletedQuiz": {},
+  "score": "分数",
+  "@score": {},
+  "testTime": "测试时间",
+  "@testTime": {},
+  "backToHomepage": "返回主页",
+  "@backToHomepage": {}
 }

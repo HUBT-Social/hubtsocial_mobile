@@ -316,7 +316,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get screen_not_found_back => 'Quay lại';
 
   @override
-  String question_value(int value) {
+  String question_value(String value) {
     return 'Câu hỏi $value';
   }
 
@@ -334,4 +334,19 @@ class AppLocalizationsVi extends AppLocalizations {
   String credits(int value) {
     return '$value tín chỉ';
   }
+
+  @override
+  String get congratulation => 'Chúc mừng bạn!';
+
+  @override
+  String get youHaveCompletedQuiz => 'Bạn đã hoàn thành bài kiểm tra';
+
+  @override
+  String get score => 'Điểm số';
+
+  @override
+  String get testTime => 'Thời gian làm bài';
+
+  @override
+  String get backToHomepage => 'Về trang chủ';
 }

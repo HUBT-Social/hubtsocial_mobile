@@ -232,7 +232,7 @@
   "@question_value": {
     "placeholders": {
       "value": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -259,5 +259,17 @@
         "type": "int"
       }
     }
-  }
+  },
+  "congratulation": "축하합니다!",
+  "@congratulation": {},
+  "youHaveCompletedQuiz": "퀴즈를 완료했습니다",
+  "@youHaveCompletedQuiz": {},
+  "score": "점수",
+  "@score": {},
+  "testTime": "테스트 시간",
+  "@testTime": {},
+  "aboutTheHomepage": "홈페이지 정보",
+  "@aboutTheHomepage": {},
+  "backToHomepage": "홈페이지로 돌아가기",
+  "@backToHomepage": {}
 }

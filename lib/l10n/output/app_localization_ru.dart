@@ -316,7 +316,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get screen_not_found_back => 'Назад';
 
   @override
-  String question_value(int value) {
+  String question_value(String value) {
     return 'Вопрос $value';
   }
 
@@ -334,4 +334,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String credits(int value) {
     return 'Кредиты $value';
   }
+
+  @override
+  String get congratulation => 'Поздравляем!';
+
+  @override
+  String get youHaveCompletedQuiz => 'Вы завершили тест';
+
+  @override
+  String get score => 'Результат';
+
+  @override
+  String get testTime => 'Время теста';
+
+  @override
+  String get backToHomepage => 'Вернуться на главную страницу';
 }

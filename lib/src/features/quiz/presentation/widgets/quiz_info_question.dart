@@ -23,7 +23,7 @@ class QuizInfoQuestion extends StatelessWidget {
         children: [
           LineInMenu(),
           Text(
-            "${context.loc.question_value(index + 1)}: ${item.title}",
+            "${context.loc.question_value((index + 1).toString())}: ${item.title}",
             style: context.textTheme.bodyLarge,
           ),
           SizedBox(height: 4.h),

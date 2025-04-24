@@ -10,13 +10,13 @@ class AnswerOptionWidget extends StatefulWidget {
   final VoidCallback onTap;
 
   const AnswerOptionWidget({
-    Key? key,
+    super.key,
     required this.text,
     required this.index,
     required this.selectedIndex,
     required this.correctIndex,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   State<AnswerOptionWidget> createState() => _AnswerOptionWidgetState();
@@ -24,7 +24,7 @@ class AnswerOptionWidget extends StatefulWidget {
 
 class _AnswerOptionWidgetState extends State<AnswerOptionWidget> {
   Color _getColor() {
-    if (widget.correctIndex == null) return Colors.grey[800]!;
+    if (widget.correctIndex == null) return context.colorScheme.onSurface;
 
     if (widget.index == widget.correctIndex) return context.colorScheme.primary;
     if (widget.index == widget.selectedIndex &&
@@ -52,30 +52,33 @@ class _AnswerOptionWidgetState extends State<AnswerOptionWidget> {
     final color = _getColor();
     final icon = _getIcon();
 
-    return InkWell(
-      onTap: widget.onTap,
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12.w),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.15),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                widget.text,
-                style: TextStyle(
-                  color: color,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 12.w),
+      child: InkWell(
+        onTap: widget.onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: color),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  widget.text,
+                  style: TextStyle(
+                    color: color,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-            ),
-            if (icon != null) Icon(icon, color: color),
-          ],
+              if (icon != null) Icon(icon, color: color),
+            ],
+          ),
         ),
       ),
     );

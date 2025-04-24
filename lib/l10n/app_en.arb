@@ -232,7 +232,7 @@
   "@question_value": {
     "placeholders": {
       "value": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -259,5 +259,15 @@
         "type": "int"
       }
     }
-  }
+  },
+  "congratulation": "Congratulation!",
+  "@congratulation": {},
+  "youHaveCompletedQuiz": "You have completed Quiz.",
+  "@youHaveCompletedQuiz": {},
+  "score": "Score",
+  "@score": {},
+  "testTime": "Test time",
+  "@testTime": {},
+  "backToHomepage": "Back to homepage",
+  "@backToHomepage": {}
 }

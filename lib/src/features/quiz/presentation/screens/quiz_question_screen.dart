@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_countdown_timer/index.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
 import '../bloc/quiz_question_bloc.dart';
 import '../widgets/answer_option_widget.dart';
 import '../widgets/timer_display_widget.dart';
@@ -35,7 +36,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
       listener: (context, state) {
         if (state.isFinished) {
           Future.delayed(const Duration(milliseconds: 800), () {
-            context.go('/quiz/result', extra: {
+            AppRoute.quizResult.pushReplacement(context, extra: {
               "score": state.score,
               "total": state.questions.length,
               "time": _timerController.elapsedSeconds,
@@ -59,7 +60,9 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text('Câu ${index + 1}/${questions.length}'),
+            title: Text(
+              context.loc.question_value('${index + 1}/${questions.length}'),
+            ),
             actions: [
               Padding(
                 padding: EdgeInsets.only(right: 12.w),

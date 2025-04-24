@@ -6,13 +6,13 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 class TimerDisplayWidget extends StatelessWidget {
   final TimerController controller;
 
-  const TimerDisplayWidget({Key? key, required this.controller})
-      : super(key: key);
+  const TimerDisplayWidget({super.key, required this.controller});
 
   String _formatTime(int seconds) {
-    final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
+    final hours = (seconds ~/ 3600).toString().padLeft(2, '0');
+    final minutes = ((seconds % 3600) ~/ 60).toString().padLeft(2, '0');
     final secs = (seconds % 60).toString().padLeft(2, '0');
-    return '$minutes:$secs';
+    return '$hours:$minutes:$secs';
   }
 
   @override
