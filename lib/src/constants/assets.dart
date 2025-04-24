@@ -35,10 +35,6 @@ class AppLotties {
 
   static const screenNotFound = 'assets/lottie/screen_not_found.json';
   static const passwordSuccessful = 'assets/lottie/password_successful.json';
-  static const verificationWaiting = 'assets/lottie/verification.json';
   static const success = 'assets/lottie/success.json';
   static const wrongInput = 'assets/lottie/wrong.json';
-  static const writeInput = 'assets/lottie/write_form.json';
-  static const paidSuccess = 'assets/lottie/wallet_paid_success.json';
-  static const paidFailed = 'assets/lottie/wallet_paid_failed.json';
 }
