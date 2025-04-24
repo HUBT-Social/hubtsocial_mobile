@@ -217,6 +217,12 @@ abstract class AppLocalizations {
   /// **'First name'**
   String get first_name;
 
+  /// No description provided for @first_name_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your first name'**
+  String get first_name_hint;
+
   /// No description provided for @next.
   ///
   /// In en, this message translates to:
@@ -228,6 +234,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Last name'**
   String get last_name;
+
+  /// No description provided for @last_name_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your last name'**
+  String get last_name_hint;
 
   /// No description provided for @otp_expired.
   ///

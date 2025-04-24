@@ -1,318 +1,144 @@
 import 'package:flutter/material.dart';
-import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';
+import 'package:hubtsocial_mobile/src/constants/assets.dart';
+import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/edit_profile_form.dart';
+import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/edit_profile_header.dart';
+import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/save_button.dart';
 import 'package:provider/provider.dart';
+import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
-class EditProfileScreen extends StatefulWidget {
+class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
 
   @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
-}
-
-class _EditProfileScreenState extends State<EditProfileScreen> {
-  late TextEditingController firstNameController;
-  late TextEditingController lastNameController;
-  late TextEditingController emailController;
-  late TextEditingController phoneController;
-  late TextEditingController dateOfBirthController;
-  String selectedGender = 'Male';
-
-  @override
-  void initState() {
-    super.initState();
-    final user = context.read<UserProvider>().user;
-    firstNameController = TextEditingController(text: user?.firstName);
-    lastNameController = TextEditingController(text: user?.lastName);
-    emailController = TextEditingController(text: user?.email);
-    phoneController = TextEditingController(text: user?.phoneNumber);
-    dateOfBirthController =
-        TextEditingController(text: user?.birthDay.toString());
-  }
-
-  @override
-  void dispose() {
-    firstNameController.dispose();
-    lastNameController.dispose();
-    emailController.dispose();
-    phoneController.dispose();
-    dateOfBirthController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final user = context.read<UserProvider>().user;
+    final user = context.watch<UserProvider>().user;
+
+    if (user == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: context.colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: context.colorScheme.surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: context.colorScheme.onSurface),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          context.loc.edit_profile,
-          style: context.textTheme.titleLarge?.copyWith(
-            color: context.colorScheme.onSurface,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Avatar section
-            Container(
-              color: context.colorScheme.surface,
-              padding: EdgeInsets.symmetric(vertical: 24),
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      // Handle avatar change
-                    },
-                    child: Stack(
-                      children: [
-                        Hero(
-                          tag: 'profile-image',
-                          child: CircleAvatar(
-                            radius: 50,
-                            backgroundImage: user?.avatarUrl != null
-                                ? NetworkImage(user!.avatarUrl)
-                                : const AssetImage(
-                                        'assets/images/default_avatar.png')
-                                    as ImageProvider,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    context.loc.change_photo,
-                    style: context.textTheme.labelLarge?.copyWith(
-                      color: context.colorScheme.primary,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
+      body: Stack(
+        children: [
+          // Nền xanh từ ảnh
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Image.asset(
+              'assets/images/background_green.png',
+              height: screenHeight * 0.45,
+              width: double.infinity,
+              fit: BoxFit.cover,
             ),
-            // Form fields
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Column(
+          ),
+          // Title và Form
+          Column(
+            children: [
+              // Phần title chỉ có nút back
+              Container(
+                height: 60,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    // Nút back
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Colors.white),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 40),
+              // Text "Cập nhật thông tin"
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  context.loc.edit_profile,
+                  style: context.textTheme.headlineMedium?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 50), // Khoảng trống cho avatar
+              // Form trắng
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    width: screenWidth,
+                    margin: EdgeInsets.only(bottom: 80),
+                    padding: const EdgeInsets.fromLTRB(16, 60, 16, 24),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(32),
+                        topRight: Radius.circular(32),
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          EditProfileForm(user: user),
+                          const SizedBox(height: 16),
+                          const SaveButton(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          // Avatar đè lên tất cả
+          Positioned(
+            top: 190,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  _buildTextField(
-                    context,
-                    controller: firstNameController,
-                    label: context.loc.first_name,
-                    hint: context.loc.first_name,
-                    required: true,
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: user.avatarUrl.isNotEmpty
+                        ? NetworkImage(user.avatarUrl)
+                        : const AssetImage('assets/images/default_avatar.png')
+                            as ImageProvider,
                   ),
-                  _buildTextField(
-                    context,
-                    controller: lastNameController,
-                    label: context.loc.last_name,
-                    hint: context.loc.last_name,
-                    required: true,
-                  ),
-                  _buildDropdownField(
-                    context,
-                    label: context.loc.gender,
-                    value: selectedGender,
-                    onChanged: (value) {
-                      if (value != null) {
-                        setState(() {
-                          selectedGender = value;
-                        });
-                      }
-                    },
-                  ),
-
-                  InputDatePickerFormField(
-                      firstDate: DateTime.now(), lastDate: DateTime.now()),
-
-                  // _buildTextField(
-                  //   context,
-                  //   controller: dateOfBirthController,
-                  //   label: context.loc.birth_of_date,
-                  //   hint: 'dd/mm/yyyy',
-                  //   readOnly: true,
-                  //   onTap: () async {
-                  //     final date = await showDatePicker(
-                  //       context: context,
-                  //       initialDate: DateTime.now(),
-                  //       firstDate: DateTime(1900),
-                  //       lastDate: DateTime.now(),
-                  //     );
-                  //     if (date != null) {
-                  //       dateOfBirthController.text = user.
-                  //           // "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}";
-                  //     }
-                  //   },
-                  // ),
-                  _buildTextField(
-                    context,
-                    controller: phoneController,
-                    label: context.loc.phone_number,
-                    hint: context.loc.phone_number,
-                    required: true,
-                    keyboardType: TextInputType.phone,
-                  ),
-                  _buildTextField(
-                    context,
-                    controller: emailController,
-                    label: context.loc.email,
-                    hint: context.loc.email,
-                    required: true,
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  SizedBox(height: 10),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 42,
-                    child: FilledButton(
-                      onPressed: () {
-                        // Handle save changes
+                  // Biểu tượng máy ảnh
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: () {
+                        // Logic thay đổi ảnh đại diện
                       },
-                      style: FilledButton.styleFrom(
-                        backgroundColor: context.colorScheme.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        context.loc.save_changes,
-                        style: context.textTheme.titleMedium?.copyWith(
-                          color: context.colorScheme.onPrimary,
-                          fontWeight: FontWeight.w600,
+                      child: CircleAvatar(
+                        radius: 16,
+                        backgroundColor: Colors.green,
+                        child: const Icon(
+                          Icons.camera_alt,
+                          size: 16,
+                          color: Colors.white,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 12),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
-
-  Widget _buildTextField(
-    BuildContext context, {
-    required TextEditingController controller,
-    required String label,
-    required String hint,
-    bool required = false,
-    TextInputType? keyboardType,
-    bool readOnly = false,
-    VoidCallback? onTap,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              label,
-              style: context.textTheme.titleSmall?.copyWith(
-                color: context.colorScheme.onSurface,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            if (required) Text(' *', style: TextStyle(color: Colors.red)),
-          ],
-        ),
-        SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          height: 41,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: context.colorScheme.outline,
-              width: 1,
-            ),
-          ),
-          child: TextField(
-            controller: controller,
-            keyboardType: keyboardType,
-            readOnly: readOnly,
-            onTap: onTap,
-            style: context.textTheme.bodyLarge?.copyWith(
-              color: context.colorScheme.onSurface,
-            ),
-            decoration: InputDecoration(
-              hintText: hint,
-              hintStyle: context.textTheme.bodyLarge?.copyWith(
-                color: context.colorScheme.onSurfaceVariant,
-              ),
-              contentPadding: EdgeInsets.symmetric(horizontal: 15),
-              border: InputBorder.none,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDropdownField(
-    BuildContext context, {
-    required String label,
-    required String value,
-    required ValueChanged<String?> onChanged,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: context.textTheme.titleSmall?.copyWith(
-            color: context.colorScheme.onSurface,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          height: 41,
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: context.colorScheme.outline,
-              width: 1,
-            ),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: value,
-              isExpanded: true,
-              icon: Icon(
-                Icons.arrow_drop_down_rounded,
-                color: context.colorScheme.onSurface,
-              ),
-              style: context.textTheme.bodyLarge?.copyWith(
-                color: context.colorScheme.onSurface,
-              ),
-              items: ['Male', 'Female', 'Other']
-                  .map((item) => DropdownMenuItem(
-                        value: item,
-                        child: Text(item),
-                      ))
-                  .toList(),
-              onChanged: onChanged,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
