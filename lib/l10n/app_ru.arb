@@ -273,5 +273,13 @@
   "testTime": "Время теста",
   "@testTime": {},
   "backToHomepage": "Вернуться на главную страницу",
-  "@backToHomepage": {}
+  "@backToHomepage": {},
+  "quizDetailTitle": "Название теста",
+  "@quizDetailTitle": {},
+  "shuffleQuestions": "Перемешать вопросы",
+  "@shuffleQuestions": {},
+  "shuffleAnswers": "Перемешать ответы",
+  "@shuffleAnswers": {},
+  "startQuiz": "Начать тест",
+  "@startQuiz": {}
 }

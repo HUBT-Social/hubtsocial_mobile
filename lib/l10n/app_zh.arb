@@ -273,5 +273,13 @@
   "testTime": "测试时间",
   "@testTime": {},
   "backToHomepage": "返回主页",
-  "@backToHomepage": {}
+  "@backToHomepage": {},
+  "quizDetailTitle": "测验详情",
+  "@quizDetailTitle": {},
+  "shuffleQuestions": "打乱问题",
+  "@shuffleQuestions": {},
+  "shuffleAnswers": "打乱答案",
+  "@shuffleAnswers": {},
+  "startQuiz": "开始测验",
+  "@startQuiz": {}
 }

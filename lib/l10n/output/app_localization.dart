@@ -762,6 +762,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back to homepage'**
   String get backToHomepage;
+
+  /// No description provided for @quizDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz detail title'**
+  String get quizDetailTitle;
+
+  /// No description provided for @shuffleQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Shuffle questions'**
+  String get shuffleQuestions;
+
+  /// No description provided for @shuffleAnswers.
+  ///
+  /// In en, this message translates to:
+  /// **'Shuffle answers'**
+  String get shuffleAnswers;
+
+  /// No description provided for @startQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Start quiz'**
+  String get startQuiz;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

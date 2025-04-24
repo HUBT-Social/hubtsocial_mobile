@@ -273,5 +273,13 @@
   "testTime": "Test time",
   "@testTime": {},
   "backToHomepage": "Back to homepage",
-  "@backToHomepage": {}
+  "@backToHomepage": {},
+  "quizDetailTitle": "Quiz detail title",
+  "@quizDetailTitle": {},
+  "shuffleQuestions": "Shuffle questions",
+  "@shuffleQuestions": {},
+  "shuffleAnswers": "Shuffle answers",
+  "@shuffleAnswers": {},
+  "startQuiz": "Start quiz",
+  "@startQuiz": {}
 }

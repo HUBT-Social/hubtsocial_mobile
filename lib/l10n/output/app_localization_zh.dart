@@ -355,4 +355,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get backToHomepage => '返回主页';
+
+  @override
+  String get quizDetailTitle => '测验详情';
+
+  @override
+  String get shuffleQuestions => '打乱问题';
+
+  @override
+  String get shuffleAnswers => '打乱答案';
+
+  @override
+  String get startQuiz => '开始测验';
 }

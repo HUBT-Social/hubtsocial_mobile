@@ -273,5 +273,13 @@
   "testTime": "テスト時間",
   "@testTime": {},
   "backToHomepage": "ホームページに戻る",
-  "@backToHomepage": {}
+  "@backToHomepage": {},
+  "quizDetailTitle": "クイズ詳細",
+  "@quizDetailTitle": {},
+  "shuffleQuestions": "質問をシャッフル",
+  "@shuffleQuestions": {},
+  "shuffleAnswers": "回答をシャッフル",
+  "@shuffleAnswers": {},
+  "startQuiz": "クイズを開始",
+  "@startQuiz": {}
 }

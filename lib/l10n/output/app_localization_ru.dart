@@ -355,4 +355,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get backToHomepage => 'Вернуться на главную страницу';
+
+  @override
+  String get quizDetailTitle => 'Название теста';
+
+  @override
+  String get shuffleQuestions => 'Перемешать вопросы';
+
+  @override
+  String get shuffleAnswers => 'Перемешать ответы';
+
+  @override
+  String get startQuiz => 'Начать тест';
 }

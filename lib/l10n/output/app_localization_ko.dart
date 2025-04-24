@@ -355,4 +355,16 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get backToHomepage => '홈페이지로 돌아가기';
+
+  @override
+  String get quizDetailTitle => '퀴즈 세부정보';
+
+  @override
+  String get shuffleQuestions => '문제 섞기';
+
+  @override
+  String get shuffleAnswers => '답변 섞기';
+
+  @override
+  String get startQuiz => '퀴즈 시작';
 }

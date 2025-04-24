@@ -355,4 +355,16 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get backToHomepage => 'Về trang chủ';
+
+  @override
+  String get quizDetailTitle => 'Tiêu đề bài kiểm tra';
+
+  @override
+  String get shuffleQuestions => 'Trộn câu hỏi';
+
+  @override
+  String get shuffleAnswers => 'Trộn câu trả lời';
+
+  @override
+  String get startQuiz => 'Bắt đầu bài kiểm tra';
 }

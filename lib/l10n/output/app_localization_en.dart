@@ -355,4 +355,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backToHomepage => 'Back to homepage';
+
+  @override
+  String get quizDetailTitle => 'Quiz detail title';
+
+  @override
+  String get shuffleQuestions => 'Shuffle questions';
+
+  @override
+  String get shuffleAnswers => 'Shuffle answers';
+
+  @override
+  String get startQuiz => 'Start quiz';
 }

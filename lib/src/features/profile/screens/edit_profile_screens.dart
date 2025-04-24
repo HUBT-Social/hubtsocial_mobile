@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hubtsocial_mobile/src/constants/assets.dart';
 import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/edit_profile_form.dart';
-import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/edit_profile_header.dart';
 import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/save_button.dart';
 import 'package:provider/provider.dart';
 import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';

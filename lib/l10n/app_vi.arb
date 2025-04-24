@@ -273,5 +273,13 @@
   "testTime": "Thời gian làm bài",
   "@testTime": {},
   "backToHomepage": "Về trang chủ",
-  "@backToHomepage": {}
+  "@backToHomepage": {},
+  "quizDetailTitle": "Tiêu đề bài kiểm tra",
+  "@quizDetailTitle": {},
+  "shuffleQuestions": "Trộn câu hỏi",
+  "@shuffleQuestions": {},
+  "shuffleAnswers": "Trộn câu trả lời",
+  "@shuffleAnswers": {},
+  "startQuiz": "Bắt đầu bài kiểm tra",
+  "@startQuiz": {}
 }
