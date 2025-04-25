@@ -155,7 +155,7 @@ class _QuizInfoScreenState extends State<QuizInfoScreen> {
                             onPressed: () {
                               final prepared =
                                   prepareQuestions(state.quizInfo.questions);
-                              AppRoute.quizQuestion.pushReplacement(
+                              AppRoute.quizQuestion.push(
                                 context,
                                 extra: prepared,
                               );

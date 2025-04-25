@@ -53,10 +53,7 @@ class AppLocalStorage {
     await Future.wait([
       Hive.openBox(LocalStorageKey.localStorage),
       Hive.openBox(LocalStorageKey.token),
-      Hive.openBox<NotificationModel>(
-        LocalStorageKey.notification,
-        compactionStrategy: (entries, deletedEntries) => deletedEntries > 50,
-      ),
+      Hive.openBox<NotificationModel>(LocalStorageKey.notification),
       Hive.openBox<TimetableResponseModel>(LocalStorageKey.timeTable),
     ]).then((_) {
       logger.d("Đã mở tất cả các box thành công");

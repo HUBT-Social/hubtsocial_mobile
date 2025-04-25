@@ -37,4 +37,5 @@ class AppLotties {
   static const passwordSuccessful = 'assets/lottie/password_successful.json';
   static const success = 'assets/lottie/success.json';
   static const wrongInput = 'assets/lottie/wrong.json';
+  static const favourite = 'assets/lottie/favourite.json';
 }

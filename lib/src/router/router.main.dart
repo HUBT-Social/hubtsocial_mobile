@@ -33,53 +33,80 @@ StatefulShellRoute _mainRoute() {
             routes: [
               GoRoute(
                   path: 'quiz',
-                  builder: (context, state) => MultiBlocProvider(
-                        providers: [
-                          BlocProvider(
-                            create: (_) => getIt<QuizBloc>(),
-                          ),
-                        ],
-                        child: QuizScreen(),
+                  pageBuilder: (context, state) => CustomTransitionPage(
+                        key: state.pageKey,
+                        child: MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (_) => getIt<QuizBloc>(),
+                            ),
+                          ],
+                          child: QuizScreen(),
+                        ),
+                        transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) =>
+                            FadeTransition(opacity: animation, child: child),
                       ),
                   routes: [
                     GoRoute(
                       path: 'info',
-                      builder: (context, state) => MultiBlocProvider(
-                        providers: [
-                          BlocProvider(
-                            create: (_) => getIt<QuizInfoBloc>(),
+                      pageBuilder: (context, state) => CustomTransitionPage(
+                        key: state.pageKey,
+                        child: MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (_) => getIt<QuizInfoBloc>(),
+                            ),
+                          ],
+                          child: QuizInfoScreen(
+                            id: state.uri.queryParameters['id'].toString(),
                           ),
-                        ],
-                        child: QuizInfoScreen(
-                          id: state.uri.queryParameters['id'].toString(),
                         ),
+                        transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) =>
+                            FadeTransition(opacity: animation, child: child),
                       ),
                       routes: [
                         GoRoute(
                           path: 'question',
-                          builder: (context, state) {
+                          pageBuilder: (context, state) {
                             final questions =
                                 state.extra as List<QuestionModel>;
-                            return MultiBlocProvider(
-                              providers: [
-                                BlocProvider(
-                                  create: (context) => getIt<QuizQuestionBloc>()
-                                    ..add(LoadQuizQuestions(questions)),
-                                  // create: (_) => getIt<QuizQuestionBloc>(),
-                                ),
-                              ],
-                              child: QuizQuestionScreen(),
+                            return CustomTransitionPage(
+                              key: state.pageKey,
+                              child: MultiBlocProvider(
+                                providers: [
+                                  BlocProvider(
+                                    create: (context) =>
+                                        getIt<QuizQuestionBloc>()
+                                          ..add(LoadQuizQuestions(questions)),
+                                    // create: (_) => getIt<QuizQuestionBloc>(),
+                                  ),
+                                ],
+                                child: QuizQuestionScreen(),
+                              ),
+                              transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) =>
+                                  FadeTransition(
+                                      opacity: animation, child: child),
                             );
                           },
                         ),
                         GoRoute(
                           path: 'result',
-                          builder: (context, state) {
+                          pageBuilder: (context, state) {
                             final extra = state.extra as Map;
-                            return QuizResultScreen(
-                              score: extra["score"],
-                              total: extra["total"],
-                              time: extra["time"],
+                            return CustomTransitionPage(
+                              key: state.pageKey,
+                              child: QuizResultScreen(
+                                score: extra["score"],
+                                total: extra["total"],
+                                time: extra["time"],
+                              ),
+                              transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) =>
+                                  FadeTransition(
+                                      opacity: animation, child: child),
                             );
                           },
                         ),
@@ -126,7 +153,13 @@ StatefulShellRoute _mainRoute() {
             routes: [
               GoRoute(
                 path: 'info',
-                builder: (context, state) => TimetableInfoScreen(),
+                pageBuilder: (context, state) => CustomTransitionPage(
+                  key: state.pageKey,
+                  child: const TimetableInfoScreen(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(opacity: animation, child: child),
+                ),
               ),
             ],
           ),
