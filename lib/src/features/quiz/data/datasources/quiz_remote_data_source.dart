@@ -80,7 +80,7 @@ class QuizRemoteDataSourceImpl implements QuizRemoteDataSource {
       logger.e(e.toString());
       logger.d(s.toString());
       throw const ServerException(
-        message: 'Failed to verify OTP password. Please try again later.',
+        message: 'Failed to get Quiz. Please try again later.',
         statusCode: '505',
       );
     }

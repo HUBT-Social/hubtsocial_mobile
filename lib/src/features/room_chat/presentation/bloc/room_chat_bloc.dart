@@ -34,7 +34,7 @@ class GetRoomChatBloc extends Bloc<RoomChatEvent, GetRoomChatState> {
   ) async {
     final result =
         await _fetchRoomChat(FetchRoomChatParams(roomId: event.roomId));
-    result.fold((failure) => emit(RoomChatLoadedError("serverError")),
+    result.fold((failure) => emit(RoomChatLoadedError(failure.message)),
         (response) => emit(FetchRoomLoaded(response)));
   }
 
@@ -43,7 +43,7 @@ class GetRoomChatBloc extends Bloc<RoomChatEvent, GetRoomChatState> {
     Emitter<GetRoomChatState> emit,
   ) async {
     final result = await _getRoomChat(GetRoomChatParams(roomId: event.roomId));
-    result.fold((failure) => emit(RoomChatLoadedError("serverError")),
+    result.fold((failure) => emit(RoomChatLoadedError(failure.message)),
         (response) => emit(RoomMemberLoaded(response)));
   }
 }
