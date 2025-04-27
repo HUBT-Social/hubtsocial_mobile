@@ -119,13 +119,13 @@ types:
         index: 7
   TimetableType:
     typeId: 8
-    nextIndex: 4
+    nextIndex: 5
     fields:
       Study:
         index: 0
       Exam:
         index: 1
-      Seminal:
-        index: 2
       RetakeExam:
         index: 3
+      Seminar:
+        index: 4

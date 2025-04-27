@@ -1,1 +1,1 @@
-enum TimetableType { Study, Exam, Seminal, RetakeExam }
+enum TimetableType { Study, Exam, Seminar, RetakeExam }

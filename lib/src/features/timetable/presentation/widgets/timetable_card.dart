@@ -35,7 +35,7 @@ class _TimetableCardState extends State<TimetableCard> {
                   width: 12.w,
                   height: double.infinity,
                   decoration: BoxDecoration(
-                    color: context.colorScheme.secondary,
+                    color: widget.reformTimetable.color,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(12.r),
                       bottomLeft: Radius.circular(12.r),
@@ -45,12 +45,12 @@ class _TimetableCardState extends State<TimetableCard> {
                 Flexible(
                   child: Padding(
                     padding: EdgeInsets.only(
-                        top: 12.h, bottom: 12.h, left: 6.w, right: 12.w),
+                        top: 12.h, bottom: 12.h, left: 12.w, right: 12.w),
                     child: Column(
                       spacing: 12.h,
                       children: [
                         Row(
-                          spacing: 12,
+                          spacing: 12.w,
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -80,7 +80,7 @@ class _TimetableCardState extends State<TimetableCard> {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 12.w, vertical: 2.h),
                                 decoration: BoxDecoration(
-                                  color: context.colorScheme.primary,
+                                  color: widget.reformTimetable.color,
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 child: Text(
