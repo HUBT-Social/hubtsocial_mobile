@@ -11,6 +11,10 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../../router/route.dart';
+import '../../../router/router.import.dart';
+import '../../app/providers/hive_provider.dart';
+import '../../notification/FirebaseMessage.dart';
 
 sealed class AppDialog {
   const AppDialog._();
@@ -267,8 +271,9 @@ sealed class AppDialog {
 
     if (confirmed && context.mounted) {
       AppDialog.showLoadingDialog(message: 'Logging out');
-
       context.read<AuthBloc>().add(const SignOutEvent());
+      HiveProvider.clearToken(
+          () => AppRoute.getStarted.go(navigatorKey.currentContext!));
     }
   }
 

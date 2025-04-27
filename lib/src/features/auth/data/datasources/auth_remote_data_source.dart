@@ -277,31 +277,31 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> signOut() async {
-    try {
-      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
+    // try {
+    //   UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
 
-      var response = await APIRequest.delete(
-        url: EndPoint.authDeleteToken,
-        token: userToken.accessToken,
-      );
-      if (response.statusCode != 200) {
-        logger.e(
-            'Could not finalize api due to: statusCode: ${response.statusCode}:  ${response.body.toString()}');
-        throw ServerException(
-          message: response.body.toString(),
-          statusCode: response.statusCode.toString(),
-        );
-      }
-      HiveProvider.clearToken(
-          () => AppRoute.getStarted.go(navigatorKey.currentContext!));
-    } catch (e, s) {
-      logger.e(e.toString());
-      logger.d(s.toString());
-      throw const ServerException(
-        message: 'Issue with the server',
-        statusCode: '505',
-      );
-    }
+    //   var response = await APIRequest.delete(
+    //     url: EndPoint.authDeleteToken,
+    //     token: userToken.accessToken,
+    //   );
+    //   if (response.statusCode != 200) {
+    //     logger.e(
+    //         'Could not finalize api due to: statusCode: ${response.statusCode}:  ${response.body.toString()}');
+    //     throw ServerException(
+    //       message: response.body.toString(),
+    //       statusCode: response.statusCode.toString(),
+    //     );
+    //   }
+    //   HiveProvider.clearToken(
+    //       () => AppRoute.getStarted.go(navigatorKey.currentContext!));
+    // } catch (e, s) {
+    //   logger.e(e.toString());
+    //   logger.d(s.toString());
+    //   throw const ServerException(
+    //     message: 'Issue with the server',
+    //     statusCode: '505',
+    //   );
+    // }
   }
 
   @override

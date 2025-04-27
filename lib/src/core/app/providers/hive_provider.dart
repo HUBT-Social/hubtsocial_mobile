@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 
 import '../../local_storage/app_local_storage.dart';
+import '../../logger/logger.dart';
+import '../../notification/FirebaseMessage.dart';
 import '../../presentation/dialog/app_dialog.dart';
 
 class HiveProvider {
@@ -49,8 +52,9 @@ class HiveProvider {
     notiBox.put('unReadNotiCount', count);
   }
 
-  static void clearToken(VoidCallback callback) {
+  static Future<void> clearToken(VoidCallback callback) async {
     AppDialog.showLoadingDialog(message: 'Logging out');
+    await FirebaseMessage().deleteFCMToken();
 
     Hive.deleteFromDisk().then((_) {
       AppLocalStorage().initLocalStorage();

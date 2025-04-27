@@ -32,7 +32,6 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       isRead: false,
       data: message.data,
       type: message.data['type']?.toString(),
-      
     );
 
     final box = await Hive.openBox<NotificationModel>('notifications');
@@ -74,7 +73,7 @@ class FirebaseMessage {
     }
   }
 
-  void deleteFCMToken() async {
+  Future<void> deleteFCMToken() async {
     await _firebaseMessaging.deleteToken();
   }
 
