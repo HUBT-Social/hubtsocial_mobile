@@ -32,6 +32,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       isRead: false,
       data: message.data,
       type: message.data['type']?.toString(),
+      
     );
 
     final box = await Hive.openBox<NotificationModel>('notifications');

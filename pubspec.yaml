@@ -122,6 +122,7 @@ flutter:
     - assets/lottie/
     - assets/images/
     - assets/icons/
+    - assets/icons/notification/
     - assets/icons/localizations/
     - assets/icons/menu/
     - assets/data/

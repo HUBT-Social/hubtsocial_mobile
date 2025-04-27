@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:hubtsocial_mobile/src/constants/assets.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
@@ -209,40 +211,40 @@ class _NotificationIcon extends StatelessWidget {
 
     switch (notificationType) {
       case 'broadcast':
-        imagePath = 'assets/icons/ic_thongbao.png';
+        imagePath = AppIcons.notificationAdmin;
         break;
       case 'profile':
         if (avatarUrl != null) return buildNetworkAvatar(avatarUrl);
-        imagePath = 'assets/icons/ic_profile.png';
+        imagePath = AppIcons.notificationChat;
         break;
       case 'learning_alerts':
       case 'academic_warning':
-        imagePath = 'assets/icons/ic_canhbao.png';
+        imagePath = AppIcons.notificationSubjectWarning;
         break;
       case 'schedule':
       case 'timetable':
-        imagePath = 'assets/icons/ic_lichhoc.png';
+        imagePath = AppIcons.notificationTimetable;
         break;
       case 'exam':
-        imagePath = 'assets/icons/ic_lichthi.png';
+        imagePath = AppIcons.notificationTimetable;
         break;
       case 'maintenance':
-        imagePath = 'assets/icons/ic_baotri.png';
+        imagePath =AppIcons.notificationSystemMaintenance;
         break;
       case 'chat':
         if (isGroupMessage) {
-          imagePath = 'assets/icons/ic_groupchat.png';
+          imagePath =AppIcons.notificationGroupChat;
         } else if (avatarUrl != null) {
           return buildNetworkAvatar(avatarUrl);
         } else {
-          imagePath = 'assets/icons/ic_chat.png';
+          imagePath =AppIcons.notificationGroupChat;
         }
         break;
       default:
-        imagePath = 'assets/icons/ic_thongbao.png';
+        imagePath = AppIcons.notificationAdmin;
     }
 
-    return Image.asset(
+    return SvgPicture.asset(
       imagePath,
       width: 50,
       height: 50,

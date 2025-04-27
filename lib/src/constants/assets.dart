@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Assets {
   Assets._();
 
@@ -28,6 +30,14 @@ class AppIcons {
   static const String iconBirthdate = "assets/icons/icon_birthdate.svg";
   static const String iconGender = "assets/icons/icon_gender.svg";
   static const String iconPhoneNumber = "assets/icons/icon_phone_number.svg";
+    
+ static const String notificationChat = "assets/icons/notification/chat.svg";
+ static const String notificationTimetable = "assets/icons/notification/schedule.svg";
+  static const String notificationSubjectWarning = "assets/icons/notification/subject_warning.svg";
+  static const String notificationGroupChat= "assets/icons/notification/group_chat.svg";
+  static const String notificationSystemMaintenance ="assets/icons/notification/systemMaintenance.svg"; 
+  static const String notificationAdmin = "assets/icons/notification/admin.svg";
+  
 }
 
 class AppLotties {
