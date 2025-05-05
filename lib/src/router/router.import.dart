@@ -16,6 +16,7 @@ import 'package:hubtsocial_mobile/src/features/quiz/presentation/screens/quiz_sc
 import 'package:hubtsocial_mobile/src/features/room_chat/presentation/bloc/room_chat_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/room_chat/presentation/screens/room_chat_info.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_bloc.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_info_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/screens/timetable_info_screen.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/screens/not_found_screen.dart';

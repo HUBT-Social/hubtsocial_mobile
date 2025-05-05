@@ -3,15 +3,12 @@ import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/constants/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/user/data/gender.dart';
-import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:injectable/injectable.dart';
 import 'package:hubtsocial_mobile/src/core/api/errors/exceptions.dart';
 import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_token.dart';
 
-import '../../../../core/app/providers/hive_provider.dart';
 import '../../../../core/local_storage/local_storage_key.dart';
-import '../../../../router/route.dart';
 import '../models/forgot_password_response_model.dart';
 import '../models/sign_in_response_model.dart';
 

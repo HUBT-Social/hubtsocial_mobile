@@ -1,11 +1,9 @@
 import 'dart:async';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 
 import '../../local_storage/app_local_storage.dart';
-import '../../logger/logger.dart';
 import '../../notification/FirebaseMessage.dart';
 import '../../presentation/dialog/app_dialog.dart';
 

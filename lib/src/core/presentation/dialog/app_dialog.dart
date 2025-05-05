@@ -14,7 +14,6 @@ import '../../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../../router/route.dart';
 import '../../../router/router.import.dart';
 import '../../app/providers/hive_provider.dart';
-import '../../notification/FirebaseMessage.dart';
 
 sealed class AppDialog {
   const AppDialog._();

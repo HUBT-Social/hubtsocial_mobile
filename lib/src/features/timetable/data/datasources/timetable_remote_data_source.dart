@@ -8,12 +8,15 @@ import '../../../../core/api/errors/exceptions.dart';
 import '../../../../core/local_storage/local_storage_key.dart';
 import '../../../../core/logger/logger.dart';
 import '../../../auth/domain/entities/user_token.dart';
+import '../models/timetable_info_response_model.dart';
 import '../models/timetable_response_model.dart';
 
 abstract class TimetableRemoteDataSource {
   const TimetableRemoteDataSource();
 
   Future<TimetableResponseModel> initTimetable();
+
+  Future<TimetableInfoResponseModel> getTimetableInfo(String timetableId);
 }
 
 @LazySingleton(
@@ -101,6 +104,42 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
             LocalStorageKey.timeTable, timetableResponseModel);
         return timetableResponseModel;
       }
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      logger.e(e.toString());
+      logger.d(s.toString());
+      throw const ServerException(
+        message: 'Failed to init time table. Please try again later.',
+        statusCode: '505',
+      );
+    }
+  }
+
+  @override
+  Future<TimetableInfoResponseModel> getTimetableInfo(
+      String timetableId) async {
+    try {
+      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
+
+      final response = await APIRequest.get(
+        url: EndPoint.timetableInfo,
+        token: userToken.accessToken,
+        queryParameters: {"timetableId": timetableId},
+      );
+
+      if (response.statusCode != 200) {
+        logger.e(
+            'Failed to Fetch RoomChat: statusCode: ${response.statusCode}: ${response.body.toString()}');
+        throw ServerException(
+          message: response.body.toString(),
+          statusCode: response.statusCode.toString(),
+        );
+      }
+
+      var responseData = TimetableInfoResponseModel.fromMap(response.body);
+
+      return responseData;
     } on ServerException {
       rethrow;
     } catch (e, s) {

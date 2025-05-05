@@ -27,7 +27,8 @@ class _TimetableCardState extends State<TimetableCard> {
         color: context.colorScheme.surfaceContainerLow,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: () => AppRoute.timetableInfo.push(context),
+          onTap: () => AppRoute.timetableInfo.push(context,
+              queryParameters: {"id": widget.reformTimetable.id}),
           child: IntrinsicHeight(
             child: Row(
               children: [
