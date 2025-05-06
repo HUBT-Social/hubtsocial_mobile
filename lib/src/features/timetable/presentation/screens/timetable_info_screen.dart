@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/string.dart';
+import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/background.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/data/timetable_type.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_info_bloc.dart';
 
 class TimetableInfoScreen extends StatefulWidget {
@@ -37,7 +41,107 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
         ),
         actions: [],
       ),
-      body: Center(),
+      body: BlocBuilder<TimetableInfoBloc, TimetableInfoState>(
+        builder: (context, state) {
+          if (state is TimetableInfoLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state is TimetableInfoError) {
+            return SafeArea(
+              child: Center(
+                child:
+                    Text(state.message, style: context.textTheme.titleMedium),
+              ),
+            );
+          }
+          if (state is InitTimetableInfoSuccess) {
+            return Stack(
+              children: [
+                Background(),
+                CustomScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 32.h, horizontal: 12.w),
+                        child: Row(
+                          spacing: 12.w,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                state.timetableInfoModel.subject == null
+                                    ? state.timetableInfoModel.type.toString()
+                                    : state.timetableInfoModel.subject!
+                                        .capitalizeFirst(),
+                                style:
+                                    context.textTheme.headlineMedium?.copyWith(
+                                  color: context.colorScheme.onPrimary,
+                                ),
+                              ),
+                            ),
+                            if (state.timetableInfoModel.type != null)
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12.w, vertical: 2.h),
+                                decoration: BoxDecoration(
+                                  color: state.timetableInfoModel.type?.color,
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                                child: Text(
+                                  state.timetableInfoModel.type!.name,
+                                  style: context.textTheme.labelLarge?.copyWith(
+                                      color: context.colorScheme.onPrimary),
+                                ),
+                              )
+                          ],
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                        child: Container(
+                      padding: EdgeInsets.only(top: 24.h),
+                      decoration: BoxDecoration(
+                        color: context.colorScheme.surface,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(48.r),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Text("data"),
+                          Text("data"),
+                          Text("data"),
+                          Text("data"),
+                          Text("data"),
+                          Text("data"),
+                          Text("data"),
+                          Text("data"),
+                        ],
+                      ),
+                    )),
+                    SliverToBoxAdapter(
+                        child: Container(
+                            color: context.colorScheme.surface,
+                            height: 10000.h)),
+                    SliverToBoxAdapter(
+                      child: Container(
+                        color: context.colorScheme.surface,
+                        height: 100.h,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }
+          return const Center(
+            child: Text("No data"),
+          );
+        },
+      ),
     );
   }
 }

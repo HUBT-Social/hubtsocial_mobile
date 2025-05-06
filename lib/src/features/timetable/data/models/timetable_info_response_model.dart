@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/timetable_info_member_model.dart';
 
+import '../timetable_type.dart';
+
 class TimetableInfoResponseModel extends Equatable {
   const TimetableInfoResponseModel({
     required this.countMember,
@@ -22,7 +24,7 @@ class TimetableInfoResponseModel extends Equatable {
   final int? countMember;
   final int? creditNum;
   final List<TimetableInfoMemberModel> timetableMembers;
-  final String? id;
+  final String id;
   final String? className;
   final DateTime? startTime;
   final DateTime? endTime;
@@ -30,7 +32,7 @@ class TimetableInfoResponseModel extends Equatable {
   final String? room;
   final String? zoomId;
   final String? courseId;
-  final int? type;
+  final TimetableType? type;
 
   TimetableInfoResponseModel copyWith({
     int? countMember,
@@ -44,7 +46,7 @@ class TimetableInfoResponseModel extends Equatable {
     String? room,
     String? zoomId,
     String? courseId,
-    int? type,
+    TimetableType? type,
   }) {
     return TimetableInfoResponseModel(
       countMember: countMember ?? this.countMember,
@@ -78,7 +80,7 @@ class TimetableInfoResponseModel extends Equatable {
       room: json["room"],
       zoomId: json["zoomID"],
       courseId: json["courseId"],
-      type: json["type"],
+      type: TimetableType.values[json["type"]],
     );
   }
   factory TimetableInfoResponseModel.fromMap(String source) =>

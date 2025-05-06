@@ -110,7 +110,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
       logger.e(e.toString());
       logger.d(s.toString());
       throw const ServerException(
-        message: 'Failed to init time table. Please try again later.',
+        message: 'Failed to init timetable. Please try again later.',
         statusCode: '505',
       );
     }
@@ -130,7 +130,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
 
       if (response.statusCode != 200) {
         logger.e(
-            'Failed to Fetch RoomChat: statusCode: ${response.statusCode}: ${response.body.toString()}');
+            'Failed to Get Timetable Info: statusCode: ${response.statusCode}: ${response.body.toString()}');
         throw ServerException(
           message: response.body.toString(),
           statusCode: response.statusCode.toString(),
@@ -146,7 +146,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
       logger.e(e.toString());
       logger.d(s.toString());
       throw const ServerException(
-        message: 'Failed to init time table. Please try again later.',
+        message: 'Failed to get timetable info. Please try again later.',
         statusCode: '505',
       );
     }
