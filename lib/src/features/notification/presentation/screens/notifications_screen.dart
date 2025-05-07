@@ -208,14 +208,74 @@ class _NotificationIcon extends StatelessWidget {
         notification.data?['type']?.toString().toLowerCase() ??
         '';
     final avatarUrl = notification.data?['avatarUrl']?.toString();
+    final imageUrl = notification.data?['imageUrl']?.toString();
     final isGroupMessage = notification.data?['isGroupMessage'] == true;
 
+    // Nếu có avatarUrl hoặc imageUrl thì hiển thị ảnh lớn, overlay icon nhỏ
+    if (notificationType == 'chat' || notificationType == 'profile') {
+      final String? mainImage = avatarUrl ?? imageUrl;
+      if (mainImage != null && mainImage.isNotEmpty) {
+        // Chọn icon nhỏ phù hợp
+        String smallIconPath = isGroupMessage
+            ? AppIcons.notificationGroupChat
+            : AppIcons.notificationChat;
+        return Stack(
+          children: [
+            ClipOval(
+              child: Image.network(
+                mainImage,
+                width: 50,
+                height: 50,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'assets/icons/ic_profile.png',
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.contain,
+                  );
+                },
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                width: 20,
+                height: 20,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 2,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: SvgPicture.asset(
+                    smallIconPath,
+                    width: 16,
+                    height: 16,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      }
+    }
+
+    // Nếu không có ảnh, giữ nguyên icon lớn như cũ
     switch (notificationType) {
       case 'broadcast':
         imagePath = AppIcons.notificationAdmin;
         break;
       case 'profile':
-        if (avatarUrl != null) return buildNetworkAvatar(avatarUrl);
         imagePath = AppIcons.notificationChat;
         break;
       case 'learning_alerts':
@@ -233,13 +293,9 @@ class _NotificationIcon extends StatelessWidget {
         imagePath = AppIcons.notificationSystemMaintenance;
         break;
       case 'chat':
-        if (isGroupMessage) {
-          imagePath = AppIcons.notificationGroupChat;
-        } else if (avatarUrl != null) {
-          return buildNetworkAvatar(avatarUrl);
-        } else {
-          imagePath = AppIcons.notificationGroupChat;
-        }
+        imagePath = isGroupMessage
+            ? AppIcons.notificationGroupChat
+            : AppIcons.notificationGroupChat;
         break;
       default:
         imagePath = AppIcons.notificationAdmin;
@@ -252,23 +308,6 @@ class _NotificationIcon extends StatelessWidget {
       fit: BoxFit.contain,
     );
   }
-}
-
-Widget buildNetworkAvatar(String url) {
-  return Image.network(
-    url,
-    width: 50,
-    height: 50,
-    fit: BoxFit.cover,
-    errorBuilder: (context, error, stackTrace) {
-      return Image.asset(
-        'assets/icons/ic_profile.png',
-        width: 50,
-        height: 50,
-        fit: BoxFit.contain,
-      );
-    },
-  );
 }
 
 class _NotificationsState extends State<NotificationsScreen> {
