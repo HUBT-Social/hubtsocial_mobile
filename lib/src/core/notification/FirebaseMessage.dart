@@ -37,6 +37,9 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     final box = await Hive.openBox<NotificationModel>('notifications');
     await box.add(notification);
 
+    print('Lưu notification vào Hive với data: ${notification.data}');
+    print('===> FCM background message.data: ${message.data}');
+
     logger
         .i('Background notification saved successfully: ${message.messageId}');
   } catch (e) {
@@ -108,7 +111,7 @@ class FirebaseMessage {
   void _handleForegroundMessage() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       logger.i('Got a message whilst in the foreground!');
-      logger.i('Message data: ${message.data}');
+      print('===> FCM foreground message.data: ${message.data}');
 
       if (message.notification != null) {
         logger.i(
@@ -139,6 +142,7 @@ class FirebaseMessage {
       // Chỉ lưu nếu thông báo chưa tồn tại
       if (!notificationExists) {
         await box.add(notification);
+        print('Lưu notification vào Hive với data: ${notification.data}');
         logger.i('Foreground notification saved: ${notification.id}');
       } else {
         logger.i('Notification already exists: ${notification.id}');
@@ -266,6 +270,7 @@ class FirebaseMessage {
         );
 
         await box.add(notification);
+        print('Lưu notification vào Hive với data: ${notification.data}');
         logger.i('Notification saved: ${notification.id}');
       } else {
         logger.i('Notification already exists: $notificationId');
@@ -414,6 +419,7 @@ class FirebaseMessage {
       // Only save if notification doesn't exist
       if (!notificationExists) {
         await box.add(notification);
+        print('Lưu notification vào Hive với data: ${notification.data}');
         logger.i('Terminated state notification saved: ${notification.id}');
       } else {
         logger.i(
