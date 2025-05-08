@@ -211,63 +211,64 @@ class _NotificationIcon extends StatelessWidget {
     final imageUrl = notification.data?['imageUrl']?.toString();
     final isGroupMessage = notification.data?['isGroupMessage'] == true;
 
-    // Nếu có avatarUrl hoặc imageUrl thì hiển thị ảnh lớn, overlay icon nhỏ
-    if (notificationType == 'chat' || notificationType == 'profile') {
-      final String? mainImage = avatarUrl ?? imageUrl;
-      if (mainImage != null && mainImage.isNotEmpty) {
-        // Chọn icon nhỏ phù hợp
-        String smallIconPath = isGroupMessage
-            ? AppIcons.notificationGroupChat
-            : AppIcons.notificationChat;
-        return Stack(
-          children: [
-            ClipOval(
-              child: Image.network(
-                mainImage,
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    'assets/icons/ic_profile.png',
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.contain,
-                  );
-                },
-              ),
+    // Ưu tiên avatarUrl, nếu không có thì lấy imageUrl
+    final String? mainImage = avatarUrl?.isNotEmpty == true
+        ? avatarUrl
+        : (imageUrl?.isNotEmpty == true ? imageUrl : null);
+
+    if ((notificationType == 'chat' || notificationType == 'profile') &&
+        mainImage != null) {
+      String smallIconPath = isGroupMessage
+          ? AppIcons.notificationGroupChat
+          : AppIcons.notificationChat;
+      return Stack(
+        children: [
+          ClipOval(
+            child: Image.network(
+              mainImage,
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Image.asset(
+                  'assets/icons/ic_profile.png',
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.contain,
+                );
+              },
             ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 2,
-                      offset: Offset(0, 1),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: SvgPicture.asset(
-                    smallIconPath,
-                    width: 16,
-                    height: 16,
-                    fit: BoxFit.contain,
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 2,
+                    offset: Offset(0, 1),
                   ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: SvgPicture.asset(
+                  smallIconPath,
+                  width: 16,
+                  height: 16,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
-          ],
-        );
-      }
+          ),
+        ],
+      );
     }
 
     // Nếu không có ảnh, giữ nguyên icon lớn như cũ
@@ -738,6 +739,10 @@ class NotificationDetailScreen extends StatelessWidget {
         break;
     }
 
+    final avatarUrl = notification.data?['avatarUrl'];
+    final imageUrl = notification.data?['imageUrl'];
+    final mainImage = avatarUrl ?? imageUrl;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -821,7 +826,7 @@ class NotificationDetailScreen extends StatelessWidget {
               SizedBox(height: 24),
 
               // Hình ảnh (nếu có)
-              if (notification.data?['imageUrl'] != null) ...[
+              if (mainImage != null) ...[
                 Text(
                   'Hình ảnh',
                   style: TextStyle(
@@ -834,7 +839,7 @@ class NotificationDetailScreen extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
-                    notification.data!['imageUrl'],
+                    mainImage,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
