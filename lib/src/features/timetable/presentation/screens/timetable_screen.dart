@@ -135,10 +135,12 @@ class _TimetableScreenState extends State<TimetableScreen> {
           return const Center(child: CircularProgressIndicator());
         }
         if (state is TimetableError) {
-          return Center(
-            child: Text(
-              state.message,
-              style: context.textTheme.titleMedium,
+          return SafeArea(
+            child: Center(
+              child: Text(
+                state.message,
+                style: context.textTheme.titleMedium,
+              ),
             ),
           );
         }

@@ -83,10 +83,14 @@ import 'package:hubtsocial_mobile/src/features/timetable/data/repos/timetable_re
     as _i576;
 import 'package:hubtsocial_mobile/src/features/timetable/domain/repos/timetable_repo.dart'
     as _i113;
+import 'package:hubtsocial_mobile/src/features/timetable/domain/usercases/init_timetable_info_usercase.dart'
+    as _i475;
 import 'package:hubtsocial_mobile/src/features/timetable/domain/usercases/init_timetable_usercase.dart'
     as _i753;
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_bloc.dart'
     as _i786;
+import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_info_bloc.dart'
+    as _i837;
 import 'package:hubtsocial_mobile/src/features/user/data/datasources/user_profile_remote_datasource.dart'
     as _i592;
 import 'package:hubtsocial_mobile/src/features/user/data/repos/user_repo_impl.dart'
@@ -156,6 +160,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i942.RoomChatRepoImpl(gh<_i311.RoomChatRemoteDataSource>()));
     gh.lazySingleton<_i753.InitTimetableUserCase>(
         () => _i753.InitTimetableUserCase(gh<_i113.TimetableRepo>()));
+    gh.lazySingleton<_i475.InitTimetableInfoUserCase>(
+        () => _i475.InitTimetableInfoUserCase(gh<_i113.TimetableRepo>()));
     gh.lazySingleton<_i936.AuthRepo>(
         () => _i457.AuthRepoImpl(gh<_i953.AuthRemoteDataSource>()));
     gh.lazySingleton<_i1063.FetchRoomChatUserCase>(
@@ -214,6 +220,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i488.SignOut>(() => _i488.SignOut(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i287.SignUpUserCase>(
         () => _i287.SignUpUserCase(gh<_i936.AuthRepo>()));
+    gh.factory<_i837.TimetableInfoBloc>(() => _i837.TimetableInfoBloc(
+        fetchTimetableInfo: gh<_i475.InitTimetableInfoUserCase>()));
     gh.factory<_i715.AuthBloc>(() => _i715.AuthBloc(
           signIn: gh<_i627.SignInUserCase>(),
           twoFactor: gh<_i245.TwoFactorUserCase>(),

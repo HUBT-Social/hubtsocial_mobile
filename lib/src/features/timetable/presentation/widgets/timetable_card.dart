@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/string.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_timetable_model.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/data/timetable_type.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:intl/intl.dart';
 
@@ -27,7 +28,8 @@ class _TimetableCardState extends State<TimetableCard> {
         color: context.colorScheme.surfaceContainerLow,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: () => AppRoute.timetableInfo.push(context),
+          onTap: () => AppRoute.timetableInfo.push(context,
+              queryParameters: {"id": widget.reformTimetable.id}),
           child: IntrinsicHeight(
             child: Row(
               children: [
@@ -35,7 +37,7 @@ class _TimetableCardState extends State<TimetableCard> {
                   width: 12.w,
                   height: double.infinity,
                   decoration: BoxDecoration(
-                    color: widget.reformTimetable.color,
+                    color: widget.reformTimetable.type?.color,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(12.r),
                       bottomLeft: Radius.circular(12.r),
@@ -80,7 +82,7 @@ class _TimetableCardState extends State<TimetableCard> {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 12.w, vertical: 2.h),
                                 decoration: BoxDecoration(
-                                  color: widget.reformTimetable.color,
+                                  color: widget.reformTimetable.type?.color,
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 child: Text(

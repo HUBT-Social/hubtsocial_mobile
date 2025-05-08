@@ -75,29 +75,4 @@ class ReformTimetable extends HiveObject {
   String toString() {
     return "$id, $className, $startTime, $endTime, $subject, $room, $zoomId, $type, ";
   }
-
-  Color get color {
-    switch (type) {
-      case TimetableType.Study:
-        return navigatorKey.currentContext != null
-            ? navigatorKey.currentContext!.colorScheme.primary
-            : Colors.blue;
-      case TimetableType.Exam:
-        return navigatorKey.currentContext != null
-            ? navigatorKey.currentContext!.colorScheme.error
-            : Colors.red;
-      case TimetableType.Seminar:
-        return navigatorKey.currentContext != null
-            ? navigatorKey.currentContext!.colorScheme.tertiary
-            : Colors.green;
-      case TimetableType.RetakeExam:
-        return navigatorKey.currentContext != null
-            ? navigatorKey.currentContext!.colorScheme.error
-            : Colors.red;
-      default:
-        return navigatorKey.currentContext != null
-            ? navigatorKey.currentContext!.colorScheme.secondary
-            : Colors.grey;
-    }
-  }
 }

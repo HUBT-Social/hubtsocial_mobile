@@ -155,7 +155,12 @@ StatefulShellRoute _mainRoute() {
                 path: 'info',
                 pageBuilder: (context, state) => CustomTransitionPage(
                   key: state.pageKey,
-                  child: const TimetableInfoScreen(),
+                  child: BlocProvider(
+                    create: (context) => getIt<TimetableInfoBloc>(),
+                    child: TimetableInfoScreen(
+                      id: state.uri.queryParameters['id'].toString(),
+                    ),
+                  ),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) =>
                           FadeTransition(opacity: animation, child: child),

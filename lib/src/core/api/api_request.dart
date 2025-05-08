@@ -193,7 +193,7 @@ class APIRequest {
         HiveProvider.clearToken(
             () => AppRoute.getStarted.go(navigatorKey.currentContext!));
         throw ServerException(
-          message: response.statusCode.toString(),
+          message: response.body.toString(),
           statusCode: response.statusCode.toString(),
         );
       }
@@ -201,7 +201,7 @@ class APIRequest {
       if (response.statusCode != 200) {
         logger.e("statusCode: ${response.statusCode}: ${response.body}");
         throw ServerException(
-          message: response.statusCode.toString(),
+          message: response.body.toString(),
           statusCode: response.statusCode.toString(),
         );
       }
