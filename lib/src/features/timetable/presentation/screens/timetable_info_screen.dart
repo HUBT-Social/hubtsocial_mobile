@@ -89,72 +89,87 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 32.h, horizontal: 24.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            state.timetableInfoModel.subject == null
-                                ? state.timetableInfoModel.type.toString()
-                                : state.timetableInfoModel.subject!
-                                    .capitalizeFirst(),
-                            style: context.textTheme.headlineMedium?.copyWith(
-                              color: context.colorScheme.onPrimary,
-                            ),
-                          ),
-                        ),
-                        if (state.timetableInfoModel.type != null)
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12.w, vertical: 2.h),
-                            decoration: BoxDecoration(
-                              color: state.timetableInfoModel.type?.color,
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                            child: Text(
-                              state.timetableInfoModel.type!.name,
-                              style: context.textTheme.labelLarge?.copyWith(
-                                  color: context.colorScheme.onPrimary),
-                            ),
-                          )
-                      ],
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
                     child: Container(
                   padding: EdgeInsets.only(top: 24.h, left: 12.w, right: 12.w),
                   decoration: BoxDecoration(
-                    color: context.colorScheme.surface,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(48.r),
-                    ),
+                    color: context.colorScheme.surfaceContainerLow,
+                    // borderRadius: BorderRadius.only(
+                    //   topLeft: Radius.circular(48.r),
+                    // ),
                   ),
                   child: Column(
+                    spacing: 12.h,
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("data"),
-                      Text("data"),
-                      Text("data"),
-                      Text("data"),
-                      Text("data"),
-                      Text("data"),
-                      Text("data"),
-                      Text("data"),
+                      Row(
+                        spacing: 6.w,
+                        children: [
+                          Icon(
+                            Icons.room,
+                            color: context.colorScheme.primary,
+                            size: 24.r,
+                          ),
+                          Text(
+                            state.timetableInfoModel.room!.capitalizeFirst(),
+                            style: context.textTheme.bodyLarge,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        spacing: 6.w,
+                        children: [
+                          Icon(
+                            Icons.school_rounded,
+                            color: context.colorScheme.primary,
+                          ),
+                          Text(
+                            state.timetableInfoModel.className!
+                                .capitalizeFirst(),
+                            style: context.textTheme.bodyLarge,
+                          ),
+                        ],
+                      ),
+                      if (state.timetableInfoModel.zoomId!.isNotEmpty)
+                        Row(
+                          spacing: 12.w,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              spacing: 6.w,
+                              children: [
+                                FilledButton(
+                                    onPressed: () {},
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.voice_chat_rounded,
+                                          color: context.colorScheme.primary,
+                                        ),
+                                        Text(
+                                          state.timetableInfoModel.zoomId!
+                                              .capitalizeFirst(),
+                                          style: context.textTheme.bodyMedium,
+                                        ),
+                                      ],
+                                    )),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.copy,
+                                    color: context.colorScheme.primary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 )),
-                SliverToBoxAdapter(
-                    child: Container(
-                        color: context.colorScheme.surface, height: 10000.h)),
+                SliverToBoxAdapter(child: Container(height: 10000.h)),
                 SliverToBoxAdapter(
                   child: Container(
-                    color: context.colorScheme.surface,
                     height: 100.h,
                   ),
                 ),
