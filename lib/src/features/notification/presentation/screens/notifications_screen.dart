@@ -8,6 +8,10 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_type_id.dart';
 import 'package:hubtsocial_mobile/hive/hive_adapters.dart';
+import 'notification_item.dart';
+import 'notification_icon.dart';
+import 'notification_detail_screen.dart';
+import 'filter_option.dart';
 
 import '../../../main_wrapper/presentation/widgets/main_app_bar.dart';
 
@@ -16,298 +20,6 @@ class NotificationsScreen extends StatefulWidget {
 
   @override
   State<NotificationsScreen> createState() => _NotificationsState();
-}
-
-class _FilterOption extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _FilterOption({
-    required this.title,
-    required this.icon,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon,
-          color: isSelected ? Theme.of(context).primaryColor : Colors.grey),
-      title: Text(title,
-          style: TextStyle(
-              color:
-                  isSelected ? Theme.of(context).primaryColor : Colors.black)),
-      trailing: isSelected
-          ? Icon(Icons.check, color: Theme.of(context).primaryColor)
-          : null,
-      onTap: onTap,
-    );
-  }
-}
-
-class _NotificationItem extends StatelessWidget {
-  final NotificationModel notification;
-  final VoidCallback onTap;
-
-  const _NotificationItem({
-    required this.notification,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final hasImage = notification.data?['imageUrl'] != null;
-    final imageUrl = notification.data?['imageUrl'];
-    final type = notification.type?.toLowerCase() ??
-        notification.data?['type']?.toString().toLowerCase() ??
-        '';
-
-    return Container(
-      height: 75,
-      width: double.infinity,
-      margin: EdgeInsets.only(bottom: 4),
-      decoration: BoxDecoration(
-        color:
-            notification.isRead ? Colors.white : Colors.blue.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: Colors.grey.withOpacity(0.1),
-          width: 0.5,
-        ),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            if ([
-              'learning_alerts',
-              'academic_warning',
-              'broadcast',
-              'exam',
-              'maintenance'
-            ].contains(type)) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      NotificationDetailScreen(notification: notification),
-                ),
-              );
-            } else {
-              onTap();
-            }
-          },
-          borderRadius: BorderRadius.circular(8),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _NotificationIcon(notification: notification),
-                SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        notification.title ?? '',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      if (notification.body != null) ...[
-                        SizedBox(height: 2),
-                        Text(
-                          notification.body!,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.black87,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                      Spacer(),
-                      Text(
-                        _formatTime(notification.time, context),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                if (hasImage) ...[
-                  SizedBox(width: 8),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      imageUrl!,
-                      width: 45,
-                      height: 45,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          width: 45,
-                          height: 45,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(Icons.image_not_supported,
-                              color: Colors.grey),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  String _formatTime(String time, BuildContext context) {
-    // Chuyển đổi chuỗi thời gian thành DateTime
-    final dateTime = DateTime.parse(time);
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
-
-    if (difference.inDays > 0) {
-      return '${difference.inDays} ${context.loc.the_day_before}';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours} ${context.loc.the_time_before}';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} ${context.loc.the_muniest_before}';
-    } else {
-      return context.loc.just_finished;
-    }
-  }
-}
-
-class _NotificationIcon extends StatelessWidget {
-  final NotificationModel notification;
-
-  const _NotificationIcon({required this.notification});
-
-  @override
-  Widget build(BuildContext context) {
-    String imagePath;
-
-    final notificationType = notification.type?.toLowerCase() ??
-        notification.data?['type']?.toString().toLowerCase() ??
-        '';
-    final avatarUrl = notification.data?['avatarUrl']?.toString();
-    final imageUrl = notification.data?['imageUrl']?.toString();
-    final isGroupMessage = notification.data?['isGroupMessage'] == true;
-
-    // Nếu có avatarUrl hoặc imageUrl thì hiển thị ảnh lớn, overlay icon nhỏ
-    if (notificationType == 'chat' || notificationType == 'profile') {
-      final String? mainImage = avatarUrl ?? imageUrl;
-      if (mainImage != null && mainImage.isNotEmpty) {
-        // Chọn icon nhỏ phù hợp
-        String smallIconPath = isGroupMessage
-            ? AppIcons.notificationGroupChat
-            : AppIcons.notificationChat;
-        return Stack(
-          children: [
-            ClipOval(
-              child: Image.network(
-                mainImage,
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    'assets/icons/ic_profile.png',
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.contain,
-                  );
-                },
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 2,
-                      offset: Offset(0, 1),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: SvgPicture.asset(
-                    smallIconPath,
-                    width: 16,
-                    height: 16,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      }
-    }
-
-    // Nếu không có ảnh, giữ nguyên icon lớn như cũ
-    switch (notificationType) {
-      case 'broadcast':
-        imagePath = AppIcons.notificationAdmin;
-        break;
-      case 'profile':
-        imagePath = AppIcons.notificationChat;
-        break;
-      case 'learning_alerts':
-      case 'academic_warning':
-        imagePath = AppIcons.notificationSubjectWarning;
-        break;
-      case 'schedule':
-      case 'timetable':
-        imagePath = AppIcons.notificationTimetable;
-        break;
-      case 'exam':
-        imagePath = AppIcons.notificationTimetable;
-        break;
-      case 'maintenance':
-        imagePath = AppIcons.notificationSystemMaintenance;
-        break;
-      case 'chat':
-        imagePath = isGroupMessage
-            ? AppIcons.notificationGroupChat
-            : AppIcons.notificationGroupChat;
-        break;
-      default:
-        imagePath = AppIcons.notificationAdmin;
-    }
-
-    return SvgPicture.asset(
-      imagePath,
-      width: 50,
-      height: 50,
-      fit: BoxFit.contain,
-    );
-  }
 }
 
 class _NotificationsState extends State<NotificationsScreen> {
@@ -473,6 +185,9 @@ class _NotificationsState extends State<NotificationsScreen> {
                     final notification = filteredNotifications[index];
                     final imageUrl = notification.data?['imageUrl'];
 
+                    print(
+                        '===> notification.data in list: ${notification.data}');
+
                     return InkWell(
                       onTap: () =>
                           _handleNotificationTap(context, notification),
@@ -495,7 +210,7 @@ class _NotificationsState extends State<NotificationsScreen> {
                               width: 50,
                               height: 50,
                               child:
-                                  _NotificationIcon(notification: notification),
+                                  NotificationIcon(notification: notification),
                             ),
                             SizedBox(width: 12),
                             // Content in the middle
@@ -612,7 +327,7 @@ class _NotificationsState extends State<NotificationsScreen> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _FilterOption(
+            FilterOption(
               title: context.loc.all,
               icon: Icons.all_inbox,
               isSelected: _selectedFilter == 'all',
@@ -621,7 +336,7 @@ class _NotificationsState extends State<NotificationsScreen> {
                 Navigator.pop(context);
               },
             ),
-            _FilterOption(
+            FilterOption(
               title: context.loc.unread,
               icon: Icons.mark_email_unread,
               isSelected: _selectedFilter == 'unread',
@@ -630,7 +345,7 @@ class _NotificationsState extends State<NotificationsScreen> {
                 Navigator.pop(context);
               },
             ),
-            _FilterOption(
+            FilterOption(
               title: context.loc.system,
               icon: Icons.campaign,
               isSelected: _selectedFilter == 'system',
@@ -639,7 +354,7 @@ class _NotificationsState extends State<NotificationsScreen> {
                 Navigator.pop(context);
               },
             ),
-            _FilterOption(
+            FilterOption(
               title: context.loc.chat,
               icon: Icons.chat_bubble,
               isSelected: _selectedFilter == 'chat',
@@ -648,7 +363,7 @@ class _NotificationsState extends State<NotificationsScreen> {
                 Navigator.pop(context);
               },
             ),
-            _FilterOption(
+            FilterOption(
               title: context.loc.groups,
               icon: Icons.group,
               isSelected: _selectedFilter == 'group',
@@ -657,7 +372,7 @@ class _NotificationsState extends State<NotificationsScreen> {
                 Navigator.pop(context);
               },
             ),
-            _FilterOption(
+            FilterOption(
               title: context.loc.schedule,
               icon: Icons.schedule,
               isSelected: _selectedFilter == 'schedule',
@@ -685,190 +400,6 @@ class _NotificationsState extends State<NotificationsScreen> {
       const SnackBar(
         content: Text('Đánh dấu tất cả là đã đọc'),
         behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
-
-  String _formatTime(String time, BuildContext context) {
-    // Chuyển đổi chuỗi thời gian thành DateTime
-    final dateTime = DateTime.parse(time);
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
-
-    if (difference.inDays > 0) {
-      return '${difference.inDays} ${context.loc.the_day_before}';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours} ${context.loc.the_time_before}';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} ${context.loc.the_muniest_before}';
-    } else {
-      return context.loc.just_finished;
-    }
-  }
-}
-
-class NotificationDetailScreen extends StatelessWidget {
-  final NotificationModel notification;
-
-  const NotificationDetailScreen({super.key, required this.notification});
-
-  @override
-  Widget build(BuildContext context) {
-    final type = notification.type?.toLowerCase() ??
-        notification.data?['type']?.toString().toLowerCase() ??
-        '';
-    String title = 'Chi tiết thông báo';
-
-    // Xác định tiêu đề dựa trên loại thông báo
-    switch (type) {
-      case 'learning_alerts':
-        title = 'Cảnh báo học tập';
-        break;
-      case 'academic_warning':
-        title = 'Cảnh báo học vụ';
-        break;
-      case 'broadcast':
-        title = 'Thông báo chung';
-        break;
-      case 'exam':
-        title = 'Thông báo thi';
-        break;
-      case 'maintenance':
-        title = 'Thông báo bảo trì';
-        break;
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        elevation: 0,
-      ),
-      body: Container(
-        color: Colors.white,
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Tiêu đề thông báo
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.05),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    _NotificationIcon(notification: notification),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            notification.title ?? '',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            _formatTime(notification.time, context),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 24),
-
-              // Nội dung thông báo
-              Text(
-                'Nội dung',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87,
-                ),
-              ),
-              SizedBox(height: 8),
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey[50],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Colors.grey.withOpacity(0.1),
-                    width: 1,
-                  ),
-                ),
-                child: Text(
-                  notification.body ?? '',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black87,
-                    height: 1.5,
-                  ),
-                ),
-              ),
-              SizedBox(height: 24),
-
-              // Hình ảnh (nếu có)
-              if (notification.data?['imageUrl'] != null) ...[
-                Text(
-                  'Hình ảnh',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
-                ),
-                SizedBox(height: 8),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    notification.data!['imageUrl'],
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 200,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.image_not_supported,
-                              color: Colors.grey,
-                              size: 40,
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Không thể tải hình ảnh',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
       ),
     );
   }

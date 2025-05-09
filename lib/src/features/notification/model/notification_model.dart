@@ -22,7 +22,7 @@ class NotificationModel extends HiveObject {
     required this.time,
     this.isRead = false,
     this.data,
-    this.type, // Thêm type vào constructor
+    this.type,
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
