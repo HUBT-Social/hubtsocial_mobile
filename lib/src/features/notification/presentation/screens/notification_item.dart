@@ -10,8 +10,8 @@ class NotificationItem extends StatelessWidget {
   const NotificationItem({
     required this.notification,
     required this.onTap,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

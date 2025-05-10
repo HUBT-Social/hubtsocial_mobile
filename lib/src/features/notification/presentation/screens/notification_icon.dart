@@ -6,7 +6,7 @@ import 'package:hubtsocial_mobile/src/constants/assets.dart';
 class NotificationIcon extends StatelessWidget {
   final NotificationModel notification;
 
-  const NotificationIcon({required this.notification});
+  const NotificationIcon({super.key, required this.notification});
 
   @override
   Widget build(BuildContext context) {

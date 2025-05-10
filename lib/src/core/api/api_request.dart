@@ -21,11 +21,12 @@ class APIRequest {
     String? token,
     Map<String, dynamic>? queryParameters,
   }) async {
-    queryParameters?.putIfAbsent(
+    queryParameters ??= {};
+    queryParameters.putIfAbsent(
         "culture", () => AppLocalStorage.currentLanguageCode);
 
     Map<String, String>? parameters =
-        queryParameters?.map((key, value) => MapEntry(key, value.toString()));
+        queryParameters.map((key, value) => MapEntry(key, value.toString()));
 
     Uri uri = Uri.parse(url).replace(queryParameters: parameters);
 
@@ -50,11 +51,13 @@ class APIRequest {
     String? token,
     Map<String, dynamic>? queryParameters,
   }) async {
-    queryParameters?.putIfAbsent(
+    queryParameters ??= {};
+
+    queryParameters.putIfAbsent(
         "culture", () => AppLocalStorage.currentLanguageCode);
 
     Map<String, String>? parameters =
-        queryParameters?.map((key, value) => MapEntry(key, value.toString()));
+        queryParameters.map((key, value) => MapEntry(key, value.toString()));
 
     Uri uri = Uri.parse(url).replace(queryParameters: parameters);
 
@@ -79,11 +82,13 @@ class APIRequest {
     String? token,
     Map<String, dynamic>? queryParameters,
   }) async {
-    queryParameters?.putIfAbsent(
+    queryParameters ??= {};
+
+    queryParameters.putIfAbsent(
         "culture", () => AppLocalStorage.currentLanguageCode);
 
     Map<String, String>? parameters =
-        queryParameters?.map((key, value) => MapEntry(key, value.toString()));
+        queryParameters.map((key, value) => MapEntry(key, value.toString()));
 
     Uri uri = Uri.parse(url).replace(queryParameters: parameters);
     final response = await http.put(
@@ -107,11 +112,13 @@ class APIRequest {
     String? token,
     Map<String, dynamic>? queryParameters,
   }) async {
-    queryParameters?.putIfAbsent(
+    queryParameters ??= {};
+
+    queryParameters.putIfAbsent(
         "culture", () => AppLocalStorage.currentLanguageCode);
 
     Map<String, String>? parameters =
-        queryParameters?.map((key, value) => MapEntry(key, value.toString()));
+        queryParameters.map((key, value) => MapEntry(key, value.toString()));
 
     Uri uri = Uri.parse(url).replace(queryParameters: parameters);
 
@@ -135,11 +142,13 @@ class APIRequest {
     String? token,
     Map<String, dynamic>? queryParameters,
   }) async {
-    queryParameters?.putIfAbsent(
+    queryParameters ??= {};
+
+    queryParameters.putIfAbsent(
         "culture", () => AppLocalStorage.currentLanguageCode);
 
     Map<String, String>? parameters =
-        queryParameters?.map((key, value) => MapEntry(key, value.toString()));
+        queryParameters.map((key, value) => MapEntry(key, value.toString()));
 
     Uri uri = Uri.parse(url).replace(queryParameters: parameters);
 
@@ -199,11 +208,15 @@ class APIRequest {
       }
 
       if (response.statusCode != 200) {
-        logger.e("statusCode: ${response.statusCode}: ${response.body}");
-        throw ServerException(
-          message: response.body.toString(),
-          statusCode: response.statusCode.toString(),
-        );
+        // logger.e("statusCode: ${response.statusCode}: ${response.body}");
+        // throw ServerException(
+        //   message: response.body.toString(),
+        //   statusCode: response.statusCode.toString(),
+        // );
+
+        token =
+            hiveAuth.box(LocalStorageKey.token).get(LocalStorageKey.userToken);
+        return token;
       }
       var newToken = UserTokenModel.fromJson(response.body);
       await hiveAuth

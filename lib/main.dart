@@ -34,12 +34,12 @@ void main() async {
   GoRouter.optionURLReflectsImperativeAPIs = true;
 
   await Future.wait([
+    _initUniqueDeviceId(),
     dotenv.load(fileName: Environment.fileName),
     configureDependencies(),
   ]);
 
   await Future.wait([
-    _initUniqueDeviceId(),
     _initFirebase(),
     AppLocalStorage().initLocalStorage(),
   ]);
@@ -158,8 +158,3 @@ Future<void> _initNotification() async {
     logger.e('Error initializing notifications: $e');
   }
 }
-     
-
-
-
-     

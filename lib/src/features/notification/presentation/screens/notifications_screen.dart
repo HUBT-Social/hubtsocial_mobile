@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:hubtsocial_mobile/src/constants/assets.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_type_id.dart';
 import 'package:hubtsocial_mobile/hive/hive_adapters.dart';
-import 'notification_item.dart';
 import 'notification_icon.dart';
 import 'notification_detail_screen.dart';
 import 'filter_option.dart';

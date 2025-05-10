@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/string.dart';
-import 'package:hubtsocial_mobile/src/features/auth/presentation/widgets/background.dart';
-import 'package:hubtsocial_mobile/src/features/timetable/data/timetable_type.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_info_bloc.dart';
 
 import '../../../../constants/assets.dart';
@@ -71,7 +69,7 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                     centerTitle: false,
                     background: ClipRRect(
                       borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(24.r),
+                        bottomRight: Radius.circular(48.r),
                       ),
                       child: Image.asset(
                         Assets.startedBg,
