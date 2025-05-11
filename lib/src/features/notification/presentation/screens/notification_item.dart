@@ -22,8 +22,8 @@ class NotificationItem extends StatelessWidget {
         '';
 
     return Container(
-      height: 75,
-      width: double.infinity,
+      height: 77,
+      width: 360,
       margin: EdgeInsets.only(bottom: 4),
       decoration: BoxDecoration(
         color:
@@ -58,17 +58,19 @@ class NotificationItem extends StatelessWidget {
           },
           borderRadius: BorderRadius.circular(8),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: 50,
-                  height: 50,
+                  width: 60,
+                  height: 60,
                   child: buildNotificationAvatar(notification),
                 ),
                 SizedBox(width: 8),
-                Expanded(
+                SizedBox(
+                  width: 278,
+                  height: 60,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

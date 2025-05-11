@@ -9,6 +9,7 @@ import 'package:hubtsocial_mobile/hive/hive_adapters.dart';
 import 'notification_icon.dart';
 import 'notification_detail_screen.dart';
 import 'filter_option.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../main_wrapper/presentation/widgets/main_app_bar.dart';
 
@@ -117,16 +118,22 @@ class _NotificationsState extends State<NotificationsScreen> {
           title: context.loc.notifications,
           actions: [
             IconButton(
-              icon: Icon(Icons.filter_list),
-              onPressed: () => _showFilterDialog(context),
-            ),
-            TextButton.icon(
-              onPressed: () => _markAllAsRead(context),
-              icon: const Icon(Icons.done_all, color: Colors.blue),
-              label: Text(
-                context.loc.markAllAsRead,
-                style: const TextStyle(color: Colors.blue),
+              icon: SvgPicture.asset(
+                'assets/icons/loc_thong_bao.svg',
+                width: 24,
+                height: 24,
               ),
+              onPressed: () => _showFilterDialog(context),
+              tooltip: 'Lọc thông báo',
+            ),
+            IconButton(
+              icon: SvgPicture.asset(
+                'assets/icons/danh_dau.svg',
+                width: 24,
+                height: 24,
+              ),
+              onPressed: () => _markAllAsRead(context),
+              tooltip: 'Đánh dấu tất cả là đã đọc',
             ),
           ],
         ),

@@ -164,7 +164,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       },
       (response) {
         if (response.requiresTwoFactor!) {
+
           emit(VerifyTwoFactor(response.maskEmail.toString()));
+          
         } else {
           emit(SignedIn());
         }

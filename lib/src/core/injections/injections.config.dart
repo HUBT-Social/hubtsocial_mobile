@@ -49,6 +49,8 @@ import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/chat_bloc.
     as _i359;
 import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/receive_chat/receive_chat_cubit.dart'
     as _i441;
+import 'package:hubtsocial_mobile/src/features/notification/auth/auth_notification.dart'
+    as _i924;
 import 'package:hubtsocial_mobile/src/features/quiz/data/datasources/quiz_remote_data_source.dart'
     as _i250;
 import 'package:hubtsocial_mobile/src/features/quiz/data/repos/quiz_repo_impl.dart'
@@ -121,6 +123,7 @@ extension GetItInjectableX on _i174.GetIt {
     final registerModule = _$RegisterModule();
     gh.factory<_i441.ReceiveChatCubit>(() => _i441.ReceiveChatCubit());
     gh.factory<_i1002.QuizQuestionBloc>(() => _i1002.QuizQuestionBloc());
+    gh.singleton<_i924.AuthNotification>(() => _i924.AuthNotification());
     gh.lazySingleton<_i170.HiveInterface>(() => registerModule.hive);
     gh.lazySingleton<_i892.FirebaseMessaging>(
         () => registerModule.firebaseMessaging);
