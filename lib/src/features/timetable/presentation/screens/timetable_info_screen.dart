@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/string.dart';
+import 'package:hubtsocial_mobile/src/core/presentation/dialog/app_dialog.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_info_bloc.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/presentation/widgets/timetable_member_card.dart';
+import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../constants/assets.dart';
 
@@ -29,18 +34,6 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.colorScheme.surface,
-      // appBar: AppBar(
-      //   backgroundColor: context.colorScheme.surface,
-      //   title: Text(
-      //     "Thông tin thời khóa biểu",
-      //     textAlign: TextAlign.center,
-      //     style: context.textTheme.headlineSmall?.copyWith(
-      //       color: context.colorScheme.onSurface,
-      //       fontWeight: FontWeight.w600,
-      //     ),
-      //   ),
-      //   actions: [],
-      // ),
       body: BlocBuilder<TimetableInfoBloc, TimetableInfoState>(
         builder: (context, state) {
           if (state is TimetableInfoLoading) {
@@ -67,13 +60,16 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                     titlePadding:
                         EdgeInsetsDirectional.only(start: 16.w, bottom: 16.h),
                     centerTitle: false,
-                    background: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(48.r),
-                      ),
-                      child: Image.asset(
-                        Assets.startedBg,
-                        fit: BoxFit.cover,
+                    background: Container(
+                      color: context.colorScheme.surfaceContainerLow,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(48.r),
+                        ),
+                        child: Image.asset(
+                          Assets.startedBg,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     title: Text(
@@ -87,85 +83,227 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                   ),
                 ),
                 SliverToBoxAdapter(
-                    child: Container(
-                  padding: EdgeInsets.only(top: 24.h, left: 12.w, right: 12.w),
-                  decoration: BoxDecoration(
-                    color: context.colorScheme.surfaceContainerLow,
-                    // borderRadius: BorderRadius.only(
-                    //   topLeft: Radius.circular(48.r),
-                    // ),
-                  ),
-                  child: Column(
-                    spacing: 12.h,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        spacing: 6.w,
-                        children: [
-                          Icon(
-                            Icons.room,
-                            color: context.colorScheme.primary,
-                            size: 24.r,
-                          ),
-                          Text(
-                            state.timetableInfoModel.room!.capitalizeFirst(),
-                            style: context.textTheme.bodyLarge,
-                          ),
-                        ],
+                  child: Container(
+                    padding:
+                        EdgeInsets.only(top: 24.h, left: 12.w, right: 12.w),
+                    decoration: BoxDecoration(
+                      color: context.colorScheme.surfaceContainerLow,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(24.r),
+                        bottomRight: Radius.circular(24.r),
                       ),
-                      Row(
-                        spacing: 6.w,
-                        children: [
-                          Icon(
-                            Icons.school_rounded,
-                            color: context.colorScheme.primary,
-                          ),
-                          Text(
-                            state.timetableInfoModel.className!
-                                .capitalizeFirst(),
-                            style: context.textTheme.bodyLarge,
-                          ),
-                        ],
-                      ),
-                      if (state.timetableInfoModel.zoomId!.isNotEmpty)
+                    ),
+                    child: Column(
+                      spacing: 12.h,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Row(
-                          spacing: 12.w,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          spacing: 6.w,
                           children: [
-                            Row(
-                              spacing: 6.w,
-                              children: [
-                                FilledButton(
-                                    onPressed: () {},
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.voice_chat_rounded,
-                                          color: context.colorScheme.primary,
-                                        ),
-                                        Text(
-                                          state.timetableInfoModel.zoomId!
-                                              .capitalizeFirst(),
-                                          style: context.textTheme.bodyMedium,
-                                        ),
-                                      ],
-                                    )),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.copy,
-                                    color: context.colorScheme.primary,
-                                  ),
-                                ),
-                              ],
+                            Icon(
+                              Icons.co_present,
+                              color: context.colorScheme.primary,
+                              size: 24.r,
+                            ),
+                            Text(
+                              "tran hueeehueee",
+                              style: context.textTheme.bodyLarge,
                             ),
                           ],
                         ),
-                    ],
+                        Row(
+                          spacing: 6.w,
+                          children: [
+                            Icon(
+                              Icons.token,
+                              color: context.colorScheme.primary,
+                              size: 24.r,
+                            ),
+                            Text(
+                              context.loc.credits(
+                                  state.timetableInfoModel.creditNum ?? 0),
+                              style: context.textTheme.bodyLarge,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          spacing: 6.w,
+                          children: [
+                            Icon(
+                              Icons.room,
+                              color: context.colorScheme.primary,
+                              size: 24.r,
+                            ),
+                            Text(
+                              state.timetableInfoModel.room!.capitalizeFirst(),
+                              style: context.textTheme.bodyLarge,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          spacing: 6.w,
+                          children: [
+                            Icon(
+                              Icons.school_rounded,
+                              color: context.colorScheme.primary,
+                            ),
+                            Text(
+                              state.timetableInfoModel.className!
+                                  .capitalizeFirst(),
+                              style: context.textTheme.bodyLarge,
+                            ),
+                          ],
+                        ),
+                        if (state.timetableInfoModel.startTime != null)
+                          Row(
+                            spacing: 12.w,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  spacing: 6.w,
+                                  children: [
+                                    Icon(
+                                      Icons.timer_rounded,
+                                      color: context.colorScheme.primary,
+                                      size: 24.r,
+                                    ),
+                                    Text(
+                                      DateFormat.yMd().format(
+                                          state.timetableInfoModel.startTime ??
+                                              DateTime.now()),
+                                      style: context.textTheme.bodyLarge,
+                                    ),
+                                    Text(
+                                      DateFormat.jm().format(
+                                          state.timetableInfoModel.startTime ??
+                                              DateTime.now()),
+                                      style: context.textTheme.bodyLarge,
+                                    ),
+                                    if (state.timetableInfoModel.endTime !=
+                                        null)
+                                      Text(
+                                        "-",
+                                        style: context.textTheme.bodyLarge,
+                                      ),
+                                    if (state.timetableInfoModel.endTime !=
+                                        null)
+                                      Text(
+                                        DateFormat.jm().format(
+                                            state.timetableInfoModel.endTime ??
+                                                DateTime.now()),
+                                        style: context.textTheme.bodyLarge,
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        if (state.timetableInfoModel.zoomId!.isNotEmpty)
+                          Row(
+                            spacing: 12.w,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                spacing: 6.w,
+                                children: [
+                                  FilledButton(
+                                      onPressed: () async {
+                                        if (!await launchUrl(
+                                          Uri.parse(
+                                              'https://zoom.us/j/${state.timetableInfoModel.zoomId}'),
+                                          mode: LaunchMode.externalApplication,
+                                        )) {
+                                          AppDialog.showMessageDialog(
+                                            AppDialog.errorMessage(
+                                                "Không thể truy cập zoom: ${state.timetableInfoModel.zoomId}",
+                                                context),
+                                          );
+                                        }
+                                      },
+                                      child: Row(
+                                        spacing: 6.w,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.voice_chat_rounded,
+                                            color:
+                                                context.colorScheme.onPrimary,
+                                            size: 24.r,
+                                          ),
+                                          Text(
+                                            state.timetableInfoModel.zoomId!
+                                                .capitalizeFirst(),
+                                            style: context.textTheme.bodyLarge
+                                                ?.copyWith(
+                                                    color: context
+                                                        .colorScheme.onPrimary),
+                                          ),
+                                        ],
+                                      )),
+                                  IconButton(
+                                    onPressed: () {
+                                      if (state.timetableInfoModel.zoomId !=
+                                          null) {
+                                        Clipboard.setData(ClipboardData(
+                                            text: state
+                                                .timetableInfoModel.zoomId!));
+                                        context.showSnackBarMessage(
+                                            'Đã sao chép: ${state.timetableInfoModel.zoomId}');
+                                      }
+                                    },
+                                    icon: Icon(
+                                      Icons.copy,
+                                      color: context.colorScheme.primary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        SizedBox(height: 6.h)
+                      ],
+                    ),
                   ),
-                )),
-                SliverToBoxAdapter(child: Container(height: 10000.h)),
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12.h),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(24.r),
+                        topRight: Radius.circular(24.r),
+                      ),
+                      child: ExpansionTile(
+                        leading: Icon(
+                          Icons.format_list_bulleted,
+                          color: context.colorScheme.primary,
+                          size: 24.r,
+                        ),
+                        title: Text(
+                          "Sinh viên",
+                          style: context.textTheme.bodyLarge,
+                        ),
+                        collapsedBackgroundColor:
+                            context.colorScheme.surfaceContainerLow,
+                        backgroundColor:
+                            context.colorScheme.surfaceContainerLow,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero),
+                        collapsedShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero),
+                        children: state.timetableInfoModel.timetableMembers.map(
+                          (member) {
+                            return TimetableMemberCard(
+                              memberModel: member,
+                            );
+                          },
+                        ).toList(),
+                      ),
+                    ),
+                  ),
+                ),
                 SliverToBoxAdapter(
                   child: Container(
                     height: 100.h,

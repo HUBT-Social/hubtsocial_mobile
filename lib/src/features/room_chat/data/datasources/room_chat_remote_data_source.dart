@@ -36,43 +36,47 @@ class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
 
   @override
   Future<List<Message>> fetchRoomChat({required String roomId}) async {
-    try {
-      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
+    // try {
+    //   UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
 
-      final response = await APIRequest.get(
-        url: EndPoint.roomHistory,
-        token: userToken.accessToken,
-        queryParameters: {"ChatRoomId": roomId},
-      );
+    //   final response = await APIRequest.get(
+    //     url: EndPoint.roomHistory,
+    //     token: userToken.accessToken,
+    //     queryParameters: {"ChatRoomId": roomId},
+    //   );
 
-      if (response.statusCode != 200) {
-        logger.e(
-            'Failed to Fetch RoomChat: statusCode: ${response.statusCode}: ${response.body.toString()}');
-        throw ServerException(
-          message: response.body.toString(),
-          statusCode: response.statusCode.toString(),
-        );
-      }
+    //   if (response.statusCode != 200) {
+    //     logger.e(
+    //         'Failed to Fetch RoomChat: statusCode: ${response.statusCode}: ${response.body.toString()}');
+    //     throw ServerException(
+    //       message: response.body.toString(),
+    //       statusCode: response.statusCode.toString(),
+    //     );
+    //   }
 
-      final List newItems = json.decode(response.body);
+    //   final List newItems = json.decode(response.body);
 
-      List<Message> items = [];
+    //   List<Message> items = [];
 
-      items.addAll(newItems.map<Message>((item) {
-        return Message.fromJson(item);
-      }).toList());
+    //   items.addAll(newItems.map<Message>((item) {
+    //     return Message.fromJson(item);
+    //   }).toList());
 
-      return items;
-    } on ServerException {
-      rethrow;
-    } catch (e, s) {
-      logger.e(e.toString());
-      logger.d(s.toString());
-      throw const ServerException(
-        message: 'Failed to verify OTP password. Please try again later.',
-        statusCode: '505',
-      );
-    }
+    //   return items;
+    // } on ServerException {
+    //   rethrow;
+    // } catch (e, s) {
+    //   logger.e(e.toString());
+    //   logger.d(s.toString());
+    //   throw const ServerException(
+    //     message: 'Failed to verify OTP password. Please try again later.',
+    //     statusCode: '505',
+    //   );
+    // }
+    throw const ServerException(
+      message: 'Failed to verify chat. Please try again later.',
+      statusCode: '505',
+    );
   }
 
   @override

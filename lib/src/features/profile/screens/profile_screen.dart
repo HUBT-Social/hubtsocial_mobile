@@ -48,9 +48,8 @@ class _ProfileScreenState extends State<ProfileScreen>
           ),
         ),
         actions: [
-          Positioned(
-            top: 2,
-            left: 2,
+          Padding(
+            padding: EdgeInsets.only(top: 2, left: 2, right: 12),
             child: Container(
               width: 20,
               height: 20,
@@ -62,13 +61,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                   width: 2,
                 ),
               ),
-              child: Stack(
-                alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
+                  ...List.generate(3, (_) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 1),
+                      child: Container(
                         width: 3,
                         height: 3,
                         decoration: BoxDecoration(
@@ -76,26 +75,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                           shape: BoxShape.circle,
                         ),
                       ),
-                      SizedBox(width: 2),
-                      Container(
-                        width: 3,
-                        height: 3,
-                        decoration: BoxDecoration(
-                          color: context.colorScheme.onPrimary,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      SizedBox(width: 2),
-                      Container(
-                        width: 3,
-                        height: 3,
-                        decoration: BoxDecoration(
-                          color: context.colorScheme.onPrimary,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ],
-                  ),
+                    );
+                  }),
                 ],
               ),
             ),
@@ -120,8 +101,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                             children: [
                               InkWell(
                                 borderRadius: BorderRadius.circular(12),
-                                onTap: () => AboutProfileUtils.showAboutProfileBottomSheet(
-                                    navigatorKey.currentContext ?? context),
+                                onTap: () => AboutProfileUtils
+                                    .showAboutProfileBottomSheet(
+                                        navigatorKey.currentContext ?? context),
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 6),
                                   child: Row(
@@ -129,8 +111,15 @@ class _ProfileScreenState extends State<ProfileScreen>
                                       Flexible(
                                         child: Text(
                                           user!.fullname,
-                                          style: context.textTheme.headlineMedium?.copyWith(
-                                            fontSize: (context.textTheme.headlineMedium?.fontSize ?? 16) - 4,
+                                          style: context
+                                              .textTheme.headlineMedium
+                                              ?.copyWith(
+                                            fontSize: (context
+                                                        .textTheme
+                                                        .headlineMedium
+                                                        ?.fontSize ??
+                                                    16) -
+                                                4,
                                           ),
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
