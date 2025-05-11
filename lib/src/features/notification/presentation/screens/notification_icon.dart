@@ -5,8 +5,13 @@ import 'package:hubtsocial_mobile/src/constants/assets.dart';
 
 class NotificationIcon extends StatelessWidget {
   final NotificationModel notification;
+  final double size;
 
-  const NotificationIcon({required this.notification});
+  const NotificationIcon({
+    required this.notification,
+    this.size = 50, // Mặc định là 50 nếu không truyền vào
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +44,14 @@ class NotificationIcon extends StatelessWidget {
           ClipOval(
             child: Image.network(
               mainImage,
-              width: 50,
-              height: 50,
+              width: size,
+              height: size,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
                 return Image.asset(
                   'assets/icons/ic_profile.png',
-                  width: 50,
-                  height: 50,
+                  width: size,
+                  height: size,
                   fit: BoxFit.contain,
                 );
               },
@@ -110,7 +115,7 @@ class NotificationIcon extends StatelessWidget {
       case 'chat':
         imagePath = isGroupMessage
             ? AppIcons.notificationGroupChat
-            : AppIcons.notificationGroupChat;
+            : AppIcons.notificationChat;
         break;
       default:
         imagePath = AppIcons.notificationAdmin;
@@ -118,8 +123,8 @@ class NotificationIcon extends StatelessWidget {
 
     return SvgPicture.asset(
       imagePath,
-      width: 50,
-      height: 50,
+      width: size,
+      height: size,
       fit: BoxFit.contain,
     );
   }

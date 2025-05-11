@@ -30,7 +30,12 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       body: message.notification?.body,
       time: DateTime.now().toIso8601String(),
       isRead: false,
-      data: message.data,
+      data: {
+        ...message.data,
+        if (!(message.data.containsKey('imageUrl')) &&
+            message.notification?.android?.imageUrl != null)
+          'imageUrl': message.notification?.android?.imageUrl,
+      },
       type: message.data['type']?.toString(),
     );
 
@@ -125,7 +130,12 @@ class FirebaseMessage {
         body: message.notification?.body,
         time: DateTime.now().toIso8601String(),
         isRead: false,
-        data: message.data,
+        data: {
+          ...message.data,
+          if (!message.data.containsKey('imageUrl') &&
+              message.notification?.android?.imageUrl != null)
+            'imageUrl': message.notification?.android?.imageUrl,
+        },
       );
 
       // Kiểm tra xem thông báo đã tồn tại chưa
@@ -265,7 +275,15 @@ class FirebaseMessage {
           body: data['body'],
           time: DateTime.now().toIso8601String(),
           isRead: false,
-          data: data,
+          data: {
+            ...data,
+            if (!data.containsKey('imageUrl') &&
+                data['notification'] != null &&
+                data['notification'] is Map &&
+                data['notification']['android'] != null &&
+                data['notification']['android']['imageUrl'] != null)
+              'imageUrl': data['notification']['android']['imageUrl'],
+          },
           type: type,
         );
 
