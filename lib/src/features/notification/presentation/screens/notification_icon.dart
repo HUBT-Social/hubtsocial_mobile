@@ -9,7 +9,7 @@ class NotificationIcon extends StatelessWidget {
 
   const NotificationIcon({
     required this.notification,
-    this.size = 50, // Mặc định là 50 nếu không truyền vào
+    this.size = 60,
     Key? key,
   }) : super(key: key);
 
@@ -39,53 +39,53 @@ class NotificationIcon extends StatelessWidget {
       } else {
         smallIconPath = AppIcons.notificationAdmin;
       }
-      return Stack(
-        children: [
-          ClipOval(
-            child: Image.network(
-              mainImage,
-              width: size,
-              height: size,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Image.asset(
-                  'assets/icons/ic_profile.png',
+      return SizedBox(
+        width: size + 12,
+        height: size + 12,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned(
+              left: 0,
+              top: 0,
+              child: ClipOval(
+                child: Image.network(
+                  mainImage,
                   width: size,
                   height: size,
-                  fit: BoxFit.contain,
-                );
-              },
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Container(
-              width: 20,
-              height: 20,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 2,
-                    offset: Offset(0, 1),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: SvgPicture.asset(
-                  smallIconPath,
-                  width: 16,
-                  height: 16,
-                  fit: BoxFit.contain,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      'assets/icons/ic_profile.png',
+                      width: size,
+                      height: size,
+                      fit: BoxFit.contain,
+                    );
+                  },
                 ),
               ),
             ),
-          ),
-        ],
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: Container(
+                width: 25,
+                height: 25,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: SvgPicture.asset(
+                    smallIconPath,
+                    width: 25,
+                    height: 25,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       );
     }
 
