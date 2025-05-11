@@ -62,7 +62,11 @@ class NotificationItem extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                NotificationIcon(notification: notification),
+                SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: buildNotificationAvatar(notification),
+                ),
                 SizedBox(width: 8),
                 Expanded(
                   child: Column(
@@ -101,36 +105,60 @@ class NotificationItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (hasImage) ...[
-                  SizedBox(width: 8),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      imageUrl!,
-                      width: 45,
-                      height: 45,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          width: 45,
-                          height: 45,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(Icons.image_not_supported,
-                              color: Colors.grey),
-                        );
-                      },
-                    ),
-                  ),
-                ],
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget buildNotificationAvatar(NotificationModel notification) {
+    final imageUrl = notification.data?['imageUrl'];
+    if (imageUrl != null && imageUrl.toString().isNotEmpty) {
+      return Stack(
+        children: [
+          ClipOval(
+            child: Image.network(
+              imageUrl,
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  width: 50,
+                  height: 50,
+                  color: Colors.grey[200],
+                  child: Icon(Icons.image, color: Colors.grey),
+                );
+              },
+            ),
+          ),
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 2,
+                    offset: Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: NotificationIcon(notification: notification, size: 16),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return NotificationIcon(notification: notification, size: 50);
+    }
   }
 
   String _formatTime(String time, BuildContext context) {

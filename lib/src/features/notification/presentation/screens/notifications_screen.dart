@@ -180,7 +180,9 @@ class _NotificationsState extends State<NotificationsScreen> {
                   itemCount: filteredNotifications.length,
                   itemBuilder: (context, index) {
                     final notification = filteredNotifications[index];
+                    final avatarUrl = notification.data?['avatarUrl'];
                     final imageUrl = notification.data?['imageUrl'];
+                    final mainImage = imageUrl ?? avatarUrl; // Ưu tiên imageUrl
 
                     print(
                         '===> notification.data in list: ${notification.data}');
@@ -202,15 +204,14 @@ class _NotificationsState extends State<NotificationsScreen> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Left icon
+                            // Avatar bên trái
                             SizedBox(
                               width: 50,
                               height: 50,
-                              child:
-                                  NotificationIcon(notification: notification),
+                              child: buildNotificationAvatar(notification),
                             ),
                             SizedBox(width: 12),
-                            // Content in the middle
+                            // Nội dung ở giữa
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,23 +249,6 @@ class _NotificationsState extends State<NotificationsScreen> {
                                   ),
                                 ],
                               ),
-                            ),
-                            SizedBox(width: 12),
-                            // Right image or empty space
-                            SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: imageUrl?.toString().isNotEmpty == true
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(4),
-                                      child: Image.network(
-                                        imageUrl!,
-                                        width: 50,
-                                        height: 50,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : null,
                             ),
                           ],
                         ),
@@ -415,6 +399,57 @@ class _NotificationsState extends State<NotificationsScreen> {
       return '${difference.inMinutes} ${context.loc.the_muniest_before}';
     } else {
       return context.loc.just_finished;
+    }
+  }
+
+  Widget buildNotificationAvatar(NotificationModel notification) {
+    final imageUrl = notification.data?['imageUrl'];
+    final avatarUrl = notification.data?['avatarUrl'];
+    final mainImage = imageUrl ?? avatarUrl;
+
+    if (mainImage != null && mainImage.toString().isNotEmpty) {
+      return Stack(
+        children: [
+          ClipOval(
+            child: Image.network(
+              mainImage,
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  width: 50,
+                  height: 50,
+                  color: Colors.grey[200],
+                  child: Icon(Icons.image, color: Colors.grey),
+                );
+              },
+            ),
+          ),
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 2,
+                    offset: Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: NotificationIcon(notification: notification, size: 16),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return NotificationIcon(notification: notification, size: 50);
     }
   }
 }

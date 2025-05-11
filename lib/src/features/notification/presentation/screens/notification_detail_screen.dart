@@ -35,7 +35,53 @@ class NotificationDetailScreen extends StatelessWidget {
 
     final avatarUrl = notification.data?['avatarUrl'];
     final imageUrl = notification.data?['imageUrl'];
-    final mainImage = avatarUrl ?? imageUrl;
+    Widget mainImageWidget;
+    if (imageUrl != null && imageUrl.toString().isNotEmpty) {
+      mainImageWidget = Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.network(
+              imageUrl,
+              width: 180,
+              height: 180,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  width: 180,
+                  height: 180,
+                  color: Colors.grey[200],
+                  child: Icon(Icons.image_not_supported,
+                      size: 40, color: Colors.grey),
+                );
+              },
+            ),
+          ),
+          Positioned(
+            right: 8,
+            bottom: 8,
+            child: Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 2,
+                    offset: Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: NotificationIcon(notification: notification, size: 24),
+            ),
+          ),
+        ],
+      );
+    } else {
+      mainImageWidget = NotificationIcon(notification: notification, size: 80);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -49,6 +95,9 @@ class NotificationDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              mainImageWidget,
+              SizedBox(height: 16),
+
               // Tiêu đề thông báo
               Container(
                 padding: EdgeInsets.all(16),
@@ -120,7 +169,7 @@ class NotificationDetailScreen extends StatelessWidget {
               SizedBox(height: 24),
 
               // Hình ảnh (nếu có)
-              if (mainImage != null) ...[
+              if (imageUrl != null) ...[
                 Text(
                   'Hình ảnh',
                   style: TextStyle(
@@ -133,7 +182,7 @@ class NotificationDetailScreen extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
-                    mainImage,
+                    imageUrl,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
