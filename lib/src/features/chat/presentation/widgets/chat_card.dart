@@ -119,13 +119,26 @@ class _ChatCardState extends State<ChatCard> {
                                 style: context.textTheme.labelLarge?.copyWith(
                                     color: context.colorScheme.onSurface),
                               ),
-                              Text(
-                                widget.chatModel.lastMessage ?? "",
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: true,
-                                style: context.textTheme.labelMedium?.copyWith(
-                                    color:
-                                        context.colorScheme.onSurfaceVariant),
+                              Row(
+                                children: [
+                                  // Text(
+                                  //   widget.chatModel.lastMessage!.decrypt(),
+                                  //   overflow: TextOverflow.ellipsis,
+                                  //   softWrap: true,
+                                  //   style: context.textTheme.labelMedium
+                                  //       ?.copyWith(
+                                  //           color: context
+                                  //               .colorScheme.onSurfaceVariant),
+                                  // ),
+                                  // Text(
+                                  //   widget.chatModel.lastMessage!.decrypt(),
+                                  //   overflow: TextOverflow.ellipsis,
+                                  //   softWrap: true,
+                                  //   style: context.textTheme.labelMedium?.copyWith(
+                                  //       color:
+                                  //           context.colorScheme.onSurfaceVariant),
+                                  // ),
+                                ],
                               ),
                             ],
                           ),

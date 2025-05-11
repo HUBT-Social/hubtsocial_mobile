@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'aes_cipher.dart';
+
 extension StringExtension on String {
   bool isValidEmail() {
     return RegExp(
@@ -22,5 +24,15 @@ extension StringExtension on String {
 
   String removeSpecialCharacters() {
     return replaceAll(RegExp(r"[^a-zA-Z0-9\s]"), "");
+  }
+
+  String encrypt() {
+    final cipher = AESCipher("cipher string");
+    return cipher.encryptText(this);
+  }
+
+  String decrypt() {
+    final cipher = AESCipher("cipher string");
+    return cipher.decryptText(this);
   }
 }

@@ -53,8 +53,6 @@ class DeviceId {
       _uniqueDeviceId = _readAndroidDeviceInfo(androidDeviceInfo);
     }
 
-    _uniqueDeviceId = _uniqueDeviceId.replaceAll(RegExp(r"[^a-zA-Z0-9\s]"), "");
-
     var key = await FirebaseMessaging.instance.getToken();
     final cipher = AESCipher(key!);
 

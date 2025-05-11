@@ -15,6 +15,10 @@ class Environment {
   }
 
   static String get getChatHub {
-    return dotenv.env['CHAT_HUB_URL'] ?? "API_URL not specified";
+    return dotenv.env['CHAT_HUB_URL'] ?? "CHAT_HUB_URL not specified";
+  }
+
+  static String get getIVUtf8 {
+    return dotenv.env['IV_UTF8'] ?? "IV_UTF8 not specified";
   }
 }

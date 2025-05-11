@@ -1,13 +1,17 @@
 import 'package:encrypt/encrypt.dart';
 
+import '../../constants/environment.dart';
+
 class AESCipher {
+  static String get iVUtf8 => Environment.getIVUtf8;
+
   final Key key;
   final IV iv;
   final Encrypter encrypter;
 
   AESCipher(String keyStr)
       : key = Key.fromUtf8(_normalizeKey(keyStr)),
-        iv = IV.fromLength(16),
+        iv = IV.fromUtf8(iVUtf8),
         encrypter = Encrypter(AES(Key.fromUtf8(_normalizeKey(keyStr))));
 
   static String _normalizeKey(String keyStr) {
