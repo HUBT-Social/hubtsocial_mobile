@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/adapters.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/device_id.dart';
 
 import '../../local_storage/app_local_storage.dart';
 import '../../notification/FirebaseMessage.dart';
@@ -53,7 +54,7 @@ class HiveProvider {
   static Future<void> clearToken(VoidCallback callback) async {
     AppDialog.showLoadingDialog(message: 'Logging out');
     await FirebaseMessage().deleteFCMToken();
-
+    await DeviceId.setupUniqueDeviceId();
     Hive.deleteFromDisk().then((_) {
       AppLocalStorage().initLocalStorage();
 
