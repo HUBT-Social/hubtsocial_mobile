@@ -35,53 +35,10 @@ class NotificationDetailScreen extends StatelessWidget {
 
     final avatarUrl = notification.data?['avatarUrl'];
     final imageUrl = notification.data?['imageUrl'];
-    Widget mainImageWidget;
-    if (imageUrl != null && imageUrl.toString().isNotEmpty) {
-      mainImageWidget = Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.network(
-              imageUrl,
-              width: 180,
-              height: 180,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  width: 180,
-                  height: 180,
-                  color: Colors.grey[200],
-                  child: Icon(Icons.image_not_supported,
-                      size: 40, color: Colors.grey),
-                );
-              },
-            ),
-          ),
-          Positioned(
-            right: 8,
-            bottom: 8,
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 2,
-                    offset: Offset(0, 1),
-                  ),
-                ],
-              ),
-              child: NotificationIcon(notification: notification, size: 24),
-            ),
-          ),
-        ],
-      );
-    } else {
-      mainImageWidget = NotificationIcon(notification: notification, size: 80);
-    }
+    // Avatar lớn phía trên
+    Widget mainImageWidget = Center(
+      child: NotificationIcon(notification: notification, size: 100),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -96,19 +53,19 @@ class NotificationDetailScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               mainImageWidget,
-              SizedBox(height: 16),
-
-              // Tiêu đề thông báo
+              SizedBox(height: 24),
+              // Box thông tin thông báo
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.blue.withOpacity(0.05),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    NotificationIcon(notification: notification),
-                    SizedBox(width: 12),
+                    NotificationIcon(notification: notification, size: 60),
+                    SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,11 +78,11 @@ class NotificationDetailScreen extends StatelessWidget {
                               color: Colors.black,
                             ),
                           ),
-                          SizedBox(height: 4),
+                          SizedBox(height: 6),
                           Text(
                             _formatTime(notification.time, context),
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 13,
                               color: Colors.grey[600],
                             ),
                           ),
@@ -136,7 +93,6 @@ class NotificationDetailScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 24),
-
               // Nội dung thông báo
               Text(
                 'Nội dung',
@@ -167,9 +123,8 @@ class NotificationDetailScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 24),
-
               // Hình ảnh (nếu có)
-              if (imageUrl != null) ...[
+              if (imageUrl != null && imageUrl.toString().isNotEmpty) ...[
                 Text(
                   'Hình ảnh',
                   style: TextStyle(

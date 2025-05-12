@@ -44,9 +44,8 @@ void main() async {
     AppLocalStorage().initLocalStorage(),
   ]);
 
-  runApp(MyApp());
-
   await _initNotification();
+  runApp(MyApp());
 }
 
 String _readAndroidDeviceInfo(AndroidDeviceInfo data) {
