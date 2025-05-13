@@ -4,6 +4,8 @@ import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
 import 'package:injectable/injectable.dart';
 import 'package:hubtsocial_mobile/src/core/notification/LocalMessage.dart';
 import 'dart:convert';
+import 'package:workmanager/workmanager.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/services/timetable_background_service.dart';
 
 import '../../../../constants/end_point.dart';
 import '../../../../core/api/errors/exceptions.dart';
@@ -22,6 +24,8 @@ abstract class TimetableRemoteDataSource {
 
   Future<TimetableInfoResponseModel> getTimetableInfo(String timetableId);
 
+  Future<void> scheduleNotificationsFromHive();
+
   Future<void> testNotification();
 }
 
@@ -39,52 +43,85 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
 
   Future<void> _scheduleTimetableNotifications(
       TimetableResponseModel timetable) async {
-    // Cancel all existing notifications before scheduling new ones
-    await _localMessage.cancelAllNotifications();
+    try {
+      // Cancel all existing notifications before scheduling new ones
+      await _localMessage.cancelAllNotifications();
 
-    for (var reformTimetable in timetable.reformTimetables) {
-      if (reformTimetable.startTime != null &&
-          reformTimetable.endTime != null) {
-        // Schedule notification 10 minutes before class starts
-        final notificationStartTime =
-            reformTimetable.startTime!.subtract(const Duration(minutes: 10));
-        if (notificationStartTime.isAfter(DateTime.now())) {
-          await _localMessage.scheduleNotification(
-            id: int.parse(
-                '${reformTimetable.id}1'), // Unique ID for start notification
-            title: 'Sắp đến giờ học',
-            body:
-                'Lớp ${reformTimetable.className} - ${reformTimetable.subject} sẽ bắt đầu trong 10 phút nữa\nPhòng: ${reformTimetable.room ?? "Chưa cập nhật"}\nZoom ID: ${reformTimetable.zoomId ?? "Chưa cập nhật"}',
-            scheduledDate: notificationStartTime,
-            payload: jsonEncode({
-              'timetableId': reformTimetable.id,
-              'type': 'start_notification',
-              'className': reformTimetable.className,
-              'subject': reformTimetable.subject,
-              'room': reformTimetable.room,
-              'zoomId': reformTimetable.zoomId
-            }),
-          );
-        }
+      for (var reformTimetable in timetable.reformTimetables) {
+        if (reformTimetable.startTime != null &&
+            reformTimetable.endTime != null) {
+          // Schedule notification 10 minutes before class starts
+          final notificationStartTime =
+              reformTimetable.startTime!.subtract(const Duration(minutes: 10));
+          if (notificationStartTime.isAfter(DateTime.now())) {
+            await _localMessage.scheduleNotification(
+              id: int.parse(
+                  '${reformTimetable.id}1'), // Unique ID for start notification
+              title: 'Sắp đến giờ học',
+              body:
+                  'Lớp ${reformTimetable.className} - ${reformTimetable.subject} sẽ bắt đầu trong 10 phút nữa\nPhòng: ${reformTimetable.room ?? "Chưa cập nhật"}\nZoom ID: ${reformTimetable.zoomId ?? "Chưa cập nhật"}',
+              scheduledDate: notificationStartTime,
+              payload: jsonEncode({
+                'timetableId': reformTimetable.id,
+                'type': 'start_notification',
+                'className': reformTimetable.className,
+                'subject': reformTimetable.subject,
+                'room': reformTimetable.room,
+                'zoomId': reformTimetable.zoomId
+              }),
+            );
+            logger.i(
+                'Đã lên lịch thông báo bắt đầu cho môn ${reformTimetable.subject}');
+          }
 
-        // Schedule notification when class ends
-        if (reformTimetable.endTime!.isAfter(DateTime.now())) {
-          await _localMessage.scheduleNotification(
-            id: int.parse(
-                '${reformTimetable.id}2'), // Unique ID for end notification
-            title: 'Kết thúc buổi học',
-            body:
-                'Lớp ${reformTimetable.className} - ${reformTimetable.subject} đã kết thúc',
-            scheduledDate: reformTimetable.endTime!,
-            payload: jsonEncode({
-              'timetableId': reformTimetable.id,
-              'type': 'end_notification',
-              'className': reformTimetable.className,
-              'subject': reformTimetable.subject
-            }),
-          );
+          // Schedule notification when class ends
+          if (reformTimetable.endTime!.isAfter(DateTime.now())) {
+            await _localMessage.scheduleNotification(
+              id: int.parse(
+                  '${reformTimetable.id}2'), // Unique ID for end notification
+              title: 'Kết thúc buổi học',
+              body:
+                  'Lớp ${reformTimetable.className} - ${reformTimetable.subject} đã kết thúc',
+              scheduledDate: reformTimetable.endTime!,
+              payload: jsonEncode({
+                'timetableId': reformTimetable.id,
+                'type': 'end_notification',
+                'className': reformTimetable.className,
+                'subject': reformTimetable.subject
+              }),
+            );
+            logger.i(
+                'Đã lên lịch thông báo kết thúc cho môn ${reformTimetable.subject}');
+          }
         }
       }
+      logger.i('Đã lên lịch tất cả thông báo cho thời khóa biểu');
+    } catch (e, s) {
+      logger.e('Lỗi khi lên lịch thông báo: $e');
+      logger.d(s.toString());
+    }
+  }
+
+  @override
+  Future<void> scheduleNotificationsFromHive() async {
+    try {
+      if (!Hive.isBoxOpen(LocalStorageKey.timeTable)) {
+        await Hive.openBox<TimetableResponseModel>(LocalStorageKey.timeTable);
+      }
+
+      final timetableBox =
+          Hive.box<TimetableResponseModel>(LocalStorageKey.timeTable);
+      final timetableData = timetableBox.get(LocalStorageKey.timeTable);
+
+      if (timetableData != null) {
+        await _scheduleTimetableNotifications(timetableData);
+        logger.i('Đã lên lịch thông báo từ dữ liệu Hive');
+      } else {
+        logger.w('Không tìm thấy dữ liệu thời khóa biểu trong Hive');
+      }
+    } catch (e, s) {
+      logger.e('Lỗi khi lên lịch thông báo từ Hive: $e');
+      logger.d(s.toString());
     }
   }
 
@@ -142,8 +179,14 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         await timetableBox.put(
             LocalStorageKey.timeTable, timetableResponseModel);
 
-        // Sau khi lấy được dữ liệu mới, tự động lên lịch thông báo
+        // Lên lịch thông báo ngay khi có dữ liệu mới
         await _scheduleTimetableNotifications(timetableResponseModel);
+        // Kích hoạt background task để đảm bảo thông báo được lên lịch
+        await Workmanager().registerOneOffTask(
+          'timetable_notification_task_${DateTime.now().millisecondsSinceEpoch}',
+          'scheduleTimetableNotifications',
+          initialDelay: const Duration(seconds: 5),
+        );
 
         return timetableResponseModel;
       } else {
@@ -167,8 +210,14 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         await timetableBox.put(
             LocalStorageKey.timeTable, timetableResponseModel);
 
-        // Sau khi lấy được dữ liệu mới, tự động lên lịch thông báo
+        // Lên lịch thông báo ngay khi có dữ liệu mới
         await _scheduleTimetableNotifications(timetableResponseModel);
+        // Kích hoạt background task để đảm bảo thông báo được lên lịch
+        await Workmanager().registerOneOffTask(
+          'timetable_notification_task_${DateTime.now().millisecondsSinceEpoch}',
+          'scheduleTimetableNotifications',
+          initialDelay: const Duration(seconds: 5),
+        );
 
         return timetableResponseModel;
       }
@@ -220,6 +269,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
     }
   }
 
+  @override
   Future<void> testNotification() async {
     try {
       // Khởi tạo local notifications
