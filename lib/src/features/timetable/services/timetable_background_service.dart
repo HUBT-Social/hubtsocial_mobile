@@ -1,4 +1,4 @@
-import 'package:workmanager/workmanager.dart';
+/*import 'package:workmanager/workmanager.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/notification/LocalMessage.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_key.dart';
@@ -90,3 +90,4 @@ class TimetableBackgroundService {
     );
   }
 }
+*/

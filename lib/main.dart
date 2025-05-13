@@ -25,6 +25,7 @@ import 'src/core/logger/logger.dart';
 
 import 'package:hubtsocial_mobile/src/core/notification/FirebaseMessage.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/services/timetable_background_service.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/services/timetable_notification_service.dart';
 
 class NavigationService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -46,10 +47,11 @@ void main() async {
   ]);
 
   // Khởi tạo background service
-  await TimetableBackgroundService.initialize();
-  await TimetableBackgroundService.schedulePeriodicTask();
+  //await TimetableBackgroundService.initialize();
+  //await TimetableBackgroundService.schedulePeriodicTask();
 
   await _initNotification();
+  getIt<TimetableNotificationService>().scheduleNotificationsFromHive();
   runApp(MyApp());
 }
 
