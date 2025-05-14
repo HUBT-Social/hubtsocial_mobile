@@ -3,7 +3,10 @@ import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
 import 'package:injectable/injectable.dart';
 import 'package:hubtsocial_mobile/src/core/notification/LocalMessage.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/services/timetable_notification_service.dart';
 import 'dart:convert';
+
+import 'package:hubtsocial_mobile/src/features/timetable/services/timetable_background_service.dart';
 
 import '../../../../constants/end_point.dart';
 import '../../../../core/api/errors/exceptions.dart';
@@ -22,6 +25,8 @@ abstract class TimetableRemoteDataSource {
 
   Future<TimetableInfoResponseModel> getTimetableInfo(String timetableId);
 
+  Future<void> scheduleNotificationsFromHive();
+
   Future<void> testNotification();
 }
 
@@ -32,67 +37,18 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
   TimetableRemoteDataSourceImpl({
     required HiveInterface hiveAuth,
     required FirebaseMessaging messaging,
-  }) : _hiveAuth = hiveAuth;
+  }) : _hiveAuth = hiveAuth {
+    _notificationService = TimetableNotificationService();
+  }
 
   final HiveInterface _hiveAuth;
-  final LocalMessage _localMessage = LocalMessage();
-
-  Future<void> _scheduleTimetableNotifications(
-      TimetableResponseModel timetable) async {
-    // Cancel all existing notifications before scheduling new ones
-    await _localMessage.cancelAllNotifications();
-
-    for (var reformTimetable in timetable.reformTimetables) {
-      if (reformTimetable.startTime != null &&
-          reformTimetable.endTime != null) {
-        // Schedule notification 10 minutes before class starts
-        final notificationStartTime =
-            reformTimetable.startTime!.subtract(const Duration(minutes: 10));
-        if (notificationStartTime.isAfter(DateTime.now())) {
-          await _localMessage.scheduleNotification(
-            id: int.parse(
-                '${reformTimetable.id}1'), // Unique ID for start notification
-            title: 'Sắp đến giờ học',
-            body:
-                'Lớp ${reformTimetable.className} - ${reformTimetable.subject} sẽ bắt đầu trong 10 phút nữa\nPhòng: ${reformTimetable.room ?? "Chưa cập nhật"}\nZoom ID: ${reformTimetable.zoomId ?? "Chưa cập nhật"}',
-            scheduledDate: notificationStartTime,
-            payload: jsonEncode({
-              'timetableId': reformTimetable.id,
-              'type': 'start_notification',
-              'className': reformTimetable.className,
-              'subject': reformTimetable.subject,
-              'room': reformTimetable.room,
-              'zoomId': reformTimetable.zoomId
-            }),
-          );
-        }
-
-        // Schedule notification when class ends
-        if (reformTimetable.endTime!.isAfter(DateTime.now())) {
-          await _localMessage.scheduleNotification(
-            id: int.parse(
-                '${reformTimetable.id}2'), // Unique ID for end notification
-            title: 'Kết thúc buổi học',
-            body:
-                'Lớp ${reformTimetable.className} - ${reformTimetable.subject} đã kết thúc',
-            scheduledDate: reformTimetable.endTime!,
-            payload: jsonEncode({
-              'timetableId': reformTimetable.id,
-              'type': 'end_notification',
-              'className': reformTimetable.className,
-              'subject': reformTimetable.subject
-            }),
-          );
-        }
-      }
-    }
-  }
+  late final TimetableNotificationService _notificationService;
 
   @override
   Future<TimetableResponseModel> initTimetable() async {
     try {
       // Initialize local notifications
-      await _localMessage.initLocalNotifications();
+      await _notificationService.scheduleNotificationsFromHive();
 
       if (!Hive.isBoxOpen(LocalStorageKey.timeTable)) {
         await Hive.openBox<TimetableResponseModel>(LocalStorageKey.timeTable);
@@ -142,8 +98,8 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         await timetableBox.put(
             LocalStorageKey.timeTable, timetableResponseModel);
 
-        // Sau khi lấy được dữ liệu mới, tự động lên lịch thông báo
-        await _scheduleTimetableNotifications(timetableResponseModel);
+        // Lên lịch thông báo ngay khi có dữ liệu mới
+        await _notificationService.scheduleNotificationsFromHive();
 
         return timetableResponseModel;
       } else {
@@ -167,8 +123,8 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         await timetableBox.put(
             LocalStorageKey.timeTable, timetableResponseModel);
 
-        // Sau khi lấy được dữ liệu mới, tự động lên lịch thông báo
-        await _scheduleTimetableNotifications(timetableResponseModel);
+        // Lên lịch thông báo ngay khi có dữ liệu mới
+        await _notificationService.scheduleNotificationsFromHive();
 
         return timetableResponseModel;
       }
@@ -220,11 +176,14 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
     }
   }
 
+  @override
+  Future<void> scheduleNotificationsFromHive() async {
+    await _notificationService.scheduleNotificationsFromHive();
+  }
+
+  @override
   Future<void> testNotification() async {
     try {
-      // Khởi tạo local notifications
-      await _localMessage.initLocalNotifications();
-
       // Tạo một môn học test với thời gian bắt đầu sau 1 phút và kết thúc sau 2 phút
       final now = DateTime.now();
       final testTimetable = ReformTimetable(
@@ -246,8 +205,16 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         reformTimetables: [testTimetable],
       );
 
-      // Lên lịch thông báo cho môn học test
-      await _scheduleTimetableNotifications(testTimetableResponse);
+      // Lưu vào Hive
+      if (!Hive.isBoxOpen(LocalStorageKey.timeTable)) {
+        await Hive.openBox<TimetableResponseModel>(LocalStorageKey.timeTable);
+      }
+      final timetableBox =
+          Hive.box<TimetableResponseModel>(LocalStorageKey.timeTable);
+      await timetableBox.put(LocalStorageKey.timeTable, testTimetableResponse);
+
+      // Lên lịch thông báo
+      await _notificationService.scheduleNotificationsFromHive();
 
       logger.i('Đã tạo thông báo test. Thông báo sẽ hiển thị sau 1 phút.');
     } catch (e, s) {

@@ -83,6 +83,8 @@ import 'package:hubtsocial_mobile/src/features/timetable/data/datasources/timeta
     as _i806;
 import 'package:hubtsocial_mobile/src/features/timetable/data/repos/timetable_repo_impl.dart'
     as _i576;
+import 'package:hubtsocial_mobile/src/features/timetable/di/timetable_module.dart'
+    as _i320;
 import 'package:hubtsocial_mobile/src/features/timetable/domain/repos/timetable_repo.dart'
     as _i113;
 import 'package:hubtsocial_mobile/src/features/timetable/domain/usercases/init_timetable_info_usercase.dart'
@@ -93,6 +95,8 @@ import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timet
     as _i786;
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_info_bloc.dart'
     as _i837;
+import 'package:hubtsocial_mobile/src/features/timetable/services/timetable_notification_service.dart'
+    as _i536;
 import 'package:hubtsocial_mobile/src/features/user/data/datasources/user_profile_remote_datasource.dart'
     as _i592;
 import 'package:hubtsocial_mobile/src/features/user/data/repos/user_repo_impl.dart'
@@ -120,10 +124,13 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    final timetableModule = _$TimetableModule();
     final registerModule = _$RegisterModule();
     gh.factory<_i441.ReceiveChatCubit>(() => _i441.ReceiveChatCubit());
     gh.factory<_i1002.QuizQuestionBloc>(() => _i1002.QuizQuestionBloc());
     gh.singleton<_i924.AuthNotification>(() => _i924.AuthNotification());
+    gh.singleton<_i536.TimetableNotificationService>(
+        () => timetableModule.timetableNotificationService);
     gh.lazySingleton<_i170.HiveInterface>(() => registerModule.hive);
     gh.lazySingleton<_i892.FirebaseMessaging>(
         () => registerModule.firebaseMessaging);
@@ -161,10 +168,10 @@ extension GetItInjectableX on _i174.GetIt {
             ));
     gh.lazySingleton<_i133.RoomChatRepo>(
         () => _i942.RoomChatRepoImpl(gh<_i311.RoomChatRemoteDataSource>()));
-    gh.lazySingleton<_i753.InitTimetableUserCase>(
-        () => _i753.InitTimetableUserCase(gh<_i113.TimetableRepo>()));
     gh.lazySingleton<_i475.InitTimetableInfoUserCase>(
         () => _i475.InitTimetableInfoUserCase(gh<_i113.TimetableRepo>()));
+    gh.lazySingleton<_i753.InitTimetableUserCase>(
+        () => _i753.InitTimetableUserCase(gh<_i113.TimetableRepo>()));
     gh.lazySingleton<_i936.AuthRepo>(
         () => _i457.AuthRepoImpl(gh<_i953.AuthRemoteDataSource>()));
     gh.lazySingleton<_i1063.FetchRoomChatUserCase>(
@@ -241,5 +248,7 @@ extension GetItInjectableX on _i174.GetIt {
     return this;
   }
 }
+
+class _$TimetableModule extends _i320.TimetableModule {}
 
 class _$RegisterModule extends _i107.RegisterModule {}
