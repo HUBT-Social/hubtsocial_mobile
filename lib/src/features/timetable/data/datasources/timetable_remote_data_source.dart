@@ -180,39 +180,22 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
   @override
   Future<void> testNotification() async {
     try {
-      // Tạo một môn học test với thời gian bắt đầu sau 1 phút và kết thúc sau 2 phút
       final now = DateTime.now();
       final testTimetable = ReformTimetable(
         id: 'test_${now.millisecondsSinceEpoch}',
-        className: 'Lớp Test',
-        startTime: now.add(const Duration(minutes: 1)),
-        endTime: now.add(const Duration(minutes: 2)),
-        subject: 'Môn Test',
-        room: 'Phòng Test',
-        zoomId: '123456789',
+        className: 'GO HOME',
+        startTime: now,
+        endTime: now.add(const Duration(minutes: 1)),
+        subject: 'NGUYỄN THẾ TRƯỜNG DZ',
+        room: 'ĐẠI HỌC KINH DOANH CÔNG NGHỆ',
+        zoomId: '0949101573',
         type: TimetableType.Study,
       );
 
-      // Tạo TimetableResponseModel test
-      final testTimetableResponse = TimetableResponseModel(
-        versionKey: 'test_version',
-        starttime: now,
-        endtime: now.add(const Duration(days: 1)),
-        reformTimetables: [testTimetable],
-      );
+      // Gửi thông báo ngay lập tức
+      await _notificationService.showInstantNotification(testTimetable);
 
-      // Lưu vào Hive
-      if (!Hive.isBoxOpen(LocalStorageKey.timeTable)) {
-        await Hive.openBox<TimetableResponseModel>(LocalStorageKey.timeTable);
-      }
-      final timetableBox =
-          Hive.box<TimetableResponseModel>(LocalStorageKey.timeTable);
-      await timetableBox.put(LocalStorageKey.timeTable, testTimetableResponse);
-
-      // Lên lịch thông báo
-      await _notificationService.scheduleNotificationsFromHive();
-
-      logger.i('Đã tạo thông báo test. Thông báo sẽ hiển thị sau 1 phút.');
+      logger.i('Đã gửi thông báo test ngay lập tức.');
     } catch (e, s) {
       logger.e('Lỗi khi tạo thông báo test: $e');
       logger.d(s.toString());
