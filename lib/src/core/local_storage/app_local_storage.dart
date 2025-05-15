@@ -12,7 +12,6 @@ import 'package:hubtsocial_mobile/hive/hive_registrar.g.dart';
 
 class AppLocalStorage {
   static String currentLanguageCode = "";
-  static String uniqueDeviceId = "";
   static Box<dynamic> get localBox {
     if (!Hive.isBoxOpen(LocalStorageKey.localStorage)) {
       Hive.openBox(LocalStorageKey.localStorage);

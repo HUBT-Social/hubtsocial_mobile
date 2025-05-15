@@ -73,97 +73,109 @@ class _ChatCardState extends State<ChatCard> {
               "avatarUrl": widget.chatModel.avatarUrl
             });
           },
-          child: SizedBox(
-              height: 60.h,
-              width: double.infinity,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        SizedBox(width: 12.w),
-                        Stack(
-                          alignment: AlignmentDirectional.bottomEnd,
-                          children: [
-                            UrlImage.circle(
-                              widget.chatModel.avatarUrl,
-                              size: 48.r,
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 6.h),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      SizedBox(width: 12.w),
+                      Stack(
+                        alignment: AlignmentDirectional.bottomEnd,
+                        children: [
+                          UrlImage.circle(
+                            widget.chatModel.avatarUrl,
+                            size: 48.r,
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(2),
+                            height: 14.r,
+                            width: 14.r,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: context.colorScheme.surface,
                             ),
-                            Container(
-                              padding: EdgeInsets.all(2),
-                              height: 14.r,
-                              width: 14.r,
+                            child: Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: context.colorScheme.surface,
-                              ),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: context.colorScheme.primary,
-                                ),
+                                color: context.colorScheme.primary,
                               ),
                             ),
-                          ],
-                        ),
-                        SizedBox(width: 12.w),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8.h),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.chatModel.groupName,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: context.textTheme.labelLarge?.copyWith(
-                                      color: context.colorScheme.onSurface),
-                                ),
-                                Text(
-                                  widget.chatModel.lastMessage ?? "",
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: true,
-                                  style: context.textTheme.labelMedium
-                                      ?.copyWith(
-                                          color: context
-                                              .colorScheme.onSurfaceVariant),
-                                ),
-                              ],
-                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8.h),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.chatModel.groupName,
+                                overflow: TextOverflow.ellipsis,
+                                style: context.textTheme.labelLarge?.copyWith(
+                                    color: context.colorScheme.onSurface),
+                              ),
+                              Row(
+                                children: [
+                                  // Text(
+                                  //   widget.chatModel.lastMessage!.decrypt(),
+                                  //   overflow: TextOverflow.ellipsis,
+                                  //   softWrap: true,
+                                  //   style: context.textTheme.labelMedium
+                                  //       ?.copyWith(
+                                  //           color: context
+                                  //               .colorScheme.onSurfaceVariant),
+                                  // ),
+                                  // Text(
+                                  //   widget.chatModel.lastMessage!.decrypt(),
+                                  //   overflow: TextOverflow.ellipsis,
+                                  //   softWrap: true,
+                                  //   style: context.textTheme.labelMedium?.copyWith(
+                                  //       color:
+                                  //           context.colorScheme.onSurfaceVariant),
+                                  // ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 12.w),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.h),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        SizedBox(),
-                        Container(
-                          height: 8.r,
-                          width: 8.r,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: context.colorScheme.tertiary,
-                          ),
+                ),
+                SizedBox(width: 12.w),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      SizedBox(),
+                      Container(
+                        height: 8.r,
+                        width: 8.r,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: context.colorScheme.tertiary,
                         ),
-                        Text(
-                          widget.chatModel.lastInteractionTime ?? "",
-                          overflow: TextOverflow.ellipsis,
-                          style: context.textTheme.labelSmall
-                              ?.copyWith(color: context.colorScheme.onSurface),
-                        ),
-                      ],
-                    ),
+                      ),
+                      Text(
+                        widget.chatModel.lastInteractionTime ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: context.textTheme.labelSmall
+                            ?.copyWith(color: context.colorScheme.onSurface),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 18.w),
-                ],
-              )),
+                ),
+                SizedBox(width: 18.w),
+              ],
+            ),
+          ),
         ));
   }
 }

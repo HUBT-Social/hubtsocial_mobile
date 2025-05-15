@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:chatview/chatview.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_ce_flutter/adapters.dart';

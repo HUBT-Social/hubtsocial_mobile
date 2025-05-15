@@ -110,9 +110,13 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
 
       List<Message> items = [];
 
-      items.addAll(newItems.map<Message>((item) {
-        return Message.fromJson(item);
-      }).toList());
+      var convertItems = newItems.map<Message>((item) {
+        var message = Message.fromJson(item);
+        message.copyWith(message: message.message.decrypt());
+        return message;
+      }).toList();
+
+      items.addAll(convertItems);
 
       if (items.isEmpty) {
         _isLastPage = true;
@@ -420,8 +424,8 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
   ) async {
     SendChatRequestModel sendChatRequestModel = SendChatRequestModel(
       groupId: widget.id,
-      requestId: "message id".generateRandomString(40),
-      content: message,
+      requestId: "message id ".generateRandomString(40),
+      content: message.encrypt(),
       medias: null,
       files: null,
       replyToMessageId: replyMessage.messageId,
@@ -449,10 +453,11 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
   }
 
   void _handleReceiveChat(List<Object?>? arguments) {
-    final message =
+    final messageModel =
         MessageResponseModel.fromJson(arguments![0] as Map<String, dynamic>);
-    if (widget.id == message.groupId) {
-      _chatController.addMessage(message.message);
+    if (widget.id == messageModel.groupId) {
+      _chatController.addMessage(messageModel.message
+          .copyWith(message: messageModel.message.message.decrypt()));
     }
   }
 

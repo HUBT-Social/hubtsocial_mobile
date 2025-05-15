@@ -1,13 +1,11 @@
 //dev
+import 'package:hubtsocial_mobile/src/core/extensions/device_id.dart';
 import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_dev.dart'
     as firebaseDev;
 //prod
 import 'package:hubtsocial_mobile/src/core/firebase/firebase_options_prod.dart'
     as firebaseProd;
 
-import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -35,13 +33,13 @@ void main() async {
   GoRouter.optionURLReflectsImperativeAPIs = true;
 
   await Future.wait([
-    _initUniqueDeviceId(),
     dotenv.load(fileName: Environment.fileName),
     configureDependencies(),
+    _initFirebase(),
   ]);
 
   await Future.wait([
-    _initFirebase(),
+    DeviceId.setupUniqueDeviceId(),
     AppLocalStorage().initLocalStorage(),
   ]);
 
@@ -52,51 +50,6 @@ void main() async {
   await _initNotification();
   getIt<TimetableNotificationService>().scheduleNotificationsFromHive();
   runApp(MyApp());
-}
-
-String _readAndroidDeviceInfo(AndroidDeviceInfo data) {
-  return data.version.release +
-      data.version.previewSdkInt.toString() +
-      data.version.incremental +
-      data.version.codename +
-      data.brand +
-      data.device +
-      data.host +
-      data.id +
-      data.model +
-      data.supportedAbis.toString();
-}
-
-String _readIosDeviceInfo(IosDeviceInfo data) {
-  return data.name +
-      data.systemName +
-      data.systemVersion +
-      data.model +
-      data.localizedModel +
-      data.identifierForVendor.toString() +
-      data.isPhysicalDevice.toString() +
-      data.utsname.sysname +
-      data.utsname.nodename +
-      data.utsname.release +
-      data.utsname.version +
-      data.utsname.machine;
-}
-
-Future<void> _initUniqueDeviceId() async {
-  var deviceInfo = DeviceInfoPlugin();
-
-  if (Platform.isIOS) {
-    var iosDeviceInfo = await deviceInfo.iosInfo;
-    AppLocalStorage.uniqueDeviceId =
-        _readIosDeviceInfo(iosDeviceInfo).toString(); // unique ID on iOS
-  } else if (Platform.isAndroid) {
-    var androidDeviceInfo = await deviceInfo.androidInfo;
-    AppLocalStorage.uniqueDeviceId = _readAndroidDeviceInfo(androidDeviceInfo);
-  }
-  AppLocalStorage.uniqueDeviceId =
-      AppLocalStorage.uniqueDeviceId.replaceAll(RegExp(r"[^a-zA-Z0-9\s]"), "");
-
-  logger.d("AppLocalStorage.uniqueDeviceId: ${AppLocalStorage.uniqueDeviceId}");
 }
 
 Future<void> _initFirebase() async {

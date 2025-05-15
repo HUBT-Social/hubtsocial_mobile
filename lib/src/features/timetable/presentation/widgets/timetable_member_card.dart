@@ -74,66 +74,59 @@ class _TimetableMemberCardState extends State<TimetableMemberCard> {
         onTap: () {
           AppRoute.profile.push(context);
         },
-        child: SizedBox(
-          height: 60.h,
-          width: double.infinity,
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 6.h),
           child: Row(
             children: [
-              Expanded(
-                child: Row(
-                  children: [
-                    SizedBox(width: 12.w),
-                    Stack(
-                      alignment: AlignmentDirectional.bottomEnd,
-                      children: [
-                        if (widget.memberModel.avatarUrl != null)
-                          UrlImage.circle(
-                            widget.memberModel.avatarUrl ?? "",
-                            size: 48.r,
-                          ),
-                        Container(
-                          padding: EdgeInsets.all(2),
-                          height: 14.r,
-                          width: 14.r,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: context.colorScheme.surface,
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: context.colorScheme.primary,
-                            ),
-                          ),
-                        ),
-                      ],
+              SizedBox(width: 12.w),
+              Stack(
+                alignment: AlignmentDirectional.bottomEnd,
+                children: [
+                  if (widget.memberModel.avatarUrl != null)
+                    UrlImage.circle(
+                      widget.memberModel.avatarUrl ?? "",
+                      size: 48.r,
                     ),
-                    SizedBox(width: 12.w),
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.h),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.memberModel.fullName ?? "",
-                              overflow: TextOverflow.ellipsis,
-                              style: context.textTheme.labelLarge?.copyWith(
-                                  color: context.colorScheme.onSurface),
-                            ),
-                            Text(
-                              widget.memberModel.userName ?? "",
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: true,
-                              style: context.textTheme.labelMedium?.copyWith(
-                                  color: context.colorScheme.onSurfaceVariant),
-                            ),
-                          ],
-                        ),
+                  Container(
+                    padding: EdgeInsets.all(2),
+                    height: 14.r,
+                    width: 14.r,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: context.colorScheme.surface,
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: context.colorScheme.primary,
                       ),
                     ),
-                  ],
+                  ),
+                ],
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.memberModel.fullName ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: context.textTheme.labelLarge
+                            ?.copyWith(color: context.colorScheme.onSurface),
+                      ),
+                      Text(
+                        widget.memberModel.userName ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        style: context.textTheme.labelMedium?.copyWith(
+                            color: context.colorScheme.onSurfaceVariant),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

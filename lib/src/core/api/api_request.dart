@@ -4,6 +4,7 @@ import 'package:hive_ce_flutter/adapters.dart';
 import 'package:http/http.dart' as http;
 import 'package:hubtsocial_mobile/src/core/api/errors/exceptions.dart';
 import 'package:hubtsocial_mobile/src/core/app/providers/hive_provider.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/device_id.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/auth/data/models/user_token_model.dart';
@@ -35,7 +36,7 @@ class APIRequest {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'User-Agent': AppLocalStorage.uniqueDeviceId,
+        'User-Agent': DeviceId.getUniqueDeviceId(),
         'Authorization': token != null ? 'Bearer $token' : '',
       },
       body: body != null ? jsonEncode(body) : null,
@@ -66,7 +67,7 @@ class APIRequest {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'User-Agent': AppLocalStorage.uniqueDeviceId,
+        'User-Agent': DeviceId.getUniqueDeviceId(),
         'Authorization': token != null ? 'Bearer $token' : '',
       },
       body: body != null ? jsonEncode(body) : null,
@@ -96,7 +97,7 @@ class APIRequest {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'User-Agent': AppLocalStorage.uniqueDeviceId,
+        'User-Agent': DeviceId.getUniqueDeviceId(),
         'Authorization': token != null ? 'Bearer $token' : '',
       },
       body: body != null ? jsonEncode(body) : null,
@@ -127,7 +128,7 @@ class APIRequest {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'User-Agent': AppLocalStorage.uniqueDeviceId,
+        'User-Agent': DeviceId.getUniqueDeviceId(),
         'Authorization': token != null ? 'Bearer $token' : '',
       },
     );
@@ -157,7 +158,7 @@ class APIRequest {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'User-Agent': AppLocalStorage.uniqueDeviceId,
+        'User-Agent': DeviceId.getUniqueDeviceId(),
         'Authorization': token != null ? 'Bearer $token' : '',
       },
       body: body != null ? jsonEncode(body) : null,
