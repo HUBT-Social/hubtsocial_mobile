@@ -5,8 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/string.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/dialog/app_dialog.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/data/timetable_type.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_info_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/widgets/timetable_member_card.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -102,17 +104,39 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              spacing: 6.w,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(
-                                  Icons.co_present,
-                                  color: context.colorScheme.primary,
-                                  size: 24.r,
+                                Row(
+                                  spacing: 6.w,
+                                  children: [
+                                    Icon(
+                                      Icons.co_present,
+                                      color: context.colorScheme.primary,
+                                      size: 24.r,
+                                    ),
+                                    Text(
+                                      "tran hueeehueee",
+                                      style: context.textTheme.bodyLarge,
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  "tran hueeehueee",
-                                  style: context.textTheme.bodyLarge,
-                                ),
+                                if (state.timetableInfoModel.type != null)
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 12.w, vertical: 4.h),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          state.timetableInfoModel.type?.color,
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    child: Text(
+                                      state.timetableInfoModel.type!.name,
+                                      style: context.textTheme.bodyLarge
+                                          ?.copyWith(
+                                              color: context
+                                                  .colorScheme.onPrimary),
+                                    ),
+                                  ),
                               ],
                             ),
                             Row(
@@ -280,7 +304,7 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                     ),
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        padding: EdgeInsets.only(top: 12.h, bottom: 3.h),
                         child: ClipRRect(
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(24.r),
@@ -318,6 +342,94 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                     ),
                     SliverToBoxAdapter(
                       child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 3.h),
+                        height: 54.h,
+                        decoration: BoxDecoration(
+                          color: context.colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.only(
+                              // topLeft: Radius.circular(24.r),
+                              // topRight: Radius.circular(24.r),
+                              // bottomLeft: Radius.circular(24.r),
+                              // bottomRight: Radius.circular(24.r),
+                              ),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.only(
+                                // topLeft: Radius.circular(24.r),
+                                // topRight: Radius.circular(24.r),
+                                // bottomLeft: Radius.circular(24.r),
+                                // bottomRight: Radius.circular(24.r),
+                                ),
+                            onTap: () {},
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 18.w),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.content_paste_search,
+                                    size: 24.r,
+                                    color: context.colorScheme.primary,
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Text(
+                                    "Content",
+                                    style: context.textTheme.bodyLarge,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 3.h),
+                        height: 54.h,
+                        decoration: BoxDecoration(
+                          color: context.colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.only(
+                            // topLeft: Radius.circular(24.r),
+                            // topRight: Radius.circular(24.r),
+                            bottomLeft: Radius.circular(24.r),
+                            bottomRight: Radius.circular(24.r),
+                          ),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.only(
+                              // topLeft: Radius.circular(24.r),
+                              // topRight: Radius.circular(24.r),
+                              bottomLeft: Radius.circular(24.r),
+                              bottomRight: Radius.circular(24.r),
+                            ),
+                            onTap: () {},
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 18.w),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.rate_review_rounded,
+                                    size: 24.r,
+                                    color: context.colorScheme.primary,
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Text(
+                                    "Evaluate",
+                                    style: context.textTheme.bodyLarge,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Container(
                         height: 120.h,
                       ),
                     ),
@@ -327,7 +439,9 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                   bottom: 72.h,
                   right: 24.w,
                   child: FloatingActionButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      AppRoute.chat.go(context);
+                    },
                     child: Icon(Icons.message),
                   ),
                 ),

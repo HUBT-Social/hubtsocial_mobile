@@ -22,7 +22,6 @@ import 'src/core/injections/injections.dart';
 import 'src/core/logger/logger.dart';
 
 import 'package:hubtsocial_mobile/src/core/notification/FirebaseMessage.dart';
-import 'package:hubtsocial_mobile/src/features/timetable/services/timetable_background_service.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/services/timetable_notification_service.dart';
 
 class NavigationService {

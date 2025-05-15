@@ -2,11 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
 import 'package:injectable/injectable.dart';
-import 'package:hubtsocial_mobile/src/core/notification/LocalMessage.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/services/timetable_notification_service.dart';
-import 'dart:convert';
-
-import 'package:hubtsocial_mobile/src/features/timetable/services/timetable_background_service.dart';
 
 import '../../../../constants/end_point.dart';
 import '../../../../core/api/errors/exceptions.dart';
