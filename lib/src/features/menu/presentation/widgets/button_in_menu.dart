@@ -27,46 +27,48 @@ class ButtonInMenu extends StatefulWidget {
 class _ButtonInMenuState extends State<ButtonInMenu> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 6.w),
-      child: Container(
-        height: 48.h,
-        decoration: BoxDecoration(
-          color: context.colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(widget.borderRadiusTop),
-            topRight: Radius.circular(widget.borderRadiusTop),
-            bottomLeft: Radius.circular(widget.borderRadiusBottom),
-            bottomRight: Radius.circular(widget.borderRadiusBottom),
-          ),
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 6.w),
+        child: Container(
+          height: 48.h,
+          decoration: BoxDecoration(
+            color: context.colorScheme.surfaceContainerHighest,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(widget.borderRadiusTop),
               topRight: Radius.circular(widget.borderRadiusTop),
               bottomLeft: Radius.circular(widget.borderRadiusBottom),
               bottomRight: Radius.circular(widget.borderRadiusBottom),
             ),
-            onTap: widget.onTap,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      widget.icon,
-                      SizedBox(width: 12.w),
-                      Text(
-                        widget.label,
-                        style: context.textTheme.titleSmall,
-                      ),
-                    ],
-                  ),
-                  widget.iconArrow
-                ],
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(widget.borderRadiusTop),
+                topRight: Radius.circular(widget.borderRadiusTop),
+                bottomLeft: Radius.circular(widget.borderRadiusBottom),
+                bottomRight: Radius.circular(widget.borderRadiusBottom),
+              ),
+              onTap: widget.onTap,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        widget.icon,
+                        SizedBox(width: 12.w),
+                        Text(
+                          widget.label,
+                          style: context.textTheme.titleSmall,
+                        ),
+                      ],
+                    ),
+                    widget.iconArrow
+                  ],
+                ),
               ),
             ),
           ),

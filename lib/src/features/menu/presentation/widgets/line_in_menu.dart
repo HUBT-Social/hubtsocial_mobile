@@ -9,12 +9,14 @@ class LineInMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 12.h),
-      child: Container(
-        color: context.colorScheme.outlineVariant,
-        height: 2.h,
-        width: double.infinity,
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 12.h),
+        child: Container(
+          color: context.colorScheme.outlineVariant,
+          height: 2.h,
+          width: double.infinity,
+        ),
       ),
     );
   }

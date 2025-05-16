@@ -33,18 +33,20 @@ class _MenuScreenState extends State<MenuScreen> {
           title: context.loc.menu,
         )
       ],
-      body: ListView(
+      body: CustomScrollView(
         // controller: scrollController,
         physics: const BouncingScrollPhysics(),
-        children: [
+        slivers: [
           UserCardInMenu(),
-          SizedBox(height: 6.h),
-          Container(
-            height: 2.h,
-            width: double.infinity,
-            color: context.colorScheme.surfaceContainerHighest,
+          SliverToBoxAdapter(child: SizedBox(height: 6.h)),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 2.h,
+              width: double.infinity,
+              color: context.colorScheme.surfaceContainerHighest,
+            ),
           ),
-          SizedBox(height: 6.h),
+          SliverToBoxAdapter(child: SizedBox(height: 6.h)),
           ButtonInMenu(
             borderRadiusTop: 12.r,
             icon: BlocBuilder<ThemeBloc, AppThemeState>(
@@ -63,7 +65,7 @@ class _MenuScreenState extends State<MenuScreen> {
             onTap: () => ThemeUtils.showThemeBottomSheet(
                 navigatorKey.currentContext ?? context),
           ),
-          SizedBox(height: 6.h),
+          SliverToBoxAdapter(child: SizedBox(height: 6.h)),
           ButtonInMenu(
             borderRadiusBottom: 12.r,
             icon: BlocBuilder<LocalizationBloc, AppLocalizationState>(
@@ -94,13 +96,12 @@ class _MenuScreenState extends State<MenuScreen> {
               size: 16.r,
             ),
             onTap: () {
-            //  context.showSnackBarMessage('Tính năng đang phát triển')
-            // ;
-           AppRoute.setNewPassword.push(context); 
-           
+              //  context.showSnackBarMessage('Tính năng đang phát triển')
+              // ;
+              AppRoute.setNewPassword.push(context);
             },
           ),
-          SizedBox(height: 6.h),
+          SliverToBoxAdapter(child: SizedBox(height: 6.h)),
           ButtonInMenu(
             icon: Icon(
               Icons.support_agent_rounded,
@@ -113,12 +114,10 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
             onTap: () {
               context.showSnackBarMessage('Tính năng đang phát triển');
-             
-              
             },
           ),
-          SizedBox(height: 6.h),
-            ButtonInMenu(
+          SliverToBoxAdapter(child: SizedBox(height: 6.h)),
+          ButtonInMenu(
             icon: Icon(
               Icons.star_border_rounded,
               size: 28.r,
@@ -132,7 +131,7 @@ class _MenuScreenState extends State<MenuScreen> {
               AppRoute.teacherCode.push(context);
             },
           ),
-          SizedBox(height: 6.h),
+          SliverToBoxAdapter(child: SizedBox(height: 6.h)),
           ButtonInMenu(
             borderRadiusBottom: 12.r,
             icon: Icon(
@@ -149,85 +148,89 @@ class _MenuScreenState extends State<MenuScreen> {
             },
           ),
           LineInMenu(),
-          InkWell(
-            borderRadius: BorderRadius.all(
-              Radius.circular(12.r),
-            ),
-            onTap: () {
-              AppDialog.showDeleteAccountConfirmationDialog(context);
-              context.showSnackBarMessage('Tính năng đang phát triển');
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 6.w),
-              child: Container(
-                height: 48.h,
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                decoration: BoxDecoration(
-                  color: context.colorScheme.errorContainer,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12.r),
+          SliverToBoxAdapter(
+            child: InkWell(
+              borderRadius: BorderRadius.all(
+                Radius.circular(12.r),
+              ),
+              onTap: () {
+                AppDialog.showDeleteAccountConfirmationDialog(context);
+                context.showSnackBarMessage('Tính năng đang phát triển');
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 6.w),
+                child: Container(
+                  height: 48.h,
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  decoration: BoxDecoration(
+                    color: context.colorScheme.errorContainer,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(12.r),
+                    ),
                   ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.delete_forever_rounded,
-                          size: 28.r,
-                          color: context.colorScheme.error,
-                        ),
-                        SizedBox(width: 12.w),
-                        Text(
-                          context.loc.delete_account,
-                          style: context.textTheme.titleSmall?.copyWith(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.delete_forever_rounded,
+                            size: 28.r,
                             color: context.colorScheme.error,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          SizedBox(width: 12.w),
+                          Text(
+                            context.loc.delete_account,
+                            style: context.textTheme.titleSmall?.copyWith(
+                              color: context.colorScheme.error,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-          SizedBox(height: 6.h),
-          InkWell(
-            borderRadius: BorderRadius.all(
-              Radius.circular(12.r),
-            ),
-            onTap: () {
-              AppDialog.showSignOutConfirmationDialog(context);
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 6.w),
-              child: Container(
-                height: 48.h,
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                decoration: BoxDecoration(
-                  color: context.colorScheme.outlineVariant,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12.r),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.output_rounded,
-                          size: 28.r,
-                        ),
-                        SizedBox(width: 12.w),
-                        Text(
-                          context.loc.sign_out,
-                          style: context.textTheme.titleSmall,
-                        ),
-                      ],
+          SliverToBoxAdapter(child: SizedBox(height: 6.h)),
+          SliverToBoxAdapter(
+            child: InkWell(
+              borderRadius: BorderRadius.all(
+                Radius.circular(12.r),
+              ),
+              onTap: () {
+                AppDialog.showSignOutConfirmationDialog(context);
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 6.w),
+                child: Container(
+                  height: 48.h,
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  decoration: BoxDecoration(
+                    color: context.colorScheme.outlineVariant,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(12.r),
                     ),
-                  ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.output_rounded,
+                            size: 28.r,
+                          ),
+                          SizedBox(width: 12.w),
+                          Text(
+                            context.loc.sign_out,
+                            style: context.textTheme.titleSmall,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

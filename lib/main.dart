@@ -35,19 +35,19 @@ void main() async {
   await Future.wait([
     dotenv.load(fileName: Environment.fileName),
     configureDependencies(),
+    AppLocalStorage().initLocalStorage(),
     _initFirebase(),
   ]);
 
   await Future.wait([
     DeviceId.setupUniqueDeviceId(),
-    AppLocalStorage().initLocalStorage(),
+    _initNotification(),
   ]);
 
   // Khởi tạo background service
   //await TimetableBackgroundService.initialize();
   //await TimetableBackgroundService.schedulePeriodicTask();
 
-  await _initNotification();
   getIt<TimetableNotificationService>().scheduleNotificationsFromHive();
   runApp(MyApp());
 }
