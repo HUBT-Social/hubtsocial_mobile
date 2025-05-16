@@ -281,5 +281,39 @@
   "shuffleAnswers": "Trộn câu trả lời",
   "@shuffleAnswers": {},
   "startQuiz": "Bắt đầu bài kiểm tra",
-  "@startQuiz": {}
+  "@startQuiz": {},
+  "zoom_cannot_be_accessed": "Zoom không thể truy cập {zoom_id}",
+  "@zoom_cannot_be_accessed": {
+    "placeholders": {
+      "zoom_id": {
+        "type": "String"
+      }
+    }
+  },
+  "copied": "Đã sao chép",
+  "@copied": {},
+  "student_list": "Danh sách sinh viên",
+  "@student_list": {},
+  "content": "Nội dung",
+  "@content": {},
+  "evaluate": "Đánh giá",
+  "@evaluate": {},
+  "information": "Thông tin",
+  "@information": {},
+  "present": "Có mặt",
+  "@present": {},
+  "absent": "Vắng mặt",
+  "@absent": {},
+  "late": "Đi muộn",
+  "@late": {},
+  "exam_ban": "Cấm thi",
+  "@exam_ban": {},
+  "study": "Học",
+  "@study": {},
+  "exam": "Thi",
+  "@exam": {},
+  "seminar": "Hội thảo",
+  "@seminar": {},
+  "retake_exam": "Thi lại",
+  "@retake_exam": {}
 }

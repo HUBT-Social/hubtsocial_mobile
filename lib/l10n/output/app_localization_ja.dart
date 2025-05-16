@@ -367,4 +367,48 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get startQuiz => 'クイズを開始';
+
+  @override
+  String zoom_cannot_be_accessed(String zoom_id) {
+    return 'Zoomにアクセスできません $zoom_id';
+  }
+
+  @override
+  String get copied => 'コピーされました';
+
+  @override
+  String get student_list => '学生リスト';
+
+  @override
+  String get content => 'コンテンツ';
+
+  @override
+  String get evaluate => '評価';
+
+  @override
+  String get information => '情報';
+
+  @override
+  String get present => '出席';
+
+  @override
+  String get absent => '欠席';
+
+  @override
+  String get late => '遅刻';
+
+  @override
+  String get exam_ban => '試験禁止';
+
+  @override
+  String get study => '勉強';
+
+  @override
+  String get exam => '試験';
+
+  @override
+  String get seminar => 'セミナー';
+
+  @override
+  String get retake_exam => '再試験';
 }

@@ -786,6 +786,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start quiz'**
   String get startQuiz;
+
+  /// No description provided for @zoom_cannot_be_accessed.
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom cannot be accessed {zoom_id}'**
+  String zoom_cannot_be_accessed(String zoom_id);
+
+  /// No description provided for @copied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get copied;
+
+  /// No description provided for @student_list.
+  ///
+  /// In en, this message translates to:
+  /// **'Student list'**
+  String get student_list;
+
+  /// No description provided for @content.
+  ///
+  /// In en, this message translates to:
+  /// **'Content'**
+  String get content;
+
+  /// No description provided for @evaluate.
+  ///
+  /// In en, this message translates to:
+  /// **'Evaluate'**
+  String get evaluate;
+
+  /// No description provided for @information.
+  ///
+  /// In en, this message translates to:
+  /// **'Information'**
+  String get information;
+
+  /// No description provided for @present.
+  ///
+  /// In en, this message translates to:
+  /// **'Present'**
+  String get present;
+
+  /// No description provided for @absent.
+  ///
+  /// In en, this message translates to:
+  /// **'Absent'**
+  String get absent;
+
+  /// No description provided for @late.
+  ///
+  /// In en, this message translates to:
+  /// **'Late'**
+  String get late;
+
+  /// No description provided for @exam_ban.
+  ///
+  /// In en, this message translates to:
+  /// **'Exam ban'**
+  String get exam_ban;
+
+  /// No description provided for @study.
+  ///
+  /// In en, this message translates to:
+  /// **'Study'**
+  String get study;
+
+  /// No description provided for @exam.
+  ///
+  /// In en, this message translates to:
+  /// **'Exam'**
+  String get exam;
+
+  /// No description provided for @seminar.
+  ///
+  /// In en, this message translates to:
+  /// **'Seminar'**
+  String get seminar;
+
+  /// No description provided for @retake_exam.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake exam'**
+  String get retake_exam;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

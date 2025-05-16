@@ -367,4 +367,48 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get startQuiz => '퀴즈 시작';
+
+  @override
+  String zoom_cannot_be_accessed(String zoom_id) {
+    return 'Zoom에 접근할 수 없습니다 $zoom_id';
+  }
+
+  @override
+  String get copied => '복사됨';
+
+  @override
+  String get student_list => '학생 목록';
+
+  @override
+  String get content => '내용';
+
+  @override
+  String get evaluate => '평가';
+
+  @override
+  String get information => '정보';
+
+  @override
+  String get present => '출석';
+
+  @override
+  String get absent => '결석';
+
+  @override
+  String get late => '지각';
+
+  @override
+  String get exam_ban => '시험 금지';
+
+  @override
+  String get study => '공부';
+
+  @override
+  String get exam => '시험';
+
+  @override
+  String get seminar => '세미나';
+
+  @override
+  String get retake_exam => '재시험';
 }

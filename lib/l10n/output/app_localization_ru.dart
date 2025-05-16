@@ -367,4 +367,48 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get startQuiz => 'Начать тест';
+
+  @override
+  String zoom_cannot_be_accessed(String zoom_id) {
+    return 'Zoom не может быть доступен $zoom_id';
+  }
+
+  @override
+  String get copied => 'Скопировано';
+
+  @override
+  String get student_list => 'Список студентов';
+
+  @override
+  String get content => 'Содержание';
+
+  @override
+  String get evaluate => 'Оценить';
+
+  @override
+  String get information => 'Информация';
+
+  @override
+  String get present => 'Присутствует';
+
+  @override
+  String get absent => 'Отсутствует';
+
+  @override
+  String get late => 'Опоздание';
+
+  @override
+  String get exam_ban => 'Запрет на экзамен';
+
+  @override
+  String get study => 'Учеба';
+
+  @override
+  String get exam => 'Экзамен';
+
+  @override
+  String get seminar => 'Семинар';
+
+  @override
+  String get retake_exam => 'Пересдать экзамен';
 }

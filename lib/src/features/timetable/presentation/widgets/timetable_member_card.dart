@@ -33,7 +33,7 @@ class _TimetableMemberCardState extends State<TimetableMemberCard> {
             backgroundColor: context.colorScheme.primary,
             foregroundColor: context.colorScheme.onPrimary,
             icon: Icons.info,
-            label: 'Thông tin',
+            label: context.loc.information,
           ),
           SlidableAction(
             onPressed: (context) {
@@ -42,7 +42,7 @@ class _TimetableMemberCardState extends State<TimetableMemberCard> {
             backgroundColor: context.colorScheme.tertiary,
             foregroundColor: context.colorScheme.onTertiary,
             icon: Icons.check,
-            label: 'Có mặt',
+            label: context.loc.present,
           ),
         ],
       ),
@@ -57,7 +57,7 @@ class _TimetableMemberCardState extends State<TimetableMemberCard> {
             backgroundColor: context.colorScheme.errorContainer,
             foregroundColor: context.colorScheme.onErrorContainer,
             icon: Icons.close,
-            label: 'Vắng mặt',
+            label: context.loc.absent,
           ),
           SlidableAction(
             onPressed: (context) {
@@ -66,7 +66,7 @@ class _TimetableMemberCardState extends State<TimetableMemberCard> {
             backgroundColor: context.colorScheme.error,
             foregroundColor: context.colorScheme.onError,
             icon: Icons.block,
-            label: 'Cấm thi',
+            label: context.loc.exam_ban,
           ),
         ],
       ),

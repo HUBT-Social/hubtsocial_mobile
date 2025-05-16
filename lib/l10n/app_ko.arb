@@ -283,5 +283,39 @@
   "shuffleAnswers": "답변 섞기",
   "@shuffleAnswers": {},
   "startQuiz": "퀴즈 시작",
-  "@startQuiz": {}
+  "@startQuiz": {},
+  "zoom_cannot_be_accessed": "Zoom에 접근할 수 없습니다 {zoom_id}",
+  "@zoom_cannot_be_accessed": {
+    "placeholders": {
+      "zoom_id": {
+        "type": "String"
+      }
+    }
+  },
+  "copied": "복사됨",
+  "@copied": {},
+  "student_list": "학생 목록",
+  "@student_list": {},
+  "content": "내용",
+  "@content": {},
+  "evaluate": "평가",
+  "@evaluate": {},
+  "information": "정보",
+  "@information": {},
+  "present": "출석",
+  "@present": {},
+  "absent": "결석",
+  "@absent": {},
+  "late": "지각",
+  "@late": {},
+  "exam_ban": "시험 금지",
+  "@exam_ban": {},
+  "study": "공부",
+  "@study": {},
+  "exam": "시험",
+  "@exam": {},
+  "seminar": "세미나",
+  "@seminar": {},
+  "retake_exam": "재시험",
+  "@retake_exam": {}
 }

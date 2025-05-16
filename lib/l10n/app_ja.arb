@@ -281,5 +281,39 @@
   "shuffleAnswers": "回答をシャッフル",
   "@shuffleAnswers": {},
   "startQuiz": "クイズを開始",
-  "@startQuiz": {}
+  "@startQuiz": {},
+  "zoom_cannot_be_accessed": "Zoomにアクセスできません {zoom_id}",
+  "@zoom_cannot_be_accessed": {
+    "placeholders": {
+      "zoom_id": {
+        "type": "String"
+      }
+    }
+  },
+  "copied": "コピーされました",
+  "@copied": {},
+  "student_list": "学生リスト",
+  "@student_list": {},
+  "content": "コンテンツ",
+  "@content": {},
+  "evaluate": "評価",
+  "@evaluate": {},
+  "information": "情報",
+  "@information": {},
+  "present": "出席",
+  "@present": {},
+  "absent": "欠席",
+  "@absent": {},
+  "late": "遅刻",
+  "@late": {},
+  "exam_ban": "試験禁止",
+  "@exam_ban": {},
+  "study": "勉強",
+  "@study": {},
+  "exam": "試験",
+  "@exam": {},
+  "seminar": "セミナー",
+  "@seminar": {},
+  "retake_exam": "再試験",
+  "@retake_exam": {}
 }

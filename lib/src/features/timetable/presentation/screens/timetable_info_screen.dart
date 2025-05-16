@@ -175,6 +175,7 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                                 Icon(
                                   Icons.school_rounded,
                                   color: context.colorScheme.primary,
+                                  size: 24.r,
                                 ),
                                 Text(
                                   state.timetableInfoModel.className!
@@ -249,33 +250,42 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                                             )) {
                                               AppDialog.showMessageDialog(
                                                 AppDialog.errorMessage(
-                                                    "Không thể truy cập zoom: ${state.timetableInfoModel.zoomId}",
+                                                    context.loc
+                                                        .zoom_cannot_be_accessed(
+                                                            state
+                                                                .timetableInfoModel
+                                                                .zoomId!),
                                                     context),
                                               );
                                             }
                                           },
-                                          child: Row(
-                                            spacing: 6.w,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.voice_chat_rounded,
-                                                color: context
-                                                    .colorScheme.onPrimary,
-                                                size: 24.r,
-                                              ),
-                                              Text(
-                                                state.timetableInfoModel.zoomId!
-                                                    .capitalizeFirst(),
-                                                style: context
-                                                    .textTheme.bodyLarge
-                                                    ?.copyWith(
-                                                        color: context
-                                                            .colorScheme
-                                                            .onPrimary),
-                                              ),
-                                            ],
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 4.h),
+                                            child: Row(
+                                              spacing: 6.w,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.voice_chat_rounded,
+                                                  color: context
+                                                      .colorScheme.onPrimary,
+                                                  size: 24.r,
+                                                ),
+                                                Text(
+                                                  state.timetableInfoModel
+                                                      .zoomId!
+                                                      .capitalizeFirst(),
+                                                  style: context
+                                                      .textTheme.bodyLarge
+                                                      ?.copyWith(
+                                                          color: context
+                                                              .colorScheme
+                                                              .onPrimary),
+                                                ),
+                                              ],
+                                            ),
                                           )),
                                       IconButton(
                                         onPressed: () {
@@ -285,7 +295,7 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                                                 text: state.timetableInfoModel
                                                     .zoomId!));
                                             context.showSnackBarMessage(
-                                                'Đã sao chép: ${state.timetableInfoModel.zoomId}');
+                                                context.loc.copied);
                                           }
                                         },
                                         icon: Icon(
@@ -311,13 +321,15 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                             topRight: Radius.circular(24.r),
                           ),
                           child: ExpansionTile(
+                            minTileHeight: 52.h,
+                            tilePadding: EdgeInsets.symmetric(horizontal: 18.w),
                             leading: Icon(
                               Icons.format_list_bulleted,
                               color: context.colorScheme.primary,
                               size: 24.r,
                             ),
                             title: Text(
-                              "Danh sách sinh viên",
+                              context.loc.student_list,
                               style: context.textTheme.bodyLarge,
                             ),
                             collapsedBackgroundColor:
@@ -374,7 +386,7 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                                   ),
                                   SizedBox(width: 12.w),
                                   Text(
-                                    "Content",
+                                    context.loc.content,
                                     style: context.textTheme.bodyLarge,
                                   ),
                                 ],
@@ -418,7 +430,7 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                                   ),
                                   SizedBox(width: 12.w),
                                   Text(
-                                    "Evaluate",
+                                    context.loc.evaluate,
                                     style: context.textTheme.bodyLarge,
                                   ),
                                 ],

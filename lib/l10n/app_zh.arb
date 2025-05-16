@@ -281,5 +281,39 @@
   "shuffleAnswers": "打乱答案",
   "@shuffleAnswers": {},
   "startQuiz": "开始测验",
-  "@startQuiz": {}
+  "@startQuiz": {},
+  "zoom_cannot_be_accessed": "Zoom 无法访问 {zoom_id}",
+  "@zoom_cannot_be_accessed": {
+    "placeholders": {
+      "zoom_id": {
+        "type": "String"
+      }
+    }
+  },
+  "copied": "已复制",
+  "@copied": {},
+  "student_list": "学生列表",
+  "@student_list": {},
+  "content": "内容",
+  "@content": {},
+  "evaluate": "评估",
+  "@evaluate": {},
+  "information": "信息",
+  "@information": {},
+  "present": "在场",
+  "@present": {},
+  "absent": "缺席",
+  "@absent": {},
+  "late": "迟到",
+  "@late": {},
+  "exam_ban": "考试禁令",
+  "@exam_ban": {},
+  "study": "学习",
+  "@study": {},
+  "exam": "考试",
+  "@exam": {},
+  "seminar": "研讨会",
+  "@seminar": {},
+  "retake_exam": "重考",
+  "@retake_exam": {}
 }

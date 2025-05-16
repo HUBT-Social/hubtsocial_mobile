@@ -26,4 +26,25 @@ extension TimetableTypeExtension on TimetableType {
             : Colors.red;
     }
   }
+
+  String get name {
+    switch (this) {
+      case TimetableType.Study:
+        return navigatorKey.currentContext != null
+            ? navigatorKey.currentContext!.loc.study
+            : "Study";
+      case TimetableType.Exam:
+        return navigatorKey.currentContext != null
+            ? navigatorKey.currentContext!.loc.exam
+            : "Exam";
+      case TimetableType.Seminar:
+        return navigatorKey.currentContext != null
+            ? navigatorKey.currentContext!.loc.seminar
+            : "Seminar";
+      case TimetableType.RetakeExam:
+        return navigatorKey.currentContext != null
+            ? navigatorKey.currentContext!.loc.retake_exam
+            : "RetakeExam";
+    }
+  }
 }

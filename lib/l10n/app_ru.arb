@@ -281,5 +281,39 @@
   "shuffleAnswers": "Перемешать ответы",
   "@shuffleAnswers": {},
   "startQuiz": "Начать тест",
-  "@startQuiz": {}
+  "@startQuiz": {},
+  "zoom_cannot_be_accessed": "Zoom не может быть доступен {zoom_id}",
+  "@zoom_cannot_be_accessed": {
+    "placeholders": {
+      "zoom_id": {
+        "type": "String"
+      }
+    }
+  },
+  "copied": "Скопировано",
+  "@copied": {},
+  "student_list": "Список студентов",
+  "@student_list": {},
+  "content": "Содержание",
+  "@content": {},
+  "evaluate": "Оценить",
+  "@evaluate": {},
+  "information": "Информация",
+  "@information": {},
+  "present": "Присутствует",
+  "@present": {},
+  "absent": "Отсутствует",
+  "@absent": {},
+  "late": "Опоздание",
+  "@late": {},
+  "exam_ban": "Запрет на экзамен",
+  "@exam_ban": {},
+  "study": "Учеба",
+  "@study": {},
+  "exam": "Экзамен",
+  "@exam": {},
+  "seminar": "Семинар",
+  "@seminar": {},
+  "retake_exam": "Пересдать экзамен",
+  "@retake_exam": {}
 }

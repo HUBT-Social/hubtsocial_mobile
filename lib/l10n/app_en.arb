@@ -281,5 +281,39 @@
   "shuffleAnswers": "Shuffle answers",
   "@shuffleAnswers": {},
   "startQuiz": "Start quiz",
-  "@startQuiz": {}
+  "@startQuiz": {},
+  "zoom_cannot_be_accessed": "Zoom cannot be accessed {zoom_id}",
+  "@zoom_cannot_be_accessed": {
+    "placeholders": {
+      "zoom_id": {
+        "type": "String"
+      }
+    }
+  },
+  "copied": "Copied",
+  "@copied": {},
+  "student_list": "Student list",
+  "@student_list": {},
+  "content": "Content",
+  "@content": {},
+  "evaluate": "Evaluate",
+  "@evaluate": {},
+  "information": "Information",
+  "@information": {},
+  "present": "Present",
+  "@present": {},
+  "absent": "Absent",
+  "@absent": {},
+  "late": "Late",
+  "@late": {},
+  "exam_ban": "Exam ban",
+  "@exam_ban": {},
+  "study": "Study",
+  "@study": {},
+  "exam": "Exam",
+  "@exam": {},
+  "seminar": "Seminar",
+  "@seminar": {},
+  "retake_exam": "Retake exam",
+  "@retake_exam": {}
 }

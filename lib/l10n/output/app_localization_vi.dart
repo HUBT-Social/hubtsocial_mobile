@@ -367,4 +367,48 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get startQuiz => 'Bắt đầu bài kiểm tra';
+
+  @override
+  String zoom_cannot_be_accessed(String zoom_id) {
+    return 'Zoom không thể truy cập $zoom_id';
+  }
+
+  @override
+  String get copied => 'Đã sao chép';
+
+  @override
+  String get student_list => 'Danh sách sinh viên';
+
+  @override
+  String get content => 'Nội dung';
+
+  @override
+  String get evaluate => 'Đánh giá';
+
+  @override
+  String get information => 'Thông tin';
+
+  @override
+  String get present => 'Có mặt';
+
+  @override
+  String get absent => 'Vắng mặt';
+
+  @override
+  String get late => 'Đi muộn';
+
+  @override
+  String get exam_ban => 'Cấm thi';
+
+  @override
+  String get study => 'Học';
+
+  @override
+  String get exam => 'Thi';
+
+  @override
+  String get seminar => 'Hội thảo';
+
+  @override
+  String get retake_exam => 'Thi lại';
 }

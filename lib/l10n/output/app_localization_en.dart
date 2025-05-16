@@ -367,4 +367,48 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get startQuiz => 'Start quiz';
+
+  @override
+  String zoom_cannot_be_accessed(String zoom_id) {
+    return 'Zoom cannot be accessed $zoom_id';
+  }
+
+  @override
+  String get copied => 'Copied';
+
+  @override
+  String get student_list => 'Student list';
+
+  @override
+  String get content => 'Content';
+
+  @override
+  String get evaluate => 'Evaluate';
+
+  @override
+  String get information => 'Information';
+
+  @override
+  String get present => 'Present';
+
+  @override
+  String get absent => 'Absent';
+
+  @override
+  String get late => 'Late';
+
+  @override
+  String get exam_ban => 'Exam ban';
+
+  @override
+  String get study => 'Study';
+
+  @override
+  String get exam => 'Exam';
+
+  @override
+  String get seminar => 'Seminar';
+
+  @override
+  String get retake_exam => 'Retake exam';
 }

@@ -367,4 +367,48 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get startQuiz => '开始测验';
+
+  @override
+  String zoom_cannot_be_accessed(String zoom_id) {
+    return 'Zoom 无法访问 $zoom_id';
+  }
+
+  @override
+  String get copied => '已复制';
+
+  @override
+  String get student_list => '学生列表';
+
+  @override
+  String get content => '内容';
+
+  @override
+  String get evaluate => '评估';
+
+  @override
+  String get information => '信息';
+
+  @override
+  String get present => '在场';
+
+  @override
+  String get absent => '缺席';
+
+  @override
+  String get late => '迟到';
+
+  @override
+  String get exam_ban => '考试禁令';
+
+  @override
+  String get study => '学习';
+
+  @override
+  String get exam => '考试';
+
+  @override
+  String get seminar => '研讨会';
+
+  @override
+  String get retake_exam => '重考';
 }
