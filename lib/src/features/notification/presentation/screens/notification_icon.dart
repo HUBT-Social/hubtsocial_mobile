@@ -9,7 +9,7 @@ class NotificationIcon extends StatelessWidget {
 
   const NotificationIcon({
     required this.notification,
-    this.size = 60,
+    this.size = 70,
     Key? key,
   }) : super(key: key);
 
@@ -27,7 +27,6 @@ class NotificationIcon extends StatelessWidget {
         ? avatarUrl
         : (imageUrl?.isNotEmpty == true ? imageUrl : null);
 
-    // Nếu có ảnh, hiển thị ảnh to tròn, icon nhỏ ở góc phải dưới
     if (mainImage != null && mainImage.isNotEmpty) {
       String smallIconPath;
       if (notificationType == 'chat' || notificationType == 'profile') {
@@ -40,8 +39,8 @@ class NotificationIcon extends StatelessWidget {
         smallIconPath = AppIcons.notificationAdmin;
       }
       return SizedBox(
-        width: size + 12,
-        height: size + 12,
+        width: size + 8,
+        height: size + 8,
         child: Stack(
           clipBehavior: Clip.none,
           children: [
@@ -69,16 +68,16 @@ class NotificationIcon extends StatelessWidget {
               right: 0,
               bottom: 0,
               child: Container(
-                width: 25,
-                height: 25,
+                width: size * 0.35,
+                height: size * 0.35,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                 ),
                 child: Center(
                   child: SvgPicture.asset(
                     smallIconPath,
-                    width: 25,
-                    height: 25,
+                    width: size * 0.35,
+                    height: size * 0.35,
                     fit: BoxFit.contain,
                   ),
                 ),

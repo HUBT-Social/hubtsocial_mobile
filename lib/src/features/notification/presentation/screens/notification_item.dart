@@ -15,16 +15,22 @@ class NotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasImage = notification.data?['imageUrl'] != null;
-    final imageUrl = notification.data?['imageUrl'];
+    final screenHeight = MediaQuery.of(context).size.height;
     final type = notification.type?.toLowerCase() ??
         notification.data?['type']?.toString().toLowerCase() ??
         '';
 
+    final typesToShowDetail = [
+      'learning_alerts',
+      'academic_warning',
+      'broadcast',
+      'exam',
+      'maintenance',
+    ];
+
     return Container(
-      height: 77,
-      width: 360,
-      margin: EdgeInsets.only(bottom: 4),
+      height: screenHeight / 9,
+      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color:
             notification.isRead ? Colors.white : Colors.blue.withOpacity(0.05),
@@ -38,13 +44,8 @@ class NotificationItem extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            if ([
-              'learning_alerts',
-              'academic_warning',
-              'broadcast',
-              'exam',
-              'maintenance'
-            ].contains(type)) {
+            if ((notification.body?.isNotEmpty == true) &&
+                typesToShowDetail.contains(type)) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -58,26 +59,25 @@ class NotificationItem extends StatelessWidget {
           },
           borderRadius: BorderRadius.circular(8),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: buildNotificationAvatar(notification),
+                  width: 70,
+                  height: 70,
+                  child: NotificationIcon(notification: notification, size: 70),
                 ),
-                SizedBox(width: 8),
-                SizedBox(
-                  width: 278,
-                  height: 60,
+                SizedBox(width: 12),
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         notification.title ?? '',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
                         ),
@@ -85,14 +85,14 @@ class NotificationItem extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       if (notification.body != null) ...[
-                        SizedBox(height: 2),
+                        SizedBox(height: 3),
                         Text(
                           notification.body!,
                           style: TextStyle(
-                            fontSize: 19,
+                            fontSize: 16,
                             color: Colors.black87,
                           ),
-                          maxLines: 1,
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
@@ -100,7 +100,7 @@ class NotificationItem extends StatelessWidget {
                       Text(
                         _formatTime(notification.time, context),
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 13,
                           color: Colors.grey[600],
                         ),
                       ),
@@ -113,54 +113,6 @@ class NotificationItem extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget buildNotificationAvatar(NotificationModel notification) {
-    final imageUrl = notification.data?['imageUrl'];
-    if (imageUrl != null && imageUrl.toString().isNotEmpty) {
-      return Stack(
-        children: [
-          ClipOval(
-            child: Image.network(
-              imageUrl,
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  width: 50,
-                  height: 50,
-                  color: Colors.grey[200],
-                  child: Icon(Icons.image, color: Colors.grey),
-                );
-              },
-            ),
-          ),
-          Positioned(
-            right: 0,
-            bottom: 0,
-            child: Container(
-              width: 20,
-              height: 20,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 2,
-                    offset: Offset(0, 1),
-                  ),
-                ],
-              ),
-              child: NotificationIcon(notification: notification, size: 16),
-            ),
-          ),
-        ],
-      );
-    } else {
-      return NotificationIcon(notification: notification, size: 50);
-    }
   }
 
   String _formatTime(String time, BuildContext context) {

@@ -10,6 +10,7 @@ import 'notification_icon.dart';
 import 'notification_detail_screen.dart';
 import 'filter_option.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hubtsocial_mobile/src/features/notification/presentation/screens/notification_item.dart';
 
 import '../../../main_wrapper/presentation/widgets/main_app_bar.dart';
 
@@ -187,79 +188,10 @@ class _NotificationsState extends State<NotificationsScreen> {
                   itemCount: filteredNotifications.length,
                   itemBuilder: (context, index) {
                     final notification = filteredNotifications[index];
-                    final avatarUrl = notification.data?['avatarUrl'];
-                    final imageUrl = notification.data?['imageUrl'];
-                    final mainImage = imageUrl ?? avatarUrl; // Ưu tiên imageUrl
-
-                    print(
-                        '===> notification.data in list: ${notification.data}');
-
-                    return InkWell(
+                    return NotificationItem(
+                      notification: notification,
                       onTap: () =>
                           _handleNotificationTap(context, notification),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              color: Colors.grey.withOpacity(0.1),
-                              width: 0.5,
-                            ),
-                          ),
-                        ),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Avatar bên trái
-                            SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: buildNotificationAvatar(notification),
-                            ),
-                            SizedBox(width: 12),
-                            // Nội dung ở giữa
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    notification.title ?? '',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  if (notification.body != null) ...[
-                                    SizedBox(height: 2),
-                                    Text(
-                                      notification.body ?? '',
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.grey[600],
-                                        height: 1.2,
-                                      ),
-                                    ),
-                                  ],
-                                  SizedBox(height: 2),
-                                  Text(
-                                    _formatTime(notification.time, context),
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey[500],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     );
                   },
                 );
