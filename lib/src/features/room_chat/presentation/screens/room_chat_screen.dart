@@ -32,20 +32,17 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
   void initState() {
     context.read<GetRoomChatBloc>().add(GetRoomMemberEvent(roomId: widget.id));
 
-    if (ChatHubConnection.chatHubConnection.state ==
-        HubConnectionState.Connected) {
-      ChatHubConnection.chatHubConnection.on("ReceiveChat", _handleReceiveChat);
-      ChatHubConnection.chatHubConnection
-          .on("ReceiveProcess", _handleReceiveProcess);
+    if (ChatHubConnection.connection.state == HubConnectionState.Connected) {
+      ChatHubConnection.connection.on("ReceiveChat", _handleReceiveChat);
+      ChatHubConnection.connection.on("ReceiveProcess", _handleReceiveProcess);
     }
     super.initState();
   }
 
   @override
   void dispose() {
-    ChatHubConnection.chatHubConnection
-        .off("ReceiveChat", method: _handleReceiveChat);
-    ChatHubConnection.chatHubConnection
+    ChatHubConnection.connection.off("ReceiveChat", method: _handleReceiveChat);
+    ChatHubConnection.connection
         .off("ReceiveProcess", method: _handleReceiveProcess);
     super.dispose();
   }

@@ -6,9 +6,6 @@ import 'package:hubtsocial_mobile/src/core/injections/injections.dart';
 import 'package:hubtsocial_mobile/src/features/home/presentation/widgets/user_header_widget.dart';
 
 import '../../../../router/route.dart';
-import '../../../../core/presentation/widget/url_image.dart';
-import '../../../../router/router.import.dart';
-import '../../../main_wrapper/presentation/widgets/main_app_bar.dart';
 import '../../../user/domain/entities/user.dart';
 import '../../../user/presentation/bloc/user_bloc.dart';
 import '../../../timetable/data/datasources/timetable_remote_data_source.dart';

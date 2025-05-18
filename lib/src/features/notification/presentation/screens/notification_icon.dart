@@ -10,8 +10,8 @@ class NotificationIcon extends StatelessWidget {
   const NotificationIcon({
     required this.notification,
     this.size = 70,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

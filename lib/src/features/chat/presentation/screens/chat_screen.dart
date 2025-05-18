@@ -32,9 +32,8 @@ class _ChatScreenState extends State<ChatScreen> {
       context.read<ChatBloc>().add(FetchChatEvent(page: pageKey));
     });
 
-    if (ChatHubConnection.chatHubConnection.state ==
-        HubConnectionState.Connected) {
-      ChatHubConnection.chatHubConnection.on("ReceiveChat", _handleReceiveChat);
+    if (ChatHubConnection.connection.state == HubConnectionState.Connected) {
+      ChatHubConnection.connection.on("ReceiveChat", _handleReceiveChat);
     }
     super.initState();
   }
@@ -42,8 +41,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     _pagingController.dispose();
-    ChatHubConnection.chatHubConnection
-        .off("ReceiveChat", method: _handleReceiveChat);
+    ChatHubConnection.connection.off("ReceiveChat", method: _handleReceiveChat);
     super.dispose();
   }
 
