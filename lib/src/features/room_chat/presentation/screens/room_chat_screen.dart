@@ -112,7 +112,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
 
       var convertItems = newItems.map<Message>((item) {
         var message = Message.fromJson(item);
-        message.copyWith(message: message.message.decrypt());
+        message.copyWith(message: message.message.decrypt(key: widget.id));
         return message;
       }).toList();
 
@@ -425,7 +425,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
     SendChatRequestModel sendChatRequestModel = SendChatRequestModel(
       groupId: widget.id,
       requestId: "message id ".generateRandomString(40),
-      content: message.encrypt(),
+      content: message.encrypt(key: widget.id),
       medias: null,
       files: null,
       replyToMessageId: replyMessage.messageId,
@@ -456,8 +456,8 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
     final messageModel =
         MessageResponseModel.fromJson(arguments![0] as Map<String, dynamic>);
     if (widget.id == messageModel.groupId) {
-      _chatController.addMessage(messageModel.message
-          .copyWith(message: messageModel.message.message.decrypt()));
+      _chatController.addMessage(messageModel.message.copyWith(
+          message: messageModel.message.message.decrypt(key: widget.id)));
     }
   }
 
