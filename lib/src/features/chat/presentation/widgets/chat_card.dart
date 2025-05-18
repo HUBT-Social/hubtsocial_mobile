@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/string.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/router/router.import.dart';
@@ -121,23 +122,38 @@ class _ChatCardState extends State<ChatCard> {
                               ),
                               Row(
                                 children: [
-                                  // Text(
-                                  //   widget.chatModel.lastMessage!.decrypt(),
-                                  //   overflow: TextOverflow.ellipsis,
-                                  //   softWrap: true,
-                                  //   style: context.textTheme.labelMedium
-                                  //       ?.copyWith(
-                                  //           color: context
-                                  //               .colorScheme.onSurfaceVariant),
-                                  // ),
-                                  // Text(
-                                  //   widget.chatModel.lastMessage!.decrypt(),
-                                  //   overflow: TextOverflow.ellipsis,
-                                  //   softWrap: true,
-                                  //   style: context.textTheme.labelMedium?.copyWith(
-                                  //       color:
-                                  //           context.colorScheme.onSurfaceVariant),
-                                  // ),
+                                  if (widget.chatModel.lassSender != null)
+                                    Text(
+                                      widget.chatModel.lassSender ?? "",
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: true,
+                                      style: context.textTheme.labelMedium
+                                          ?.copyWith(
+                                              color: context.colorScheme
+                                                  .onSurfaceVariant),
+                                    ),
+                                  if (widget.chatModel.lassSender != null)
+                                    Text(
+                                      " : ",
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: true,
+                                      style: context.textTheme.labelMedium
+                                          ?.copyWith(
+                                              color: context.colorScheme
+                                                  .onSurfaceVariant),
+                                    ),
+                                  Flexible(
+                                    child: Text(
+                                      widget.chatModel.lastMessage!
+                                          .decrypt(key: widget.chatModel.id),
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: true,
+                                      style: context.textTheme.labelMedium
+                                          ?.copyWith(
+                                              color: context.colorScheme
+                                                  .onSurfaceVariant),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],

@@ -109,8 +109,9 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
 
       var convertItems = newItems.map<Message>((item) {
         var message = Message.fromJson(item);
-        message.copyWith(message: message.message.decrypt(key: widget.id));
-        return message;
+        var decryptMessage = message.message.decrypt(key: widget.id);
+        var newMessage = message.copyWith(message: decryptMessage);
+        return newMessage;
       }).toList();
 
       items.addAll(convertItems);

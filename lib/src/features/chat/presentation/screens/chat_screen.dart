@@ -66,6 +66,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
       final newChat = ChatResponseModel(
           lastMessage: message.message.message,
+          lassSender: message.message.sentBy,
           lastInteractionTime: vietnamTime,
           id: chat.id,
           avatarUrl: chat.avatarUrl,
