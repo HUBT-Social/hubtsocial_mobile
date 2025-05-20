@@ -422,7 +422,7 @@ class _AuthInterceptor extends Interceptor {
         return newToken.accessToken;
       }
 
-      return await _handleRefreshFailure(token);
+      return await _handleRefreshFailure(token, response);
     } catch (e) {
       return await _handleRefreshError(token, e);
     } finally {
@@ -432,14 +432,17 @@ class _AuthInterceptor extends Interceptor {
   }
 
   /// Handles refresh failure
-  Future<String?> _handleRefreshFailure(UserTokenModel token) async {
+  Future<String?> _handleRefreshFailure(
+      UserTokenModel token, Response response) async {
     logger.e('Failed to refresh token');
     if (!_isExpiredToken(token.accessToken)) {
       _refreshCompleter?.complete(token);
       return token.accessToken;
     }
     _refreshCompleter?.completeError('Failed to refresh token');
-    await _clearToken();
+    if (response.statusCode == 401) {
+      await _clearToken();
+    }
     return null;
   }
 
@@ -452,7 +455,9 @@ class _AuthInterceptor extends Interceptor {
       return token.accessToken;
     }
     _refreshCompleter?.completeError(error);
-    await _clearToken();
+    if (error is DioException && error.response?.statusCode == 401) {
+      await _clearToken();
+    }
     return null;
   }
 
@@ -539,12 +544,25 @@ class _ErrorInterceptor extends Interceptor {
           message: 'Connection timeout',
           statusCode: err.response?.statusCode?.toString() ?? '408',
         );
+      case DioExceptionType.connectionError:
+        throw ServerException(
+          message:
+              'Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng của bạn.',
+          statusCode: '500',
+        );
       case DioExceptionType.badResponse:
         _handleBadResponse(err);
         break;
       case DioExceptionType.cancel:
         break;
       default:
+        if (err.error?.toString().contains('Failed host lookup') ?? false) {
+          throw ServerException(
+            message:
+                'Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng của bạn.',
+            statusCode: '500',
+          );
+        }
         throw ServerException(
           message: err.message ?? 'Unknown error',
           statusCode: err.response?.statusCode?.toString() ?? '500',
