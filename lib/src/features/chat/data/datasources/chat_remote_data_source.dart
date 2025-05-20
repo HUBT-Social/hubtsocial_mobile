@@ -1,4 +1,3 @@
-import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/api/dio_client.dart';
 import 'package:injectable/injectable.dart';
 
@@ -22,12 +21,9 @@ abstract class ChatRemoteDataSource {
 )
 class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   const ChatRemoteDataSourceImpl({
-    required HiveInterface hiveAuth,
     required DioClient dioClient,
-  })  : _hiveAuth = hiveAuth,
-        _dioClient = dioClient;
+  }) : _dioClient = dioClient;
 
-  final HiveInterface _hiveAuth;
   final DioClient _dioClient;
 
   @override

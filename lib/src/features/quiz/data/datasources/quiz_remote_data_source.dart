@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:hive_ce_flutter/adapters.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/api/errors/exceptions.dart';
@@ -27,11 +26,8 @@ abstract class QuizRemoteDataSource {
 )
 class QuizRemoteDataSourceImpl implements QuizRemoteDataSource {
   const QuizRemoteDataSourceImpl({
-    required HiveInterface hiveAuth,
     required FirebaseMessaging messaging,
-  }) : _hiveAuth = hiveAuth;
-
-  final HiveInterface _hiveAuth;
+  });
 
   @override
   Future<List<QuizResponseModel>> fetchQuiz({required int page}) async {

@@ -33,12 +33,10 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
     required HiveInterface hiveAuth,
     required FirebaseMessaging messaging,
     required DioClient dioClient,
-  })  : _hiveAuth = hiveAuth,
-        _dioClient = dioClient {
+  }) : _dioClient = dioClient {
     _notificationService = TimetableNotificationService();
   }
 
-  final HiveInterface _hiveAuth;
   final DioClient _dioClient;
   late final TimetableNotificationService _notificationService;
 

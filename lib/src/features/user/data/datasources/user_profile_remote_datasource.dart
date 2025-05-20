@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/constants/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:injectable/injectable.dart';
@@ -32,12 +31,9 @@ abstract class UserProfileRemoteDataSource {
 )
 class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
   const UserProfileRemoteDataSourceImpl({
-    required HiveInterface hiveAuth,
     required DioClient dioClient,
-  })  : _hiveAuth = hiveAuth,
-        _dioClient = dioClient;
+  }) : _dioClient = dioClient;
 
-  final HiveInterface _hiveAuth;
   final DioClient _dioClient;
 
   @override

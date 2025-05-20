@@ -135,35 +135,28 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i170.HiveInterface>(() => registerModule.hive);
     gh.lazySingleton<_i892.FirebaseMessaging>(
         () => registerModule.firebaseMessaging);
-    gh.lazySingleton<_i250.QuizRemoteDataSource>(
-        () => _i250.QuizRemoteDataSourceImpl(
-              hiveAuth: gh<_i170.HiveInterface>(),
-              messaging: gh<_i892.FirebaseMessaging>(),
-            ));
     gh.singleton<_i292.DioClient>(
         () => _i292.DioClient(gh<_i170.HiveInterface>()));
+    gh.lazySingleton<_i250.QuizRemoteDataSource>(() =>
+        _i250.QuizRemoteDataSourceImpl(
+            messaging: gh<_i892.FirebaseMessaging>()));
     gh.lazySingleton<_i953.AuthRemoteDataSource>(
         () => _i953.AuthRemoteDataSourceImpl(
               hiveAuth: gh<_i170.HiveInterface>(),
               messaging: gh<_i892.FirebaseMessaging>(),
               dioClient: gh<_i292.DioClient>(),
             ));
-    gh.lazySingleton<_i592.UserProfileRemoteDataSource>(
-        () => _i592.UserProfileRemoteDataSourceImpl(
-              hiveAuth: gh<_i170.HiveInterface>(),
-              dioClient: gh<_i292.DioClient>(),
-            ));
+    gh.lazySingleton<_i745.ChatRemoteDataSource>(
+        () => _i745.ChatRemoteDataSourceImpl(dioClient: gh<_i292.DioClient>()));
+    gh.lazySingleton<_i592.UserProfileRemoteDataSource>(() =>
+        _i592.UserProfileRemoteDataSourceImpl(
+            dioClient: gh<_i292.DioClient>()));
     gh.lazySingleton<_i936.AuthRepo>(
         () => _i457.AuthRepoImpl(gh<_i953.AuthRemoteDataSource>()));
     gh.lazySingleton<_i806.TimetableRemoteDataSource>(
         () => _i806.TimetableRemoteDataSourceImpl(
               hiveAuth: gh<_i170.HiveInterface>(),
               messaging: gh<_i892.FirebaseMessaging>(),
-              dioClient: gh<_i292.DioClient>(),
-            ));
-    gh.lazySingleton<_i745.ChatRemoteDataSource>(
-        () => _i745.ChatRemoteDataSourceImpl(
-              hiveAuth: gh<_i170.HiveInterface>(),
               dioClient: gh<_i292.DioClient>(),
             ));
     gh.lazySingleton<_i311.RoomChatRemoteDataSource>(
