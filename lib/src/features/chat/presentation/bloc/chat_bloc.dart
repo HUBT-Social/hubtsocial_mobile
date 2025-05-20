@@ -30,6 +30,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     final result = await _fetchChat(
       FetchChatParams(
         page: event.page,
+        limit: event.limit,
       ),
     );
     result.fold(

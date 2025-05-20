@@ -5,5 +5,6 @@ abstract class ChatRepo {
   const ChatRepo();
   ResultFuture<List<ChatResponseModel>> fetchChat({
     required int page,
+    required int limit,
   });
 }

@@ -12,16 +12,20 @@ class FetchChatUserCase extends UseCaseWithParams<void, FetchChatParams> {
   final ChatRepo _repo;
   @override
   ResultFuture<List<ChatResponseModel>> call(FetchChatParams param) =>
-      _repo.fetchChat(page: param.page);
+      _repo.fetchChat(page: param.page, limit: param.limit);
 }
 
 class FetchChatParams extends Equatable {
   const FetchChatParams({
     required this.page,
+    required this.limit,
   });
-  const FetchChatParams.empty() : page = 0;
+  const FetchChatParams.empty()
+      : page = 0,
+        limit = 10;
   final int page;
+  final int limit;
 
   @override
-  List<String> get props => [page.toString()];
+  List<String> get props => [page.toString(), limit.toString()];
 }

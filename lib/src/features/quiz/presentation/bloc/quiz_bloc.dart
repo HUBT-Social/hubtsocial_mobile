@@ -34,8 +34,8 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
     );
     result.fold(
       (failure) {
-        switch (int.parse(failure.statusCode)) {
-          case 401:
+        switch (failure.statusCode) {
+          case '401':
             emit(QuizError(failure.message));
             break;
           default:

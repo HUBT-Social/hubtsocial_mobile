@@ -29,7 +29,10 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
       this.pageKey = pageKey;
-      context.read<ChatBloc>().add(FetchChatEvent(page: pageKey));
+      context.read<ChatBloc>().add(FetchChatEvent(
+            page: pageKey,
+            limit: 10,
+          ));
     });
 
     if (ChatHubConnection.connection.state == HubConnectionState.Connected) {

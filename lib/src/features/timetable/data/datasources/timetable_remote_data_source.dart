@@ -1,6 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_ce_flutter/adapters.dart';
-import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
+import 'package:hubtsocial_mobile/src/core/api/dio_client.dart';
 import 'package:injectable/injectable.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/services/timetable_notification_service.dart';
 
@@ -8,7 +8,6 @@ import '../../../../constants/end_point.dart';
 import '../../../../core/api/errors/exceptions.dart';
 import '../../../../core/local_storage/local_storage_key.dart';
 import '../../../../core/logger/logger.dart';
-import '../../../auth/domain/entities/user_token.dart';
 import '../models/timetable_info_response_model.dart';
 import '../models/timetable_response_model.dart';
 import '../models/reform_timetable_model.dart';
@@ -33,16 +32,21 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
   TimetableRemoteDataSourceImpl({
     required HiveInterface hiveAuth,
     required FirebaseMessaging messaging,
-  }) : _hiveAuth = hiveAuth {
+    required DioClient dioClient,
+  })  : _hiveAuth = hiveAuth,
+        _dioClient = dioClient {
     _notificationService = TimetableNotificationService();
   }
 
   final HiveInterface _hiveAuth;
+  final DioClient _dioClient;
   late final TimetableNotificationService _notificationService;
 
   @override
   Future<TimetableResponseModel> initTimetable() async {
     try {
+      logger.i('Initializing timetable');
+
       // Initialize local notifications
       await _notificationService.scheduleNotificationsFromHive();
 
@@ -52,86 +56,135 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
 
       final timetableBox =
           Hive.box<TimetableResponseModel>(LocalStorageKey.timeTable);
-
       final oldDataTimetableResponseModel =
           timetableBox.get(LocalStorageKey.timeTable);
 
-      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
       if (oldDataTimetableResponseModel != null) {
-        final responseCheckVersion = await APIRequest.get(
-          url: EndPoint.checkVersion,
+        logger.i(
+            'Checking timetable version with key: ${oldDataTimetableResponseModel.versionKey}');
+
+        final responseCheckVersion = await _dioClient.get<dynamic>(
+          EndPoint.checkVersion,
           queryParameters: {
             "Key": oldDataTimetableResponseModel.versionKey,
           },
-          token: userToken.accessToken,
         );
+
+        if (responseCheckVersion.statusCode == 401) {
+          logger.w('Unauthorized access while checking timetable version');
+          throw const ServerException(
+            message: 'Your session has expired. Please login again.',
+            statusCode: '401',
+          );
+        }
 
         if (responseCheckVersion.statusCode != 200) {
+          logger.w(
+            'Failed to check timetable version. Using cached data. Status: ${responseCheckVersion.statusCode}',
+          );
           return oldDataTimetableResponseModel;
         }
 
-        if (responseCheckVersion.body.toString() == "true") {
+        if (responseCheckVersion.data == true) {
+          logger.i('Timetable is up to date');
           return oldDataTimetableResponseModel;
         }
 
-        final response = await APIRequest.get(
-          url: EndPoint.timetable,
-          token: userToken.accessToken,
+        logger.i('Fetching new timetable data');
+        final response = await _dioClient.get<Map<String, dynamic>>(
+          EndPoint.timetable,
         );
+
+        if (response.statusCode == 401) {
+          logger.w('Unauthorized access while fetching timetable');
+          throw const ServerException(
+            message: 'Your session has expired. Please login again.',
+            statusCode: '401',
+          );
+        }
 
         if (response.statusCode != 200) {
           logger.e(
-              'Failed to Fetch Timetable: statusCode: ${response.statusCode}: ${response.body.toString()}');
+            'Failed to fetch timetable. Status: ${response.statusCode}, Response: ${response.data}',
+          );
           throw ServerException(
-            message: response.body.toString(),
-            statusCode: response.statusCode.toString(),
+            message: response.data?['message']?.toString() ??
+                'Failed to fetch timetable. Please try again.',
+            statusCode: response.statusCode?.toString() ?? '400',
+          );
+        }
+
+        if (response.data == null) {
+          logger.e('Empty response received for timetable');
+          throw const ServerException(
+            message: 'Invalid timetable data received from server.',
+            statusCode: '400',
           );
         }
 
         final timetableResponseModel =
-            TimetableResponseModel.fromJson(response.body);
+            TimetableResponseModel.fromMap(response.data!);
         oldDataTimetableResponseModel.delete();
         await timetableBox.put(
             LocalStorageKey.timeTable, timetableResponseModel);
 
-        // Lên lịch thông báo ngay khi có dữ liệu mới
+        // Schedule notifications with new data
         await _notificationService.scheduleNotificationsFromHive();
+        logger.i('Successfully updated timetable and scheduled notifications');
 
         return timetableResponseModel;
       } else {
-        final response = await APIRequest.get(
-          url: EndPoint.timetable,
-          token: userToken.accessToken,
+        logger.i('No cached timetable found. Fetching new data');
+        final response = await _dioClient.get<Map<String, dynamic>>(
+          EndPoint.timetable,
         );
+
+        if (response.statusCode == 401) {
+          logger.w('Unauthorized access while fetching timetable');
+          throw const ServerException(
+            message: 'Your session has expired. Please login again.',
+            statusCode: '401',
+          );
+        }
 
         if (response.statusCode != 200) {
           logger.e(
-              'Failed to Fetch Timetable: statusCode: ${response.statusCode}: ${response.body.toString()}');
+            'Failed to fetch timetable. Status: ${response.statusCode}, Response: ${response.data}',
+          );
           throw ServerException(
-            message: response.body.toString(),
-            statusCode: response.statusCode.toString(),
+            message: response.data?['message']?.toString() ??
+                'Failed to fetch timetable. Please try again.',
+            statusCode: response.statusCode?.toString() ?? '400',
+          );
+        }
+
+        if (response.data == null) {
+          logger.e('Empty response received for timetable');
+          throw const ServerException(
+            message: 'Invalid timetable data received from server.',
+            statusCode: '400',
           );
         }
 
         final timetableResponseModel =
-            TimetableResponseModel.fromJson(response.body);
-
+            TimetableResponseModel.fromMap(response.data!);
         await timetableBox.put(
             LocalStorageKey.timeTable, timetableResponseModel);
 
-        // Lên lịch thông báo ngay khi có dữ liệu mới
+        // Schedule notifications with new data
         await _notificationService.scheduleNotificationsFromHive();
+        logger.i('Successfully fetched timetable and scheduled notifications');
 
         return timetableResponseModel;
       }
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logger.e(e.toString());
-      logger.d(s.toString());
-      throw const ServerException(
-        message: 'Failed to init timetable. Please try again later.',
-        statusCode: '505',
+      logger.e('Unexpected error while initializing timetable: $e');
+      logger.d('Stack trace: $s');
+      throw ServerException(
+        message: 'Failed to initialize timetable. Please try again later.',
+        statusCode: '500',
       );
     }
   }
@@ -140,46 +193,82 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
   Future<TimetableInfoResponseModel> getTimetableInfo(
       String timetableId) async {
     try {
-      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
+      logger.i('Fetching timetable info for id: $timetableId');
 
-      final response = await APIRequest.get(
-        url: EndPoint.timetableInfo,
-        token: userToken.accessToken,
+      final response = await _dioClient.get<Map<String, dynamic>>(
+        EndPoint.timetableInfo,
         queryParameters: {"timetableId": timetableId},
       );
 
-      if (response.statusCode != 200) {
-        logger.e(
-            'Failed to Get Timetable Info: statusCode: ${response.statusCode}: ${response.body.toString()}');
-        throw ServerException(
-          message: response.body.toString(),
-          statusCode: response.statusCode.toString(),
+      if (response.statusCode == 401) {
+        logger.w('Unauthorized access while fetching timetable info');
+        throw const ServerException(
+          message: 'Your session has expired. Please login again.',
+          statusCode: '401',
         );
       }
 
-      var responseData = TimetableInfoResponseModel.fromMap(response.body);
+      if (response.statusCode == 404) {
+        logger.w('Timetable not found. Id: $timetableId');
+        throw const ServerException(
+          message:
+              'Timetable not found. It may have been deleted or you no longer have access.',
+          statusCode: '404',
+        );
+      }
 
-      return responseData;
+      if (response.statusCode != 200) {
+        logger.e(
+          'Failed to get timetable info. Status: ${response.statusCode}, Response: ${response.data}',
+        );
+        throw ServerException(
+          message: response.data?['message']?.toString() ??
+              'Failed to get timetable information. Please try again.',
+          statusCode: response.statusCode?.toString() ?? '400',
+        );
+      }
+
+      if (response.data == null) {
+        logger.e('Empty response received for timetable info');
+        throw const ServerException(
+          message: 'Invalid timetable information received from server.',
+          statusCode: '400',
+        );
+      }
+
+      final timetableInfo = TimetableInfoResponseModel.fromJson(response.data!);
+      logger.i('Successfully fetched timetable info');
+      return timetableInfo;
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logger.e(e.toString());
-      logger.d(s.toString());
-      throw const ServerException(
-        message: 'Failed to get timetable info. Please try again later.',
-        statusCode: '505',
+      logger.e('Unexpected error while getting timetable info: $e');
+      logger.d('Stack trace: $s');
+      throw ServerException(
+        message: 'Failed to get timetable information. Please try again later.',
+        statusCode: '500',
       );
     }
   }
 
   @override
   Future<void> scheduleNotificationsFromHive() async {
-    await _notificationService.scheduleNotificationsFromHive();
+    try {
+      logger.i('Scheduling notifications from Hive');
+      await _notificationService.scheduleNotificationsFromHive();
+      logger.i('Successfully scheduled notifications');
+    } catch (e, s) {
+      logger.e('Failed to schedule notifications: $e');
+      logger.d('Stack trace: $s');
+      // Don't throw here as this is a background operation
+    }
   }
 
   @override
   Future<void> testNotification() async {
     try {
+      logger.i('Sending test notification');
+
       final now = DateTime.now();
       final testTimetable = ReformTimetable(
         id: 'test_${now.millisecondsSinceEpoch}',
@@ -192,13 +281,15 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         type: TimetableType.Study,
       );
 
-      // Gửi thông báo ngay lập tức
       await _notificationService.showInstantNotification(testTimetable);
-
-      logger.i('Đã gửi thông báo test ngay lập tức.');
+      logger.i('Successfully sent test notification');
     } catch (e, s) {
-      logger.e('Lỗi khi tạo thông báo test: $e');
-      logger.d(s.toString());
+      logger.e('Failed to send test notification: $e');
+      logger.d('Stack trace: $s');
+      throw ServerException(
+        message: 'Failed to send test notification. Please try again later.',
+        statusCode: '500',
+      );
     }
   }
 }
