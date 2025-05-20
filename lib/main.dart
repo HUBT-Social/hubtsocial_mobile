@@ -31,11 +31,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoRouter.optionURLReflectsImperativeAPIs = true;
 
-  await Environment.initialize();
+  await Future.wait([
+    Environment.initialize(),
+    AppLocalStorage().initLocalStorage(),
+  ]);
 
   await Future.wait([
     configureDependencies(),
-    AppLocalStorage().initLocalStorage(),
     _initFirebase(),
   ]);
 

@@ -4,6 +4,8 @@ import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/api/dio_client.dart';
 import 'package:hubtsocial_mobile/src/features/room_chat/data/models/room_info_model.dart';
 import 'package:injectable/injectable.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
+import 'package:dio/dio.dart';
 
 import '../../../../constants/end_point.dart';
 import '../../../../core/api/errors/exceptions.dart';
@@ -20,13 +22,11 @@ abstract class RoomChatRemoteDataSource {
   });
 
   Future<RoomInfoModel> getRoomMember({
-    required String roomId,
+    required String groupId,
   });
 }
 
-@LazySingleton(
-  as: RoomChatRemoteDataSource,
-)
+@LazySingleton(as: RoomChatRemoteDataSource)
 class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
   const RoomChatRemoteDataSourceImpl({
     required HiveInterface hiveAuth,
@@ -46,64 +46,22 @@ class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
       logger.i(
           'Fetching room chat for roomId: $roomId, page: $page, limit: $limit');
 
-      final response = await _dioClient.get<List<dynamic>>(
-        EndPoint.roomHistory,
-        queryParameters: {
-          "ChatRoomId": roomId,
-          if (page != null) "page": page.toString(),
-          if (limit != null) "limit": limit.toString(),
-        },
-      );
+      // Try to get data from cache first
+      final cachedData = await _getCachedRoomChat(roomId, page, limit);
+      if (cachedData != null) return cachedData;
 
-      final statusCode = response.statusCode ?? 400;
-      final statusCodeStr = statusCode.toString();
-
-      if (statusCode == 401) {
-        logger.w('Unauthorized access to room chat');
-        throw const ServerException(
-          message: 'Your session has expired. Please login again.',
-          statusCode: '401',
-        );
-      }
-
-      if (statusCode != 200) {
-        logger.e(
-          'Failed to fetch room chat. Status: $statusCode, Response: ${response.data}',
-        );
-        throw ServerException(
-          message: response.data?[0]?.toString() ??
-              'Failed to fetch room chat. Please try again.',
-          statusCode: statusCodeStr,
-        );
-      }
-
-      if (response.data == null) {
-        logger.w('Empty response received for room chat');
-        return [];
-      }
-
-      final items = response.data!.map<Message>((item) {
-        try {
-          final message = Message.fromJson(item as Map<String, dynamic>);
-          // Decrypt the message if it's encrypted
-          if (message.message.isNotEmpty) {
-            final decryptedMessage = message.message.decrypt(key: roomId);
-            return message.copyWith(message: decryptedMessage);
-          }
-          return message;
-        } catch (e) {
-          logger.e('Error parsing message: $e, Data: $item');
-          rethrow;
-        }
-      }).toList();
-
-      logger.i('Successfully fetched ${items.length} messages');
-      return items;
+      // If no cache, try network request
+      return await _fetchRoomChatFromNetwork(roomId, page, limit);
     } on ServerException {
       rethrow;
     } catch (e, s) {
       logger.e('Unexpected error while fetching room chat: $e');
       logger.d('Stack trace: $s');
+
+      // Final attempt to get cached data
+      final cachedData = await _getCachedRoomChat(roomId, page, limit);
+      if (cachedData != null) return cachedData;
+
       throw ServerException(
         message: 'Failed to fetch room chat. Please try again later.',
         statusCode: '500',
@@ -113,60 +71,156 @@ class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
 
   @override
   Future<RoomInfoModel> getRoomMember({
-    required String roomId,
+    required String groupId,
   }) async {
     try {
-      logger.i('Fetching room members for roomId: $roomId');
+      logger.i('Fetching room member info for groupId: $groupId');
 
-      final response = await _dioClient.get<Map<String, dynamic>>(
-        EndPoint.roomInfo,
-        queryParameters: {
-          "groupId": roomId,
-        },
-      );
+      // Try to get data from cache first
+      final cachedData = await _getCachedRoomMember(groupId);
+      if (cachedData != null) return cachedData;
 
-      final statusCode = response.statusCode ?? 400;
-      final statusCodeStr = statusCode.toString();
-
-      if (statusCode == 401) {
-        logger.w('Unauthorized access to room members');
-        throw const ServerException(
-          message: 'Your session has expired. Please login again.',
-          statusCode: '401',
-        );
-      }
-
-      if (statusCode != 200) {
-        logger.e(
-          'Failed to fetch room members. Status: $statusCode, Response: ${response.data}',
-        );
-        throw ServerException(
-          message: response.data?['message']?.toString() ??
-              'Failed to fetch room members. Please try again.',
-          statusCode: statusCode.toString(),
-        );
-      }
-
-      if (response.data == null) {
-        logger.w('Empty response received for room members');
-        throw const ServerException(
-          message: 'Failed to fetch room members. No data received.',
-          statusCode: '404',
-        );
-      }
-
-      final roomInfo = RoomInfoModel.fromJson(response.data!);
-      logger.i('Successfully fetched room members');
-      return roomInfo;
+      // If no cache, try network request
+      return await _fetchRoomMemberFromNetwork(groupId);
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logger.e('Unexpected error while fetching room members: $e');
+      logger.e('Unexpected error while fetching room member: $e');
       logger.d('Stack trace: $s');
+
+      // Final attempt to get cached data
+      final cachedData = await _getCachedRoomMember(groupId);
+      if (cachedData != null) return cachedData;
+
       throw ServerException(
-        message: 'Failed to fetch room members. Please try again later.',
+        message: 'Failed to fetch room member info. Please try again later.',
         statusCode: '500',
       );
     }
+  }
+
+  /// Attempts to get room chat data from cache
+  Future<List<Message>?> _getCachedRoomChat(
+    String roomId,
+    int? page,
+    int? limit,
+  ) async {
+    try {
+      final response = await _dioClient.getWithCache<List<dynamic>>(
+        EndPoint.roomHistory,
+        queryParameters: _buildRoomChatQueryParams(roomId, page, limit),
+        policy: CachePolicy.forceCache,
+      );
+
+      if (response.data != null) {
+        logger.i('Successfully retrieved cached room chat data');
+        return _parseRoomChatResponse(response.data!);
+      }
+    } catch (e) {
+      logger.w('No cached data available: $e');
+    }
+    return null;
+  }
+
+  /// Fetches room chat data from network
+  Future<List<Message>> _fetchRoomChatFromNetwork(
+    String roomId,
+    int? page,
+    int? limit,
+  ) async {
+    final response = await _dioClient.getWithCache<List<dynamic>>(
+      EndPoint.roomHistory,
+      queryParameters: _buildRoomChatQueryParams(roomId, page, limit),
+      maxStale: const Duration(hours: 1),
+      policy: CachePolicy.refreshForceCache,
+    );
+
+    _validateResponse(response);
+    return _parseRoomChatResponse(response.data ?? []);
+  }
+
+  /// Attempts to get room member data from cache
+  Future<RoomInfoModel?> _getCachedRoomMember(String groupId) async {
+    try {
+      final response = await _dioClient.getWithCache<Map<String, dynamic>>(
+        EndPoint.roomInfo,
+        queryParameters: {"groupId": groupId},
+        policy: CachePolicy.forceCache,
+      );
+
+      if (response.data != null) {
+        logger.i('Successfully retrieved cached room member data');
+        return RoomInfoModel.fromJson(response.data!);
+      }
+    } catch (e) {
+      logger.w('No cached data available: $e');
+    }
+    return null;
+  }
+
+  /// Fetches room member data from network
+  Future<RoomInfoModel> _fetchRoomMemberFromNetwork(String groupId) async {
+    final response = await _dioClient.getWithCache<Map<String, dynamic>>(
+      EndPoint.roomInfo,
+      queryParameters: {"groupId": groupId},
+      maxStale: const Duration(hours: 1),
+      policy: CachePolicy.refreshForceCache,
+    );
+
+    _validateResponse(response);
+    return RoomInfoModel.fromJson(response.data!);
+  }
+
+  /// Validates the response and throws appropriate exceptions
+  void _validateResponse(Response response) {
+    final statusCode = response.statusCode ?? 400;
+
+    if (statusCode == 401) {
+      logger.w('Unauthorized access');
+      throw const ServerException(
+        message: 'Your session has expired. Please login again.',
+        statusCode: '401',
+      );
+    }
+
+    if (statusCode != 200) {
+      logger
+          .e('Request failed. Status: $statusCode, Response: ${response.data}');
+      throw ServerException(
+        message: response.data?[0]?.toString() ??
+            'Request failed. Please try again.',
+        statusCode: statusCode.toString(),
+      );
+    }
+  }
+
+  /// Builds query parameters for room chat request
+  Map<String, String> _buildRoomChatQueryParams(
+    String roomId,
+    int? page,
+    int? limit,
+  ) =>
+      {
+        "ChatRoomId": roomId,
+        if (page != null) "page": page.toString(),
+        if (limit != null) "limit": limit.toString(),
+      };
+
+  /// Parses the room chat response data
+  List<Message> _parseRoomChatResponse(List<dynamic> data) {
+    return data.map<Message>((item) {
+      try {
+        final message = Message.fromJson(item as Map<String, dynamic>);
+        if (message.message.isNotEmpty) {
+          return message.copyWith(
+            message: message.message.decrypt(key: message.id),
+          );
+        }
+        return message;
+      } catch (e) {
+        logger.e('Error parsing room chat item: $e, Data: $item');
+        rethrow;
+      }
+    }).toList();
   }
 }

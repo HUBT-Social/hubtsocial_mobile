@@ -9,6 +9,6 @@ abstract class RoomChatRepo {
     required String roomId,
   });
   ResultFuture<RoomInfoModel> getRoomMember({
-    required String roomId,
+    required String groupId,
   });
 }

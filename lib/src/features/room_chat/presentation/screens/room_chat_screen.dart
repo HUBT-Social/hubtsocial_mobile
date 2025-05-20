@@ -30,7 +30,7 @@ class RoomChatScreen extends StatefulWidget {
 class _RoomChatScreenState extends State<RoomChatScreen> {
   @override
   void initState() {
-    context.read<GetRoomChatBloc>().add(GetRoomMemberEvent(roomId: widget.id));
+    context.read<GetRoomChatBloc>().add(GetRoomMemberEvent(groupId: widget.id));
 
     if (ChatHubConnection.connection.state == HubConnectionState.Connected) {
       ChatHubConnection.connection.on("ReceiveChat", _handleReceiveChat);

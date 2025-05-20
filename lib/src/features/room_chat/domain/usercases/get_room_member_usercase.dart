@@ -13,16 +13,16 @@ class GetRoomMemberUserCase extends UseCaseWithParams<void, GetRoomChatParams> {
   final RoomChatRepo _repo;
   @override
   ResultFuture<RoomInfoModel> call(GetRoomChatParams param) =>
-      _repo.getRoomMember(roomId: param.roomId);
+      _repo.getRoomMember(groupId: param.groupId);
 }
 
 class GetRoomChatParams extends Equatable {
   const GetRoomChatParams({
-    required this.roomId,
+    required this.groupId,
   });
-  const GetRoomChatParams.empty() : roomId = "";
-  final String roomId;
+  const GetRoomChatParams.empty() : groupId = "";
+  final String groupId;
 
   @override
-  List<String> get props => [roomId];
+  List<String> get props => [groupId];
 }

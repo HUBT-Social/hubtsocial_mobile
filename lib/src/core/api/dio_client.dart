@@ -1,4 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
+import 'package:http_cache_hive_store/http_cache_hive_store.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/api/errors/exceptions.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/device_id.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
@@ -6,10 +9,14 @@ import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/auth/data/models/user_token_model.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/router/router.import.dart';
-import 'package:hive_ce_flutter/adapters.dart';
 import 'package:jwt_decode_full/jwt_decode_full.dart';
 import 'package:injectable/injectable.dart';
 import 'dart:async';
+import 'package:hubtsocial_mobile/src/core/api/cache/cache_manager.dart';
+import 'package:hubtsocial_mobile/src/core/api/interceptors/auth_interceptor.dart';
+import 'package:hubtsocial_mobile/src/core/api/interceptors/error_interceptor.dart';
+import 'package:hubtsocial_mobile/src/core/api/interceptors/logging_interceptor.dart';
+import 'package:hubtsocial_mobile/src/core/api/methods/http_methods.dart';
 
 import '../../constants/end_point.dart';
 import '../local_storage/local_storage_key.dart';
@@ -17,19 +24,75 @@ import '../local_storage/local_storage_key.dart';
 /// A singleton class that manages HTTP requests using Dio.
 /// Handles authentication, logging, and error handling.
 @singleton
-class DioClient {
+class DioClient with HttpMethods {
   /// The Dio instance used for making HTTP requests
-  late final Dio _dio;
+  @override
+  late final Dio dio;
 
   /// The Hive interface for token storage
   final HiveInterface _hiveAuth;
+
+  /// The cache manager for managing cache
+  @override
+  late final CacheManager cacheManager;
 
   /// Creates a new instance of DioClient
   ///
   /// [hiveAuth] is used for token storage
   DioClient(this._hiveAuth) {
-    _dio = _createDioInstance();
-    _setupInterceptors();
+    // Initialize cache manager
+    cacheManager = CacheManager();
+    cacheManager.initializeSync();
+
+    // Initialize Dio instance
+    dio = _createDioInstance();
+
+    // Initialize cache asynchronously and then setup interceptors
+    _initializeCacheAndSetupInterceptors();
+  }
+
+  /// Initialize cache and setup interceptors
+  Future<void> _initializeCacheAndSetupInterceptors() async {
+    try {
+      // Wait for cache initialization
+      await cacheManager.initialize();
+
+      // Setup interceptors after cache is initialized
+      _setupInterceptors();
+
+      logger.i('DioClient initialized successfully');
+    } catch (e) {
+      logger.e('Error initializing DioClient: $e');
+      // Even if cache initialization fails, we still want to setup basic interceptors
+      _setupBasicInterceptors();
+    }
+  }
+
+  /// Setup basic interceptors without cache
+  void _setupBasicInterceptors() {
+    dio.interceptors.addAll([
+      AuthInterceptor(_hiveAuth, this),
+      LoggingInterceptor(),
+      ErrorInterceptor(),
+    ]);
+    logger.w('Using basic interceptors without cache');
+  }
+
+  /// Sets up all interceptors for the Dio instance
+  void _setupInterceptors() {
+    if (!cacheManager.isInitialized) {
+      logger.w('Cache not fully initialized, using basic interceptors');
+      _setupBasicInterceptors();
+      return;
+    }
+
+    dio.interceptors.addAll([
+      AuthInterceptor(_hiveAuth, this),
+      cacheManager.cacheInterceptor,
+      LoggingInterceptor(),
+      ErrorInterceptor(),
+    ]);
+    logger.i('All interceptors setup successfully');
   }
 
   /// Creates and configures the Dio instance with base options
@@ -47,138 +110,6 @@ class DioClient {
         validateStatus: (status) => status != null && status < 500,
       ),
     );
-  }
-
-  /// Sets up all interceptors for the Dio instance
-  void _setupInterceptors() {
-    _dio.interceptors.addAll([
-      _AuthInterceptor(_hiveAuth, this),
-      _LoggingInterceptor(),
-      _ErrorInterceptor(),
-    ]);
-  }
-
-  /// Makes a GET request to the specified path
-  ///
-  /// [path] is the endpoint to request
-  /// [queryParameters] are optional query parameters
-  /// [options] are optional request options
-  /// [cancelToken] is an optional token to cancel the request
-  Future<Response<T>> get<T>(
-    String path, {
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    return _dio.get(
-      path,
-      queryParameters: _addCultureParameter(queryParameters),
-      options: options,
-      cancelToken: cancelToken,
-    );
-  }
-
-  /// Makes a POST request to the specified path
-  ///
-  /// [path] is the endpoint to request
-  /// [data] is the request body
-  /// [queryParameters] are optional query parameters
-  /// [options] are optional request options
-  /// [cancelToken] is an optional token to cancel the request
-  Future<Response<T>> post<T>(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    return _dio.post(
-      path,
-      data: data,
-      queryParameters: _addCultureParameter(queryParameters),
-      options: options,
-      cancelToken: cancelToken,
-    );
-  }
-
-  /// Makes a PUT request to the specified path
-  ///
-  /// [path] is the endpoint to request
-  /// [data] is the request body
-  /// [queryParameters] are optional query parameters
-  /// [options] are optional request options
-  /// [cancelToken] is an optional token to cancel the request
-  Future<Response<T>> put<T>(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    return _dio.put(
-      path,
-      data: data,
-      queryParameters: _addCultureParameter(queryParameters),
-      options: options,
-      cancelToken: cancelToken,
-    );
-  }
-
-  /// Makes a PATCH request to the specified path
-  ///
-  /// [path] is the endpoint to request
-  /// [data] is the request body
-  /// [queryParameters] are optional query parameters
-  /// [options] are optional request options
-  /// [cancelToken] is an optional token to cancel the request
-  Future<Response<T>> patch<T>(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    return _dio.patch(
-      path,
-      data: data,
-      queryParameters: _addCultureParameter(queryParameters),
-      options: options,
-      cancelToken: cancelToken,
-    );
-  }
-
-  /// Makes a DELETE request to the specified path
-  ///
-  /// [path] is the endpoint to request
-  /// [data] is the request body
-  /// [queryParameters] are optional query parameters
-  /// [options] are optional request options
-  /// [cancelToken] is an optional token to cancel the request
-  Future<Response<T>> delete<T>(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    return _dio.delete(
-      path,
-      data: data,
-      queryParameters: _addCultureParameter(queryParameters),
-      options: options,
-      cancelToken: cancelToken,
-    );
-  }
-
-  /// Adds the culture parameter to query parameters if not present
-  Map<String, dynamic> _addCultureParameter(
-      Map<String, dynamic>? queryParameters) {
-    queryParameters ??= {};
-    queryParameters.putIfAbsent(
-      "culture",
-      () => AppLocalStorage.currentLanguageCode,
-    );
-    return queryParameters;
   }
 
   /// Gets the current user token, refreshing it if expired
@@ -269,51 +200,362 @@ class DioClient {
 
   /// Clears the token and redirects to the login screen
   Future<void> _clearToken() async {
-    await _hiveAuth.box(LocalStorageKey.token).clear();
-    if (navigatorKey.currentContext != null) {
-      AppRoute.getStarted.go(navigatorKey.currentContext!);
+    try {
+      await _hiveAuth.box(LocalStorageKey.token).clear();
+      if (navigatorKey.currentContext != null) {
+        AppRoute.getStarted.go(navigatorKey.currentContext!);
+      }
+    } catch (e) {
+      logger.e('Error clearing token: $e');
     }
   }
-}
 
-/// Interceptor that handles authentication
-class _AuthInterceptor extends Interceptor {
-  final HiveInterface _hiveAuth;
-  final DioClient _dioClient;
-  bool _isRefreshing = false;
-  DateTime? _lastRefreshAttempt;
-  Completer<UserTokenModel?>? _refreshCompleter;
-
-  _AuthInterceptor(this._hiveAuth, this._dioClient);
-
+  /// Makes a GET request to the specified path
+  ///
+  /// [path] is the endpoint to request
+  /// [queryParameters] are optional query parameters
+  /// [options] are optional request options
+  /// [cancelToken] is an optional token to cancel the request
   @override
-  Future<void> onRequest(
-    RequestOptions options,
-    RequestInterceptorHandler handler,
-  ) async {
-    try {
-      if (_isAuthEndpoint(options.path)) {
-        handler.next(options);
-        return;
-      }
+  Future<Response<T>> get<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    return dio.get(
+      path,
+      queryParameters: _addCultureParameter(queryParameters),
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
 
-      final token = await _getValidToken();
-      if (token != null) {
-        options.headers['Authorization'] = 'Bearer $token';
-      }
-      handler.next(options);
-    } catch (e) {
-      logger.e('Error in auth interceptor: $e');
-      if (e is UnauthorizedException || e is ServerException) {
-        handler.reject(
-          DioException(
-            requestOptions: options,
-            error: e,
-          ),
+  /// Makes a POST request to the specified path
+  ///
+  /// [path] is the endpoint to request
+  /// [data] is the request body
+  /// [queryParameters] are optional query parameters
+  /// [options] are optional request options
+  /// [cancelToken] is an optional token to cancel the request
+  @override
+  Future<Response<T>> post<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    return dio.post(
+      path,
+      data: data,
+      queryParameters: _addCultureParameter(queryParameters),
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
+
+  /// Makes a PUT request to the specified path
+  ///
+  /// [path] is the endpoint to request
+  /// [data] is the request body
+  /// [queryParameters] are optional query parameters
+  /// [options] are optional request options
+  /// [cancelToken] is an optional token to cancel the request
+  @override
+  Future<Response<T>> put<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    return dio.put(
+      path,
+      data: data,
+      queryParameters: _addCultureParameter(queryParameters),
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
+
+  /// Makes a PATCH request to the specified path
+  ///
+  /// [path] is the endpoint to request
+  /// [data] is the request body
+  /// [queryParameters] are optional query parameters
+  /// [options] are optional request options
+  /// [cancelToken] is an optional token to cancel the request
+  @override
+  Future<Response<T>> patch<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    return dio.patch(
+      path,
+      data: data,
+      queryParameters: _addCultureParameter(queryParameters),
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
+
+  /// Makes a DELETE request to the specified path
+  ///
+  /// [path] is the endpoint to request
+  /// [data] is the request body
+  /// [queryParameters] are optional query parameters
+  /// [options] are optional request options
+  /// [cancelToken] is an optional token to cancel the request
+  @override
+  Future<Response<T>> delete<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    return dio.delete(
+      path,
+      data: data,
+      queryParameters: _addCultureParameter(queryParameters),
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
+
+  /// Adds the culture parameter to query parameters if not present
+  Map<String, dynamic> _addCultureParameter(
+      Map<String, dynamic>? queryParameters) {
+    queryParameters ??= {};
+    queryParameters.putIfAbsent(
+      "culture",
+      () => AppLocalStorage.currentLanguageCode,
+    );
+    return queryParameters;
+  }
+
+  /// Clears all cached data
+  Future<void> clearCache() async {
+    await cacheManager.clean();
+  }
+
+  /// Removes cache for a specific endpoint
+  Future<void> removeCache(String path) async {
+    final cacheKey = CacheOptions.defaultCacheKeyBuilder(
+      url: Uri.parse('$EndPoint.apiUrl$path'),
+    );
+    await cacheManager.delete(cacheKey);
+  }
+
+  /// Makes a GET request with custom cache policy
+  @override
+  Future<Response<T>> getWithCachePolicy<T>(
+    String path, {
+    CachePolicy policy = CachePolicy.refreshForceCache,
+    Duration? maxStale,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    final cacheOptions = CacheOptions(
+      store: cacheManager.cacheStore,
+      policy: policy,
+      maxStale: maxStale,
+    );
+
+    final requestOptions = options?.copyWith(
+          extra: {
+            ...?options.extra,
+            'cache_options': cacheOptions,
+          },
+        ) ??
+        Options(
+          extra: {'cache_options': cacheOptions},
         );
-      } else {
-        handler.next(options);
+
+    return dio.get(
+      path,
+      queryParameters: _addCultureParameter(queryParameters),
+      options: requestOptions,
+      cancelToken: cancelToken,
+    );
+  }
+
+  /// Makes a GET request with cache
+  @override
+  Future<Response<T>> getWithCache<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Duration? maxStale,
+    CachePolicy policy = CachePolicy.refreshForceCache,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    // Disable cache for auth endpoints
+    if (_isAuthEndpoint(path)) {
+      return get<T>(
+        path,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      );
+    }
+
+    final cacheOptions = CacheOptions(
+      store: cacheManager.cacheStore,
+      policy: policy,
+      maxStale: maxStale ?? const Duration(hours: 1),
+    );
+
+    final requestOptions = options?.copyWith(
+          extra: {
+            ...?options.extra,
+            'cache_options': cacheOptions,
+          },
+        ) ??
+        Options(
+          extra: {'cache_options': cacheOptions},
+        );
+
+    return dio.get(
+      path,
+      queryParameters: _addCultureParameter(queryParameters),
+      options: requestOptions,
+      cancelToken: cancelToken,
+    );
+  }
+
+  /// Makes a POST request and invalidates related cache
+  @override
+  Future<Response<T>> postAndInvalidateCache<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    List<String>? invalidatePaths,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    // Disable cache invalidation for auth endpoints
+    if (_isAuthEndpoint(path)) {
+      return post<T>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      );
+    }
+
+    final response = await post<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+    );
+
+    // Invalidate related cache paths
+    if (invalidatePaths != null) {
+      for (final cachePath in invalidatePaths) {
+        await removeCache(cachePath);
       }
+    }
+
+    return response;
+  }
+
+  /// Makes a PUT request and invalidates related cache
+  @override
+  Future<Response<T>> putAndInvalidateCache<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    List<String>? invalidatePaths,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    final response = await put<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+    );
+
+    // Invalidate related cache paths
+    if (invalidatePaths != null) {
+      for (final cachePath in invalidatePaths) {
+        await removeCache(cachePath);
+      }
+    }
+
+    return response;
+  }
+
+  /// Makes a DELETE request and invalidates related cache
+  @override
+  Future<Response<T>> deleteAndInvalidateCache<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    List<String>? invalidatePaths,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    final response = await delete<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+    );
+
+    // Invalidate related cache paths
+    if (invalidatePaths != null) {
+      for (final cachePath in invalidatePaths) {
+        await removeCache(cachePath);
+      }
+    }
+
+    return response;
+  }
+
+  /// Makes a PATCH request and invalidates related cache
+  @override
+  Future<Response<T>> patchAndInvalidateCache<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    List<String>? invalidatePaths,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    final response = await patch<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+    );
+
+    // Invalidate related cache paths
+    if (invalidatePaths != null) {
+      for (final cachePath in invalidatePaths) {
+        await removeCache(cachePath);
+      }
+    }
+
+    return response;
+  }
+
+  /// Removes cache for multiple endpoints
+  Future<void> removeMultipleCache(List<String> paths) async {
+    for (final path in paths) {
+      await removeCache(path);
     }
   }
 
@@ -326,269 +568,170 @@ class _AuthInterceptor extends Interceptor {
         path.contains(EndPoint.authSignUpVerifyEmail);
   }
 
-  /// Gets a valid token, refreshing if necessary
-  Future<String?> _getValidToken() async {
-    try {
-      await _ensureTokenBoxOpen();
-
-      final token = _getStoredToken();
-      if (token == null) {
-        logger.e('No token found in storage');
-        return null;
-      }
-
-      if (_shouldRefreshToken(token)) {
-        return await _handleTokenRefresh(token);
-      }
-
-      return token.accessToken;
-    } catch (e) {
-      logger.e('Error getting valid token: $e');
-      return null;
-    }
-  }
-
-  /// Ensures the token box is open
-  Future<void> _ensureTokenBoxOpen() async {
-    if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
-      await _hiveAuth.openBox(LocalStorageKey.token);
-    }
-    if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
-      await _hiveAuth.openBox(LocalStorageKey.token);
-    }
-  }
-
-  /// Gets the stored token
-  UserTokenModel? _getStoredToken() {
-    return _hiveAuth.box(LocalStorageKey.token).get(LocalStorageKey.userToken);
-  }
-
-  /// Checks if the token should be refreshed
-  bool _shouldRefreshToken(UserTokenModel token) {
-    return _isExpiredToken(token.accessToken) ||
-        _isTokenExpiringSoon(token.accessToken);
-  }
-
-  /// Handles token refresh with proper locking and error handling
-  Future<String?> _handleTokenRefresh(UserTokenModel token) async {
-    if (_isRefreshing && _refreshCompleter != null) {
-      return await _waitForRefresh();
-    }
-
-    if (_isTooSoonToRefresh()) {
-      return token.accessToken;
-    }
-
-    return await _startRefresh(token);
-  }
-
-  /// Waits for an ongoing refresh operation
-  Future<String?> _waitForRefresh() async {
-    try {
-      final newToken = await _refreshCompleter!.future;
-      return newToken?.accessToken;
-    } catch (e) {
-      logger.e('Error waiting for token refresh: $e');
-      return null;
-    }
-  }
-
-  /// Checks if it's too soon to attempt another refresh
-  bool _isTooSoonToRefresh() {
-    if (_lastRefreshAttempt == null) return false;
-    return DateTime.now().difference(_lastRefreshAttempt!) <
-        const Duration(seconds: 30);
-  }
-
-  /// Starts a new token refresh operation
-  Future<String?> _startRefresh(UserTokenModel token) async {
-    _isRefreshing = true;
-    _lastRefreshAttempt = DateTime.now();
-    _refreshCompleter = Completer<UserTokenModel?>();
-
-    try {
-      final response = await _dioClient.post<Map<String, dynamic>>(
-        EndPoint.authRefreshToken,
-        data: {"refreshToken": token.refreshToken},
-        options: Options(
-          headers: {'Authorization': 'Bearer ${token.accessToken}'},
-        ),
-      );
-
-      if (response.statusCode == 200 && response.data != null) {
-        final newToken = UserTokenModel.fromMap(response.data!);
-        await _saveToken(newToken);
-        _refreshCompleter?.complete(newToken);
-        return newToken.accessToken;
-      }
-
-      return await _handleRefreshFailure(token);
-    } catch (e) {
-      return await _handleRefreshError(token, e);
-    } finally {
-      _isRefreshing = false;
-      _refreshCompleter = null;
-    }
-  }
-
-  /// Handles refresh failure
-  Future<String?> _handleRefreshFailure(UserTokenModel token) async {
-    logger.e('Failed to refresh token');
-    if (!_isExpiredToken(token.accessToken)) {
-      _refreshCompleter?.complete(token);
-      return token.accessToken;
-    }
-    _refreshCompleter?.completeError('Failed to refresh token');
-    await _clearToken();
-    return null;
-  }
-
-  /// Handles refresh error
-  Future<String?> _handleRefreshError(
-      UserTokenModel token, dynamic error) async {
-    logger.e('Error refreshing token: $error');
-    if (!_isExpiredToken(token.accessToken)) {
-      _refreshCompleter?.complete(token);
-      return token.accessToken;
-    }
-    _refreshCompleter?.completeError(error);
-    await _clearToken();
-    return null;
-  }
-
-  /// Saves a token to storage
-  Future<void> _saveToken(UserTokenModel token) async {
-    await _hiveAuth
-        .box(LocalStorageKey.token)
-        .put(LocalStorageKey.userToken, token);
-  }
-
-  /// Checks if a token is expired
-  bool _isExpiredToken(String token) {
-    try {
-      final payload = jwtDecode(token).payload;
-      final expiredTime = payload['exp'] as int;
-      final currentTimestamp = DateTime.now().millisecondsSinceEpoch;
-      return currentTimestamp ~/ 1000 > expiredTime;
-    } catch (e) {
-      logger.e('Error checking token expiration: $e');
-      return true;
-    }
-  }
-
-  /// Checks if a token is about to expire (within 2 minutes)
-  bool _isTokenExpiringSoon(String token) {
-    try {
-      final payload = jwtDecode(token).payload;
-      final expiredTime = payload['exp'] as int;
-      final currentTimestamp = DateTime.now().millisecondsSinceEpoch;
-      return (expiredTime - (currentTimestamp ~/ 1000)) < 120;
-    } catch (e) {
-      logger.e('Error checking if token is expiring soon: $e');
-      return false;
-    }
-  }
-
-  /// Clears the token and redirects to login
-  Future<void> _clearToken() async {
-    try {
-      await _hiveAuth.box(LocalStorageKey.token).clear();
-      if (navigatorKey.currentContext != null) {
-        AppRoute.getStarted.go(navigatorKey.currentContext!);
-      }
-    } catch (e) {
-      logger.e('Error clearing token: $e');
-    }
-  }
-}
-
-/// Interceptor that handles logging
-class _LoggingInterceptor extends Interceptor {
+  /// Makes a GET request with default cache settings
+  /// Use this for most GET requests that need caching
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    logger.d('REQUEST[${options.method}] => PATH: ${options.path}');
-    super.onRequest(options, handler);
-  }
-
-  @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    logger.d(
-      'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}',
+  Future<Response<T>> getWithDefaultCache<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    return getWithCache<T>(
+      path,
+      queryParameters: queryParameters,
+      maxStale: const Duration(hours: 1), // Default 1 hour cache
+      policy: CachePolicy.refreshForceCache,
+      options: options,
+      cancelToken: cancelToken,
     );
-    super.onResponse(response, handler);
   }
 
+  /// Makes a GET request with long-term cache
+  /// Use this for data that rarely changes (e.g., static content, configurations)
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    logger.e(
-      'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}',
+  Future<Response<T>> getWithLongTermCache<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Duration maxStale = const Duration(days: 7),
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    return getWithCache<T>(
+      path,
+      queryParameters: queryParameters,
+      maxStale: maxStale,
+      policy: CachePolicy.refreshForceCache,
+      options: options,
+      cancelToken: cancelToken,
     );
-    super.onError(err, handler);
   }
-}
 
-/// Interceptor that handles error responses
-class _ErrorInterceptor extends Interceptor {
+  /// Makes a GET request with short-term cache
+  /// Use this for frequently changing data (e.g., notifications, real-time updates)
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    switch (err.type) {
-      case DioExceptionType.connectionTimeout:
-      case DioExceptionType.sendTimeout:
-      case DioExceptionType.receiveTimeout:
-        throw TimeoutException(
-          message: 'Connection timeout',
-          statusCode: err.response?.statusCode?.toString() ?? '408',
-        );
-      case DioExceptionType.badResponse:
-        _handleBadResponse(err);
-        break;
-      case DioExceptionType.cancel:
-        break;
-      default:
-        throw ServerException(
-          message: err.message ?? 'Unknown error',
-          statusCode: err.response?.statusCode?.toString() ?? '500',
-        );
-    }
-    super.onError(err, handler);
+  Future<Response<T>> getWithShortTermCache<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Duration maxStale = const Duration(minutes: 5),
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    return getWithCache<T>(
+      path,
+      queryParameters: queryParameters,
+      maxStale: maxStale,
+      policy: CachePolicy.refreshForceCache,
+      options: options,
+      cancelToken: cancelToken,
+    );
   }
 
-  /// Handles bad response errors with specific status codes
-  void _handleBadResponse(DioException err) {
-    final message = err.response?.data?['message']?.toString() ?? '';
-    final statusCode = err.response?.statusCode;
+  /// Makes a GET request with real-time cache
+  /// Use this for data that needs to be as fresh as possible
+  @override
+  Future<Response<T>> getWithRealTimeCache<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Duration maxStale = const Duration(seconds: 30),
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    return getWithCache<T>(
+      path,
+      queryParameters: queryParameters,
+      maxStale: maxStale,
+      policy: CachePolicy.refresh,
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
 
-    switch (statusCode) {
-      case 400:
-        throw BadRequestException(
-          message: message.isNotEmpty ? message : 'Bad request',
-          statusCode: statusCode?.toString() ?? '400',
-        );
-      case 401:
-        throw UnauthorizedException(
-          message: message.isNotEmpty ? message : 'Unauthorized',
-          statusCode: statusCode?.toString() ?? '401',
-        );
-      case 403:
-        throw ForbiddenException(
-          message: message.isNotEmpty ? message : 'Forbidden',
-          statusCode: statusCode?.toString() ?? '403',
-        );
-      case 404:
-        throw NotFoundException(
-          message: message.isNotEmpty ? message : 'Not found',
-          statusCode: statusCode?.toString() ?? '404',
-        );
-      case 500:
-        throw ServerException(
-          message: message.isNotEmpty ? message : 'Server error',
-          statusCode: statusCode?.toString() ?? '500',
-        );
-      default:
-        throw ServerException(
-          message: message.isNotEmpty ? message : 'Unknown error',
-          statusCode: statusCode?.toString() ?? '500',
-        );
+  /// Makes a POST request and invalidates related cache with default settings
+  Future<Response<T>> postAndInvalidateDefaultCache<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    List<String>? invalidatePaths,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    return postAndInvalidateCache<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      invalidatePaths: invalidatePaths,
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
+
+  /// Makes a PUT request and invalidates related cache with default settings
+  Future<Response<T>> putAndInvalidateDefaultCache<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    List<String>? invalidatePaths,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    return putAndInvalidateCache<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      invalidatePaths: invalidatePaths,
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
+
+  /// Makes a DELETE request and invalidates related cache with default settings
+  Future<Response<T>> deleteAndInvalidateDefaultCache<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    List<String>? invalidatePaths,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    return deleteAndInvalidateCache<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      invalidatePaths: invalidatePaths,
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
+
+  /// Makes a PATCH request and invalidates related cache with default settings
+  Future<Response<T>> patchAndInvalidateDefaultCache<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    List<String>? invalidatePaths,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    return patchAndInvalidateCache<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      invalidatePaths: invalidatePaths,
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
+
+  /// Removes cache for multiple endpoints with logging
+  Future<void> removeMultipleCacheWithLogging(List<String> paths) async {
+    for (final path in paths) {
+      try {
+        await removeCache(path);
+        logger.d('Cache removed for path: $path');
+      } catch (e) {
+        logger.e('Error removing cache for path: $path', error: e);
+      }
     }
   }
 }

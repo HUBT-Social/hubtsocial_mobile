@@ -22,11 +22,11 @@ class FetchRoomChatEvent extends RoomChatEvent {
 
 class GetRoomMemberEvent extends RoomChatEvent {
   const GetRoomMemberEvent({
-    required this.roomId,
+    required this.groupId,
   });
 
-  final String roomId;
+  final String groupId;
 
   @override
-  List<String> get props => [roomId];
+  List<String> get props => [groupId];
 }

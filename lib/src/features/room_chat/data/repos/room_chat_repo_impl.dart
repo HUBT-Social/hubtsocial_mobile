@@ -31,10 +31,10 @@ class RoomChatRepoImpl implements RoomChatRepo {
   }
 
   @override
-  ResultFuture<RoomInfoModel> getRoomMember({required String roomId}) async {
+  ResultFuture<RoomInfoModel> getRoomMember({required String groupId}) async {
     try {
       final result = await _remoteDataSource.getRoomMember(
-        roomId: roomId,
+        groupId: groupId,
       );
 
       return Right(result);

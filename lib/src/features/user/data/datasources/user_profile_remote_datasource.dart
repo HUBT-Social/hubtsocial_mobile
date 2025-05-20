@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:hubtsocial_mobile/src/constants/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:injectable/injectable.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
+import 'package:dio/dio.dart';
 
 import '../../../../core/api/dio_client.dart';
 import '../../../../core/api/errors/exceptions.dart';
@@ -26,10 +28,8 @@ abstract class UserProfileRemoteDataSource {
   });
 }
 
-@LazySingleton(
-  as: UserProfileRemoteDataSource,
-)
-class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
+@LazySingleton(as: UserProfileRemoteDataSource)
+class UserProfileRemoteDataSourceImpl implements UserProfileRemoteDataSource {
   const UserProfileRemoteDataSourceImpl({
     required DioClient dioClient,
   }) : _dioClient = dioClient;
@@ -41,47 +41,58 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
     try {
       logger.i('Initializing user profile');
 
-      final response = await _dioClient.get<Map<String, dynamic>>(
-        EndPoint.userGetUser,
-      );
-
-      if (response.statusCode == 401) {
-        logger.w('Unauthorized access to user profile');
-        throw const ServerException(
-          message: 'Your session has expired. Please login again.',
-          statusCode: '401',
-        );
+      // Try to get data from cache first
+      final cachedData = await _getCachedUserProfile();
+      if (cachedData != null) {
+        logger.i('Using cached user profile data');
+        return cachedData;
       }
 
-      if (response.statusCode != 200) {
-        logger.e(
-          'Failed to get user profile. Status: ${response.statusCode}, Response: ${response.data}',
-        );
+      // If no cache, try network request
+      return await _fetchUserProfileFromNetwork();
+    } on DioException catch (e) {
+      logger.e('Network error while fetching user profile: ${e.message}');
+      logger.d('Error type: ${e.type}, Error: ${e.error}');
+
+      // Handle specific connection errors
+      if (e.type == DioExceptionType.connectionError ||
+          e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.unknown) {
+        // Try to get cached data as fallback
+        final cachedData = await _getCachedUserProfile();
+        if (cachedData != null) {
+          logger.i('Using cached user profile data after connection error');
+          return cachedData;
+        }
+
         throw ServerException(
-          message: response.data?['message']?.toString() ??
-              'Failed to get user profile. Please try again.',
-          statusCode: response.statusCode?.toString() ?? '400',
+          message:
+              'Unable to connect to the server. Please check your internet connection.',
+          statusCode: '0',
         );
       }
 
-      if (response.data == null) {
-        logger.e('Empty response received for user profile');
-        throw const ServerException(
-          message: 'Invalid user profile data received from server.',
-          statusCode: '400',
-        );
-      }
-
-      final userProfile = UserModel.fromMap(response.data!);
-      logger.i('Successfully fetched user profile');
-      return userProfile;
+      // Handle other Dio errors
+      throw ServerException(
+        message: e.message ??
+            'Failed to fetch user profile. Please try again later.',
+        statusCode: e.response?.statusCode?.toString() ?? '500',
+      );
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logger.e('Unexpected error while getting user profile: $e');
+      logger.e('Unexpected error while fetching user profile: $e');
       logger.d('Stack trace: $s');
+
+      // Final attempt to get cached data
+      final cachedData = await _getCachedUserProfile();
+      if (cachedData != null) {
+        logger.i('Using cached user profile data after error');
+        return cachedData;
+      }
+
       throw ServerException(
-        message: 'Failed to get user profile. Please try again later.',
+        message: 'Failed to fetch user profile. Please try again later.',
         statusCode: '500',
       );
     }
@@ -98,59 +109,48 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
     try {
       logger.i('Updating user profile for userId: $userId');
 
-      // TODO: Implement image upload if needed
-      // if (newImage != null) {
-      //   final ref = _dbClient.ref().child('profile_pics/$userId.png');
-      //   await ref.putFile(newImage);
-      //   avatarUrl = await ref.getDownloadURL();
-      // }
-
-      final response = await _dioClient.put<Map<String, dynamic>>(
-        '${EndPoint.apiUrl}/profile',
-        data: {
-          'fullName': fullName,
-          'email': email,
-          'avatarUrl': avatarUrl,
-        },
+      final formData = await _buildUpdateProfileFormData(
+        userId: userId,
+        fullName: fullName,
+        email: email,
+        avatarUrl: avatarUrl,
+        newImage: newImage,
       );
 
-      if (response.statusCode == 401) {
-        logger.w('Unauthorized access while updating profile');
-        throw const ServerException(
-          message: 'Your session has expired. Please login again.',
-          statusCode: '401',
-        );
-      }
+      final response =
+          await _dioClient.putAndInvalidateDefaultCache<Map<String, dynamic>>(
+        '${EndPoint.apiUrl}/profile',
+        data: formData,
+      );
 
-      if (response.statusCode == 400) {
-        logger.w('Invalid profile data provided');
-        throw ServerException(
-          message: response.data?['message']?.toString() ??
-              'Invalid profile information provided.',
-          statusCode: '400',
-        );
-      }
-
-      if (response.statusCode != 200) {
-        logger.e(
-          'Failed to update profile. Status: ${response.statusCode}, Response: ${response.data}',
-        );
-        throw ServerException(
-          message: response.data?['message']?.toString() ??
-              'Failed to update profile. Please try again.',
-          statusCode: response.statusCode?.toString() ?? '400',
-        );
-      }
-
+      _validateResponse(response);
       logger.i('Successfully updated user profile');
-      return;
+    } on DioException catch (e) {
+      logger.e('Network error while updating user profile: ${e.message}');
+      logger.d('Error type: ${e.type}, Error: ${e.error}');
+
+      if (e.type == DioExceptionType.connectionError ||
+          e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.unknown) {
+        throw ServerException(
+          message:
+              'Unable to connect to the server. Please check your internet connection.',
+          statusCode: '0',
+        );
+      }
+
+      throw ServerException(
+        message: e.message ??
+            'Failed to update user profile. Please try again later.',
+        statusCode: e.response?.statusCode?.toString() ?? '500',
+      );
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logger.e('Unexpected error while updating profile: $e');
+      logger.e('Error updating user profile: $e');
       logger.d('Stack trace: $s');
       throw ServerException(
-        message: 'Failed to update profile. Please try again later.',
+        message: 'Failed to update user profile. Please try again later.',
         statusCode: '500',
       );
     }
@@ -164,51 +164,126 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
     try {
       logger.i('Changing password');
 
-      final response = await _dioClient.post<Map<String, dynamic>>(
-        '${EndPoint.apiUrl}/change-password',
+      final response = await _dioClient.put<Map<String, dynamic>>(
+        '${EndPoint.apiUrl}/profile/change-password',
         data: {
           'oldPassword': oldPassword,
           'newPassword': newPassword,
         },
       );
 
-      if (response.statusCode == 401) {
-        logger.w('Unauthorized access while changing password');
-        throw const ServerException(
-          message: 'Your session has expired. Please login again.',
-          statusCode: '401',
-        );
-      }
-
-      if (response.statusCode == 400) {
-        logger.w('Invalid password provided');
-        throw const ServerException(
-          message: 'Your current password is incorrect.',
-          statusCode: '400',
-        );
-      }
-
-      if (response.statusCode != 200) {
-        logger.e(
-          'Failed to change password. Status: ${response.statusCode}, Response: ${response.data}',
-        );
-        throw ServerException(
-          message: response.data?['message']?.toString() ??
-              'Failed to change password. Please try again.',
-          statusCode: response.statusCode?.toString() ?? '400',
-        );
-      }
-
+      _validateResponse(response);
       logger.i('Successfully changed password');
-      return;
+    } on DioException catch (e) {
+      logger.e('Network error while changing password: ${e.message}');
+      logger.d('Error type: ${e.type}, Error: ${e.error}');
+
+      if (e.type == DioExceptionType.connectionError ||
+          e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.unknown) {
+        throw ServerException(
+          message:
+              'Unable to connect to the server. Please check your internet connection.',
+          statusCode: '0',
+        );
+      }
+
+      throw ServerException(
+        message:
+            e.message ?? 'Failed to change password. Please try again later.',
+        statusCode: e.response?.statusCode?.toString() ?? '500',
+      );
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logger.e('Unexpected error while changing password: $e');
+      logger.e('Error changing password: $e');
       logger.d('Stack trace: $s');
       throw ServerException(
         message: 'Failed to change password. Please try again later.',
         statusCode: '500',
+      );
+    }
+  }
+
+  /// Attempts to get user profile data from cache
+  Future<UserModel?> _getCachedUserProfile() async {
+    try {
+      final response = await _dioClient.getWithCache<Map<String, dynamic>>(
+        EndPoint.userGetUser,
+        policy: CachePolicy.forceCache,
+      );
+
+      if (response.data != null) {
+        logger.i('Successfully retrieved cached user profile data');
+        return UserModel.fromMap(response.data!);
+      }
+    } catch (e) {
+      logger.w('No cached user profile data available: $e');
+    }
+    return null;
+  }
+
+  /// Fetches user profile data from network
+  Future<UserModel> _fetchUserProfileFromNetwork() async {
+    final response = await _dioClient.getWithCache<Map<String, dynamic>>(
+      EndPoint.userGetUser,
+      maxStale: const Duration(hours: 1),
+      policy: CachePolicy.refreshForceCache,
+    );
+
+    _validateResponse(response);
+    return UserModel.fromMap(response.data!);
+  }
+
+  /// Builds form data for profile update request
+  Future<FormData> _buildUpdateProfileFormData({
+    required String userId,
+    required String fullName,
+    required String email,
+    required String avatarUrl,
+    required File? newImage,
+  }) async {
+    final formData = FormData.fromMap({
+      'userId': userId,
+      'fullName': fullName,
+      'email': email,
+      'avatarUrl': avatarUrl,
+    });
+
+    if (newImage != null) {
+      formData.files.add(
+        MapEntry(
+          'newImage',
+          await MultipartFile.fromFile(
+            newImage.path,
+            filename: newImage.path.split('/').last,
+          ),
+        ),
+      );
+    }
+
+    return formData;
+  }
+
+  /// Validates the response and throws appropriate exceptions
+  void _validateResponse(Response response) {
+    final statusCode = response.statusCode ?? 400;
+
+    if (statusCode == 401) {
+      logger.w('Unauthorized access');
+      throw const ServerException(
+        message: 'Your session has expired. Please login again.',
+        statusCode: '401',
+      );
+    }
+
+    if (statusCode != 200) {
+      logger
+          .e('Request failed. Status: $statusCode, Response: ${response.data}');
+      throw ServerException(
+        message: response.data?['message']?.toString() ??
+            'Request failed. Please try again.',
+        statusCode: statusCode.toString(),
       );
     }
   }

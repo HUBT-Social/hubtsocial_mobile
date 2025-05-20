@@ -42,7 +42,8 @@ class GetRoomChatBloc extends Bloc<RoomChatEvent, GetRoomChatState> {
     GetRoomMemberEvent event,
     Emitter<GetRoomChatState> emit,
   ) async {
-    final result = await _getRoomChat(GetRoomChatParams(roomId: event.roomId));
+    final result =
+        await _getRoomChat(GetRoomChatParams(groupId: event.groupId));
     result.fold((failure) => emit(RoomChatLoadedError(failure.message)),
         (response) => emit(RoomMemberLoaded(response)));
   }
