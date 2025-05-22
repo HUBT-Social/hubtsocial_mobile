@@ -1,12 +1,14 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/constants/end_point.dart';
+import 'package:hubtsocial_mobile/src/core/api/dio_client.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/user/data/gender.dart';
 import 'package:injectable/injectable.dart';
 import 'package:hubtsocial_mobile/src/core/api/errors/exceptions.dart';
-import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
-import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_token.dart';
+import 'package:dio/dio.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
+import 'package:hubtsocial_mobile/src/router/router.import.dart';
 
 import '../../../../core/local_storage/local_storage_key.dart';
 import '../models/forgot_password_response_model.dart';
@@ -55,29 +57,33 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   const AuthRemoteDataSourceImpl({
     required HiveInterface hiveAuth,
     required FirebaseMessaging messaging,
-  }) : _hiveAuth = hiveAuth;
+    required DioClient dioClient,
+  })  : _hiveAuth = hiveAuth,
+        _dioClient = dioClient;
 
   final HiveInterface _hiveAuth;
+  final DioClient _dioClient;
 
   @override
   Future<SignInResponseModel> twoFactorPassword(
       {required String otpPassword}) async {
     try {
-      final response = await APIRequest.post(
-        url: EndPoint.twoFactorPassword,
-        body: {'otpPassword': otpPassword},
+      final response = await _dioClient.post<Map<String, dynamic>>(
+        EndPoint.twoFactorPassword,
+        data: {'otpPassword': otpPassword},
       );
 
-      var responseData = SignInResponseModel.fromJson(response.body);
       if (response.statusCode != 200) {
         logger.e(
-            'Failed to verify OTP password: statusCode: ${response.statusCode}:  ${response.body.toString()}');
+            'Failed to verify OTP password: statusCode: ${response.statusCode}:  ${response.data}');
         throw ServerException(
-          message: responseData.message.toString(),
-          statusCode: response.statusCode.toString(),
+          message: response.data?['message']?.toString() ??
+              'Failed to verify OTP password',
+          statusCode: response.statusCode?.toString() ?? '400',
         );
       }
 
+      var responseData = SignInResponseModel.fromMap(response.data!);
       if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
         await _hiveAuth.openBox(LocalStorageKey.token);
       }
@@ -106,19 +112,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> verifyPassword({required String postcode}) async {
     try {
-      final response = await APIRequest.post(
-        url: EndPoint.authVerifyPassword,
-        body: {
+      final response = await _dioClient.post<Map<String, dynamic>>(
+        EndPoint.authVerifyPassword,
+        data: {
           'postcode': postcode,
         },
       );
 
       if (response.statusCode != 200) {
         logger.e(
-            'Failed to verify password: statusCode: ${response.statusCode}:  ${response.body.toString()}');
+            'Failed to verify password: statusCode: ${response.statusCode}:  ${response.data}');
         throw ServerException(
-          message: response.body,
-          statusCode: response.statusCode.toString(),
+          message: response.data?['message']?.toString() ??
+              'Failed to verify password',
+          statusCode: response.statusCode?.toString() ?? '400',
         );
       }
 
@@ -141,9 +148,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String password,
   }) async {
     try {
-      final response = await APIRequest.post(
-        url: EndPoint.authSignIn,
-        body: {
+      final response = await _dioClient.post<Map<String, dynamic>>(
+        EndPoint.authSignIn,
+        data: {
           'userName': userName,
           'password': password,
         },
@@ -151,39 +158,48 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       if (response.statusCode != 200) {
         logger.e(
-            'Could not finalize api due to: statusCode: ${response.statusCode}:  ${response.body.toString()}');
+            'Could not finalize api due to: statusCode: ${response.statusCode}:  ${response.data}');
         throw ServerException(
-          message: response.body.toString(),
-          statusCode: response.statusCode.toString(),
+          message: response.data?['message']?.toString() ?? 'Failed to sign in',
+          statusCode: response.statusCode?.toString() ?? '400',
         );
       }
 
-      var responseData = SignInResponseModel.fromJson(response.body);
-      var token = responseData.userToken;
-      final responseFcm = await APIRequest.put(
-        url: EndPoint.updateFcmToken,
-        token: token?.accessToken,
-        body: {"fcmToken": await FirebaseMessaging.instance.getToken()},
-      );
+      var responseData = SignInResponseModel.fromMap(response.data!);
 
-      if (responseFcm.statusCode != 200) {
-        logger.e(
-            'Could not finalize api due to: statusCode: ${responseFcm.statusCode}:  ${responseFcm.body.toString()}');
-        throw ServerException(
-          message: responseFcm.body.toString(),
-          statusCode: responseFcm.statusCode.toString(),
-        );
-      }
+      // Only store token if sign in is successful and doesn't require 2FA
       if (!responseData.requiresTwoFactor! && responseData.userToken != null) {
-        if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
-          await _hiveAuth.openBox(LocalStorageKey.token);
+        try {
+          if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
+            await _hiveAuth.openBox(LocalStorageKey.token);
+          }
+          if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
+            await _hiveAuth.openBox(LocalStorageKey.token);
+          }
+          var tokenBox = _hiveAuth.box(LocalStorageKey.token);
+          await tokenBox.put(LocalStorageKey.userToken, responseData.userToken);
+          logger.i('Sign in token stored successfully');
+        } catch (e) {
+          logger.e('Failed to store token: $e');
+          // Continue even if token storage fails
         }
-        if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
-          await _hiveAuth.openBox(LocalStorageKey.token);
+
+        // Update FCM token after successful sign in
+        try {
+          final responseFcm = await _dioClient.put<Map<String, dynamic>>(
+            EndPoint.updateFcmToken,
+            data: {"fcmToken": await FirebaseMessaging.instance.getToken()},
+          );
+
+          if (responseFcm.statusCode != 200) {
+            logger.e(
+                'Could not update FCM token: statusCode: ${responseFcm.statusCode}:  ${responseFcm.data}');
+            // Continue even if FCM update fails
+          }
+        } catch (e) {
+          logger.e('Failed to update FCM token: $e');
+          // Continue even if FCM update fails
         }
-        var tokenBox = _hiveAuth.box(LocalStorageKey.token);
-        await tokenBox.put(LocalStorageKey.userToken, token);
-        logger.i('Sign in token : $token');
       }
 
       return responseData;
@@ -208,9 +224,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }) async {
     logger.i('phone number :$userName, name: $email, password: $password');
     try {
-      final response = await APIRequest.post(
-        url: EndPoint.authSignUp,
-        body: {
+      final response = await _dioClient.post<Map<String, dynamic>>(
+        EndPoint.authSignUp,
+        data: {
           "userName": userName,
           "email": email,
           "password": password,
@@ -220,10 +236,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       if (response.statusCode != 200) {
         logger.e(
-            'Could not finalize api due to: statusCode: ${response.statusCode}:  ${response.body.toString()}');
+            'Could not finalize api due to: statusCode: ${response.statusCode}:  ${response.data}');
         throw ServerException(
-          message: response.body.toString(),
-          statusCode: response.statusCode.toString(),
+          message: response.data?['message']?.toString() ?? 'Failed to sign up',
+          statusCode: response.statusCode?.toString() ?? '400',
         );
       }
 
@@ -246,20 +262,23 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String token,
   }) async {
     try {
-      final response = await APIRequest.post(
-        url: '${EndPoint.apiUrl}/reset-password',
-        body: {
+      final response = await _dioClient.post<Map<String, dynamic>>(
+        '${EndPoint.apiUrl}/reset-password',
+        data: {
           'newPassword': newPassword,
         },
-        token: token,
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
       );
 
       if (response.statusCode != 200) {
         logger.e(
-            'Could not finalize api due to: statusCode: ${response.statusCode}:  ${response.body.toString()}');
+            'Could not finalize api due to: statusCode: ${response.statusCode}:  ${response.data}');
         throw ServerException(
-          message: response.body.toString(),
-          statusCode: response.statusCode.toString(),
+          message: response.data?['message']?.toString() ??
+              'Failed to reset password',
+          statusCode: response.statusCode?.toString() ?? '400',
         );
       }
     } catch (e, s) {
@@ -274,53 +293,44 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> signOut() async {
-    // try {
-    //   UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
-
-    //   var response = await APIRequest.delete(
-    //     url: EndPoint.authDeleteToken,
-    //     token: userToken.accessToken,
-    //   );
-    //   if (response.statusCode != 200) {
-    //     logger.e(
-    //         'Could not finalize api due to: statusCode: ${response.statusCode}:  ${response.body.toString()}');
-    //     throw ServerException(
-    //       message: response.body.toString(),
-    //       statusCode: response.statusCode.toString(),
-    //     );
-    //   }
-    //   HiveProvider.clearToken(
-    //       () => AppRoute.getStarted.go(navigatorKey.currentContext!));
-    // } catch (e, s) {
-    //   logger.e(e.toString());
-    //   logger.d(s.toString());
-    //   throw const ServerException(
-    //     message: 'Issue with the server',
-    //     statusCode: '505',
-    //   );
-    // }
+    try {
+      final userToken = await _dioClient.getUserToken();
+      await _dioClient.delete<Map<String, dynamic>>(
+        EndPoint.authDeleteToken,
+      );
+      await _hiveAuth.box(LocalStorageKey.token).clear();
+      router.go(AppRoute.getStarted.path);
+    } catch (e, s) {
+      logger.e(e.toString());
+      logger.d(s.toString());
+      throw const ServerException(
+        message: 'Issue with the server',
+        statusCode: '505',
+      );
+    }
   }
 
   @override
   Future<SignInResponseModel> twoFactor({required String postcode}) async {
     try {
-      final response = await APIRequest.post(
-        url: EndPoint.authSignInTwoFactor,
-        body: {
+      final response = await _dioClient.post<Map<String, dynamic>>(
+        EndPoint.authSignInTwoFactor,
+        data: {
           'postcode': postcode,
         },
       );
 
-      var responseData = SignInResponseModel.fromJson(response.body);
       if (response.statusCode != 200) {
         logger.e(
-            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.body.toString()}');
+            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.data}');
         throw ServerException(
-          message: responseData.message.toString(),
-          statusCode: response.statusCode.toString(),
+          message: response.data?['message']?.toString() ??
+              'Failed to verify two factor',
+          statusCode: response.statusCode?.toString() ?? '400',
         );
       }
 
+      var responseData = SignInResponseModel.fromMap(response.data!);
       if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
         await _hiveAuth.openBox(LocalStorageKey.token);
       }
@@ -331,13 +341,21 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       var tokenBox = _hiveAuth.box(LocalStorageKey.token);
       await tokenBox.put(LocalStorageKey.userToken, token);
       logger.i('Sign in token : $token');
-      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
 
-      final responseFcm = await APIRequest.put(
-        url: EndPoint.updateFcmToken,
-        token: userToken.accessToken,
-        body: {"fcmToken": await FirebaseMessaging.instance.getToken()},
+      final responseFcm = await _dioClient.put<Map<String, dynamic>>(
+        EndPoint.updateFcmToken,
+        data: {"fcmToken": await FirebaseMessaging.instance.getToken()},
       );
+
+      if (responseFcm.statusCode != 200) {
+        logger.e(
+            'Could not finalize api due to: statusCode: ${responseFcm.statusCode}:  ${responseFcm.data}');
+        throw ServerException(
+          message: responseFcm.data?['message']?.toString() ??
+              'Failed to update FCM token',
+          statusCode: responseFcm.statusCode?.toString() ?? '400',
+        );
+      }
 
       return responseData;
     } on ServerException {
@@ -355,35 +373,36 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<SignInResponseModel> verifyEmail({required String postcode}) async {
     try {
-      final response = await APIRequest.post(
-        url: EndPoint.authSignUpVerifyEmail,
-        body: {
+      final response = await _dioClient.post<Map<String, dynamic>>(
+        EndPoint.authSignUpVerifyEmail,
+        data: {
           'postcode': postcode,
         },
       );
 
-      var responseData = SignInResponseModel.fromJson(response.body);
       if (response.statusCode != 200) {
         logger.e(
-            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.body.toString()}');
+            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.data}');
         throw ServerException(
-          message: responseData.message.toString(),
-          statusCode: response.statusCode.toString(),
+          message:
+              response.data?['message']?.toString() ?? 'Failed to verify email',
+          statusCode: response.statusCode?.toString() ?? '400',
         );
       }
 
+      var responseData = SignInResponseModel.fromMap(response.data!);
       var token = responseData.userToken;
-      final responseFcm = await APIRequest.put(
-        url: EndPoint.updateFcmToken,
-        token: token?.accessToken,
-        body: {"fcmToken": await FirebaseMessaging.instance.getToken()},
+      final responseFcm = await _dioClient.put<Map<String, dynamic>>(
+        EndPoint.updateFcmToken,
+        data: {"fcmToken": await FirebaseMessaging.instance.getToken()},
       );
       if (responseFcm.statusCode != 200) {
         logger.e(
-            'Could not finalize api due to: statusCode: ${responseFcm.statusCode}:  ${responseFcm.body.toString()}');
+            'Could not finalize api due to: statusCode: ${responseFcm.statusCode}:  ${responseFcm.data}');
         throw ServerException(
-          message: responseFcm.body.toString(),
-          statusCode: responseFcm.statusCode.toString(),
+          message: responseFcm.data?['message']?.toString() ??
+              'Failed to update FCM token',
+          statusCode: responseFcm.statusCode?.toString() ?? '400',
         );
       }
       if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
@@ -413,22 +432,23 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<ForgotPasswordResponseModel> forgotPassword(
       {required String usernameOrEmail}) async {
     try {
-      final response = await APIRequest.post(
-        url: EndPoint.authForgotPassword,
-        body: {
+      final response = await _dioClient.post<Map<String, dynamic>>(
+        EndPoint.authForgotPassword,
+        data: {
           'usernameOrEmail': usernameOrEmail,
         },
       );
 
       if (response.statusCode != 200) {
         logger.e(
-            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.body.toString()}');
+            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.data}');
         throw ServerException(
-          message: response.body.toString(),
-          statusCode: response.statusCode.toString(),
+          message: response.data?['message']?.toString() ??
+              'Failed to process forgot password request',
+          statusCode: response.statusCode?.toString() ?? '400',
         );
       }
-      var responseData = ForgotPasswordResponseModel.fromJson(response.body);
+      var responseData = ForgotPasswordResponseModel.fromMap(response.data!);
 
       return responseData;
     } on ServerException {
@@ -447,9 +467,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> setNewPassword(
       {required String newPassword, required String confirmNewPassword}) async {
     try {
-      final response = await APIRequest.put(
-        url: EndPoint.authSetNewPassword,
-        body: {
+      final response = await _dioClient.put<Map<String, dynamic>>(
+        EndPoint.authSetNewPassword,
+        data: {
           "newPassword": newPassword,
           "confirmNewPassword": confirmNewPassword,
         },
@@ -457,10 +477,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       if (response.statusCode != 200) {
         logger.e(
-            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.body.toString()}');
+            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.data}');
         throw ServerException(
-          message: response.body.toString(),
-          statusCode: response.statusCode.toString(),
+          message: response.data?['message']?.toString() ??
+              'Failed to set new password',
+          statusCode: response.statusCode?.toString() ?? '400',
         );
       }
 
@@ -485,12 +506,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       required Gender gender,
       required String phoneNumber}) async {
     try {
-      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
-
-      final response = await APIRequest.put(
-        url: EndPoint.informationUser,
-        token: userToken.accessToken,
-        body: {
+      final response = await _dioClient.put<Map<String, dynamic>>(
+        EndPoint.informationUser,
+        data: {
           "firstName": firstName,
           "lastName": lastName,
           "phoneNumber": phoneNumber,
@@ -501,10 +519,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       if (response.statusCode != 200) {
         logger.e(
-            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.body.toString()}');
+            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.data}');
         throw ServerException(
-          message: response.body.toString(),
-          statusCode: response.statusCode.toString(),
+          message: response.data?['message']?.toString() ??
+              'Failed to update user information',
+          statusCode: response.statusCode?.toString() ?? '400',
         );
       }
 

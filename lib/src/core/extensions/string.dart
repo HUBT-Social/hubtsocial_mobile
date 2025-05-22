@@ -26,13 +26,21 @@ extension StringExtension on String {
     return replaceAll(RegExp(r"[^a-zA-Z0-9\s]"), "");
   }
 
-  String encrypt() {
-    final cipher = AESCipher("cipher string");
-    return cipher.encryptText(this);
+  String encrypt({String key = "cipher_string_key"}) {
+    try {
+      final cipher = AESCipher(key);
+      return cipher.encryptText(this);
+    } catch (e) {
+      return this;
+    }
   }
 
-  String decrypt() {
-    final cipher = AESCipher("cipher string");
-    return cipher.decryptText(this);
+  String decrypt({String key = "cipher_string_key"}) {
+    try {
+      final cipher = AESCipher(key);
+      return cipher.decryptText(this);
+    } catch (e) {
+      return this;
+    }
   }
 }

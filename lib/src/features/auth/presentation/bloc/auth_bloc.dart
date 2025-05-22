@@ -100,8 +100,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     result.fold(
       (failure) {
-        switch (int.parse(failure.statusCode)) {
-          case 401:
+        switch (failure.statusCode) {
+          case '401':
             emit(AuthError(failure.message));
             break;
           default:
@@ -126,8 +126,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     result.fold(
       (failure) {
-        switch (int.parse(failure.statusCode)) {
-          case 401:
+        switch (failure.statusCode) {
+          case '401':
             emit(AuthError(failure.message));
             break;
           default:
@@ -153,8 +153,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     result.fold(
       (failure) {
-        switch (int.parse(failure.statusCode)) {
-          case 401:
+        switch (failure.statusCode) {
+          case '401':
             emit(AuthError(failure.message));
             break;
           default:
@@ -164,9 +164,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       },
       (response) {
         if (response.requiresTwoFactor!) {
-
           emit(VerifyTwoFactor(response.maskEmail.toString()));
-          
         } else {
           emit(SignedIn());
         }
@@ -185,8 +183,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     result.fold(
       (failure) {
-        switch (int.parse(failure.statusCode)) {
-          case 401:
+        switch (failure.statusCode) {
+          case '401':
             emit(AuthError(failure.message));
             break;
           default:
@@ -211,8 +209,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     result.fold(
       (failure) {
-        switch (int.parse(failure.statusCode)) {
-          case 401:
+        switch (failure.statusCode) {
+          case '401':
             emit(AuthError(failure.message));
             break;
           default:
@@ -240,8 +238,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     result.fold(
       (failure) {
-        switch (int.parse(failure.statusCode)) {
-          case 401:
+        switch (failure.statusCode) {
+          case '401':
             emit(ExpiredToken(failure.message));
             break;
           default:
@@ -273,8 +271,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     result.fold(
       (failure) {
-        switch (int.parse(failure.statusCode)) {
-          case 401:
+        switch (failure.statusCode) {
+          case '401':
             emit(AuthError(failure.message));
             break;
           default:

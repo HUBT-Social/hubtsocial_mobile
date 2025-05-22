@@ -17,10 +17,14 @@ class ChatRepoImpl implements ChatRepo {
   final ChatRemoteDataSource _remoteDataSource;
 
   @override
-  ResultFuture<List<ChatResponseModel>> fetchChat({required int page}) async {
+  ResultFuture<List<ChatResponseModel>> fetchChat({
+    required int page,
+    required int limit,
+  }) async {
     try {
       final result = await _remoteDataSource.fetchChat(
         page: page,
+        limit: limit,
       );
 
       return Right(result);

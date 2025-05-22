@@ -7,10 +7,12 @@ abstract class ChatEvent extends Equatable {
 class FetchChatEvent extends ChatEvent {
   const FetchChatEvent({
     required this.page,
+    required this.limit,
   });
 
   final int page;
+  final int limit;
 
   @override
-  List<String> get props => [page.toString()];
+  List<String> get props => [page.toString(), limit.toString()];
 }

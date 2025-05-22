@@ -83,7 +83,7 @@ class _MenuScreenState extends State<MenuScreen> {
             onTap: () => LocalizatioUtils.showLanguageBottomSheet(
                 navigatorKey.currentContext ?? context),
           ),
-          LineInMenu(),
+          SliverToBoxAdapter(child: LineInMenu()),
           ButtonInMenu(
             borderRadiusTop: 12.r,
             icon: Icon(
@@ -147,7 +147,7 @@ class _MenuScreenState extends State<MenuScreen> {
               context.showSnackBarMessage('Tính năng đang phát triển');
             },
           ),
-          LineInMenu(),
+          SliverToBoxAdapter(child: LineInMenu()),
           SliverToBoxAdapter(
             child: InkWell(
               borderRadius: BorderRadius.all(

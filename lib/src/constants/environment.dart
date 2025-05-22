@@ -1,24 +1,65 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 
 class Environment {
+  static bool _isInitialized = false;
+  static String? _apiUrl;
+  static String? _chatHubUrl;
+  static String? _ivUtf8;
+
+  static Future<void> initialize() async {
+    if (_isInitialized) {
+      logger.i('Environment already initialized');
+      return;
+    }
+
+    try {
+      await dotenv.load(fileName: fileName);
+      _apiUrl = dotenv.env['API_URL'] ?? _throwMissingEnv('API_URL');
+      _chatHubUrl =
+          dotenv.env['CHAT_HUB_URL'] ?? _throwMissingEnv('CHAT_HUB_URL');
+      _ivUtf8 = dotenv.env['IV_UTF8'] ?? _throwMissingEnv('IV_UTF8');
+      _isInitialized = true;
+      logger.i('Environment initialized successfully');
+    } catch (e, s) {
+      logger.e('Failed to initialize environment: $e');
+      logger.d('Stack trace: $s');
+      rethrow;
+    }
+  }
+
   static String get fileName {
     if (kReleaseMode) {
       return '.env.production';
     }
-
     return '.env.development';
   }
 
   static String get getApiUrl {
-    return dotenv.env['API_URL'] ?? "API_URL not specified";
+    _checkInitialized();
+    return _apiUrl!;
   }
 
   static String get getChatHub {
-    return dotenv.env['CHAT_HUB_URL'] ?? "CHAT_HUB_URL not specified";
+    _checkInitialized();
+    return _chatHubUrl!;
   }
 
   static String get getIVUtf8 {
-    return dotenv.env['IV_UTF8'] ?? "IV_UTF8 not specified";
+    _checkInitialized();
+    return _ivUtf8!;
+  }
+
+  static void _checkInitialized() {
+    if (!_isInitialized) {
+      throw StateError(
+          'Environment not initialized. Call Environment.initialize() first.');
+    }
+  }
+
+  static String _throwMissingEnv(String key) {
+    throw StateError(
+        'Environment variable $key not found. Please check your .env file.');
   }
 }

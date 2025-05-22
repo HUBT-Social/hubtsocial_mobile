@@ -315,5 +315,21 @@
   "seminar": "Семинар",
   "@seminar": {},
   "retake_exam": "Пересдать экзамен",
-  "@retake_exam": {}
+  "@retake_exam": {},
+  "functions": "Функции",
+  "@functions": {},
+  "revise": "Повторение",
+  "@revise": {},
+  "module": "Модуль",
+  "@module": {},
+  "academic_result": "Учебные результаты",
+  "@academic_result": {},
+  "pay_tuition": "Оплата обучения",
+  "@pay_tuition": {},
+  "school_survey": "Школьный опрос",
+  "@school_survey": {},
+  "instructor_evaluation": "Оценка преподавателя",
+  "@instructor_evaluation": {},
+  "academic_advisor": "Учебный консультант",
+  "@academic_advisor": {}
 }

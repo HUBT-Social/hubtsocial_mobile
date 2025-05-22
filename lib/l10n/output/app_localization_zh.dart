@@ -377,7 +377,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get copied => '已复制';
 
   @override
-  String get student_list => '学生列表';
+  String get student_list => '学生名单';
 
   @override
   String get content => '内容';
@@ -411,4 +411,28 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get retake_exam => '重考';
+
+  @override
+  String get functions => '功能';
+
+  @override
+  String get revise => '复习';
+
+  @override
+  String get module => '模块';
+
+  @override
+  String get academic_result => '学业成绩';
+
+  @override
+  String get pay_tuition => '缴纳学费';
+
+  @override
+  String get school_survey => '学校调查';
+
+  @override
+  String get instructor_evaluation => '教师评价';
+
+  @override
+  String get academic_advisor => '学业顾问';
 }

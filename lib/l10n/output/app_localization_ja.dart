@@ -411,4 +411,28 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get retake_exam => '再試験';
+
+  @override
+  String get functions => '機能';
+
+  @override
+  String get revise => '復習';
+
+  @override
+  String get module => 'モジュール';
+
+  @override
+  String get academic_result => '学業成績';
+
+  @override
+  String get pay_tuition => '授業料の支払い';
+
+  @override
+  String get school_survey => '学校調査';
+
+  @override
+  String get instructor_evaluation => '講師評価';
+
+  @override
+  String get academic_advisor => '学業アドバイザー';
 }

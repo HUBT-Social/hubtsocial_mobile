@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 class ChatResponseModel extends Equatable {
   const ChatResponseModel({
     required this.lastMessage,
+    required this.lassSender,
     required this.lastInteractionTime,
     required this.id,
     required this.avatarUrl,
@@ -10,6 +11,7 @@ class ChatResponseModel extends Equatable {
   });
 
   final String? lastMessage;
+  final String? lassSender;
   final String? lastInteractionTime;
   final String id;
   final String avatarUrl;
@@ -17,6 +19,7 @@ class ChatResponseModel extends Equatable {
 
   ChatResponseModel copyWith({
     String? lastMessage,
+    String? lassSender,
     String? lastInteractionTime,
     String? id,
     String? avatarUrl,
@@ -24,6 +27,7 @@ class ChatResponseModel extends Equatable {
   }) {
     return ChatResponseModel(
       lastMessage: lastMessage ?? this.lastMessage,
+      lassSender: lassSender ?? this.lassSender,
       lastInteractionTime: lastInteractionTime ?? this.lastInteractionTime,
       id: id ?? this.id,
       avatarUrl: avatarUrl ?? this.avatarUrl,
@@ -34,6 +38,7 @@ class ChatResponseModel extends Equatable {
   factory ChatResponseModel.fromJson(Map<String, dynamic> json) {
     return ChatResponseModel(
       lastMessage: json["lastMessage"],
+      lassSender: json["lassSender"],
       lastInteractionTime: json["lastInteractionTime"],
       id: json["id"],
       avatarUrl: json["avatarUrl"],
@@ -43,6 +48,7 @@ class ChatResponseModel extends Equatable {
 
   Map<String, dynamic> toJson() => {
         "lastMessage": lastMessage,
+        "lassSender": lassSender,
         "lastInteractionTime": lastInteractionTime,
         "id": id,
         "avatarUrl": avatarUrl,
@@ -51,7 +57,7 @@ class ChatResponseModel extends Equatable {
 
   @override
   String toString() {
-    return "$lastMessage, $lastInteractionTime, $id, $avatarUrl, $groupName, ";
+    return "$lastMessage,$lassSender, $lastInteractionTime, $id, $avatarUrl, $groupName, ";
   }
 
   @override

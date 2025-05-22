@@ -870,6 +870,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retake exam'**
   String get retake_exam;
+
+  /// No description provided for @functions.
+  ///
+  /// In en, this message translates to:
+  /// **'Functions'**
+  String get functions;
+
+  /// No description provided for @revise.
+  ///
+  /// In en, this message translates to:
+  /// **'Revise'**
+  String get revise;
+
+  /// No description provided for @module.
+  ///
+  /// In en, this message translates to:
+  /// **'Module'**
+  String get module;
+
+  /// No description provided for @academic_result.
+  ///
+  /// In en, this message translates to:
+  /// **'Academic result'**
+  String get academic_result;
+
+  /// No description provided for @pay_tuition.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay tuition'**
+  String get pay_tuition;
+
+  /// No description provided for @school_survey.
+  ///
+  /// In en, this message translates to:
+  /// **'School survey'**
+  String get school_survey;
+
+  /// No description provided for @instructor_evaluation.
+  ///
+  /// In en, this message translates to:
+  /// **'Instructor Evaluation'**
+  String get instructor_evaluation;
+
+  /// No description provided for @academic_advisor.
+  ///
+  /// In en, this message translates to:
+  /// **'Academic advisor'**
+  String get academic_advisor;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

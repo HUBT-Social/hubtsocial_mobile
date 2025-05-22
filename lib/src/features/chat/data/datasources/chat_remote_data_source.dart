@@ -1,21 +1,18 @@
-import 'dart:convert';
-
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:hive_ce_flutter/adapters.dart';
-import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
-import 'package:hubtsocial_mobile/src/features/chat/data/models/chat_response_model.dart';
+import 'package:hubtsocial_mobile/src/core/api/dio_client.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../constants/end_point.dart';
 import '../../../../core/api/errors/exceptions.dart';
 import '../../../../core/logger/logger.dart';
-import '../../../auth/domain/entities/user_token.dart';
+import '../../../../core/extensions/string.dart';
+import '../models/chat_response_model.dart';
 
 abstract class ChatRemoteDataSource {
   const ChatRemoteDataSource();
 
   Future<List<ChatResponseModel>> fetchChat({
     required int page,
+    required int limit,
   });
 }
 
@@ -24,52 +21,82 @@ abstract class ChatRemoteDataSource {
 )
 class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   const ChatRemoteDataSourceImpl({
-    required HiveInterface hiveAuth,
-    required FirebaseMessaging messaging,
-  }) : _hiveAuth = hiveAuth;
+    required DioClient dioClient,
+  }) : _dioClient = dioClient;
 
-  final HiveInterface _hiveAuth;
+  final DioClient _dioClient;
 
   @override
-  Future<List<ChatResponseModel>> fetchChat({required int page}) async {
+  Future<List<ChatResponseModel>> fetchChat({
+    required int page,
+    required int limit,
+  }) async {
     try {
-      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
+      logger.i('Fetching chat list for page: $page, limit: $limit');
 
-      final response = await APIRequest.get(
-        url: EndPoint.chatView,
-        token: userToken.accessToken,
+      final response = await _dioClient.get<List<dynamic>>(
+        EndPoint.chatView,
         queryParameters: {
-          'page': page.toString(),
-          'limit': '10',
+          "page": page.toString(),
+          "limit": limit.toString(),
         },
       );
 
-      if (response.statusCode != 200) {
-        logger.e(
-            'Failed to Fetch Chat: statusCode: ${response.statusCode}: ${response.body.toString()}');
-        throw ServerException(
-          message: response.body.toString(),
-          statusCode: response.statusCode.toString(),
+      final statusCode = response.statusCode ?? 400;
+      final statusCodeStr = statusCode.toString();
+
+      if (statusCode == 401) {
+        logger.w('Unauthorized access to chat list');
+        throw const ServerException(
+          message: 'Your session has expired. Please login again.',
+          statusCode: '401',
         );
       }
 
-      final List newItems = json.decode(response.body);
+      if (statusCode != 200) {
+        logger.e(
+          'Failed to fetch chat list. Status: $statusCode, Response: ${response.data}',
+        );
+        throw ServerException(
+          message: response.data?[0]?.toString() ??
+              'Failed to fetch chat list. Please try again.',
+          statusCode: statusCodeStr,
+        );
+      }
 
-      List<ChatResponseModel> items = [];
+      if (response.data == null) {
+        logger.w('Empty response received for chat list');
+        return [];
+      }
 
-      items.addAll(newItems.map<ChatResponseModel>((item) {
-        return ChatResponseModel.fromJson(item);
-      }).toList());
+      final items = response.data!.map<ChatResponseModel>((item) {
+        try {
+          final chatItem =
+              ChatResponseModel.fromJson(item as Map<String, dynamic>);
+          // Decrypt the last message if it's encrypted
+          if (chatItem.lastMessage != null &&
+              chatItem.lastMessage!.isNotEmpty) {
+            final decryptedMessage =
+                chatItem.lastMessage!.decrypt(key: chatItem.id);
+            return chatItem.copyWith(lastMessage: decryptedMessage);
+          }
+          return chatItem;
+        } catch (e) {
+          logger.e('Error parsing chat item: $e, Data: $item');
+          rethrow;
+        }
+      }).toList();
 
+      logger.i('Successfully fetched ${items.length} chat items');
       return items;
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logger.e(e.toString());
-      logger.d(s.toString());
-      throw const ServerException(
-        message: 'Failed to verify OTP password. Please try again later.',
-        statusCode: '505',
+      logger.e('Unexpected error while fetching chat list: $e');
+      logger.d('Stack trace: $s');
+      throw ServerException(
+        message: 'Failed to fetch chat list. Please try again later.',
+        statusCode: '500',
       );
     }
   }

@@ -1,12 +1,10 @@
 import 'dart:io';
-import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/constants/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/api/api_request.dart';
+import '../../../../core/api/dio_client.dart';
 import '../../../../core/api/errors/exceptions.dart';
-import '../../../auth/domain/entities/user_token.dart';
 import '../models/user_model.dart';
 
 abstract class UserProfileRemoteDataSource {
@@ -22,8 +20,10 @@ abstract class UserProfileRemoteDataSource {
     required File? newImage,
   });
 
-  Future<void> changePassword(
-      {required String oldPassword, required String newPassword});
+  Future<void> changePassword({
+    required String oldPassword,
+    required String newPassword,
+  });
 }
 
 @LazySingleton(
@@ -31,37 +31,58 @@ abstract class UserProfileRemoteDataSource {
 )
 class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
   const UserProfileRemoteDataSourceImpl({
-    required HiveInterface hiveAuth,
-  }) : _hiveAuth = hiveAuth;
+    required DioClient dioClient,
+  }) : _dioClient = dioClient;
 
-  final HiveInterface _hiveAuth;
+  final DioClient _dioClient;
 
   @override
   Future<UserModel> initUserProfile() async {
     try {
-      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
+      logger.i('Initializing user profile');
 
-      final response = await APIRequest.get(
-        url: EndPoint.userGetUser,
-        token: userToken.accessToken,
+      final response = await _dioClient.get<Map<String, dynamic>>(
+        EndPoint.userGetUser,
       );
-      if (response.statusCode != 200) {
-        logger.e(
-            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.body.toString()}');
-        throw ServerException(
-          message: response.body,
-          statusCode: response.statusCode.toString(),
+
+      if (response.statusCode == 401) {
+        logger.w('Unauthorized access to user profile');
+        throw const ServerException(
+          message: 'Your session has expired. Please login again.',
+          statusCode: '401',
         );
       }
-      return UserModel.fromJson(response.body);
+
+      if (response.statusCode != 200) {
+        logger.e(
+          'Failed to get user profile. Status: ${response.statusCode}, Response: ${response.data}',
+        );
+        throw ServerException(
+          message: response.data?['message']?.toString() ??
+              'Failed to get user profile. Please try again.',
+          statusCode: response.statusCode?.toString() ?? '400',
+        );
+      }
+
+      if (response.data == null) {
+        logger.e('Empty response received for user profile');
+        throw const ServerException(
+          message: 'Invalid user profile data received from server.',
+          statusCode: '400',
+        );
+      }
+
+      final userProfile = UserModel.fromMap(response.data!);
+      logger.i('Successfully fetched user profile');
+      return userProfile;
     } on ServerException {
       rethrow;
     } catch (e, s) {
-      logger.e(e.toString());
-      logger.d(s.toString());
-      throw const ServerException(
-        message: 'Please try again later',
-        statusCode: '505',
+      logger.e('Unexpected error while getting user profile: $e');
+      logger.d('Stack trace: $s');
+      throw ServerException(
+        message: 'Failed to get user profile. Please try again later.',
+        statusCode: '500',
       );
     }
   }
@@ -74,77 +95,121 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
     required String avatarUrl,
     required File? newImage,
   }) async {
-    // try {
-    //   if (newImage != null) {
-    //     final ref = _dbClient.ref().child('profile_pics/$userId.png');
-
-    //     await ref.putFile(newImage);
-    //     avatarUrl = await ref.getDownloadURL();
-    //   }
-
-    //   UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
-
-    //   final response = await APIRequest.put(
-    //     url: '${ApiConstants.usersEndpoint}/profile',
-    //     body: {
-    //       'fullName': fullName,
-    //       'email': email,
-    //       'avatarUrl': avatarUrl,
-    //     },
-    //     token: userToken.accessToken,
-    //   );
-    //   if (response.statusCode != 200) {
-    //     logger.e('Could not finalize api due to: ${response.body.toString()}');
-    //     throw ServerException(
-    //       message: response.body.toString(),
-    //       statusCode: response.statusCode.toString(),
-    //     );
-    //   }
-    //   return;
-    // } on ServerException {
-    //   rethrow;
-    // } catch (e, s) {
-    //   logger.e(e);
-    //   debugPrintStack(stackTrace: s);
-    //   throw const ServerException(
-    //     message: 'Please try again later',
-    //     statusCode: '505',
-    //   );
-    // }
-  }
-
-  @override
-  Future<void> changePassword(
-      {required String oldPassword, required String newPassword}) async {
     try {
-      UserToken userToken = await APIRequest.getUserToken(_hiveAuth);
+      logger.i('Updating user profile for userId: $userId');
 
-      final response = await APIRequest.post(
-        url: '${EndPoint.apiUrl}/change-password',
-        body: {
-          'oldPassword': oldPassword,
-          'newPassword': newPassword,
+      // TODO: Implement image upload if needed
+      // if (newImage != null) {
+      //   final ref = _dbClient.ref().child('profile_pics/$userId.png');
+      //   await ref.putFile(newImage);
+      //   avatarUrl = await ref.getDownloadURL();
+      // }
+
+      final response = await _dioClient.put<Map<String, dynamic>>(
+        '${EndPoint.apiUrl}/profile',
+        data: {
+          'fullName': fullName,
+          'email': email,
+          'avatarUrl': avatarUrl,
         },
-        token: userToken.accessToken,
       );
+
+      if (response.statusCode == 401) {
+        logger.w('Unauthorized access while updating profile');
+        throw const ServerException(
+          message: 'Your session has expired. Please login again.',
+          statusCode: '401',
+        );
+      }
+
+      if (response.statusCode == 400) {
+        logger.w('Invalid profile data provided');
+        throw ServerException(
+          message: response.data?['message']?.toString() ??
+              'Invalid profile information provided.',
+          statusCode: '400',
+        );
+      }
+
       if (response.statusCode != 200) {
         logger.e(
-            'Could not finalize api due to: statusCode: ${response.statusCode}: ${response.body.toString()}');
-        if (response.statusCode == 400) {
-          throw ServerException(
-            message: 'Your current password is incorrect',
-            statusCode: response.statusCode.toString(),
-          );
-        } else {
-          throw ServerException(
-            message: response.body.toString(),
-            statusCode: response.statusCode.toString(),
-          );
-        }
+          'Failed to update profile. Status: ${response.statusCode}, Response: ${response.data}',
+        );
+        throw ServerException(
+          message: response.data?['message']?.toString() ??
+              'Failed to update profile. Please try again.',
+          statusCode: response.statusCode?.toString() ?? '400',
+        );
       }
+
+      logger.i('Successfully updated user profile');
       return;
     } on ServerException {
       rethrow;
+    } catch (e, s) {
+      logger.e('Unexpected error while updating profile: $e');
+      logger.d('Stack trace: $s');
+      throw ServerException(
+        message: 'Failed to update profile. Please try again later.',
+        statusCode: '500',
+      );
+    }
+  }
+
+  @override
+  Future<void> changePassword({
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    try {
+      logger.i('Changing password');
+
+      final response = await _dioClient.post<Map<String, dynamic>>(
+        '${EndPoint.apiUrl}/change-password',
+        data: {
+          'oldPassword': oldPassword,
+          'newPassword': newPassword,
+        },
+      );
+
+      if (response.statusCode == 401) {
+        logger.w('Unauthorized access while changing password');
+        throw const ServerException(
+          message: 'Your session has expired. Please login again.',
+          statusCode: '401',
+        );
+      }
+
+      if (response.statusCode == 400) {
+        logger.w('Invalid password provided');
+        throw const ServerException(
+          message: 'Your current password is incorrect.',
+          statusCode: '400',
+        );
+      }
+
+      if (response.statusCode != 200) {
+        logger.e(
+          'Failed to change password. Status: ${response.statusCode}, Response: ${response.data}',
+        );
+        throw ServerException(
+          message: response.data?['message']?.toString() ??
+              'Failed to change password. Please try again.',
+          statusCode: response.statusCode?.toString() ?? '400',
+        );
+      }
+
+      logger.i('Successfully changed password');
+      return;
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      logger.e('Unexpected error while changing password: $e');
+      logger.d('Stack trace: $s');
+      throw ServerException(
+        message: 'Failed to change password. Please try again later.',
+        statusCode: '500',
+      );
     }
   }
 }

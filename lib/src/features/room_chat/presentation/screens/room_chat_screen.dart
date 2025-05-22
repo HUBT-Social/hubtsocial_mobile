@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:chatview/chatview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,9 +11,11 @@ import 'package:hubtsocial_mobile/src/features/chat/data/datasources/chat_hub_co
 import 'package:hubtsocial_mobile/src/features/room_chat/presentation/bloc/room_chat_bloc.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:signalr_netcore/signalr_client.dart';
+import 'package:dio/dio.dart';
+import 'package:hubtsocial_mobile/src/core/injections/injections.dart';
 
 import '../../../../constants/end_point.dart';
-import '../../../../core/api/api_request.dart';
+import '../../../../core/api/dio_client.dart';
 import '../../../../core/api/errors/exceptions.dart';
 import '../../../chat/data/models/message_response_model.dart';
 
@@ -28,24 +28,24 @@ class RoomChatScreen extends StatefulWidget {
 }
 
 class _RoomChatScreenState extends State<RoomChatScreen> {
+  late final DioClient _dioClient;
+
   @override
   void initState() {
+    super.initState();
+    _dioClient = getIt<DioClient>();
     context.read<GetRoomChatBloc>().add(GetRoomMemberEvent(roomId: widget.id));
 
-    if (ChatHubConnection.chatHubConnection.state ==
-        HubConnectionState.Connected) {
-      ChatHubConnection.chatHubConnection.on("ReceiveChat", _handleReceiveChat);
-      ChatHubConnection.chatHubConnection
-          .on("ReceiveProcess", _handleReceiveProcess);
+    if (ChatHubConnection.connection.state == HubConnectionState.Connected) {
+      ChatHubConnection.connection.on("ReceiveChat", _handleReceiveChat);
+      ChatHubConnection.connection.on("ReceiveProcess", _handleReceiveProcess);
     }
-    super.initState();
   }
 
   @override
   void dispose() {
-    ChatHubConnection.chatHubConnection
-        .off("ReceiveChat", method: _handleReceiveChat);
-    ChatHubConnection.chatHubConnection
+    ChatHubConnection.connection.off("ReceiveChat", method: _handleReceiveChat);
+    ChatHubConnection.connection
         .off("ReceiveProcess", method: _handleReceiveProcess);
     super.dispose();
   }
@@ -87,33 +87,36 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
 
       final token = await ChatHubConnection.getAccessTokenFactory();
 
-      final response = await APIRequest.get(
-        url: EndPoint.roomHistory,
-        token: token,
+      final response = await _dioClient.get(
+        EndPoint.roomHistory,
         queryParameters: {
           "ChatRoomId": widget.id,
           "CurrentQuantity": _chatController.initialMessageList.length,
           "Limit": 15,
         },
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
       );
 
       if (response.statusCode != 200) {
         logger.e(
-            'Failed to Fetch RoomChat: statusCode: ${response.statusCode}: ${response.body.toString()}');
+            'Failed to Fetch RoomChat: statusCode: ${response.statusCode}: ${response.data.toString()}');
         throw ServerException(
-          message: response.body.toString(),
+          message: response.data.toString(),
           statusCode: response.statusCode.toString(),
         );
       }
 
-      final List newItems = json.decode(response.body);
+      final List newItems = response.data;
 
       List<Message> items = [];
 
       var convertItems = newItems.map<Message>((item) {
         var message = Message.fromJson(item);
-        message.copyWith(message: message.message.decrypt());
-        return message;
+        var decryptMessage = message.message.decrypt(key: widget.id);
+        var newMessage = message.copyWith(message: decryptMessage);
+        return newMessage;
       }).toList();
 
       items.addAll(convertItems);
@@ -425,7 +428,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
     SendChatRequestModel sendChatRequestModel = SendChatRequestModel(
       groupId: widget.id,
       requestId: "message id ".generateRandomString(40),
-      content: message.encrypt(),
+      content: message.encrypt(key: widget.id),
       medias: null,
       files: null,
       replyToMessageId: replyMessage.messageId,
@@ -456,8 +459,8 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
     final messageModel =
         MessageResponseModel.fromJson(arguments![0] as Map<String, dynamic>);
     if (widget.id == messageModel.groupId) {
-      _chatController.addMessage(messageModel.message
-          .copyWith(message: messageModel.message.message.decrypt()));
+      _chatController.addMessage(messageModel.message.copyWith(
+          message: messageModel.message.message.decrypt(key: widget.id)));
     }
   }
 
