@@ -129,7 +129,6 @@ extension GetItInjectableX on _i174.GetIt {
     final registerModule = _$RegisterModule();
     gh.factory<_i441.ReceiveChatCubit>(() => _i441.ReceiveChatCubit());
     gh.factory<_i1002.QuizQuestionBloc>(() => _i1002.QuizQuestionBloc());
-    gh.singleton<_i924.AuthNotification>(() => _i924.AuthNotification());
     gh.singleton<_i536.TimetableNotificationService>(
         () => timetableModule.timetableNotificationService);
     gh.lazySingleton<_i170.HiveInterface>(() => registerModule.hive);
@@ -137,6 +136,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => registerModule.firebaseMessaging);
     gh.singleton<_i292.DioClient>(
         () => _i292.DioClient(gh<_i170.HiveInterface>()));
+    gh.singleton<_i924.AuthNotification>(
+        () => _i924.AuthNotification(gh<_i292.DioClient>()));
     gh.lazySingleton<_i250.QuizRemoteDataSource>(() =>
         _i250.QuizRemoteDataSourceImpl(
             messaging: gh<_i892.FirebaseMessaging>()));

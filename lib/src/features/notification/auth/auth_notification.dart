@@ -1,14 +1,19 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:hubtsocial_mobile/src/constants/end_point.dart';
-import 'package:hubtsocial_mobile/src/core/api/api_request.dart';
+import 'package:hubtsocial_mobile/src/core/api/dio_client.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_key.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/auth/domain/entities/user_token.dart';
 import 'package:injectable/injectable.dart';
+import 'package:dio/dio.dart';
 
 @singleton
 class AuthNotification {
+  final DioClient _dioClient;
+
+  AuthNotification(this._dioClient);
+
   Future<void> registerForNotifications() async {
     try {
       // Request notification permissions
@@ -28,10 +33,12 @@ class AuthNotification {
         UserToken userToken = tokenBox.get(LocalStorageKey.userToken);
 
         // Send FCM token to backend
-        final response = await APIRequest.put(
-          url: EndPoint.updateFcmToken,
-          token: userToken.accessToken,
-          body: {"fcmToken": fcmToken},
+        final response = await _dioClient.put(
+          EndPoint.updateFcmToken,
+          data: {"fcmToken": fcmToken},
+          options: Options(
+            headers: {'Authorization': 'Bearer ${userToken.accessToken}'},
+          ),
         );
 
         if (response.statusCode == 200) {

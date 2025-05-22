@@ -1,9 +1,9 @@
-import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/constants/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/chat/data/models/send_chat_request_model.dart';
 import 'package:signalr_netcore/signalr_client.dart';
-import '../../../../core/api/api_request.dart';
+import '../../../../core/api/dio_client.dart';
+import 'package:hubtsocial_mobile/src/core/injections/injections.dart';
 
 class ChatHubConnection {
   ChatHubConnection._();
@@ -19,12 +19,14 @@ class ChatHubConnection {
       .withAutomaticReconnect()
       .build();
 
+  static final DioClient _dioClient = getIt<DioClient>();
+
   static bool _isInitialized = false;
   static bool _isReconnecting = false;
 
   static Future<String> getAccessTokenFactory() async {
     try {
-      final userToken = await APIRequest.getUserToken(Hive);
+      final userToken = await _dioClient.getUserToken();
       final token = userToken.accessToken;
       logger.d("AccessToken length: ${token.length}");
       if (token.isEmpty) throw Exception("Access token is empty.");
