@@ -315,5 +315,21 @@
   "seminar": "Hội thảo",
   "@seminar": {},
   "retake_exam": "Thi lại",
-  "@retake_exam": {}
+  "@retake_exam": {},
+  "functions": "Chức năng",
+  "@functions": {},
+  "revise": "Ôn tập",
+  "@revise": {},
+  "module": "Học phần",
+  "@module": {},
+  "academic_result": "Kết quả học tập",
+  "@academic_result": {},
+  "pay_tuition": "Đóng học phí",
+  "@pay_tuition": {},
+  "school_survey": "Khảo sát trường học",
+  "@school_survey": {},
+  "instructor_evaluation": "Đánh giá giảng viên",
+  "@instructor_evaluation": {},
+  "academic_advisor": "Cố vấn học tập",
+  "@academic_advisor": {}
 }

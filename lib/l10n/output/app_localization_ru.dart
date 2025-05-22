@@ -411,4 +411,28 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get retake_exam => 'Пересдать экзамен';
+
+  @override
+  String get functions => 'Функции';
+
+  @override
+  String get revise => 'Повторение';
+
+  @override
+  String get module => 'Модуль';
+
+  @override
+  String get academic_result => 'Учебные результаты';
+
+  @override
+  String get pay_tuition => 'Оплата обучения';
+
+  @override
+  String get school_survey => 'Школьный опрос';
+
+  @override
+  String get instructor_evaluation => 'Оценка преподавателя';
+
+  @override
+  String get academic_advisor => 'Учебный консультант';
 }

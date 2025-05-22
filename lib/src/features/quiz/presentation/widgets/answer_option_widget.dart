@@ -32,7 +32,7 @@ class _AnswerOptionWidgetState extends State<AnswerOptionWidget> {
       return context.colorScheme.error;
     }
 
-    return Colors.grey[700]!;
+    return context.colorScheme.surfaceContainerHighest;
   }
 
   IconData? _getIcon() {
@@ -69,10 +69,8 @@ class _AnswerOptionWidgetState extends State<AnswerOptionWidget> {
               Expanded(
                 child: Text(
                   widget.text,
-                  style: TextStyle(
+                  style: context.textTheme.labelLarge?.copyWith(
                     color: color,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),

@@ -411,4 +411,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retake_exam => 'Retake exam';
+
+  @override
+  String get functions => 'Functions';
+
+  @override
+  String get revise => 'Revise';
+
+  @override
+  String get module => 'Module';
+
+  @override
+  String get academic_result => 'Academic result';
+
+  @override
+  String get pay_tuition => 'Pay tuition';
+
+  @override
+  String get school_survey => 'School survey';
+
+  @override
+  String get instructor_evaluation => 'Instructor Evaluation';
+
+  @override
+  String get academic_advisor => 'Academic advisor';
 }

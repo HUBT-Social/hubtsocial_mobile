@@ -411,4 +411,28 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get retake_exam => '재시험';
+
+  @override
+  String get functions => '기능';
+
+  @override
+  String get revise => '복습';
+
+  @override
+  String get module => '모듈';
+
+  @override
+  String get academic_result => '학업 성적';
+
+  @override
+  String get pay_tuition => '등록금 납부';
+
+  @override
+  String get school_survey => '학교 설문조사';
+
+  @override
+  String get instructor_evaluation => '강사 평가';
+
+  @override
+  String get academic_advisor => '학업 상담';
 }

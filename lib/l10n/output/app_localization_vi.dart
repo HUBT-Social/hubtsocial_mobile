@@ -411,4 +411,28 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get retake_exam => 'Thi lại';
+
+  @override
+  String get functions => 'Chức năng';
+
+  @override
+  String get revise => 'Ôn tập';
+
+  @override
+  String get module => 'Học phần';
+
+  @override
+  String get academic_result => 'Kết quả học tập';
+
+  @override
+  String get pay_tuition => 'Đóng học phí';
+
+  @override
+  String get school_survey => 'Khảo sát trường học';
+
+  @override
+  String get instructor_evaluation => 'Đánh giá giảng viên';
+
+  @override
+  String get academic_advisor => 'Cố vấn học tập';
 }

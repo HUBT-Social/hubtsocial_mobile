@@ -27,21 +27,24 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final List<_FunctionItem> functions = [
-      _FunctionItem("Revise", Icons.grid_view, Colors.red.shade300, () {
+      _FunctionItem(context.loc.revise, Icons.grid_view, Colors.red.shade300,
+          () {
         AppRoute.quiz.push(context);
       }),
-      _FunctionItem("Module", Icons.menu_book, Colors.amber.shade400, () {}),
       _FunctionItem(
-          "Academic result", Icons.emoji_events, Colors.blue.shade700, () {}),
-      _FunctionItem("Student list", Icons.people, Colors.pink.shade200, () {}),
+          context.loc.module, Icons.menu_book, Colors.amber.shade400, () {}),
+      _FunctionItem(context.loc.academic_result, Icons.emoji_events,
+          Colors.blue.shade700, () {}),
       _FunctionItem(
-          "Pay tuition", Icons.attach_money, Colors.green.shade400, () {}),
-      _FunctionItem(
-          "School survey", Icons.poll, Colors.lightBlue.shade400, () {}),
-      _FunctionItem("Instructor Evaluation", Icons.rate_review,
+          context.loc.student_list, Icons.people, Colors.pink.shade200, () {}),
+      _FunctionItem(context.loc.pay_tuition, Icons.attach_money,
+          Colors.green.shade400, () {}),
+      _FunctionItem(context.loc.school_survey, Icons.poll,
+          Colors.lightBlue.shade400, () {}),
+      _FunctionItem(context.loc.instructor_evaluation, Icons.rate_review,
           Colors.deepOrange.shade300, () {}),
-      _FunctionItem(
-          "Academic advisor", Icons.person_pin, Colors.red.shade700, () {}),
+      _FunctionItem(context.loc.academic_advisor, Icons.person_pin,
+          Colors.red.shade700, () {}),
     ];
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxIsScrolled) => [
@@ -98,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Functions",
+                  context.loc.functions,
                   style: context.textTheme.headlineMedium
                       ?.copyWith(color: context.colorScheme.onSurface),
                 ),

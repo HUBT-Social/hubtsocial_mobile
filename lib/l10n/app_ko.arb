@@ -317,5 +317,21 @@
   "seminar": "세미나",
   "@seminar": {},
   "retake_exam": "재시험",
-  "@retake_exam": {}
+  "@retake_exam": {},
+  "functions": "기능",
+  "@functions": {},
+  "revise": "복습",
+  "@revise": {},
+  "module": "모듈",
+  "@module": {},
+  "academic_result": "학업 성적",
+  "@academic_result": {},
+  "pay_tuition": "등록금 납부",
+  "@pay_tuition": {},
+  "school_survey": "학교 설문조사",
+  "@school_survey": {},
+  "instructor_evaluation": "강사 평가",
+  "@instructor_evaluation": {},
+  "academic_advisor": "학업 상담",
+  "@academic_advisor": {}
 }

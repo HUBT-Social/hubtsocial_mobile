@@ -315,5 +315,21 @@
   "seminar": "Seminar",
   "@seminar": {},
   "retake_exam": "Retake exam",
-  "@retake_exam": {}
+  "@retake_exam": {},
+  "functions": "Functions",
+  "@functions": {},
+  "revise": "Revise",
+  "@revise": {},
+  "module": "Module",
+  "@module": {},
+  "academic_result": "Academic result",
+  "@academic_result": {},
+  "pay_tuition": "Pay tuition",
+  "@pay_tuition": {},
+  "school_survey": "School survey",
+  "@school_survey": {},
+  "instructor_evaluation": "Instructor Evaluation",
+  "@instructor_evaluation": {},
+  "academic_advisor": "Academic advisor",
+  "@academic_advisor": {}
 }

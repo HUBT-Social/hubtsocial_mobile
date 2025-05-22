@@ -315,5 +315,21 @@
   "seminar": "セミナー",
   "@seminar": {},
   "retake_exam": "再試験",
-  "@retake_exam": {}
+  "@retake_exam": {},
+  "functions": "機能",
+  "@functions": {},
+  "revise": "復習",
+  "@revise": {},
+  "module": "モジュール",
+  "@module": {},
+  "academic_result": "学業成績",
+  "@academic_result": {},
+  "pay_tuition": "授業料の支払い",
+  "@pay_tuition": {},
+  "school_survey": "学校調査",
+  "@school_survey": {},
+  "instructor_evaluation": "講師評価",
+  "@instructor_evaluation": {},
+  "academic_advisor": "学業アドバイザー",
+  "@academic_advisor": {}
 }
