@@ -26,11 +26,8 @@ class ChatHubConnection {
 
   static Future<String> getAccessTokenFactory() async {
     try {
-      final userToken = await _dioClient.getUserToken();
-      final token = userToken.accessToken;
-      logger.d("AccessToken length: ${token.length}");
-      if (token.isEmpty) throw Exception("Access token is empty.");
-      return token;
+      final token = await _dioClient.getUserToken();
+      return token.toString();
     } catch (e) {
       logger.e("❌ Error retrieving access token: $e");
       return "";

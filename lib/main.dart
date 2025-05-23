@@ -32,10 +32,10 @@ void main() async {
   GoRouter.optionURLReflectsImperativeAPIs = true;
 
   await Environment.initialize();
+  await AppLocalStorage().initLocalStorage();
 
   await Future.wait([
     configureDependencies(),
-    AppLocalStorage().initLocalStorage(),
     _initFirebase(),
   ]);
 

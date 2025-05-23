@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/url_image.dart';
 import 'package:hubtsocial_mobile/src/features/user/domain/entities/user.dart';
+import 'package:shimmer/shimmer.dart';
 
 class UserHeaderWidget extends StatelessWidget {
   final User user;
@@ -61,7 +62,7 @@ class UserHeaderWidget extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "aaaaa",
+                            "TH27.33",
                             style: context.textTheme.bodyLarge?.copyWith(
                               color: context.colorScheme.onPrimary,
                             ),
@@ -94,6 +95,124 @@ class UserHeaderWidget extends StatelessWidget {
               "35.4",
               style: context.textTheme.headlineMedium?.copyWith(
                 color: context.colorScheme.primary,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class UserHeaderShimmer extends StatelessWidget {
+  const UserHeaderShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        ClipPath(
+          clipper: _SlantClipper(),
+          child: Container(
+            width: double.infinity,
+            padding: EdgeInsets.only(
+                left: 20.w, top: 12.h, right: 20.w, bottom: 50.h),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xff52C755),
+                  Color(0xff43B446),
+                  Color(0xff33A036),
+                  Color(0xff248D27),
+                ],
+              ),
+              boxShadow: [
+                BoxShadow(blurRadius: 4, color: context.colorScheme.shadow)
+              ],
+            ),
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 70.r,
+                        height: 70.r,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      SizedBox(width: 12.w),
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 120.w,
+                              height: 24.h,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(4.r),
+                              ),
+                            ),
+                            SizedBox(height: 8.h),
+                            Container(
+                              width: 100.w,
+                              height: 20.h,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(4.r),
+                              ),
+                            ),
+                            SizedBox(height: 8.h),
+                            Container(
+                              width: 80.w,
+                              height: 20.h,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(4.r),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // GPA circle shimmer
+        Positioned(
+          right: 24.w,
+          bottom: 12.h,
+          child: Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              padding: EdgeInsets.all(14.r),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 12.r,
+                    color: context.colorScheme.shadow.withAlpha(128),
+                  ),
+                ],
+              ),
+              child: Container(
+                width: 30.w,
+                height: 30.h,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
               ),
             ),
           ),

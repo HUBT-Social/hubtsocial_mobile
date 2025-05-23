@@ -37,8 +37,8 @@ class DioClient {
     return Dio(
       BaseOptions(
         baseUrl: EndPoint.apiUrl,
-        connectTimeout: const Duration(seconds: 300),
-        receiveTimeout: const Duration(seconds: 300),
+        connectTimeout: const Duration(seconds: 600),
+        receiveTimeout: const Duration(seconds: 600),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -52,7 +52,7 @@ class DioClient {
   /// Sets up all interceptors for the Dio instance
   void _setupInterceptors() {
     _dio.interceptors.addAll([
-      _AuthInterceptor(_hiveAuth, this),
+      _AuthInterceptor(this),
       _LoggingInterceptor(),
       _ErrorInterceptor(),
     ]);
@@ -181,153 +181,10 @@ class DioClient {
     return queryParameters;
   }
 
-  /// Gets the current user token, refreshing it if expired
+  /// Gets the current user token, refreshing it if necessary
   ///
   /// Returns the current valid token or throws an exception if token is invalid
-  Future<UserTokenModel> getUserToken() async {
-    await _ensureTokenBoxOpen();
-
-    final token = _getStoredToken();
-    if (token == null) {
-      throw UnauthorizedException(
-        message: 'No token found',
-        statusCode: '401',
-      );
-    }
-
-    if (_isExpiredToken(token.accessToken)) {
-      return _refreshToken(token);
-    }
-
-    return token;
-  }
-
-  /// Ensures the token box is open and available
-  Future<void> _ensureTokenBoxOpen() async {
-    if (!await _hiveAuth.boxExists(LocalStorageKey.token)) {
-      await _hiveAuth.openBox(LocalStorageKey.token);
-    }
-    if (!_hiveAuth.isBoxOpen(LocalStorageKey.token)) {
-      await _hiveAuth.openBox(LocalStorageKey.token);
-    }
-  }
-
-  /// Gets the stored token from Hive
-  UserTokenModel? _getStoredToken() {
-    return _hiveAuth.box(LocalStorageKey.token).get(LocalStorageKey.userToken);
-  }
-
-  /// Refreshes the token using the refresh token
-  Future<UserTokenModel> _refreshToken(UserTokenModel token) async {
-    try {
-      final response = await post<Map<String, dynamic>>(
-        EndPoint.authRefreshToken,
-        data: {"refreshToken": token.refreshToken},
-        options: Options(
-          headers: {'Authorization': 'Bearer ${token.accessToken}'},
-        ),
-      );
-
-      if (response.statusCode == 200 && response.data != null) {
-        final newToken = UserTokenModel.fromMap(response.data!);
-        await _saveToken(newToken);
-        return newToken;
-      }
-
-      throw ServerException(
-        message:
-            response.data?['message']?.toString() ?? 'Failed to refresh token',
-        statusCode: response.statusCode?.toString() ?? '401',
-      );
-    } catch (e) {
-      if (e is DioException && e.response?.statusCode == 401) {
-        await _clearToken();
-      }
-      rethrow;
-    }
-  }
-
-  /// Saves a token to Hive storage
-  Future<void> _saveToken(UserTokenModel token) async {
-    await _hiveAuth
-        .box(LocalStorageKey.token)
-        .put(LocalStorageKey.userToken, token);
-  }
-
-  /// Checks if a token is expired
-  bool _isExpiredToken(String token) {
-    try {
-      final payload = jwtDecode(token).payload;
-      final expiredTime = payload['exp'] as int;
-      final currentTimestamp = DateTime.now().millisecondsSinceEpoch;
-      return currentTimestamp ~/ 1000 > expiredTime;
-    } catch (e) {
-      logger.e('Error checking token expiration: $e');
-      return true;
-    }
-  }
-
-  /// Clears the token and redirects to the login screen
-  Future<void> _clearToken() async {
-    await _hiveAuth.box(LocalStorageKey.token).clear();
-    if (navigatorKey.currentContext != null) {
-      AppRoute.getStarted.go(navigatorKey.currentContext!);
-    }
-  }
-}
-
-/// Interceptor that handles authentication
-class _AuthInterceptor extends Interceptor {
-  final HiveInterface _hiveAuth;
-  final DioClient _dioClient;
-  bool _isRefreshing = false;
-  DateTime? _lastRefreshAttempt;
-  Completer<UserTokenModel?>? _refreshCompleter;
-
-  _AuthInterceptor(this._hiveAuth, this._dioClient);
-
-  @override
-  Future<void> onRequest(
-    RequestOptions options,
-    RequestInterceptorHandler handler,
-  ) async {
-    try {
-      if (_isAuthEndpoint(options.path)) {
-        handler.next(options);
-        return;
-      }
-
-      final token = await _getValidToken();
-      if (token != null) {
-        options.headers['Authorization'] = 'Bearer $token';
-      }
-      handler.next(options);
-    } catch (e) {
-      logger.e('Error in auth interceptor: $e');
-      if (e is UnauthorizedException || e is ServerException) {
-        handler.reject(
-          DioException(
-            requestOptions: options,
-            error: e,
-          ),
-        );
-      } else {
-        handler.next(options);
-      }
-    }
-  }
-
-  /// Checks if the endpoint is an authentication endpoint
-  bool _isAuthEndpoint(String path) {
-    return path.contains(EndPoint.authSignIn) ||
-        path.contains(EndPoint.authSignUp) ||
-        path.contains(EndPoint.authRefreshToken) ||
-        path.contains(EndPoint.authSignInTwoFactor) ||
-        path.contains(EndPoint.authSignUpVerifyEmail);
-  }
-
-  /// Gets a valid token, refreshing if necessary
-  Future<String?> _getValidToken() async {
+  Future<String?> getUserToken() async {
     try {
       await _ensureTokenBoxOpen();
 
@@ -337,8 +194,9 @@ class _AuthInterceptor extends Interceptor {
         return null;
       }
 
-      if (_shouldRefreshToken(token)) {
-        return await _handleTokenRefresh(token);
+      if (_isExpiredToken(token.accessToken) ||
+          _isTokenExpiringSoon(token.accessToken)) {
+        return await _refreshToken(token);
       }
 
       return token.accessToken;
@@ -361,111 +219,6 @@ class _AuthInterceptor extends Interceptor {
   /// Gets the stored token
   UserTokenModel? _getStoredToken() {
     return _hiveAuth.box(LocalStorageKey.token).get(LocalStorageKey.userToken);
-  }
-
-  /// Checks if the token should be refreshed
-  bool _shouldRefreshToken(UserTokenModel token) {
-    return _isExpiredToken(token.accessToken) ||
-        _isTokenExpiringSoon(token.accessToken);
-  }
-
-  /// Handles token refresh with proper locking and error handling
-  Future<String?> _handleTokenRefresh(UserTokenModel token) async {
-    if (_isRefreshing && _refreshCompleter != null) {
-      return await _waitForRefresh();
-    }
-
-    if (_isTooSoonToRefresh()) {
-      return token.accessToken;
-    }
-
-    return await _startRefresh(token);
-  }
-
-  /// Waits for an ongoing refresh operation
-  Future<String?> _waitForRefresh() async {
-    try {
-      final newToken = await _refreshCompleter!.future;
-      return newToken?.accessToken;
-    } catch (e) {
-      logger.e('Error waiting for token refresh: $e');
-      return null;
-    }
-  }
-
-  /// Checks if it's too soon to attempt another refresh
-  bool _isTooSoonToRefresh() {
-    if (_lastRefreshAttempt == null) return false;
-    return DateTime.now().difference(_lastRefreshAttempt!) <
-        const Duration(seconds: 30);
-  }
-
-  /// Starts a new token refresh operation
-  Future<String?> _startRefresh(UserTokenModel token) async {
-    _isRefreshing = true;
-    _lastRefreshAttempt = DateTime.now();
-    _refreshCompleter = Completer<UserTokenModel?>();
-
-    try {
-      final response = await _dioClient.post<Map<String, dynamic>>(
-        EndPoint.authRefreshToken,
-        data: {"refreshToken": token.refreshToken},
-        options: Options(
-          headers: {'Authorization': 'Bearer ${token.accessToken}'},
-        ),
-      );
-
-      if (response.statusCode == 200 && response.data != null) {
-        final newToken = UserTokenModel.fromMap(response.data!);
-        await _saveToken(newToken);
-        _refreshCompleter?.complete(newToken);
-        return newToken.accessToken;
-      }
-
-      return await _handleRefreshFailure(token, response);
-    } catch (e) {
-      return await _handleRefreshError(token, e);
-    } finally {
-      _isRefreshing = false;
-      _refreshCompleter = null;
-    }
-  }
-
-  /// Handles refresh failure
-  Future<String?> _handleRefreshFailure(
-      UserTokenModel token, Response response) async {
-    logger.e('Failed to refresh token');
-    if (!_isExpiredToken(token.accessToken)) {
-      _refreshCompleter?.complete(token);
-      return token.accessToken;
-    }
-    _refreshCompleter?.completeError('Failed to refresh token');
-    if (response.statusCode == 401) {
-      await _clearToken();
-    }
-    return null;
-  }
-
-  /// Handles refresh error
-  Future<String?> _handleRefreshError(
-      UserTokenModel token, dynamic error) async {
-    logger.e('Error refreshing token: $error');
-    if (!_isExpiredToken(token.accessToken)) {
-      _refreshCompleter?.complete(token);
-      return token.accessToken;
-    }
-    _refreshCompleter?.completeError(error);
-    if (error is DioException && error.response?.statusCode == 401) {
-      await _clearToken();
-    }
-    return null;
-  }
-
-  /// Saves a token to storage
-  Future<void> _saveToken(UserTokenModel token) async {
-    await _hiveAuth
-        .box(LocalStorageKey.token)
-        .put(LocalStorageKey.userToken, token);
   }
 
   /// Checks if a token is expired
@@ -494,6 +247,49 @@ class _AuthInterceptor extends Interceptor {
     }
   }
 
+  /// Refreshes the token using the refresh token
+  Future<String?> _refreshToken(UserTokenModel token) async {
+    try {
+      final response = await _dio.post(
+        EndPoint.authRefreshToken,
+        data: {"refreshToken": token.refreshToken},
+      );
+
+      if (response.statusCode == 200 && response.data != null) {
+        try {
+          final newToken = UserTokenModel.fromMap(response.data);
+          await _saveToken(newToken);
+          return newToken.accessToken;
+        } catch (e) {
+          logger.e('Error parsing refresh token response: $e');
+          throw FormatException('Failed to parse refresh token response');
+        }
+      }
+
+      if (response.statusCode == 401) {
+        logger.w('Refresh token expired or invalid');
+        await _clearToken();
+        return null;
+      }
+
+      logger.e('Failed to refresh token: ${response.statusCode}');
+      return null;
+    } catch (e) {
+      logger.e('Error during token refresh: $e');
+      if (e is DioException && e.response?.statusCode == 401) {
+        await _clearToken();
+      }
+      return null;
+    }
+  }
+
+  /// Saves a token to storage
+  Future<void> _saveToken(UserTokenModel token) async {
+    await _hiveAuth
+        .box(LocalStorageKey.token)
+        .put(LocalStorageKey.userToken, token);
+  }
+
   /// Clears the token and redirects to login
   Future<void> _clearToken() async {
     try {
@@ -504,6 +300,53 @@ class _AuthInterceptor extends Interceptor {
     } catch (e) {
       logger.e('Error clearing token: $e');
     }
+  }
+}
+
+/// Interceptor that handles authentication
+class _AuthInterceptor extends Interceptor {
+  final DioClient _dioClient;
+
+  _AuthInterceptor(this._dioClient);
+
+  @override
+  Future<void> onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
+    try {
+      if (_isAuthEndpoint(options.path)) {
+        handler.next(options);
+        return;
+      }
+
+      final token = await _dioClient.getUserToken();
+      if (token != null) {
+        options.headers['Authorization'] = 'Bearer $token';
+      }
+      handler.next(options);
+    } catch (e) {
+      logger.e('Error in auth interceptor: $e');
+      if (e is UnauthorizedException || e is ServerException) {
+        handler.reject(
+          DioException(
+            requestOptions: options,
+            error: e,
+          ),
+        );
+      } else {
+        handler.next(options);
+      }
+    }
+  }
+
+  /// Checks if the endpoint is an authentication endpoint
+  bool _isAuthEndpoint(String path) {
+    return path.contains(EndPoint.authSignIn) ||
+        path.contains(EndPoint.authSignUp) ||
+        path.contains(EndPoint.authRefreshToken) ||
+        path.contains(EndPoint.authSignInTwoFactor) ||
+        path.contains(EndPoint.authSignUpVerifyEmail);
   }
 }
 

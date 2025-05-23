@@ -4,9 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/injections/injections.dart';
 import 'package:hubtsocial_mobile/src/features/home/presentation/widgets/user_header_widget.dart';
+import 'package:hubtsocial_mobile/src/features/main_wrapper/presentation/widgets/main_app_bar.dart';
 
 import '../../../../router/route.dart';
-import '../../../user/domain/entities/user.dart';
 import '../../../user/presentation/bloc/user_bloc.dart';
 import '../../../timetable/data/datasources/timetable_remote_data_source.dart';
 
@@ -48,35 +48,20 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxIsScrolled) => [
-        SliverAppBar(
-          toolbarHeight: 52.h,
-          floating: true,
-          snap: true,
-          title: Text(
-            context.loc.home,
-            style: context.textTheme.headlineSmall?.copyWith(
-                color: context.colorScheme.surface,
-                fontWeight: FontWeight.w600),
-          ),
-          expandedHeight: 0,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          flexibleSpace: Container(
-            width: double.infinity,
-            padding: EdgeInsets.fromLTRB(20.w, 50.h, 20.w, 100.h),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xff52C755),
-                  Color(0xff43B446),
-                  Color(0xff33A036),
-                  Color(0xff248D27),
-                ],
-                // begin: Alignment.topLeft,
-                // end: Alignment.bottomRight,
+        MainAppBar(
+          title: context.loc.home,
+          actions: [
+            IconButton(
+              onPressed: () {
+                AppRoute.notifications.go(context);
+              },
+              icon: Icon(
+                Icons.notifications,
+                size: 24.r,
+                color: context.colorScheme.onPrimary,
               ),
             ),
-          ),
+          ],
         ),
       ],
       body: CustomScrollView(
@@ -86,10 +71,12 @@ class _HomeScreenState extends State<HomeScreen> {
             child: BlocBuilder<UserBloc, UserState>(
               builder: (context, state) {
                 if (state is UserProfileLoaded) {
-                  User user = state.user;
-                  return UserHeaderWidget(user: user);
+                  context.userProvider.initUser(state.user);
+                  return UserHeaderWidget(user: state.user);
+                } else if (state is UserProfileLoading) {
+                  return const UserHeaderShimmer();
                 } else {
-                  return SizedBox(height: 200.h);
+                  return const UserHeaderShimmer();
                 }
               },
             ),

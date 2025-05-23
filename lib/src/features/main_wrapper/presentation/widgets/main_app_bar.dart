@@ -16,24 +16,31 @@ class MainAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       toolbarHeight: 52.h,
-      backgroundColor:
-          // Theme.of(context).colorScheme.surfaceContainerHighest.withAlpha(192),
-          Theme.of(context).colorScheme.surfaceContainerHighest,
       floating: true,
       snap: true,
-      // flexibleSpace: ClipRRect(
-      //   child: BackdropFilter(
-      //     filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-      //     blendMode: BlendMode.srcOver,
-      //     child: Container(
-      //       color: Colors.transparent,
-      //     ),
-      //   ),
-      // ),
+      expandedHeight: 0,
+      elevation: 0,
+      automaticallyImplyLeading: false,
+      flexibleSpace: Container(
+        width: double.infinity,
+        padding: EdgeInsets.fromLTRB(20.w, 50.h, 20.w, 100.h),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xff52C755),
+              Color(0xff43B446),
+              Color(0xff33A036),
+              Color(0xff248D27),
+            ],
+            // begin: Alignment.topLeft,
+            // end: Alignment.bottomRight,
+          ),
+        ),
+      ),
       title: Text(
         title,
         style: context.textTheme.headlineSmall?.copyWith(
-            color: context.colorScheme.onSurface, fontWeight: FontWeight.w600),
+            color: context.colorScheme.onPrimary, fontWeight: FontWeight.w600),
       ),
       actions: actions,
     );
