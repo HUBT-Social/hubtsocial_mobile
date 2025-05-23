@@ -3,13 +3,19 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import '../../../main.dart';
 import '../logger/logger.dart';
 import 'aes_cipher.dart';
 
 class DeviceId {
   static String _uniqueDeviceId = "";
 
-  static String getUniqueDeviceId() {
+  static Future<String> getUniqueDeviceId() async {
+    if (_uniqueDeviceId.isEmpty) {
+      logger.d("uniqueDeviceId is empty");
+      await setupUniqueDeviceId();
+    }
+
     return _uniqueDeviceId;
   }
 
@@ -43,20 +49,26 @@ class DeviceId {
 
   static Future<void> setupUniqueDeviceId() async {
     var deviceInfo = DeviceInfoPlugin();
+    var uniqueDeviceId = "";
 
     if (Platform.isIOS) {
       var iosDeviceInfo = await deviceInfo.iosInfo;
-      _uniqueDeviceId =
+      uniqueDeviceId =
           _readIosDeviceInfo(iosDeviceInfo).toString(); // unique ID on iOS
     } else if (Platform.isAndroid) {
       var androidDeviceInfo = await deviceInfo.androidInfo;
-      _uniqueDeviceId = _readAndroidDeviceInfo(androidDeviceInfo);
+      uniqueDeviceId = _readAndroidDeviceInfo(androidDeviceInfo);
+    }
+
+    if (!isInitializedFirebase) {
+      await initFirebase();
+      return;
     }
 
     var key = await FirebaseMessaging.instance.getToken();
     final cipher = AESCipher(key!);
 
-    _uniqueDeviceId = cipher.encryptText(_uniqueDeviceId);
+    _uniqueDeviceId = cipher.encryptText(uniqueDeviceId);
 
     logger.d("uniqueDeviceId: $_uniqueDeviceId");
   }

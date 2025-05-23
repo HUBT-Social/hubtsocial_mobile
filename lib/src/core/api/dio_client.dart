@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hubtsocial_mobile/src/core/api/errors/exceptions.dart';
+import 'package:hubtsocial_mobile/src/core/app/providers/hive_provider.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/device_id.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
@@ -42,7 +43,6 @@ class DioClient {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'User-Agent': DeviceId.getUniqueDeviceId(),
         },
         validateStatus: (status) => status != null && status < 500,
       ),
@@ -250,9 +250,17 @@ class DioClient {
   /// Refreshes the token using the refresh token
   Future<String?> _refreshToken(UserTokenModel token) async {
     try {
+      var deviceId = await DeviceId.getUniqueDeviceId();
+
       final response = await _dio.post(
         EndPoint.authRefreshToken,
         data: {"refreshToken": token.refreshToken},
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${token.accessToken}',
+            'User-Agent': deviceId,
+          },
+        ),
       );
 
       if (response.statusCode == 200 && response.data != null) {
@@ -293,10 +301,8 @@ class DioClient {
   /// Clears the token and redirects to login
   Future<void> _clearToken() async {
     try {
-      await _hiveAuth.box(LocalStorageKey.token).clear();
-      if (navigatorKey.currentContext != null) {
-        AppRoute.getStarted.go(navigatorKey.currentContext!);
-      }
+      HiveProvider.clearToken(
+          () => AppRoute.getStarted.go(navigatorKey.currentContext!));
     } catch (e) {
       logger.e('Error clearing token: $e');
     }
@@ -323,6 +329,7 @@ class _AuthInterceptor extends Interceptor {
       final token = await _dioClient.getUserToken();
       if (token != null) {
         options.headers['Authorization'] = 'Bearer $token';
+        options.headers['User-Agent'] = await DeviceId.getUniqueDeviceId();
       }
       handler.next(options);
     } catch (e) {

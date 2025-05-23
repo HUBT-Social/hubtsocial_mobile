@@ -36,7 +36,7 @@ void main() async {
 
   await Future.wait([
     configureDependencies(),
-    _initFirebase(),
+    initFirebase(),
   ]);
 
   await Future.wait([
@@ -52,7 +52,13 @@ void main() async {
   runApp(MyApp());
 }
 
-Future<void> _initFirebase() async {
+bool isInitializedFirebase = false;
+
+Future<void> initFirebase() async {
+  if (isInitializedFirebase) {
+    logger.d("Firebase already initialized");
+    return;
+  }
   if (kReleaseMode) {
     await Firebase.initializeApp(
       options: firebaseProd.DefaultFirebaseOptions.currentPlatform,
@@ -90,7 +96,7 @@ Future<void> _initFirebase() async {
   };
 
   final fcmToken = await FirebaseMessaging.instance.getToken();
-
+  isInitializedFirebase = true;
   logger.d("fcmToken : $fcmToken");
 }
 
