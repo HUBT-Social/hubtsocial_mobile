@@ -8,6 +8,8 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   description: 'This channel is used for important notifications.',
   importance: Importance.high,
   playSound: true,
+  enableVibration: true,
+  showBadge: true,
 );
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -21,11 +23,28 @@ class LocalMessage {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
+    final DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
+
     final InitializationSettings initializationSettings =
         InitializationSettings(
       android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
     );
 
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        // Handle notification tap
+        print('Notification tapped: ${response.payload}');
+      },
+    );
+
+    // Create the notification channel
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
@@ -44,11 +63,18 @@ class LocalMessage {
       importance: Importance.high,
       priority: Priority.high,
       playSound: true,
+      enableVibration: true,
+      showWhen: true,
       icon: '@mipmap/ic_launcher',
     );
 
     final notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
+      iOS: const DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      ),
     );
 
     await flutterLocalNotificationsPlugin.show(
@@ -74,10 +100,19 @@ class LocalMessage {
       importance: Importance.high,
       priority: Priority.high,
       playSound: true,
+      enableVibration: true,
+      showWhen: true,
       icon: '@mipmap/ic_launcher',
     );
 
-    final notificationDetails = NotificationDetails(android: androidDetails);
+    final notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: const DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      ),
+    );
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
@@ -88,7 +123,7 @@ class LocalMessage {
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       payload: payload,
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
   }
 

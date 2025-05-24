@@ -87,12 +87,22 @@ class _ProfileScreenState extends State<ProfileScreen>
         children: [
           Padding(
             padding: EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Consumer<UserProvider>(
-                  builder: (context, userProvider, child) {
-                    final user = userProvider.user;
-                    return Row(
+            child: Consumer<UserProvider>(
+              builder: (context, userProvider, child) {
+                final user = userProvider.user;
+
+                if (user == null) {
+                  // Display a loading indicator or a placeholder if user is null
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                // Create a local non-nullable variable
+                final nonNullUser = user;
+
+                // Now 'nonNullUser' is guaranteed to be non-null here
+                return Column(
+                  children: [
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
@@ -110,7 +120,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     children: [
                                       Flexible(
                                         child: Text(
-                                          user!.fullname,
+                                          nonNullUser
+                                              .fullname, // Use nonNullUser
                                           style: context
                                               .textTheme.headlineMedium
                                               ?.copyWith(
@@ -133,7 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               Padding(
                                 padding: EdgeInsets.only(left: 18),
                                 child: Text(
-                                  '@${user.userName}',
+                                  '@${nonNullUser.userName}', // Use nonNullUser
                                   style: context.textTheme.labelLarge?.copyWith(
                                     color: context.colorScheme.onSurfaceVariant,
                                     fontWeight: FontWeight.w500,
@@ -154,11 +165,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                         SizedBox(width: 8),
                         GestureDetector(
                           onTap: () {
-                            if (user.avatarUrl.isNotEmpty) {
+                            if (nonNullUser.avatarUrl.isNotEmpty) {
+                              // Use nonNullUser
                               navigatorKey.currentContext?.push(
                                 AppRoute.fullProfile.path,
                                 extra: {
-                                  'imageUrl': user.avatarUrl,
+                                  'imageUrl':
+                                      nonNullUser.avatarUrl, // Use nonNullUser
                                   'heroTag': 'profile-image',
                                 },
                               );
@@ -168,8 +181,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                             tag: 'profile-image',
                             child: CircleAvatar(
                               radius: 42,
-                              backgroundImage: user.avatarUrl.isNotEmpty
-                                  ? NetworkImage(user.avatarUrl)
+                              backgroundImage: nonNullUser
+                                      .avatarUrl.isNotEmpty // Use nonNullUser
+                                  ? NetworkImage(
+                                      nonNullUser.avatarUrl) // Use nonNullUser
                                   : const AssetImage(
                                           'assets/images/default_avatar.png')
                                       as ImageProvider,
@@ -177,12 +192,12 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ),
                         ),
                       ],
-                    );
-                  },
-                ),
-                SizedBox(height: 32),
-                const ProfileActionButtons(),
-              ],
+                    ),
+                    SizedBox(height: 32),
+                    const ProfileActionButtons(),
+                  ],
+                );
+              },
             ),
           ),
           SizedBox(height: 16),
