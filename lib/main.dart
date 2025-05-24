@@ -44,11 +44,10 @@ void main() async {
     _initNotification(),
   ]);
 
-  // Khởi tạo background service
-  //await TimetableBackgroundService.initialize();
-  //await TimetableBackgroundService.schedulePeriodicTask();
+  // Initialize timetable notification service
+  final timetableNotificationService = getIt<TimetableNotificationService>();
+  await timetableNotificationService.scheduleNotificationsFromHive();
 
-  getIt<TimetableNotificationService>().scheduleNotificationsFromHive();
   runApp(MyApp());
 }
 

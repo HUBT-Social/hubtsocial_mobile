@@ -45,16 +45,17 @@ class TimetableNotificationService {
       for (var reformTimetable in timetable.reformTimetables) {
         if (reformTimetable.startTime != null &&
             reformTimetable.endTime != null) {
-          // Schedule notification 10 minutes before class starts
+          // Schedule notification 1 hour before class starts
           final notificationStartTime =
-              reformTimetable.startTime!.subtract(const Duration(minutes: 10));
+              reformTimetable.startTime!.subtract(const Duration(hours: 1));
+
           if (notificationStartTime.isAfter(DateTime.now())) {
             await _localMessage.scheduleNotification(
               id: reformTimetable.id.hashCode +
                   1, // Unique ID for start notification
               title: 'Sắp đến giờ học',
               body:
-                  'Lớp ${reformTimetable.className} - ${reformTimetable.subject} sẽ bắt đầu trong 10 phút nữa\nPhòng: ${reformTimetable.room ?? "Chưa cập nhật"}\nZoom ID: ${reformTimetable.zoomId ?? "Chưa cập nhật"}',
+                  'Lớp ${reformTimetable.className} - ${reformTimetable.subject} sẽ bắt đầu trong 1 giờ nữa\nPhòng: ${reformTimetable.room ?? "Chưa cập nhật"}\nZoom ID: ${reformTimetable.zoomId ?? "Chưa cập nhật"}',
               scheduledDate: notificationStartTime,
               payload: jsonEncode({
                 'timetableId': reformTimetable.id,
@@ -66,27 +67,31 @@ class TimetableNotificationService {
               }),
             );
             logger.i(
-                'Đã lên lịch thông báo bắt đầu cho môn ${reformTimetable.subject}');
+                'Đã lên lịch thông báo bắt đầu cho môn ${reformTimetable.subject} tại ${notificationStartTime}');
           }
 
-          // Schedule notification when class ends
-          if (reformTimetable.endTime!.isAfter(DateTime.now())) {
+          // Schedule notification 15 minutes before class starts
+          final notificationReminderTime =
+              reformTimetable.startTime!.subtract(const Duration(minutes: 15));
+          if (notificationReminderTime.isAfter(DateTime.now())) {
             await _localMessage.scheduleNotification(
               id: reformTimetable.id.hashCode +
-                  2, // Unique ID for end notification
-              title: 'Kết thúc buổi học',
+                  2, // Unique ID for reminder notification
+              title: 'Nhắc nhở: Sắp đến giờ học',
               body:
-                  'Lớp ${reformTimetable.className} - ${reformTimetable.subject} đã kết thúc',
-              scheduledDate: reformTimetable.endTime!,
+                  'Lớp ${reformTimetable.className} - ${reformTimetable.subject} sẽ bắt đầu trong 15 phút nữa\nPhòng: ${reformTimetable.room ?? "Chưa cập nhật"}\nZoom ID: ${reformTimetable.zoomId ?? "Chưa cập nhật"}',
+              scheduledDate: notificationReminderTime,
               payload: jsonEncode({
                 'timetableId': reformTimetable.id,
-                'type': 'end_notification',
+                'type': 'reminder_notification',
                 'className': reformTimetable.className,
-                'subject': reformTimetable.subject
+                'subject': reformTimetable.subject,
+                'room': reformTimetable.room,
+                'zoomId': reformTimetable.zoomId
               }),
             );
             logger.i(
-                'Đã lên lịch thông báo kết thúc cho môn ${reformTimetable.subject}');
+                'Đã lên lịch thông báo nhắc nhở cho môn ${reformTimetable.subject} tại ${notificationReminderTime}');
           }
         }
       }
@@ -104,7 +109,7 @@ class TimetableNotificationService {
       body: 'Lớp ${timetable.className} - ${timetable.subject} thông báo !',
       payload: jsonEncode({
         'timetableId': timetable.id,
-        'type': 'start_notification',
+        'type': 'test_notification',
         'className': timetable.className,
         'subject': timetable.subject,
         'room': timetable.room,
