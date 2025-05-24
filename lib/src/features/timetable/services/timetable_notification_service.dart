@@ -5,6 +5,7 @@ import 'package:hubtsocial_mobile/src/core/notification/LocalMessage.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_key.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_timetable_model.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/timetable_response_model.dart';
+import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 
 class TimetableNotificationService {
   TimetableNotificationService() : _localMessage = LocalMessage();
@@ -20,12 +21,17 @@ class TimetableNotificationService {
         await Hive.openBox<TimetableResponseModel>(LocalStorageKey.timeTable);
       }
 
+      if (!Hive.isBoxOpen('notifications')) {
+        await Hive.openBox<NotificationModel>('notifications');
+      }
+
       final timetableBox =
           Hive.box<TimetableResponseModel>(LocalStorageKey.timeTable);
+      final notificationsBox = Hive.box<NotificationModel>('notifications');
       final timetableData = timetableBox.get(LocalStorageKey.timeTable);
 
       if (timetableData != null) {
-        await _scheduleTimetableNotifications(timetableData);
+        await _scheduleTimetableNotifications(timetableData, notificationsBox);
         logger.i('Đã lên lịch thông báo từ dữ liệu Hive');
       } else {
         logger.w('Không tìm thấy dữ liệu thời khóa biểu trong Hive');
@@ -36,8 +42,8 @@ class TimetableNotificationService {
     }
   }
 
-  Future<void> _scheduleTimetableNotifications(
-      TimetableResponseModel timetable) async {
+  Future<void> _scheduleTimetableNotifications(TimetableResponseModel timetable,
+      Box<NotificationModel> notificationsBox) async {
     try {
       // Cancel all existing notifications before scheduling new ones
       await _localMessage.cancelAllNotifications();
@@ -50,21 +56,37 @@ class TimetableNotificationService {
               reformTimetable.startTime!.subtract(const Duration(hours: 1));
 
           if (notificationStartTime.isAfter(DateTime.now())) {
-            await _localMessage.scheduleNotification(
-              id: reformTimetable.id.hashCode +
-                  1, // Unique ID for start notification
+            // Create notification model for 1 hour before
+            final notificationModel = NotificationModel(
+              id: 'timetable_${reformTimetable.id ?? DateTime.now().millisecondsSinceEpoch}_1h',
               title: 'Sắp đến giờ học',
               body:
-                  'Lớp ${reformTimetable.className} - ${reformTimetable.subject} sẽ bắt đầu trong 1 giờ nữa\nPhòng: ${reformTimetable.room ?? "Chưa cập nhật"}\nZoom ID: ${reformTimetable.zoomId ?? "Chưa cập nhật"}',
-              scheduledDate: notificationStartTime,
-              payload: jsonEncode({
-                'timetableId': reformTimetable.id,
+                  'Lớp ${reformTimetable.className ?? ""} - ${reformTimetable.subject ?? ""} sẽ bắt đầu trong 1 giờ nữa\nPhòng: ${reformTimetable.room ?? "Chưa cập nhật"}\nZoom ID: ${reformTimetable.zoomId ?? "Chưa cập nhật"}',
+              time: notificationStartTime.toIso8601String(),
+              type: 'timetable',
+              data: {
+                'timetableId':
+                    reformTimetable.id ?? DateTime.now().millisecondsSinceEpoch,
                 'type': 'start_notification',
-                'className': reformTimetable.className,
-                'subject': reformTimetable.subject,
-                'room': reformTimetable.room,
-                'zoomId': reformTimetable.zoomId
-              }),
+                'className': reformTimetable.className ?? "",
+                'subject': reformTimetable.subject ?? "",
+                'room': reformTimetable.room ?? "",
+                'zoomId': reformTimetable.zoomId ?? "",
+                'startTime': reformTimetable.startTime?.toIso8601String(),
+                'endTime': reformTimetable.endTime?.toIso8601String(),
+              },
+            );
+
+            // Save notification to Hive
+            await notificationsBox.add(notificationModel);
+
+            // Schedule local notification
+            await _localMessage.scheduleNotification(
+              id: reformTimetable.id.hashCode + 1,
+              title: notificationModel.title??'',
+                body: notificationModel.body ?? '',
+              scheduledDate: notificationStartTime,
+              payload: jsonEncode(notificationModel.data),
             );
             logger.i(
                 'Đã lên lịch thông báo bắt đầu cho môn ${reformTimetable.subject} tại ${notificationStartTime}');
@@ -74,21 +96,37 @@ class TimetableNotificationService {
           final notificationReminderTime =
               reformTimetable.startTime!.subtract(const Duration(minutes: 15));
           if (notificationReminderTime.isAfter(DateTime.now())) {
-            await _localMessage.scheduleNotification(
-              id: reformTimetable.id.hashCode +
-                  2, // Unique ID for reminder notification
+            // Create notification model for 15 minutes before
+            final reminderModel = NotificationModel(
+              id: 'timetable_${reformTimetable.id ?? DateTime.now().millisecondsSinceEpoch}_15m',
               title: 'Nhắc nhở: Sắp đến giờ học',
               body:
-                  'Lớp ${reformTimetable.className} - ${reformTimetable.subject} sẽ bắt đầu trong 15 phút nữa\nPhòng: ${reformTimetable.room ?? "Chưa cập nhật"}\nZoom ID: ${reformTimetable.zoomId ?? "Chưa cập nhật"}',
-              scheduledDate: notificationReminderTime,
-              payload: jsonEncode({
-                'timetableId': reformTimetable.id,
+                  'Lớp ${reformTimetable.className ?? ""} - ${reformTimetable.subject ?? ""} sẽ bắt đầu trong 15 phút nữa\nPhòng: ${reformTimetable.room ?? "Chưa cập nhật"}\nZoom ID: ${reformTimetable.zoomId ?? "Chưa cập nhật"}',
+              time: notificationReminderTime.toIso8601String(),
+              type: 'timetable',
+              data: {
+                'timetableId':
+                    reformTimetable.id ?? DateTime.now().millisecondsSinceEpoch,
                 'type': 'reminder_notification',
-                'className': reformTimetable.className,
-                'subject': reformTimetable.subject,
-                'room': reformTimetable.room,
-                'zoomId': reformTimetable.zoomId
-              }),
+                'className': reformTimetable.className ?? "",
+                'subject': reformTimetable.subject ?? "",
+                'room': reformTimetable.room ?? "",
+                'zoomId': reformTimetable.zoomId ?? "",
+                'startTime': reformTimetable.startTime?.toIso8601String(),
+                'endTime': reformTimetable.endTime?.toIso8601String(),
+              },
+            );
+
+            // Save reminder to Hive
+            await notificationsBox.add(reminderModel);
+
+            // Schedule local notification
+            await _localMessage.scheduleNotification(
+              id: reformTimetable.id.hashCode + 2,
+              title: reminderModel.title??'',
+              body: reminderModel.body??'',
+              scheduledDate: notificationReminderTime,
+              payload: jsonEncode(reminderModel.data),
             );
             logger.i(
                 'Đã lên lịch thông báo nhắc nhở cho môn ${reformTimetable.subject} tại ${notificationReminderTime}');
@@ -104,17 +142,37 @@ class TimetableNotificationService {
 
   Future<void> showInstantNotification(ReformTimetable timetable) async {
     await _localMessage.initLocalNotifications();
-    await _localMessage.showNotification(
+
+    // Create notification model for instant notification
+    final notificationModel = NotificationModel(
+      id: 'timetable_test_${DateTime.now().millisecondsSinceEpoch}',
       title: 'Test Notification',
-      body: 'Lớp ${timetable.className} - ${timetable.subject} thông báo !',
-      payload: jsonEncode({
-        'timetableId': timetable.id,
+      body:
+          'Lớp ${timetable.className ?? ""} - ${timetable.subject ?? ""} thông báo !',
+      time: DateTime.now().toIso8601String(),
+      type: 'timetable',
+      data: {
+        'timetableId': timetable.id ?? DateTime.now().millisecondsSinceEpoch,
         'type': 'test_notification',
-        'className': timetable.className,
-        'subject': timetable.subject,
-        'room': timetable.room,
-        'zoomId': timetable.zoomId
-      }),
+        'className': timetable.className ?? "",
+        'subject': timetable.subject ?? "",
+        'room': timetable.room ?? "",
+        'zoomId': timetable.zoomId ?? "",
+        'startTime': timetable.startTime?.toIso8601String(),
+        'endTime': timetable.endTime?.toIso8601String(),
+      },
+    );
+
+    // Save test notification to Hive
+    final notificationsBox =
+        await Hive.openBox<NotificationModel>('notifications');
+    await notificationsBox.add(notificationModel);
+
+    // Show local notification
+    await _localMessage.showNotification(
+      title: notificationModel.title??'',
+      body: notificationModel.body??'',
+      payload: jsonEncode(notificationModel.data),
     );
   }
 }
