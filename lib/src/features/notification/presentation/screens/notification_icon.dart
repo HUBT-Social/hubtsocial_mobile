@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 import 'package:hubtsocial_mobile/src/constants/assets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NotificationIcon extends StatelessWidget {
   final NotificationModel notification;
@@ -39,8 +40,8 @@ class NotificationIcon extends StatelessWidget {
         smallIconPath = AppIcons.notificationAdmin;
       }
       return SizedBox(
-        width: size + 8,
-        height: size + 8,
+        width: size + 8.r,
+        height: size + 8.r,
         child: Stack(
           clipBehavior: Clip.none,
           children: [
@@ -72,6 +73,7 @@ class NotificationIcon extends StatelessWidget {
                 height: size * 0.35,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
+                  color: Theme.of(context).colorScheme.surface,
                 ),
                 child: Center(
                   child: SvgPicture.asset(

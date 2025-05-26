@@ -11,6 +11,7 @@ import 'notification_detail_screen.dart';
 import 'filter_option.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hubtsocial_mobile/src/features/notification/presentation/screens/notification_item.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../main_wrapper/presentation/widgets/main_app_bar.dart';
 
@@ -121,8 +122,8 @@ class _NotificationsState extends State<NotificationsScreen> {
             IconButton(
               icon: SvgPicture.asset(
                 'assets/icons/loc_thong_bao.svg',
-                width: 24,
-                height: 24,
+                width: 24.r,
+                height: 24.r,
               ),
               onPressed: () => _showFilterDialog(context),
               tooltip: 'Lọc thông báo',
@@ -130,8 +131,8 @@ class _NotificationsState extends State<NotificationsScreen> {
             IconButton(
               icon: SvgPicture.asset(
                 'assets/icons/danh_dau.svg',
-                width: 24,
-                height: 24,
+                width: 24.r,
+                height: 24.r,
               ),
               onPressed: () => _markAllAsRead(context),
               tooltip: 'Đánh dấu tất cả là đã đọc',
@@ -139,64 +140,67 @@ class _NotificationsState extends State<NotificationsScreen> {
           ],
         ),
       ],
-      body: _notificationsBox == null
-          ? Center(child: CircularProgressIndicator())
-          : ValueListenableBuilder<Box<NotificationModel>>(
-              valueListenable: _notificationsBox!.listenable(),
-              builder: (context, box, _) {
-                if (box.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.notifications_off_outlined,
-                          size: 80,
-                          color: Colors.grey[400],
-                        ),
-                        SizedBox(height: 16),
-                        Text(context.loc.noNotifications,
-                            style: context.textTheme.bodyLarge),
-                      ],
-                    ),
-                  );
-                }
-
-                final filteredNotifications =
-                    _filterNotifications(box.values.toList());
-
-                if (filteredNotifications.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.filter_list_off,
-                          size: 80,
-                          color: Colors.grey[400],
-                        ),
-                        SizedBox(height: 16),
-                        Text('Không có thông báo nào trong bộ lọc này',
-                            style: context.textTheme.bodyLarge),
-                      ],
-                    ),
-                  );
-                }
-
-                return ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: filteredNotifications.length,
-                  itemBuilder: (context, index) {
-                    final notification = filteredNotifications[index];
-                    return NotificationItem(
-                      notification: notification,
-                      onTap: () =>
-                          _handleNotificationTap(context, notification),
+      body: Container(
+        color: context.colorScheme.background,
+        child: _notificationsBox == null
+            ? Center(child: CircularProgressIndicator())
+            : ValueListenableBuilder<Box<NotificationModel>>(
+                valueListenable: _notificationsBox!.listenable(),
+                builder: (context, box, _) {
+                  if (box.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.notifications_off_outlined,
+                            size: 80.r,
+                            color: Colors.grey[400],
+                          ),
+                          SizedBox(height: 16.h),
+                          Text(context.loc.noNotifications,
+                              style: context.textTheme.bodyLarge),
+                        ],
+                      ),
                     );
-                  },
-                );
-              },
-            ),
+                  }
+
+                  final filteredNotifications =
+                      _filterNotifications(box.values.toList());
+
+                  if (filteredNotifications.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.filter_list_off,
+                            size: 80.r,
+                            color: Colors.grey[400],
+                          ),
+                          SizedBox(height: 16.h),
+                          Text('Không có thông báo nào trong bộ lọc này',
+                              style: context.textTheme.bodyLarge),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: filteredNotifications.length,
+                    itemBuilder: (context, index) {
+                      final notification = filteredNotifications[index];
+                      return NotificationItem(
+                        notification: notification,
+                        onTap: () =>
+                            _handleNotificationTap(context, notification),
+                      );
+                    },
+                  );
+                },
+              ),
+      ),
     );
   }
 

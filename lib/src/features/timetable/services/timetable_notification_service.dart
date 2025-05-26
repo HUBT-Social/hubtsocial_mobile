@@ -57,11 +57,12 @@ class TimetableNotificationService {
 
           if (notificationStartTime.isAfter(DateTime.now())) {
             // Create notification model for 1 hour before
+            final String bodyText =
+                'Lớp ${reformTimetable.className ?? ""} - ${reformTimetable.subject ?? ""} sẽ bắt đầu trong 1 giờ nữa. Phòng: ${reformTimetable.room ?? "Chưa cập nhật"}. Zoom ID: ${reformTimetable.zoomId ?? "Chưa cập nhật"}';
             final notificationModel = NotificationModel(
               id: 'timetable_${reformTimetable.id ?? DateTime.now().millisecondsSinceEpoch}_1h',
               title: 'Sắp đến giờ học',
-              body:
-                  'Lớp ${reformTimetable.className ?? ""} - ${reformTimetable.subject ?? ""} sẽ bắt đầu trong 1 giờ nữa\nPhòng: ${reformTimetable.room ?? "Chưa cập nhật"}\nZoom ID: ${reformTimetable.zoomId ?? "Chưa cập nhật"}',
+              body: _truncateWithEllipsis(bodyText, 90),
               time: notificationStartTime.toIso8601String(),
               type: 'timetable',
               data: {
@@ -83,8 +84,8 @@ class TimetableNotificationService {
             // Schedule local notification
             await _localMessage.scheduleNotification(
               id: reformTimetable.id.hashCode + 1,
-              title: notificationModel.title??'',
-                body: notificationModel.body ?? '',
+              title: notificationModel.title ?? '',
+              body: notificationModel.body ?? '',
               scheduledDate: notificationStartTime,
               payload: jsonEncode(notificationModel.data),
             );
@@ -97,11 +98,12 @@ class TimetableNotificationService {
               reformTimetable.startTime!.subtract(const Duration(minutes: 15));
           if (notificationReminderTime.isAfter(DateTime.now())) {
             // Create notification model for 15 minutes before
+            final String reminderBodyText =
+                'Lớp ${reformTimetable.className ?? ""} - ${reformTimetable.subject ?? ""} sẽ bắt đầu trong 15 phút nữa. Phòng: ${reformTimetable.room ?? "Chưa cập nhật"}. Zoom ID: ${reformTimetable.zoomId ?? "Chưa cập nhật"}';
             final reminderModel = NotificationModel(
               id: 'timetable_${reformTimetable.id ?? DateTime.now().millisecondsSinceEpoch}_15m',
               title: 'Nhắc nhở: Sắp đến giờ học',
-              body:
-                  'Lớp ${reformTimetable.className ?? ""} - ${reformTimetable.subject ?? ""} sẽ bắt đầu trong 15 phút nữa\nPhòng: ${reformTimetable.room ?? "Chưa cập nhật"}\nZoom ID: ${reformTimetable.zoomId ?? "Chưa cập nhật"}',
+              body: _truncateWithEllipsis(reminderBodyText, 50),
               time: notificationReminderTime.toIso8601String(),
               type: 'timetable',
               data: {
@@ -123,8 +125,8 @@ class TimetableNotificationService {
             // Schedule local notification
             await _localMessage.scheduleNotification(
               id: reformTimetable.id.hashCode + 2,
-              title: reminderModel.title??'',
-              body: reminderModel.body??'',
+              title: reminderModel.title ?? '',
+              body: reminderModel.body ?? '',
               scheduledDate: notificationReminderTime,
               payload: jsonEncode(reminderModel.data),
             );
@@ -144,11 +146,12 @@ class TimetableNotificationService {
     await _localMessage.initLocalNotifications();
 
     // Create notification model for instant notification
+    final String testBodyText =
+        'Lớp ${timetable.className ?? ""} - ${timetable.subject ?? ""} thông báo !';
     final notificationModel = NotificationModel(
       id: 'timetable_test_${DateTime.now().millisecondsSinceEpoch}',
       title: 'Test Notification',
-      body:
-          'Lớp ${timetable.className ?? ""} - ${timetable.subject ?? ""} thông báo !',
+      body: _truncateWithEllipsis(testBodyText, 90),
       time: DateTime.now().toIso8601String(),
       type: 'timetable',
       data: {
@@ -170,9 +173,15 @@ class TimetableNotificationService {
 
     // Show local notification
     await _localMessage.showNotification(
-      title: notificationModel.title??'',
-      body: notificationModel.body??'',
+      title: notificationModel.title ?? '',
+      body: notificationModel.body ?? '',
       payload: jsonEncode(notificationModel.data),
     );
+  }
+
+  String _truncateWithEllipsis(String text, int maxLength) {
+    return (text.length <= maxLength)
+        ? text
+        : text.substring(0, maxLength - 3) + '...';
   }
 }
