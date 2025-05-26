@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 import 'notification_icon.dart';
 import 'notification_detail_screen.dart';
@@ -32,11 +33,11 @@ class NotificationItem extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
       decoration: BoxDecoration(
         color: notification.isRead
-            ? Theme.of(context).colorScheme.surface
-            : Theme.of(context).colorScheme.primary.withOpacity(0.05),
+            ? context.colorScheme.surface
+            : context.colorScheme.primary.withOpacity(0.05),
         borderRadius: BorderRadius.circular(6.r),
         border: Border.all(
-          color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+          color: context.colorScheme.outline.withOpacity(0.1),
           width: 0.5.w,
         ),
       ),
@@ -59,15 +60,15 @@ class NotificationItem extends StatelessWidget {
           },
           borderRadius: BorderRadius.circular(6.r),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 8.h),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: 48.r,
-                  height: 48.r,
+                  width: 44.r,
+                  height: 44.r,
                   child:
-                      NotificationIcon(notification: notification, size: 48.r),
+                      NotificationIcon(notification: notification, size: 44.r),
                 ),
                 SizedBox(width: 8.w),
                 Expanded(
@@ -77,14 +78,9 @@ class NotificationItem extends StatelessWidget {
                     children: [
                       Text(
                         notification.title ?? '',
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelMedium
-                            ?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: Theme.of(context).colorScheme.onSurface,
-                              
-                            ),
+                        style: context.textTheme.labelMedium?.copyWith(
+                          color: context.colorScheme.onSurface,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -92,14 +88,9 @@ class NotificationItem extends StatelessWidget {
                         SizedBox(height: 1.h),
                         Text(
                           notification.body!,
-                          style:
-                              Theme.of(context).textTheme.labelSmall?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                  
-                                    
-                                  ),
+                          style: context.textTheme.labelSmall?.copyWith(
+                            color: context.colorScheme.outline,
+                          ),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -107,10 +98,9 @@ class NotificationItem extends StatelessWidget {
                       SizedBox(height: 2.h),
                       Text(
                         _formatTime(notification.time, context),
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: Theme.of(context).colorScheme.outline,
-                         
-                            ),
+                        style: context.textTheme.labelSmall?.copyWith(
+                          color: context.colorScheme.outlineVariant,
+                        ),
                       ),
                     ],
                   ),

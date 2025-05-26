@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 class FilterOption extends StatelessWidget {
   final String title;
@@ -17,7 +18,7 @@ class FilterOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 2.h),
       leading: Icon(

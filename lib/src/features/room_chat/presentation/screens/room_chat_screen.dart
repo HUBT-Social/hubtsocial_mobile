@@ -196,8 +196,8 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
               appBar: AppBar(
                 toolbarHeight: 52.h,
                 leadingWidth: 36.w,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                backgroundColor: context.colorScheme.primary,
+                foregroundColor: context.colorScheme.onPrimary,
                 title: Row(
                   children: [
                     UrlImage.circle(state.roomInfo.avatarUrl!, size: 36.r),

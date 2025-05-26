@@ -33,7 +33,7 @@ final class LocalizatioUtils {
                   child: Text(
                     textAlign: TextAlign.left,
                     context.loc.choose_language,
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    style: context.textTheme.headlineSmall,
                   ),
                 ),
                 SizedBox(height: 12),

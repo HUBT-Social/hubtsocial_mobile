@@ -80,7 +80,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
                     child: Padding(
                       padding: EdgeInsets.all(12.h),
                       child: Text(question.title ?? '',
-                          style: Theme.of(context).textTheme.titleLarge),
+                          style: context.textTheme.titleLarge),
                     ),
                   ),
                   SliverList.builder(

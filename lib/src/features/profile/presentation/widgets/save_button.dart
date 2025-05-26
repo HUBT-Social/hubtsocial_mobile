@@ -7,31 +7,31 @@ class SaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16), 
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: SizedBox(
-        width: 294, 
-        height: 38, 
+        width: 294,
+        height: 38,
         child: ElevatedButton(
           onPressed: () {
             // logic to save changes
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green, 
-            padding: const EdgeInsets.symmetric(vertical: 7), 
+            backgroundColor: Colors.green,
+            padding: const EdgeInsets.symmetric(vertical: 7),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10000), 
+              borderRadius: BorderRadius.circular(10000),
               side: const BorderSide(
-                color: Color(0xFFB2DFDB), 
-                width: 0.5, 
+                color: Color(0xFFB2DFDB),
+                width: 0.5,
               ),
             ),
           ),
           child: Text(
             context.loc.save_changes,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.white, 
-                  fontWeight: FontWeight.bold,
-                ),
+            style: context.textTheme.titleMedium?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

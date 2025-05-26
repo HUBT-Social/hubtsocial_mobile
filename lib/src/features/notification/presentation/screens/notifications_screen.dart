@@ -141,7 +141,7 @@ class _NotificationsState extends State<NotificationsScreen> {
         ),
       ],
       body: Container(
-        color: context.colorScheme.background,
+        color: context.colorScheme.surface,
         child: _notificationsBox == null
             ? Center(child: CircularProgressIndicator())
             : ValueListenableBuilder<Box<NotificationModel>>(
@@ -176,11 +176,14 @@ class _NotificationsState extends State<NotificationsScreen> {
                           Icon(
                             Icons.filter_list_off,
                             size: 80.r,
-                            color: Colors.grey[400],
+                            color: context.colorScheme.onSurface.withAlpha(192),
                           ),
                           SizedBox(height: 16.h),
                           Text('Không có thông báo nào trong bộ lọc này',
-                              style: context.textTheme.bodyLarge),
+                              style: context.textTheme.bodyLarge?.copyWith(
+                                color: context.colorScheme.onSurface
+                                    .withAlpha(192),
+                              )),
                         ],
                       ),
                     );

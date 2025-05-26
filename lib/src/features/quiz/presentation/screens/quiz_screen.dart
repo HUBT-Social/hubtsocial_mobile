@@ -86,7 +86,7 @@ class _QuizScreenState extends State<QuizScreen> {
                             Text(
                               context.loc.no_messages,
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.titleLarge,
+                              style: context.textTheme.titleLarge,
                             ),
                             SizedBox(
                               height: 16.h,

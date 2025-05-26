@@ -145,7 +145,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             Text(
                               context.loc.no_messages,
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.titleLarge,
+                              style: context.textTheme.titleLarge,
                             ),
                             SizedBox(
                               height: 16.h,

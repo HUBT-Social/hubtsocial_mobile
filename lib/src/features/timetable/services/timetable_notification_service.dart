@@ -90,7 +90,7 @@ class TimetableNotificationService {
               payload: jsonEncode(notificationModel.data),
             );
             logger.i(
-                'Đã lên lịch thông báo bắt đầu cho môn ${reformTimetable.subject} tại ${notificationStartTime}');
+                'Đã lên lịch thông báo bắt đầu cho môn ${reformTimetable.subject} tại $notificationStartTime');
           }
 
           // Schedule notification 15 minutes before class starts
@@ -131,7 +131,7 @@ class TimetableNotificationService {
               payload: jsonEncode(reminderModel.data),
             );
             logger.i(
-                'Đã lên lịch thông báo nhắc nhở cho môn ${reformTimetable.subject} tại ${notificationReminderTime}');
+                'Đã lên lịch thông báo nhắc nhở cho môn ${reformTimetable.subject} tại $notificationReminderTime');
           }
         }
       }
@@ -182,6 +182,6 @@ class TimetableNotificationService {
   String _truncateWithEllipsis(String text, int maxLength) {
     return (text.length <= maxLength)
         ? text
-        : text.substring(0, maxLength - 3) + '...';
+        : '${text.substring(0, maxLength - 3)}...';
   }
 }

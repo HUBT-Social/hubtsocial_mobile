@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 import 'package:hubtsocial_mobile/src/constants/assets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NotificationIcon extends StatelessWidget {
   final NotificationModel notification;
@@ -39,54 +39,50 @@ class NotificationIcon extends StatelessWidget {
       } else {
         smallIconPath = AppIcons.notificationAdmin;
       }
-      return SizedBox(
-        width: size + 8.r,
-        height: size + 8.r,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Positioned(
-              left: 0,
-              top: 0,
-              child: ClipOval(
-                child: Image.network(
-                  mainImage,
-                  width: size,
-                  height: size,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.asset(
-                      'assets/icons/ic_profile.png',
-                      width: size,
-                      height: size,
-                      fit: BoxFit.contain,
-                    );
-                  },
-                ),
-              ),
-            ),
-            Positioned(
-              right: 0,
-              bottom: 0,
-              child: Container(
-                width: size * 0.35,
-                height: size * 0.35,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).colorScheme.surface,
-                ),
-                child: Center(
-                  child: SvgPicture.asset(
-                    smallIconPath,
-                    width: size * 0.35,
-                    height: size * 0.35,
+      return Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            left: 0,
+            top: 0,
+            child: ClipOval(
+              child: Image.network(
+                mainImage,
+                width: size,
+                height: size,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'assets/icons/ic_profile.png',
+                    width: size,
+                    height: size,
                     fit: BoxFit.contain,
-                  ),
+                  );
+                },
+              ),
+            ),
+          ),
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: Container(
+              width: size * 0.35,
+              height: size * 0.35,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: context.colorScheme.surface,
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  smallIconPath,
+                  width: size * 0.35,
+                  height: size * 0.35,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       );
     }
 

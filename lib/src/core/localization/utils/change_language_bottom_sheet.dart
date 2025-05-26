@@ -34,7 +34,7 @@ final class LocalizatioUtils {
                   child: Text(
                     context.loc.choose_language,
                     textAlign: TextAlign.left,
-                    style: Theme.of(context).textTheme.headlineMedium,
+                    style: context.textTheme.headlineMedium,
                   ),
                 ),
                 SizedBox(height: 24.h),
