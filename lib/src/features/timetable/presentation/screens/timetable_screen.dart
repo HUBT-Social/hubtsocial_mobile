@@ -243,8 +243,8 @@ class _TimetableScreenState extends State<TimetableScreen> {
             ],
           );
         }
-        return const Center(
-          child: Text("No data"),
+        return Center(
+          child: Text(context.loc.no_data),
         );
       }),
     );

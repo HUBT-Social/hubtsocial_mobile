@@ -331,5 +331,11 @@
   "instructor_evaluation": "Instructor Evaluation",
   "@instructor_evaluation": {},
   "academic_advisor": "Academic advisor",
-  "@academic_advisor": {}
+  "@academic_advisor": {},
+  "features_currently_in_development": "Features currently in development",
+  "@features_currently_in_development": {},
+  "coming_soon": "Coming soon",
+  "@coming_soon": {},
+  "no_data": "No data",
+  "@no_data": {}
 }

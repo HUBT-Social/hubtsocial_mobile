@@ -435,4 +435,13 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get academic_advisor => '学業アドバイザー';
+
+  @override
+  String get features_currently_in_development => '現在開発中の機能';
+
+  @override
+  String get coming_soon => '近日公開予定';
+
+  @override
+  String get no_data => 'データがありません';
 }

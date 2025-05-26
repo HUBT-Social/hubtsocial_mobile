@@ -333,5 +333,11 @@
   "instructor_evaluation": "강사 평가",
   "@instructor_evaluation": {},
   "academic_advisor": "학업 상담",
-  "@academic_advisor": {}
+  "@academic_advisor": {},
+  "features_currently_in_development": "현재 개발 중인 기능",
+  "@features_currently_in_development": {},
+  "coming_soon": "곧 출시 예정",
+  "@coming_soon": {},
+  "no_data": "데이터가 없습니다",
+  "@no_data": {}
 }

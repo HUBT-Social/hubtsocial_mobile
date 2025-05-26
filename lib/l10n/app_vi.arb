@@ -331,5 +331,11 @@
   "instructor_evaluation": "Đánh giá giảng viên",
   "@instructor_evaluation": {},
   "academic_advisor": "Cố vấn học tập",
-  "@academic_advisor": {}
+  "@academic_advisor": {},
+  "features_currently_in_development": "Các tính năng hiện đang trong quá trình phát triển",
+  "@features_currently_in_development": {},
+  "coming_soon": "Sắp ra mắt",
+  "@coming_soon": {},
+  "no_data": "Không có dữ liệu",
+  "@no_data": {}
 }

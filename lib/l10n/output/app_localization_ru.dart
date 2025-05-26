@@ -435,4 +435,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get academic_advisor => 'Учебный консультант';
+
+  @override
+  String get features_currently_in_development => 'Функции, которые в настоящее время разрабатываются';
+
+  @override
+  String get coming_soon => 'Скоро будет доступно';
+
+  @override
+  String get no_data => 'Нет данных';
 }

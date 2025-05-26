@@ -435,4 +435,13 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get academic_advisor => 'Cố vấn học tập';
+
+  @override
+  String get features_currently_in_development => 'Các tính năng hiện đang trong quá trình phát triển';
+
+  @override
+  String get coming_soon => 'Sắp ra mắt';
+
+  @override
+  String get no_data => 'Không có dữ liệu';
 }

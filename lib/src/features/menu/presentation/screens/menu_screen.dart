@@ -96,9 +96,8 @@ class _MenuScreenState extends State<MenuScreen> {
               size: 16.r,
             ),
             onTap: () {
-              //  context.showSnackBarMessage('Tính năng đang phát triển')
-              // ;
-              AppRoute.setNewPassword.push(context);
+              context.showSnackBarMessage(
+                  context.loc.features_currently_in_development);
             },
           ),
           SliverToBoxAdapter(child: SizedBox(height: 6.h)),
@@ -113,7 +112,8 @@ class _MenuScreenState extends State<MenuScreen> {
               size: 16.r,
             ),
             onTap: () {
-              context.showSnackBarMessage('Tính năng đang phát triển');
+              context.showSnackBarMessage(
+                  context.loc.features_currently_in_development);
             },
           ),
           SliverToBoxAdapter(child: SizedBox(height: 6.h)),
@@ -144,7 +144,8 @@ class _MenuScreenState extends State<MenuScreen> {
               size: 16.r,
             ),
             onTap: () {
-              context.showSnackBarMessage('Tính năng đang phát triển');
+              context.showSnackBarMessage(
+                  context.loc.features_currently_in_development);
             },
           ),
           SliverToBoxAdapter(child: LineInMenu()),
@@ -155,7 +156,8 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
               onTap: () {
                 AppDialog.showDeleteAccountConfirmationDialog(context);
-                context.showSnackBarMessage('Tính năng đang phát triển');
+                context.showSnackBarMessage(
+                    context.loc.features_currently_in_development);
               },
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 6.w),

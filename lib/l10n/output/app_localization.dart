@@ -918,6 +918,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Academic advisor'**
   String get academic_advisor;
+
+  /// No description provided for @features_currently_in_development.
+  ///
+  /// In en, this message translates to:
+  /// **'Features currently in development'**
+  String get features_currently_in_development;
+
+  /// No description provided for @coming_soon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get coming_soon;
+
+  /// No description provided for @no_data.
+  ///
+  /// In en, this message translates to:
+  /// **'No data'**
+  String get no_data;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

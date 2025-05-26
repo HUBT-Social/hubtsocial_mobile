@@ -435,4 +435,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get academic_advisor => '学业顾问';
+
+  @override
+  String get features_currently_in_development => '正在开发的功能';
+
+  @override
+  String get coming_soon => '即将推出';
+
+  @override
+  String get no_data => '没有数据';
 }

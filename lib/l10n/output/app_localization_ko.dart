@@ -435,4 +435,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get academic_advisor => '학업 상담';
+
+  @override
+  String get features_currently_in_development => '현재 개발 중인 기능';
+
+  @override
+  String get coming_soon => '곧 출시 예정';
+
+  @override
+  String get no_data => '데이터가 없습니다';
 }

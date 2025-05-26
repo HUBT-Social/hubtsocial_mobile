@@ -331,5 +331,11 @@
   "instructor_evaluation": "Оценка преподавателя",
   "@instructor_evaluation": {},
   "academic_advisor": "Учебный консультант",
-  "@academic_advisor": {}
+  "@academic_advisor": {},
+  "features_currently_in_development": "Функции, которые в настоящее время разрабатываются",
+  "@features_currently_in_development": {},
+  "coming_soon": "Скоро будет доступно",
+  "@coming_soon": {},
+  "no_data": "Нет данных",
+  "@no_data": {}
 }

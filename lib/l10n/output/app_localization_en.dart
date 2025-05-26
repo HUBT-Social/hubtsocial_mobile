@@ -435,4 +435,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get academic_advisor => 'Academic advisor';
+
+  @override
+  String get features_currently_in_development => 'Features currently in development';
+
+  @override
+  String get coming_soon => 'Coming soon';
+
+  @override
+  String get no_data => 'No data';
 }

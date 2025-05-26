@@ -331,5 +331,11 @@
   "instructor_evaluation": "講師評価",
   "@instructor_evaluation": {},
   "academic_advisor": "学業アドバイザー",
-  "@academic_advisor": {}
+  "@academic_advisor": {},
+  "features_currently_in_development": "現在開発中の機能",
+  "@features_currently_in_development": {},
+  "coming_soon": "近日公開予定",
+  "@coming_soon": {},
+  "no_data": "データがありません",
+  "@no_data": {}
 }

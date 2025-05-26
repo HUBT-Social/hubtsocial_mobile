@@ -331,5 +331,11 @@
   "instructor_evaluation": "教师评价",
   "@instructor_evaluation": {},
   "academic_advisor": "学业顾问",
-  "@academic_advisor": {}
+  "@academic_advisor": {},
+  "features_currently_in_development": "正在开发的功能",
+  "@features_currently_in_development": {},
+  "coming_soon": "即将推出",
+  "@coming_soon": {},
+  "no_data": "没有数据",
+  "@no_data": {}
 }
