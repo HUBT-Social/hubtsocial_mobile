@@ -39,12 +39,19 @@ class _HomeScreenState extends State<HomeScreen> {
           context.loc.student_list, Icons.people, Colors.pink.shade200, () {}),
       _FunctionItem(context.loc.pay_tuition, Icons.attach_money,
           Colors.green.shade400, () {}),
-      _FunctionItem(context.loc.school_survey, Icons.poll,
-          Colors.lightBlue.shade400, () {}),
+      _FunctionItem(
+          context.loc.school_survey, Icons.poll, Colors.lightBlue.shade400, () {
+        context
+            .showSnackBarMessage(context.loc.features_currently_in_development);
+      }),
       _FunctionItem(context.loc.instructor_evaluation, Icons.rate_review,
           Colors.deepOrange.shade300, () {}),
-      _FunctionItem(context.loc.academic_advisor, Icons.person_pin,
-          Colors.red.shade700, () {}),
+      _FunctionItem(
+          context.loc.academic_advisor, Icons.person_pin, Colors.red.shade700,
+          () {
+        context
+            .showSnackBarMessage(context.loc.features_currently_in_development);
+      }),
     ];
     return NestedScrollView(
       headerSliverBuilder: (context, innerBoxIsScrolled) => [
