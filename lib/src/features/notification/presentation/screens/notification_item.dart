@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 import 'notification_icon.dart';
 import 'notification_detail_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NotificationItem extends StatelessWidget {
   final NotificationModel notification;
@@ -15,7 +16,6 @@ class NotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     final type = notification.type?.toLowerCase() ??
         notification.data?['type']?.toString().toLowerCase() ??
         '';
@@ -29,15 +29,15 @@ class NotificationItem extends StatelessWidget {
     ];
 
     return Container(
-      height: screenHeight / 9,
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
       decoration: BoxDecoration(
-        color:
-            notification.isRead ? Colors.white : Colors.blue.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(8),
+        color: notification.isRead
+            ? Theme.of(context).colorScheme.surface
+            : Theme.of(context).colorScheme.primary.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(6.r),
         border: Border.all(
-          color: Colors.grey.withOpacity(0.1),
-          width: 0.5,
+          color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+          width: 0.5.w,
         ),
       ),
       child: Material(
@@ -57,18 +57,19 @@ class NotificationItem extends StatelessWidget {
               onTap();
             }
           },
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(6.r),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: 70,
-                  height: 70,
-                  child: NotificationIcon(notification: notification, size: 70),
+                  width: 48.r,
+                  height: 48.r,
+                  child:
+                      NotificationIcon(notification: notification, size: 48.r),
                 ),
-                SizedBox(width: 12),
+                SizedBox(width: 8.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,33 +77,40 @@ class NotificationItem extends StatelessWidget {
                     children: [
                       Text(
                         notification.title ?? '',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).colorScheme.onSurface,
+                              
+                            ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       if (notification.body != null) ...[
-                        SizedBox(height: 3),
+                        SizedBox(height: 1.h),
                         Text(
                           notification.body!,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black87,
-                          ),
-                          maxLines: 2,
+                          style:
+                              Theme.of(context).textTheme.labelSmall?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  
+                                    
+                                  ),
+                          maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
-                      Spacer(),
+                      SizedBox(height: 2.h),
                       Text(
                         _formatTime(notification.time, context),
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.grey[600],
-                        ),
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              color: Theme.of(context).colorScheme.outline,
+                         
+                            ),
                       ),
                     ],
                   ),
