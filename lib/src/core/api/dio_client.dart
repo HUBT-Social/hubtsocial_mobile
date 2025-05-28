@@ -252,7 +252,7 @@ class DioClient {
     try {
       var deviceId = await DeviceId.getUniqueDeviceId();
 
-      final response = await _dio.post(
+      final response = await post<Map<String, dynamic>>(
         EndPoint.authRefreshToken,
         data: {"refreshToken": token.refreshToken},
         options: Options(
@@ -263,9 +263,9 @@ class DioClient {
         ),
       );
 
-      if (response.statusCode == 200 && response.data != null) {
+      if (response.statusCode == 200) {
         try {
-          final newToken = UserTokenModel.fromMap(response.data);
+          final newToken = UserTokenModel.fromMap(response.data!);
           await _saveToken(newToken);
           return newToken.accessToken;
         } catch (e) {
