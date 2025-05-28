@@ -67,6 +67,38 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
           SliverToBoxAdapter(child: SizedBox(height: 6.h)),
           ButtonInMenu(
+            borderRadiusTop: 12.r,
+            icon: Icon(
+              Icons.security_rounded,
+              size: 28.r,
+            ),
+            label: "Security",
+            iconArrow: Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 16.r,
+            ),
+            onTap: () {
+              context.showSnackBarMessage(
+                  context.loc.features_currently_in_development);
+            },
+          ),
+          SliverToBoxAdapter(child: SizedBox(height: 6.h)),
+          ButtonInMenu(
+            icon: Icon(
+              Icons.notifications_rounded,
+              size: 28.r,
+            ),
+            label: context.loc.notifications,
+            iconArrow: Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 16.r,
+            ),
+            onTap: () {
+              AppRoute.notificationSettings.push(context);
+            },
+          ),
+          SliverToBoxAdapter(child: SizedBox(height: 6.h)),
+          ButtonInMenu(
             borderRadiusBottom: 12.r,
             icon: BlocBuilder<LocalizationBloc, AppLocalizationState>(
               builder: (context, state) {
@@ -79,7 +111,10 @@ class _MenuScreenState extends State<MenuScreen> {
               },
             ),
             label: context.loc.change_language,
-            iconArrow: Icon(Icons.arrow_drop_down_rounded),
+            iconArrow: Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 16.r,
+            ),
             onTap: () => LocalizatioUtils.showLanguageBottomSheet(
                 navigatorKey.currentContext ?? context),
           ),
@@ -117,20 +152,6 @@ class _MenuScreenState extends State<MenuScreen> {
             },
           ),
           SliverToBoxAdapter(child: SizedBox(height: 6.h)),
-          ButtonInMenu(
-            icon: Icon(
-              Icons.star_border_rounded,
-              size: 28.r,
-            ),
-            label: 'Đánh Giá Giảng Viên',
-            iconArrow: Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 16.r,
-            ),
-            onTap: () {
-              AppRoute.teacherCode.push(context);
-            },
-          ),
           SliverToBoxAdapter(child: SizedBox(height: 6.h)),
           ButtonInMenu(
             borderRadiusBottom: 12.r,

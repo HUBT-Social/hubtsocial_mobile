@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hubtsocial_mobile/src/features/menu/presentation/screens/teacher_screen.dart';
+import 'package:hubtsocial_mobile/src/features/home/presentation/screens/teacher_screen.dart';
 
 class TeacherCodeInputScreen extends StatelessWidget {
   final TextEditingController _codeController = TextEditingController();

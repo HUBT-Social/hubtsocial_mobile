@@ -43,6 +43,7 @@ enum AppRoute {
 
   // notifications
   notifications('/notifications'),
+  notificationSettings('/notification-settings'),
   // notifications
 
   // menu

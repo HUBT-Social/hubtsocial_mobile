@@ -179,6 +179,10 @@ StatefulShellRoute _mainRoute() {
             path: AppRoute.notifications.path,
             builder: (context, state) => const NotificationsScreen(),
           ),
+          GoRoute(
+            path: AppRoute.notificationSettings.path,
+            builder: (context, state) => const NotificationSettingsScreen(),
+          ),
         ],
       ),
 

@@ -15,18 +15,16 @@ class EditProfileHeader extends StatelessWidget {
         alignment: Alignment.center,
         clipBehavior: Clip.none,
         children: [
-        
           Positioned(
             top: -20,
             child: Text(
               context.loc.edit_profile,
               style: context.textTheme.headlineMedium?.copyWith(
-                color: Colors.white,
+                color: Colors.black,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-        
           Positioned(
             bottom: -150,
             child: Stack(
@@ -39,7 +37,6 @@ class EditProfileHeader extends StatelessWidget {
                       : const AssetImage('assets/images/default_avatar.png')
                           as ImageProvider,
                 ),
-               
                 Positioned(
                   bottom: 0,
                   right: 0,

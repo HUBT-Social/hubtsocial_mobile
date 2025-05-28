@@ -58,10 +58,8 @@ class EditProfileScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   context.loc.edit_profile,
-                  style: context.textTheme.headlineMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+                 style: context.textTheme.headlineMedium
+                      ?.copyWith(color: context.colorScheme.onSurface),
                 ),
               ),
               SizedBox(height: 50), // Khoảng trống cho avatar
