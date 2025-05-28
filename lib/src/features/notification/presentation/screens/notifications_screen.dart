@@ -80,14 +80,11 @@ class _NotificationsState extends State<NotificationsScreen> {
       switch (type) {
         case 'chat':
           final roomId = notification.data!['id']?.toString();
-          final title = notification.data!['title']?.toString();
-          final avatarUrl = notification.data!['avatarUrl']?.toString();
+          // final title = notification.data!['title']?.toString();
+          // final avatarUrl = notification.data!['avatarUrl']?.toString();
           if (roomId != null) {
-            AppRoute.roomChat.push(context, queryParameters: {
-              "id": roomId,
-              "title": title,
-              "avatarUrl": avatarUrl
-            });
+            AppRoute.roomChat.push(navigatorKey.currentContext!,
+                queryParameters: {"id": roomId});
           } else {
             router.go('/chat');
           }

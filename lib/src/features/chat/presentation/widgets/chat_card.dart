@@ -67,12 +67,8 @@ class _ChatCardState extends State<ChatCard> {
         ),
         child: InkWell(
           onTap: () {
-            AppRoute.roomChat
-                .push(navigatorKey.currentContext!, queryParameters: {
-              "id": widget.chatModel.id,
-              "title": widget.chatModel.groupName,
-              "avatarUrl": widget.chatModel.avatarUrl
-            });
+            AppRoute.roomChat.push(navigatorKey.currentContext!,
+                queryParameters: {"id": widget.chatModel.id});
           },
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 6.h),

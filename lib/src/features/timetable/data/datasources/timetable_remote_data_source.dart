@@ -198,23 +198,6 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         queryParameters: {"timetableId": timetableId},
       );
 
-      if (response.statusCode == 401) {
-        logger.w('Unauthorized access while fetching timetable info');
-        throw const ServerException(
-          message: 'Your session has expired. Please login again.',
-          statusCode: '401',
-        );
-      }
-
-      if (response.statusCode == 404) {
-        logger.w('Timetable not found. Id: $timetableId');
-        throw const ServerException(
-          message:
-              'Timetable not found. It may have been deleted or you no longer have access.',
-          statusCode: '404',
-        );
-      }
-
       if (response.statusCode != 200) {
         logger.e(
           'Failed to get timetable info. Status: ${response.statusCode}, Response: ${response.data}',

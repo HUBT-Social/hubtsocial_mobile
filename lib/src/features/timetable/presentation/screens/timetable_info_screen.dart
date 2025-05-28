@@ -9,6 +9,7 @@ import 'package:hubtsocial_mobile/src/features/timetable/data/timetable_type.dar
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_info_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/widgets/timetable_member_card.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
+import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -341,7 +342,7 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                             collapsedShape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.zero),
                             children:
-                                state.timetableInfoModel.timetableMembers.map(
+                                state.timetableInfoModel.studentMembers.map(
                               (member) {
                                 return TimetableMemberCard(
                                   memberModel: member,
@@ -447,16 +448,21 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                     ),
                   ],
                 ),
-                Positioned(
-                  bottom: 72.h,
-                  right: 24.w,
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      AppRoute.chat.go(context);
-                    },
-                    child: Icon(Icons.message),
+                if (state.timetableInfoModel.chatRoomId != null &&
+                    state.timetableInfoModel.chatRoomId!.isNotEmpty)
+                  Positioned(
+                    bottom: 72.h,
+                    right: 24.w,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        AppRoute.roomChat.push(navigatorKey.currentContext!,
+                            queryParameters: {
+                              "id": state.timetableInfoModel.chatRoomId
+                            });
+                      },
+                      child: Icon(Icons.message),
+                    ),
                   ),
-                ),
               ],
             );
           }
