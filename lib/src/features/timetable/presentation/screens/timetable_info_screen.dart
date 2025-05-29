@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../constants/assets.dart';
+import '../../../../core/presentation/widget/url_image.dart';
 
 class TimetableInfoScreen extends StatefulWidget {
   const TimetableInfoScreen({required this.id, super.key});
@@ -32,6 +33,9 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
 
     super.initState();
   }
+
+  final CarouselController lecturerController =
+      CarouselController(initialItem: 1);
 
   @override
   Widget build(BuildContext context) {
@@ -313,6 +317,71 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                         ),
                       ),
                     ),
+                    if (state.timetableInfoModel.teacherleMembers.isNotEmpty)
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 12.h),
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(maxHeight: 96.h),
+                            child: CarouselView.weighted(
+                              onTap: (index) {
+                                final teacherleMember = state
+                                    .timetableInfoModel.teacherleMembers[index];
+                                AppRoute.profile.push(
+                                  navigatorKey.currentContext!,
+                                  queryParameters: {
+                                    "userName": teacherleMember.userName,
+                                  },
+                                );
+                              },
+                              flexWeights: state.timetableInfoModel
+                                          .teacherleMembers.length >
+                                      1
+                                  ? [1, 8, 1]
+                                  : [1],
+                              itemSnapping: true,
+                              consumeMaxWeight: false,
+                              children: state
+                                  .timetableInfoModel.teacherleMembers
+                                  .map((teacherleMember) {
+                                return ColoredBox(
+                                  color: context
+                                      .colorScheme.surfaceContainerHighest,
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: UrlImage.circle(
+                                            teacherleMember.avatarUrl ?? "",
+                                            size: 48.r,
+                                          ),
+                                        ),
+                                        SizedBox(width: 12.h),
+                                        Flexible(
+                                          child: Text(
+                                            teacherleMember.fullName ?? "",
+                                            style: context.textTheme.bodyLarge
+                                                ?.copyWith(
+                                              color:
+                                                  context.colorScheme.onSurface,
+                                            ),
+                                            overflow: TextOverflow.clip,
+                                            softWrap: false,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      ),
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: EdgeInsets.only(top: 12.h, bottom: 3.h),

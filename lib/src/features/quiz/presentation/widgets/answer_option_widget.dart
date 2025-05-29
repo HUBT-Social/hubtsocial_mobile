@@ -32,7 +32,7 @@ class _AnswerOptionWidgetState extends State<AnswerOptionWidget> {
       return context.colorScheme.error;
     }
 
-    return context.colorScheme.surfaceContainerHighest;
+    return context.colorScheme.onSurfaceVariant;
   }
 
   IconData? _getIcon() {

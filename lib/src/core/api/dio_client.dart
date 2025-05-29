@@ -252,7 +252,7 @@ class DioClient {
     try {
       var deviceId = await DeviceId.getUniqueDeviceId();
 
-      final response = await post<Map<String, dynamic>>(
+      final response = await post(
         EndPoint.authRefreshToken,
         data: {"refreshToken": token.refreshToken},
         options: Options(
@@ -281,13 +281,13 @@ class DioClient {
       }
 
       logger.e('Failed to refresh token: ${response.statusCode}');
-      return null;
+      return token.accessToken; // Return old token if refresh fails
     } catch (e) {
       logger.e('Error during token refresh: $e');
       if (e is DioException && e.response?.statusCode == 401) {
         await _clearToken();
       }
-      return null;
+      return token.accessToken; // Return old token if refresh fails
     }
   }
 
