@@ -45,7 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
             .showSnackBarMessage(context.loc.features_currently_in_development);
       }),
       _FunctionItem(context.loc.instructor_evaluation, Icons.rate_review,
-          Colors.deepOrange.shade300, () {}),
+          Colors.deepOrange.shade300, () {
+              AppRoute.teacherCode.push(context);
+          }),
       _FunctionItem(
           context.loc.academic_advisor, Icons.person_pin, Colors.red.shade700,
           () {
