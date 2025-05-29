@@ -81,6 +81,7 @@ flutter run --flavor prod lib/main.dart
 flutter build apk --debug --flavor dev
 ```
 
+## flutter build prod
 ```
-flutter build apk --release --flavor dev
+flutter build apk --release --flavor prod
 ```
