@@ -29,9 +29,35 @@ class UpdateUserProfileEvent extends UserEvent {
   List<Object> get props => [userId, fullName, email, avatarUrl];
 }
 
+class UpdateUserNameEvent extends UserEvent {
+  const UpdateUserNameEvent({
+    required this.userId,
+    required this.firstName,
+    required this.lastName,
+  });
+  final String userId;
+  final String firstName;
+  final String lastName;
+
+  @override
+  List<Object> get props => [userId, firstName, lastName];
+}
+
+class UpdateUserAvatarEvent extends UserEvent {
+  const UpdateUserAvatarEvent({
+    required this.newImage,
+  });
+  final File newImage;
+
+  @override
+  List<Object> get props => [];
+}
+
 class ChangePasswordEvent extends UserEvent {
-  const ChangePasswordEvent(
-      {required this.oldPassword, required this.newPassword});
+  const ChangePasswordEvent({
+    required this.oldPassword,
+    required this.newPassword,
+  });
 
   final String oldPassword;
   final String newPassword;

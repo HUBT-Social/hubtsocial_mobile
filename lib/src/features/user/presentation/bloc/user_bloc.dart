@@ -8,6 +8,7 @@ import '../../domain/entities/user.dart';
 import '../../domain/usecases/change_password_usercase.dart';
 import '../../domain/usecases/init_user_usercase.dart';
 import '../../domain/usecases/update_user_usercase.dart';
+import '../../domain/repos/user_repo.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';
@@ -18,26 +19,61 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     required InitUserUserCase initUserProfile,
     required UpdateUserUserCase updateUserProfile,
     required ChangePasswordUserCase changedPassword,
+    required UserRepo userRepo,
   })  : _initUserProfile = initUserProfile,
         _updateUserProfile = updateUserProfile,
         _changedPassword = changedPassword,
+        _userRepo = userRepo,
         super(UserProfileInitial()) {
     on<UserEvent>((event, emit) {
       emit(UserProfileLoading());
     });
     on<InitUserProfileEvent>(_initUserProfileHandler);
     on<UpdateUserProfileEvent>(_updateUserProfileHandler);
+    on<UpdateUserNameEvent>(_updateUserNameHandler);
+    on<UpdateUserAvatarEvent>(_updateUserAvatarHandler);
     on<ChangePasswordEvent>(_changedPasswordHandler);
   }
 
   final InitUserUserCase _initUserProfile;
   final UpdateUserUserCase _updateUserProfile;
   final ChangePasswordUserCase _changedPassword;
+  final UserRepo _userRepo;
+
+  Future<void> _updateUserNameHandler(
+    UpdateUserNameEvent event,
+    Emitter<UserState> emit,
+  ) async {
+    final result = await _userRepo.updateUserName(
+      firstName: event.firstName,
+      lastName: event.lastName,
+    );
+    result.fold(
+      (failure) => emit(UserProfileError(failure.message)),
+      (_) => emit(UpdatedUserProfile()),
+    );
+  }
+
+  Future<void> _updateUserAvatarHandler(
+    UpdateUserAvatarEvent event,
+    Emitter<UserState> emit,
+  ) async {
+    final result = await _userRepo.updateUserAvatar(
+      newImage: event.newImage,
+    );
+    result.fold(
+      (failure) => emit(UserProfileError(failure.message)),
+      (_) => emit(UpdatedUserProfile()),
+    );
+  }
 
   Future<void> _updateUserProfileHandler(
     UpdateUserProfileEvent event,
     Emitter<UserState> emit,
   ) async {
+    // This handler might not be needed anymore or needs adjustment
+    // depending on how updateUserProfile is intended to be used.
+    // For now, I'll keep it but it might be deprecated.
     final result = await _updateUserProfile(
       UpdateProfileParams(
         userId: event.userId,
@@ -48,8 +84,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       ),
     );
     result.fold(
-      (failure) => emit(UserProfileError("serverError")),
-      (user) => emit(UpdatedUserProfile()),
+      (failure) => emit(UserProfileError(failure.message)),
+      (_) => emit(UpdatedUserProfile()),
     );
   }
 
@@ -59,7 +95,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   ) async {
     final result = await _initUserProfile();
     result.fold(
-      (failure) => emit(UserProfileError("serverError")),
+      (failure) => emit(UserProfileError(failure.message)),
       (user) => emit(UserProfileLoaded(user)),
     );
   }

@@ -5,24 +5,29 @@ import 'package:hubtsocial_mobile/src/features/user/domain/entities/user.dart';
 
 class EditProfileForm extends StatefulWidget {
   final User user;
+  final TextEditingController firstNameController;
+  final TextEditingController lastNameController;
+  final GlobalKey<FormState> formKey;
 
-  const EditProfileForm({super.key, required this.user});
+  const EditProfileForm({
+    super.key,
+    required this.user,
+    required this.firstNameController,
+    required this.lastNameController,
+    required this.formKey,
+  });
 
   @override
   State<EditProfileForm> createState() => _EditProfileFormState();
 }
 
 class _EditProfileFormState extends State<EditProfileForm> {
-  late TextEditingController firstNameController;
-  late TextEditingController lastNameController;
   late TextEditingController dateOfBirthController;
   late Gender selectedGender;
 
   @override
   void initState() {
     super.initState();
-    firstNameController = TextEditingController(text: widget.user.firstName);
-    lastNameController = TextEditingController(text: widget.user.lastName);
     dateOfBirthController = TextEditingController(
       text: widget.user.birthDay != null
           ? "${widget.user.birthDay!.day.toString().padLeft(2, '0')}/${widget.user.birthDay!.month.toString().padLeft(2, '0')}/${widget.user.birthDay!.year}"
@@ -33,66 +38,51 @@ class _EditProfileFormState extends State<EditProfileForm> {
 
   @override
   void dispose() {
-    firstNameController.dispose();
-    lastNameController.dispose();
     dateOfBirthController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildTextField(
-          context,
-          controller: firstNameController,
-          label: context.loc.first_name,
-          hint: context.loc.first_name_hint,
-          required: true,
-        ),
-        const SizedBox(height: 8), 
-        _buildTextField(
-          context,
-          controller: lastNameController,
-          label: context.loc.last_name,
-          hint: context.loc.last_name_hint,
-          required: true,
-        ),
-        const SizedBox(height: 8),
-        _buildDropdownField(
-          context,
-          label: context.loc.gender,
-          value: selectedGender,
-          onChanged: (value) {
-            if (value != null) {
-              setState(() {
-                selectedGender = value;
-              });
-            }
-          },
-        ),
-        const SizedBox(height: 8),
-        _buildTextField(
-          context,
-          controller: dateOfBirthController,
-          label: context.loc.birth_of_date,
-          hint: 'dd/mm/yyyy',
-          readOnly: true,
-          onTap: () async {
-            final date = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(1900),
-              lastDate: DateTime.now(),
-            );
-            if (date != null) {
-              dateOfBirthController.text =
-                  "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}";
-            }
-          },
-        ),
-      ],
+    return Form(
+      key: widget.formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildTextField(
+            context,
+            controller: widget.firstNameController,
+            label: context.loc.first_name,
+            hint: context.loc.first_name_hint,
+            required: true,
+          ),
+          const SizedBox(height: 8),
+          _buildTextField(
+            context,
+            controller: widget.lastNameController,
+            label: context.loc.last_name,
+            hint: context.loc.last_name_hint,
+            required: true,
+          ),
+          const SizedBox(height: 8),
+          _buildDropdownField(
+            context,
+            label: context.loc.gender,
+            value: selectedGender,
+            onChanged: null, // Make read-only
+            enabled: false, // Make read-only
+          ),
+          const SizedBox(height: 8),
+          _buildTextField(
+            context,
+            controller: dateOfBirthController,
+            label: context.loc.birth_of_date,
+            hint: 'dd/mm/yyyy',
+            readOnly: true, // Make read-only
+            onTap: null, // Disable tap
+          ),
+        ],
+      ),
     );
   }
 
@@ -122,19 +112,23 @@ class _EditProfileFormState extends State<EditProfileForm> {
             if (required) const Text(' *', style: TextStyle(color: Colors.red)),
           ],
         ),
-        const SizedBox(height: 4), 
-        TextField(
+        const SizedBox(height: 4),
+        TextFormField(
           controller: controller,
           keyboardType: keyboardType,
           readOnly: readOnly,
           onTap: onTap,
-          style: const TextStyle(fontSize: 13), 
+          style: TextStyle(
+              fontSize: 13,
+              color: readOnly
+                  ? context.colorScheme.onSurface.withOpacity(0.7)
+                  : context.colorScheme.onSurface),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: const TextStyle(fontSize: 13),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
-              vertical: 8, 
+              vertical: 8,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -150,7 +144,21 @@ class _EditProfileFormState extends State<EditProfileForm> {
                 width: 0.5,
               ),
             ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: Colors.grey
+                    .withOpacity(0.3), // Lighter border when disabled
+                width: 0.5,
+              ),
+            ),
           ),
+          validator: (value) {
+            if (required && (value == null || value.isEmpty)) {
+              return 'This field is required';
+            }
+            return null;
+          },
         ),
       ],
     );
@@ -160,7 +168,8 @@ class _EditProfileFormState extends State<EditProfileForm> {
     BuildContext context, {
     required String label,
     required Gender value,
-    required ValueChanged<Gender?> onChanged,
+    required ValueChanged<Gender?>? onChanged,
+    bool enabled = true,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,13 +182,13 @@ class _EditProfileFormState extends State<EditProfileForm> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 4), 
+        const SizedBox(height: 4),
         DropdownButtonFormField<Gender>(
           value: value,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
-              vertical: 8, 
+              vertical: 8,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -195,17 +204,34 @@ class _EditProfileFormState extends State<EditProfileForm> {
                 width: 0.5,
               ),
             ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: Colors.grey
+                    .withOpacity(0.3), // Lighter border when disabled
+                width: 0.5,
+              ),
+            ),
           ),
           items: Gender.values
               .map((gender) => DropdownMenuItem(
                     value: gender,
                     child: Text(
                       gender.name,
-                      style: const TextStyle(fontSize: 13),
+                      style: TextStyle(
+                          fontSize: 13,
+                          color: enabled
+                              ? context.colorScheme.onSurface
+                              : context.colorScheme.onSurface.withOpacity(0.7)),
                     ),
                   ))
               .toList(),
-          onChanged: onChanged,
+          onChanged: enabled ? onChanged : null,
+          iconDisabledColor: Colors.grey.withOpacity(0.5),
+          style: TextStyle(
+              color: enabled
+                  ? context.colorScheme.onSurface
+                  : context.colorScheme.onSurface.withOpacity(0.7)),
         ),
       ],
     );

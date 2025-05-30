@@ -23,6 +23,9 @@ class EndPoint {
   static String get userGetUser => _user;
   static String get informationUser => "$_user/add-info-user";
   static String get updateFcmToken => "$_user/update/fcm-token";
+  static String get updateAvatar=>"$_user/update-avatar";
+   static String get uptateName=>"$_user/update/name";// trong update name này có first name và lastName
+    
 
   static String get _chat => "$apiUrl/chat";
   static String get chatView => "$_chat/load-rooms";
@@ -33,4 +36,6 @@ class EndPoint {
   static String get checkVersion => "$_schooldata/check-version";
   static String get timetable => "$_schooldata/timetable";
   static String get timetableInfo => "$_schooldata/timetable-info";
+
+ 
 }
