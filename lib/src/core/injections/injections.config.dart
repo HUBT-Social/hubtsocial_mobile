@@ -238,6 +238,7 @@ extension GetItInjectableX on _i174.GetIt {
           initUserProfile: gh<_i477.InitUserUserCase>(),
           updateUserProfile: gh<_i925.UpdateUserUserCase>(),
           changedPassword: gh<_i789.ChangePasswordUserCase>(),
+          userRepo: gh<_i1042.UserRepo>(),
         ));
     gh.factory<_i285.GetRoomChatBloc>(() => _i285.GetRoomChatBloc(
           fetchRoomChat: gh<_i1063.FetchRoomChatUserCase>(),

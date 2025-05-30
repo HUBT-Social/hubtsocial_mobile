@@ -7,6 +7,17 @@ abstract class UserRepo {
   const UserRepo();
 
   ResultFuture<User> initUserProfile();
+
+  ResultFuture<void> updateUserName({
+    // required String userId,
+    required String firstName,
+    required String lastName,
+  });
+
+  ResultFuture<void> updateUserAvatar({
+    required File newImage,
+  });
+
   ResultFuture<void> updateUserProfile({
     required String userId,
     required String fullName,
