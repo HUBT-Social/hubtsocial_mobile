@@ -8,21 +8,24 @@ import 'package:hubtsocial_mobile/src/core/injections/injections.dart';
 class ChatHubConnection {
   ChatHubConnection._();
 
+  static final _httpConnectionOptions = HttpConnectionOptions(
+    accessTokenFactory: getAccessTokenFactory,
+    // requestTimeout: 1000,
+  );
+
   static final HubConnection _chatHubConnection = HubConnectionBuilder()
       .withUrl(
         EndPoint.chatHub,
-        options: HttpConnectionOptions(
-          accessTokenFactory: getAccessTokenFactory,
-          requestTimeout: 60000,
-        ),
+        options: _httpConnectionOptions,
       )
       .withAutomaticReconnect()
       .build();
 
   static final DioClient _dioClient = getIt<DioClient>();
 
-  static bool _isInitialized = false;
   static bool _isReconnecting = false;
+
+  static final Map<String, List<MethodInvocationFunc>> _registeredEvents = {};
 
   static Future<String> getAccessTokenFactory() async {
     try {
@@ -34,13 +37,41 @@ class ChatHubConnection {
     }
   }
 
-  static Future<void> initHubConnection() async {
-    if (_isInitialized) {
-      logger.w("⚠️ Hub already initialized");
-      return;
+  // Đăng ký sự kiện và lưu lại
+  static void on(String methodName, MethodInvocationFunc callback) {
+    if (_chatHubConnection.state != HubConnectionState.Disconnected) {
+      initHubConnection();
     }
-    _isInitialized = true;
+    _chatHubConnection.on(methodName, callback);
+    if (_registeredEvents[methodName] == null) {
+      _registeredEvents[methodName] = [];
+    }
+    _registeredEvents[methodName]?.add(callback);
+  }
 
+  // Hủy đăng ký sự kiện và xóa khỏi map
+  static void off(String methodName, {MethodInvocationFunc? method}) {
+    _chatHubConnection.off(methodName, method: method);
+
+    if (_registeredEvents.containsKey(methodName)) {
+      if (method != null) {
+        _registeredEvents[methodName]?.remove(method);
+      } else {
+        _registeredEvents.remove(methodName);
+      }
+    }
+  }
+
+  // Nạp lại các sự kiện đã lưu
+  static void _reloadRegisteredEvents() {
+    _registeredEvents.forEach((event, listCallbacks) {
+      listCallbacks.forEach((callback) {
+        _chatHubConnection.on(event, callback);
+      });
+    });
+  }
+
+  static Future<void> initHubConnection() async {
     logger.i("🔌 Initializing SignalR hub connection to: ${EndPoint.chatHub}");
 
     _chatHubConnection.onclose(({Exception? error}) {
@@ -56,9 +87,11 @@ class ChatHubConnection {
     _chatHubConnection.onreconnected(({connectionId}) {
       logger.i("✅ Reconnected successfully. ConnectionId: $connectionId");
       _isReconnecting = false;
+      _reloadRegisteredEvents(); // Nạp lại các sự kiện khi kết nối lại
     });
 
     await _startConnection();
+    _reloadRegisteredEvents(); // Nạp lại các sự kiện khi kết nối thành công lần đầu
   }
 
   static Future<void> _startConnection() async {
@@ -75,6 +108,7 @@ class ChatHubConnection {
       logger.i("▶️ Starting SignalR connection...");
       await _chatHubConnection.start();
       logger.i("✅ SignalR connected. State: ${_chatHubConnection.state}");
+      _reloadRegisteredEvents(); // Nạp lại các sự kiện sau khi start thành công
     } catch (e) {
       logger.e("❌ Failed to start SignalR connection: $e");
     }
@@ -132,6 +166,4 @@ class ChatHubConnection {
       logger.e("❌ Failed to send chat item: $e");
     }
   }
-
-  static HubConnection get connection => _chatHubConnection;
 }

@@ -198,15 +198,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       SizedBox(height: 24.h), // Space before button
                       // Save Changes Button
                       ElevatedButton(
-                        onPressed: _updateName, // Use update name function
-                        child: Text('Save Changes'), // Localize this text
+                        onPressed: _updateName, // Localize this text
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(double.infinity,
                               48.h), // Adjusted height based on design look
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.r),
                           ),
-                        ),
+                        ), // Use update name function
+                        child: Text('Save Changes'),
                       ),
                     ],
                   ),

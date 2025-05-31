@@ -10,7 +10,6 @@ import 'package:hubtsocial_mobile/src/features/chat/data/models/send_chat_reques
 import 'package:hubtsocial_mobile/src/features/chat/data/datasources/chat_hub_connection.dart';
 import 'package:hubtsocial_mobile/src/features/room_chat/presentation/bloc/room_chat_bloc.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
-import 'package:signalr_netcore/signalr_client.dart';
 import 'package:dio/dio.dart';
 import 'package:hubtsocial_mobile/src/core/injections/injections.dart';
 
@@ -36,17 +35,14 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
     _dioClient = getIt<DioClient>();
     context.read<GetRoomChatBloc>().add(GetRoomMemberEvent(roomId: widget.id));
 
-    if (ChatHubConnection.connection.state == HubConnectionState.Connected) {
-      ChatHubConnection.connection.on("ReceiveChat", _handleReceiveChat);
-      ChatHubConnection.connection.on("ReceiveProcess", _handleReceiveProcess);
-    }
+    ChatHubConnection.on("ReceiveChat", _handleReceiveChat);
+    ChatHubConnection.on("ReceiveProcess", _handleReceiveProcess);
   }
 
   @override
   void dispose() {
-    ChatHubConnection.connection.off("ReceiveChat", method: _handleReceiveChat);
-    ChatHubConnection.connection
-        .off("ReceiveProcess", method: _handleReceiveProcess);
+    ChatHubConnection.off("ReceiveChat", method: _handleReceiveChat);
+    ChatHubConnection.off("ReceiveProcess", method: _handleReceiveProcess);
     super.dispose();
   }
 

@@ -8,7 +8,6 @@ import 'package:hubtsocial_mobile/src/features/chat/data/models/message_response
 import 'package:hubtsocial_mobile/src/features/chat/presentation/widgets/chat_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
-import 'package:signalr_netcore/hub_connection.dart';
 import '../../../main_wrapper/presentation/widgets/main_app_bar.dart';
 import '../bloc/chat_bloc.dart';
 
@@ -35,16 +34,15 @@ class _ChatScreenState extends State<ChatScreen> {
           ));
     });
 
-    if (ChatHubConnection.connection.state == HubConnectionState.Connected) {
-      ChatHubConnection.connection.on("ReceiveChat", _handleReceiveChat);
-    }
+    ChatHubConnection.on("ReceiveChat", _handleReceiveChat);
+
     super.initState();
   }
 
   @override
   void dispose() {
     _pagingController.dispose();
-    ChatHubConnection.connection.off("ReceiveChat", method: _handleReceiveChat);
+    ChatHubConnection.off("ReceiveChat", method: _handleReceiveChat);
     super.dispose();
   }
 
