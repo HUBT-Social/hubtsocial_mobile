@@ -31,8 +31,10 @@ class _HomeScreenState extends State<HomeScreen> {
           () {
         AppRoute.quiz.push(context);
       }),
-      _FunctionItem(
-          context.loc.module, Icons.menu_book, Colors.amber.shade400, () {}),
+      _FunctionItem(context.loc.module, Icons.menu_book, Colors.amber.shade400,
+          () {
+        AppRoute.module.push(context);
+      }),
       _FunctionItem(context.loc.academic_result, Icons.emoji_events,
           Colors.blue.shade700, () {}),
       _FunctionItem(
@@ -46,8 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }),
       _FunctionItem(context.loc.instructor_evaluation, Icons.rate_review,
           Colors.deepOrange.shade300, () {
-              AppRoute.teacherCode.push(context);
-          }),
+        AppRoute.teacherCode.push(context);
+      }),
       _FunctionItem(
           context.loc.academic_advisor, Icons.person_pin, Colors.red.shade700,
           () {

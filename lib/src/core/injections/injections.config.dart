@@ -56,10 +56,8 @@ import 'package:hubtsocial_mobile/src/features/home/module/data/repos/module_rep
     as _i18;
 import 'package:hubtsocial_mobile/src/features/home/module/domain/repos/module_repo.dart'
     as _i346;
-import 'package:hubtsocial_mobile/src/features/home/module/domain/usercases/fetch_module_usercase.dart'
-    as _i258;
-import 'package:hubtsocial_mobile/src/features/home/module/domain/usercases/get_room_member_usercase.dart'
-    as _i581;
+import 'package:hubtsocial_mobile/src/features/home/module/domain/usercases/get_module_usercase.dart'
+    as _i411;
 import 'package:hubtsocial_mobile/src/features/home/module/presentation/bloc/module_bloc.dart'
     as _i249;
 import 'package:hubtsocial_mobile/src/features/notification/auth/auth_notification.dart'
@@ -225,10 +223,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i488.SignOut>(() => _i488.SignOut(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i287.SignUpUserCase>(
         () => _i287.SignUpUserCase(gh<_i936.AuthRepo>()));
-    gh.lazySingleton<_i258.FetchModuleUserCase>(
-        () => _i258.FetchModuleUserCase(gh<_i346.ModuleRepo>()));
-    gh.lazySingleton<_i581.GetRoomMemberUserCase>(
-        () => _i581.GetRoomMemberUserCase(gh<_i346.ModuleRepo>()));
+    gh.lazySingleton<_i411.GetModuleUserCase>(
+        () => _i411.GetModuleUserCase(gh<_i346.ModuleRepo>()));
     gh.lazySingleton<_i133.RoomChatRepo>(
         () => _i942.RoomChatRepoImpl(gh<_i311.RoomChatRemoteDataSource>()));
     gh.lazySingleton<_i475.InitTimetableInfoUserCase>(
@@ -245,6 +241,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i477.InitUserUserCase(gh<_i1042.UserRepo>()));
     gh.lazySingleton<_i925.UpdateUserUserCase>(
         () => _i925.UpdateUserUserCase(gh<_i1042.UserRepo>()));
+    gh.factory<_i249.ModuleBloc>(
+        () => _i249.ModuleBloc(getModule: gh<_i411.GetModuleUserCase>()));
     gh.factory<_i715.AuthBloc>(() => _i715.AuthBloc(
           signIn: gh<_i627.SignInUserCase>(),
           twoFactor: gh<_i245.TwoFactorUserCase>(),
@@ -263,10 +261,6 @@ extension GetItInjectableX on _i174.GetIt {
           updateUserProfile: gh<_i925.UpdateUserUserCase>(),
           changedPassword: gh<_i789.ChangePasswordUserCase>(),
           userRepo: gh<_i1042.UserRepo>(),
-        ));
-    gh.factory<_i249.GetModuleBloc>(() => _i249.GetModuleBloc(
-          fetchModule: gh<_i258.FetchModuleUserCase>(),
-          getModule: gh<_i581.GetRoomMemberUserCase>(),
         ));
     gh.factory<_i285.GetRoomChatBloc>(() => _i285.GetRoomChatBloc(
           fetchRoomChat: gh<_i1063.FetchRoomChatUserCase>(),

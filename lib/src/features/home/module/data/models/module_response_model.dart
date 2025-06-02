@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class ModuleResponseModel extends Equatable {
-  ModuleResponseModel({
+  const ModuleResponseModel({
     required this.major,
     required this.subjectName,
     required this.subjectCredit,

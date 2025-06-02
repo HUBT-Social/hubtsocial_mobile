@@ -65,9 +65,9 @@ class ChatHubConnection {
   // Nạp lại các sự kiện đã lưu
   static void _reloadRegisteredEvents() {
     _registeredEvents.forEach((event, listCallbacks) {
-      listCallbacks.forEach((callback) {
+      for (var callback in listCallbacks) {
         _chatHubConnection.on(event, callback);
-      });
+      }
     });
   }
 

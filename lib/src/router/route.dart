@@ -28,6 +28,7 @@ enum AppRoute {
   quizInfo('/quiz/info'),
   quizQuestion('/quiz/info/question'),
   quizResult('/quiz/info/result'),
+  module('/module'),
   // home
 
   // chat

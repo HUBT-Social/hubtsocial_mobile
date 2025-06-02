@@ -1,35 +1,25 @@
 part of 'module_bloc.dart';
 
-sealed class GetModuleState extends Equatable {
-  const GetModuleState();
+sealed class ModuleState extends Equatable {
+  const ModuleState();
 
   @override
   List<Object> get props => [];
 }
 
-final class ModuleProfileInitial extends GetModuleState {}
+final class ModuleInitial extends ModuleState {}
 
-class ModuleProfileLoading extends GetModuleState {}
+class ModuleLoading extends ModuleState {}
 
-class RoomMemberLoaded extends GetModuleState {
-  const RoomMemberLoaded(this.roomInfo);
-  final RoomInfoModel roomInfo;
-
-  @override
-  List<Object> get props => [];
-}
-
-class FetchRoomLoaded extends GetModuleState {
-  const FetchRoomLoaded(this.listMessage);
-  final List<Message> listMessage;
+class ModuleLoaded extends ModuleState {
+  const ModuleLoaded(this.moduleData);
+  final List<ModuleResponseModel> moduleData;
 
   @override
   List<Object> get props => [];
 }
 
-class UpdatedModuleProfile extends GetModuleState {}
-
-class ModuleLoadedError extends GetModuleState {
+class ModuleLoadedError extends ModuleState {
   const ModuleLoadedError(this.message);
 
   final String message;

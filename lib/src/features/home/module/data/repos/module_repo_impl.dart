@@ -1,11 +1,10 @@
-import 'package:chatview/chatview.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hubtsocial_mobile/src/core/api/errors/exceptions.dart';
 import 'package:hubtsocial_mobile/src/core/api/errors/failure.dart';
 import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
 import 'package:hubtsocial_mobile/src/features/home/module/data/datasources/module_remote_data_source.dart';
+import 'package:hubtsocial_mobile/src/features/home/module/data/models/module_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/home/module/domain/repos/module_repo.dart';
-import 'package:hubtsocial_mobile/src/features/room_chat/data/models/room_info_model.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(
@@ -17,24 +16,9 @@ class ModuleRepoImpl implements ModuleRepo {
   final ModuleRemoteDataSource _remoteDataSource;
 
   @override
-  ResultFuture<List<Message>> fetchModule({required String roomId}) async {
+  ResultFuture<List<ModuleResponseModel>> getModule() async {
     try {
-      final result = await _remoteDataSource.fetchModule(
-        roomId: roomId,
-      );
-
-      return Right(result);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
-    }
-  }
-
-  @override
-  ResultFuture<RoomInfoModel> getRoomMember({required String roomId}) async {
-    try {
-      final result = await _remoteDataSource.getRoomMember(
-        roomId: roomId,
-      );
+      final result = await _remoteDataSource.getModule();
 
       return Right(result);
     } on ServerException catch (e) {

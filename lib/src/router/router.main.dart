@@ -113,6 +113,23 @@ StatefulShellRoute _mainRoute() {
                       ],
                     ),
                   ]),
+              GoRoute(
+                path: 'module',
+                pageBuilder: (context, state) => CustomTransitionPage(
+                  key: state.pageKey,
+                  child: MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (_) => getIt<ModuleBloc>(),
+                      ),
+                    ],
+                    child: ModuleScreen(),
+                  ),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(opacity: animation, child: child),
+                ),
+              ),
             ],
           ),
         ],
