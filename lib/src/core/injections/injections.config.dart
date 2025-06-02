@@ -50,6 +50,18 @@ import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/chat_bloc.
     as _i359;
 import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/receive_chat/receive_chat_cubit.dart'
     as _i441;
+import 'package:hubtsocial_mobile/src/features/home/module/data/datasources/module_remote_data_source.dart'
+    as _i254;
+import 'package:hubtsocial_mobile/src/features/home/module/data/repos/module_repo_impl.dart'
+    as _i18;
+import 'package:hubtsocial_mobile/src/features/home/module/domain/repos/module_repo.dart'
+    as _i346;
+import 'package:hubtsocial_mobile/src/features/home/module/domain/usercases/fetch_module_usercase.dart'
+    as _i258;
+import 'package:hubtsocial_mobile/src/features/home/module/domain/usercases/get_room_member_usercase.dart'
+    as _i581;
+import 'package:hubtsocial_mobile/src/features/home/module/presentation/bloc/module_bloc.dart'
+    as _i249;
 import 'package:hubtsocial_mobile/src/features/notification/auth/auth_notification.dart'
     as _i924;
 import 'package:hubtsocial_mobile/src/features/quiz/data/datasources/quiz_remote_data_source.dart'
@@ -147,6 +159,12 @@ extension GetItInjectableX on _i174.GetIt {
               messaging: gh<_i892.FirebaseMessaging>(),
               dioClient: gh<_i292.DioClient>(),
             ));
+    gh.lazySingleton<_i254.ModuleRemoteDataSource>(
+        () => _i254.ModuleRemoteDataSourceImpl(
+              hiveAuth: gh<_i170.HiveInterface>(),
+              messaging: gh<_i892.FirebaseMessaging>(),
+              dioClient: gh<_i292.DioClient>(),
+            ));
     gh.lazySingleton<_i745.ChatRemoteDataSource>(
         () => _i745.ChatRemoteDataSourceImpl(dioClient: gh<_i292.DioClient>()));
     gh.lazySingleton<_i592.UserProfileRemoteDataSource>(() =>
@@ -182,6 +200,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i1023.QuizBloc(fetchQuiz: gh<_i35.FetchQuizUserCase>()));
     gh.factory<_i251.QuizInfoBloc>(
         () => _i251.QuizInfoBloc(getQuizInfo: gh<_i572.GetQuizInfoUserCase>()));
+    gh.lazySingleton<_i346.ModuleRepo>(
+        () => _i18.ModuleRepoImpl(gh<_i254.ModuleRemoteDataSource>()));
     gh.lazySingleton<_i1020.FetchChatUserCase>(
         () => _i1020.FetchChatUserCase(gh<_i965.ChatRepo>()));
     gh.factory<_i359.ChatBloc>(
@@ -205,6 +225,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i488.SignOut>(() => _i488.SignOut(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i287.SignUpUserCase>(
         () => _i287.SignUpUserCase(gh<_i936.AuthRepo>()));
+    gh.lazySingleton<_i258.FetchModuleUserCase>(
+        () => _i258.FetchModuleUserCase(gh<_i346.ModuleRepo>()));
+    gh.lazySingleton<_i581.GetRoomMemberUserCase>(
+        () => _i581.GetRoomMemberUserCase(gh<_i346.ModuleRepo>()));
     gh.lazySingleton<_i133.RoomChatRepo>(
         () => _i942.RoomChatRepoImpl(gh<_i311.RoomChatRemoteDataSource>()));
     gh.lazySingleton<_i475.InitTimetableInfoUserCase>(
@@ -239,6 +263,10 @@ extension GetItInjectableX on _i174.GetIt {
           updateUserProfile: gh<_i925.UpdateUserUserCase>(),
           changedPassword: gh<_i789.ChangePasswordUserCase>(),
           userRepo: gh<_i1042.UserRepo>(),
+        ));
+    gh.factory<_i249.GetModuleBloc>(() => _i249.GetModuleBloc(
+          fetchModule: gh<_i258.FetchModuleUserCase>(),
+          getModule: gh<_i581.GetRoomMemberUserCase>(),
         ));
     gh.factory<_i285.GetRoomChatBloc>(() => _i285.GetRoomChatBloc(
           fetchRoomChat: gh<_i1063.FetchRoomChatUserCase>(),
