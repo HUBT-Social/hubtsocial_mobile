@@ -193,7 +193,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
     try {
       logger.i('Fetching timetable info for id: $timetableId');
 
-      final response = await _dioClient.get<Map<String, dynamic>>(
+      final response = await _dioClient.get(
         EndPoint.timetableInfo,
         queryParameters: {"timetableId": timetableId},
       );

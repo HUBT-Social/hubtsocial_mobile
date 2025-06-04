@@ -29,7 +29,7 @@ class _ModuleScreenState extends State<ModuleScreen> {
       appBar: AppBar(
         backgroundColor: context.colorScheme.surface,
         title: Text(
-          "Ôn thi",
+          context.loc.module,
           textAlign: TextAlign.center,
           style: context.textTheme.headlineSmall?.copyWith(
             color: context.colorScheme.onSurface,
