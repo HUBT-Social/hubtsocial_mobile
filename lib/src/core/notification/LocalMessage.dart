@@ -1,6 +1,8 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'dart:convert';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel',
@@ -56,6 +58,23 @@ class LocalMessage {
     required String body,
     required String payload,
   }) async {
+    // Check if notification type is blocked
+    try {
+      final Map<String, dynamic> payloadData = json.decode(payload);
+      final notificationType = payloadData['type'] ?? 'system';
+
+      final settingsBox = await Hive.openBox('settings');
+      final List<dynamic> blockedTypes =
+          settingsBox.get('blocked_types', defaultValue: []);
+
+      if (blockedTypes.contains(notificationType)) {
+        print('Local notification type $notificationType is blocked');
+        return;
+      }
+    } catch (e) {
+      print('Error checking blocked types: $e');
+    }
+
     final androidNotificationDetails = AndroidNotificationDetails(
       channel.id,
       channel.name,

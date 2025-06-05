@@ -160,6 +160,17 @@ class NotificationService {
       final targetUsers = message.data['targetUsers'];
       final groupId = message.data['groupId'];
 
+      // Check if notification type is blocked
+      final settingsBox = await Hive.openBox('settings');
+      final List<dynamic> blockedTypes =
+          settingsBox.get('blocked_types', defaultValue: []);
+
+      if (blockedTypes.contains(notificationType)) {
+        print(
+            '[NotificationService] Notification type $notificationType is blocked');
+        return;
+      }
+
       // Kiểm tra xem người dùng hiện tại có trong danh sách nhận không
       if (targetUsers != null) {
         final userList = List<String>.from(json.decode(targetUsers));
