@@ -123,6 +123,7 @@ import 'package:hubtsocial_mobile/src/features/user/domain/usecases/update_user_
 import 'package:hubtsocial_mobile/src/features/user/presentation/bloc/user_bloc.dart'
     as _i527;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:logger/logger.dart' as _i974;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -256,15 +257,16 @@ extension GetItInjectableX on _i174.GetIt {
           signOut: gh<_i488.SignOut>(),
           informationUserCase: gh<_i556.InformationUserCase>(),
         ));
+    gh.factory<_i285.GetRoomChatBloc>(() => _i285.GetRoomChatBloc(
+          fetchRoomChat: gh<_i1063.FetchRoomChatUserCase>(),
+          getRoomChat: gh<_i892.GetRoomMemberUserCase>(),
+        ));
     gh.factory<_i527.UserBloc>(() => _i527.UserBloc(
           initUserProfile: gh<_i477.InitUserUserCase>(),
           updateUserProfile: gh<_i925.UpdateUserUserCase>(),
           changedPassword: gh<_i789.ChangePasswordUserCase>(),
           userRepo: gh<_i1042.UserRepo>(),
-        ));
-    gh.factory<_i285.GetRoomChatBloc>(() => _i285.GetRoomChatBloc(
-          fetchRoomChat: gh<_i1063.FetchRoomChatUserCase>(),
-          getRoomChat: gh<_i892.GetRoomMemberUserCase>(),
+          logger: gh<_i974.Logger>(),
         ));
     gh.factory<_i786.TimetableBloc>(() =>
         _i786.TimetableBloc(fetchTimetable: gh<_i753.InitTimetableUserCase>()));

@@ -83,39 +83,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    // Define sizes and positions based on design images
-    // Approximate values based on visual inspection and provided dimensions (360x372 for form/button area)
     final double screenHeight = MediaQuery.of(context).size.height;
-    final double greenAreaHeight =
-        screenHeight * 0.28; // Adjusted based on visual
+    final double greenAreaHeight = screenHeight * 0.28;
     final double avatarRadius = 50.r;
-    final double borderRadius = 32.r; // Radius of the rounded corners
-    // The white area should start so that the avatar is centered vertically on the overlap
-    // Avatar center is at greenAreaHeight - overlapHeight / 2
-    // Avatar top is at greenAreaHeight - overlapHeight / 2 - avatarRadius
-    // Avatar bottom is at greenAreaHeight - overlapHeight / 2 + avatarRadius
-    // Let's assume the white area starts around avatar center - a bit
-    final double whiteAreaTop = greenAreaHeight -
-        avatarRadius; // Start white area around avatar bottom position
+    final double borderRadius = 32.r;
+
+    final double whiteAreaTop = greenAreaHeight;
+    final double avatarTop = greenAreaHeight - (4 / 3) * avatarRadius;
     final double formPaddingTop =
-        avatarRadius + 20.h; // Padding inside white area to clear avatar
+        (avatarTop + 2 * avatarRadius) - whiteAreaTop + 20.h;
 
     return BlocListener<UserBloc, UserState>(
       listener: (context, state) {
         if (state is UserProfileLoading) {
           AppDialog.showLoadingDialog(message: 'Updating profile...');
-        } else if (state is UpdatedUserProfile) {
+        } else if (state is UserProfileLoaded) {
           AppDialog.closeDialog();
+          // UserProvider is updated by the BlocListener on UserProfileLoaded
+          // Show success message and pop for name updates
           if (_selectedImage == null) {
-            // Only show success message and pop for name updates
-            Navigator.pop(context);
             context.showSnackBarMessage('Profile updated successfully');
+            Navigator.pop(context);
           } else {
-            // For avatar updates, just show success message and refresh user data
+            // For avatar updates
             context.showSnackBarMessage('Avatar updated successfully');
             setState(() => _selectedImage = null);
-            // Dispatch event to refresh user data after avatar update
-            context.read<UserBloc>().add(const InitUserProfileEvent());
           }
         } else if (state is UserProfileError) {
           AppDialog.closeDialog();
@@ -131,18 +123,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           elevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () =>
-                Navigator.pop(context), // Assuming back button functionality
+            onPressed: () => Navigator.pop(context),
           ),
           title: Text(
-            context.loc.edit_profile, // Use localized string for title
+            context.loc.edit_profile,
             style: context.textTheme.titleLarge?.copyWith(color: Colors.white),
           ),
           centerTitle: true,
         ),
         body: Stack(
           children: [
-            // Green Area with potential background image
             Positioned(
               top: 0,
               left: 0,
@@ -150,25 +140,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: Container(
                 height: greenAreaHeight,
                 decoration: BoxDecoration(
-                  color: Colors
-                      .green, // Replace with actual green color from design
-                  // Comment out or remove if using a background image
-                  // image: DecorationImage(
-                  //   image: AssetImage('assets/images/background_green.png'),
-                  //   fit: BoxFit.cover,
-                  // ),
+                  color: Colors.green,
                 ),
               ),
             ),
-            // White Form Area (Scrollable) with rounded top corners
             Positioned(
-              top: whiteAreaTop, // Position white area
+              top: whiteAreaTop,
               left: 0,
               right: 0,
-              bottom: 0, // Extend to the bottom
+              bottom: 0,
               child: Container(
                 decoration: BoxDecoration(
-                  color: context.colorScheme.surface, // White background
+                  color: context.colorScheme.surface,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(borderRadius),
                     topRight: Radius.circular(borderRadius),
@@ -176,32 +159,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 child: SingleChildScrollView(
                   padding: EdgeInsets.only(
-                    top: formPaddingTop, // Padding to push content below avatar
+                    top: formPaddingTop,
                     left: 16.w,
                     right: 16.w,
-                    bottom: 16.h, // Padding at the bottom of the scroll view
+                    bottom: 16.h,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Edit Profile Form Widget
                       EditProfileForm(
                         user: user,
                         firstNameController: _firstNameController,
                         lastNameController: _lastNameController,
-                        formKey: _formKey, // Pass form key
+                        formKey: _formKey,
                       ),
-                      SizedBox(height: 24.h), // Space before button
-                      // Save Changes Button
+                      SizedBox(height: 24.h),
                       ElevatedButton(
-                        onPressed: _updateName, // Localize this text
+                        onPressed: _updateName,
                         style: ElevatedButton.styleFrom(
-                          minimumSize: Size(double.infinity,
-                              48.h), // Adjusted height based on design look
+                          minimumSize: Size(double.infinity, 48.h),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.r),
                           ),
-                        ), // Use update name function
+                        ),
                         child: Text('Save Changes'),
                       ),
                     ],
@@ -209,10 +189,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
               ),
             ),
-            // Avatar with camera icon (Positioned)
             Positioned(
-              top: greenAreaHeight -
-                  avatarRadius, // Position avatar relative to green area bottom
+              top: avatarTop,
               left: 0,
               right: 0,
               child: Center(
