@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/home/module/data/models/module_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/home/module/presentation/bloc/module_bloc.dart';
-import 'package:hubtsocial_mobile/src/features/home/module/presentation/widgets/module_card.dart';
 import 'package:hubtsocial_mobile/src/features/home/module/presentation/widgets/module_timeline.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -50,9 +49,15 @@ class _ModuleScreenState extends State<ModuleScreen> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 slivers: [
                   SliverToBoxAdapter(
-                    child: ModuleTimeline(
-                      title: '2024 - 2333',
-                      children: [],
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: state.moduleData.length,
+                      itemBuilder: (context, index) {
+                        return ModuleTimeline(
+                          moduleModel: state.moduleData[index],
+                        );
+                      },
                     ),
                   ),
                   SliverToBoxAdapter(
@@ -61,12 +66,16 @@ class _ModuleScreenState extends State<ModuleScreen> {
                 ],
               );
             } else if (state is ModuleLoadedError) {
-              return Center(
-                child: Text(
-                  state.message,
-                  style: context.textTheme.bodyLarge,
-                ),
-              );
+              return CustomScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Text(
+                        state.message,
+                        style: context.textTheme.bodyLarge,
+                      ),
+                    ),
+                  ]);
             }
             return const Center();
           },

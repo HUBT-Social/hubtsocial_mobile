@@ -1,58 +1,48 @@
 import 'package:equatable/equatable.dart';
+import 'package:hubtsocial_mobile/src/features/home/module/data/models/course_model.dart';
 
 class ModuleResponseModel extends Equatable {
-  const ModuleResponseModel({
-    required this.major,
-    required this.subjectName,
-    required this.subjectCredit,
-    required this.subjectYear,
+  ModuleResponseModel({
+    required this.courses,
+    required this.year,
   });
 
-  final String? major;
-  final String? subjectName;
-  final int? subjectCredit;
-  final int? subjectYear;
+  final List<CourseModel> courses;
+  final String? year;
 
   ModuleResponseModel copyWith({
-    String? major,
-    String? subjectName,
-    int? subjectCredit,
-    int? subjectYear,
+    List<CourseModel>? courses,
+    String? year,
   }) {
     return ModuleResponseModel(
-      major: major ?? this.major,
-      subjectName: subjectName ?? this.subjectName,
-      subjectCredit: subjectCredit ?? this.subjectCredit,
-      subjectYear: subjectYear ?? this.subjectYear,
+      courses: courses ?? this.courses,
+      year: year ?? this.year,
     );
   }
 
   factory ModuleResponseModel.fromJson(Map<String, dynamic> json) {
     return ModuleResponseModel(
-      major: json["major"],
-      subjectName: json["subjectName"],
-      subjectCredit: json["subjectCredit"],
-      subjectYear: json["subjectYear"],
+      courses: json["courses"] == null
+          ? []
+          : List<CourseModel>.from(
+              json["courses"]!.map((x) => CourseModel.fromJson(x))),
+      year: json["year"],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        "major": major,
-        "subjectName": subjectName,
-        "subjectCredit": subjectCredit,
-        "subjectYear": subjectYear,
+        "courses": courses.map((x) => x?.toJson()).toList(),
+        "year": year,
       };
 
   @override
   String toString() {
-    return "$major, $subjectName, $subjectCredit, $subjectYear, ";
+    return "$courses, $year, ";
   }
 
   @override
   List<Object?> get props => [
-        major,
-        subjectName,
-        subjectCredit,
-        subjectYear,
+        courses,
+        year,
       ];
 }

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
+import 'package:hubtsocial_mobile/src/features/home/module/data/models/module_response_model.dart';
+
+import '../../data/models/course_model.dart';
 
 class ModuleTimeline extends StatefulWidget {
-  final String title;
-  final List<Widget> children;
+  final ModuleResponseModel moduleModel;
 
   const ModuleTimeline({
     super.key,
-    required this.title,
-    required this.children,
+    required this.moduleModel,
   });
 
   @override
@@ -17,7 +18,7 @@ class ModuleTimeline extends StatefulWidget {
 }
 
 class _ModuleTimelineState extends State<ModuleTimeline> {
-  bool _isExpanded = false;
+  bool _isExpanded = true;
 
   @override
   Widget build(BuildContext context) {
@@ -87,9 +88,23 @@ class _ModuleTimelineState extends State<ModuleTimeline> {
             ],
           ),
 
-          title: Text(widget.title),
+          title: Text(
+            widget.moduleModel.year ?? 'No Year',
+            style: context.textTheme.titleMedium,
+          ),
           onTap: _expanded,
         ),
+        if (_isExpanded)
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: widget.moduleModel.courses.length,
+            itemBuilder: (context, index) {
+              return CoursesCard(
+                courses: widget.moduleModel.courses[index],
+              );
+            },
+          ),
         if (_isExpanded)
           Container(
             margin: EdgeInsets.only(
@@ -100,50 +115,26 @@ class _ModuleTimelineState extends State<ModuleTimeline> {
               children: [
                 SizedBox(
                   width: 24.w,
-                  // height: double.infinity,
+                  height: 12.h,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
                       Container(
                         width: 12.w,
-                        // height: double.infinity,
-                        color: context.colorScheme.primary,
-                      ),
-                      Container(
-                        width: 24.r,
-                        height: 24.r,
                         decoration: BoxDecoration(
                           color: context.colorScheme.primary,
-                          shape: BoxShape.circle,
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(100),
+                            bottomRight: Radius.circular(100),
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  width: 16.w,
-                ),
-                Padding(
-                  padding: EdgeInsets.all(24.r),
-                  child: Card(
-                    elevation: 2,
-                    color: context.colorScheme.surface,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [Text(widget.title)],
-                    ),
-                  ),
-                ),
               ],
             ),
           )
-        // Padding(
-        //   padding: EdgeInsets.only(left: 16.w),
-        //   child: Column(children: widget.children),
-        // ),
       ],
     );
   }
@@ -152,5 +143,86 @@ class _ModuleTimelineState extends State<ModuleTimeline> {
     setState(() {
       _isExpanded = !_isExpanded;
     });
+  }
+}
+
+class CoursesCard extends StatelessWidget {
+  const CoursesCard({
+    super.key,
+    required this.courses,
+  });
+
+  final CourseModel courses;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(
+        left: 16,
+        right: 16,
+      ),
+      child: IntrinsicHeight(
+        child: Row(
+          children: [
+            SizedBox(
+              width: 24.w,
+              // height: double.infinity,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: 12.w,
+                    // height: double.infinity,
+                    color: context.colorScheme.primary,
+                  ),
+                  Container(
+                    width: 24.r,
+                    height: 24.r,
+                    decoration: BoxDecoration(
+                      color: context.colorScheme.primary,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: 8.w, right: 16.w, top: 8.h, bottom: 8.h),
+                child: Card(
+                  elevation: 2,
+                  color: context.colorScheme.surface,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          courses.subjectName.toString(),
+                          style: context.textTheme.titleSmall,
+                        ),
+                        Text(
+                          context.loc.credits(
+                            courses.subjectCredit ?? 0,
+                          ),
+                          style: context.textTheme.titleSmall?.copyWith(
+                            color: context.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
