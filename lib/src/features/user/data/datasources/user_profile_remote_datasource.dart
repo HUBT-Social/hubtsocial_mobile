@@ -143,14 +143,8 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
       rethrow;
     } on DioException catch (e, s) {
       // Create a detailed log message for Dio errors
-      final logMessage = 'Dio error while updating user name: ' +
-          '\n  Type: ${e.type}' +
-          '\n  Message: ${e.message ?? 'No message'}' +
-          (e.response != null
-              ? '\n  Response Status: ${e.response?.statusCode}'
-              : '') +
-          (e.response != null ? '\n  Response Data: ${e.response?.data}' : '') +
-          (e.error != null ? '\n  Original Error: ${e.error}' : '');
+      final logMessage =
+          'Dio error while updating user name: \n  Type: ${e.type}\n  Message: ${e.message ?? 'No message'}${e.response != null ? '\n  Response Status: ${e.response?.statusCode}' : ''}${e.response != null ? '\n  Response Data: ${e.response?.data}' : ''}${e.error != null ? '\n  Original Error: ${e.error}' : ''}';
 
       logger.e(logMessage, error: e, stackTrace: s);
 

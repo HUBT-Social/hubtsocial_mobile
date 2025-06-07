@@ -65,38 +65,24 @@ class _MenuScreenState extends State<MenuScreen> {
             onTap: () => ThemeUtils.showThemeBottomSheet(
                 navigatorKey.currentContext ?? context),
           ),
-          SliverToBoxAdapter(child: SizedBox(height: 6.h)),
-          ButtonInMenu(
-            borderRadiusTop: 12.r,
-            icon: Icon(
-              Icons.security_rounded,
-              size: 28.r,
-            ),
-            label: "Security",
-            iconArrow: Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 16.r,
-            ),
-            onTap: () {
-              context.showSnackBarMessage(
-                  context.loc.features_currently_in_development);
-            },
-          ),
-          SliverToBoxAdapter(child: SizedBox(height: 6.h)),
-          ButtonInMenu(
-            icon: Icon(
-              Icons.notifications_rounded,
-              size: 28.r,
-            ),
-            label: context.loc.notifications,
-            iconArrow: Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 16.r,
-            ),
-            onTap: () {
-              AppRoute.notificationSettings.push(context);
-            },
-          ),
+          // SliverToBoxAdapter(child: SizedBox(height: 6.h)),
+          // ButtonInMenu(
+          //   borderRadiusTop: 12.r,
+          //   icon: Icon(
+          //     Icons.security_rounded,
+          //     size: 28.r,
+          //   ),
+          //   label: "Security",
+          //   iconArrow: Icon(
+          //     Icons.arrow_forward_ios_rounded,
+          //     size: 16.r,
+          //   ),
+          //   onTap: () {
+          //     context.showSnackBarMessage(
+          //         context.loc.features_currently_in_development);
+          //   },
+          // ),
+
           SliverToBoxAdapter(child: SizedBox(height: 6.h)),
           ButtonInMenu(
             borderRadiusBottom: 12.r,
@@ -112,11 +98,28 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
             label: context.loc.change_language,
             iconArrow: Icon(
-              Icons.arrow_forward_ios_rounded,
+              Icons.arrow_drop_down_rounded,
               size: 16.r,
             ),
             onTap: () => LocalizatioUtils.showLanguageBottomSheet(
                 navigatorKey.currentContext ?? context),
+          ),
+          SliverToBoxAdapter(child: LineInMenu()),
+          ButtonInMenu(
+            borderRadiusTop: 12.r,
+            borderRadiusBottom: 12.r,
+            icon: Icon(
+              Icons.notifications_rounded,
+              size: 28.r,
+            ),
+            label: context.loc.notifications,
+            iconArrow: Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 16.r,
+            ),
+            onTap: () {
+              AppRoute.notificationSettings.push(context);
+            },
           ),
           SliverToBoxAdapter(child: LineInMenu()),
           ButtonInMenu(
@@ -151,7 +154,6 @@ class _MenuScreenState extends State<MenuScreen> {
                   context.loc.features_currently_in_development);
             },
           ),
-          SliverToBoxAdapter(child: SizedBox(height: 6.h)),
           SliverToBoxAdapter(child: SizedBox(height: 6.h)),
           ButtonInMenu(
             borderRadiusBottom: 12.r,

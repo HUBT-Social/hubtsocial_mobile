@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 
 class NotificationSettingsScreen extends StatefulWidget {
   const NotificationSettingsScreen({super.key});
@@ -88,23 +90,20 @@ class _NotificationSettingsScreenState
     required List<Map<String, dynamic>> options,
   }) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       elevation: 1.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: EdgeInsets.all(12.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.green.shade700,
-              ),
+              style: context.textTheme.titleMedium
+                  ?.copyWith(color: context.colorScheme.primary),
             ),
-            SizedBox(height: 8.0),
+            SizedBox(height: 8.h),
             Column(
               children: options.map((option) {
                 final String key = option['key'];
@@ -115,7 +114,7 @@ class _NotificationSettingsScreenState
                     Expanded(
                       child: Text(
                         description,
-                        style: TextStyle(fontSize: 15),
+                        style: context.textTheme.labelLarge,
                       ),
                     ),
                     Switch(
@@ -123,7 +122,7 @@ class _NotificationSettingsScreenState
                       onChanged: (bool value) {
                         _toggleNotification(key, value);
                       },
-                      activeColor: Colors.green,
+                      activeColor: context.colorScheme.primary,
                     ),
                   ],
                 );
@@ -137,23 +136,20 @@ class _NotificationSettingsScreenState
 
   Widget _buildBlockedTypesCategory() {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       elevation: 1.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: EdgeInsets.all(12.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Chặn thông báo theo loại',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.green.shade700,
-              ),
+              style: context.textTheme.titleMedium
+                  ?.copyWith(color: context.colorScheme.primary),
             ),
-            SizedBox(height: 8.0),
+            SizedBox(height: 8.h),
             Column(
               children: _blockedTypes.entries.map((entry) {
                 return Row(
@@ -162,7 +158,7 @@ class _NotificationSettingsScreenState
                     Expanded(
                       child: Text(
                         _getTypeDescription(entry.key),
-                        style: TextStyle(fontSize: 15),
+                        style: context.textTheme.labelLarge,
                       ),
                     ),
                     Switch(
@@ -170,7 +166,7 @@ class _NotificationSettingsScreenState
                       onChanged: (bool value) {
                         _toggleBlockedType(entry.key, value);
                       },
-                      activeColor: Colors.green,
+                      activeColor: context.colorScheme.primary,
                     ),
                   ],
                 );
@@ -205,10 +201,10 @@ class _NotificationSettingsScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notification'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
+        title: Text(
+          'Notification',
+          style: context.textTheme.headlineMedium
+              ?.copyWith(color: context.colorScheme.onSurface),
         ),
       ),
       body: ListView(

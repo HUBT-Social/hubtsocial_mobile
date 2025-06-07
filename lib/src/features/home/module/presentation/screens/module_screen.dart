@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/features/home/module/data/models/module_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/home/module/presentation/bloc/module_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/home/module/presentation/widgets/module_timeline.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ModuleScreen extends StatefulWidget {
   const ModuleScreen({super.key});

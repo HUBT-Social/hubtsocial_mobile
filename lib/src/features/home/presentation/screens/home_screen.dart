@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/core/injections/injections.dart';
 import 'package:hubtsocial_mobile/src/features/home/presentation/widgets/user_header_widget.dart';
 import 'package:hubtsocial_mobile/src/features/main_wrapper/presentation/widgets/main_app_bar.dart';
 
 import '../../../../router/route.dart';
 import '../../../user/presentation/bloc/user_bloc.dart';
-import '../../../timetable/data/datasources/timetable_remote_data_source.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -120,7 +118,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-         
         ],
       ),
     );

@@ -4,14 +4,12 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:dartz/dartz.dart';
 
 import '../../domain/entities/user.dart';
 import '../../domain/usecases/change_password_usercase.dart';
 import '../../domain/usecases/init_user_usercase.dart';
 import '../../domain/usecases/update_user_usercase.dart';
 import '../../domain/repos/user_repo.dart';
-import '../../data/gender.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';
@@ -73,19 +71,16 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     UpdateUserAvatarEvent event,
     Emitter<UserState> emit,
   ) async {
-
     final resultEither = await _userRepo.updateUserAvatar(
-   
       newImage: event.newImage,
     );
 
     resultEither.fold(
       (failure) => emit(UserProfileError(failure.message)),
       (_) {
-        
         _logger.i(
             'Avatar updated successfully. Dispatching InitUserProfileEvent...');
-        
+
         add(const InitUserProfileEvent());
       },
     );
@@ -95,7 +90,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     UpdateUserProfileEvent event,
     Emitter<UserState> emit,
   ) async {
-    
     final resultEither = await _updateUserProfile(
       UpdateProfileParams(
         userId: event.userId,
@@ -109,10 +103,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     resultEither.fold(
       (failure) => emit(UserProfileError(failure.message)),
       (_) {
-       
         _logger.i(
             'Combined profile update successful. Dispatching InitUserProfileEvent...');
-        
+
         add(const InitUserProfileEvent());
       },
     );

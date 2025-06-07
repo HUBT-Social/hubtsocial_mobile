@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hubtsocial_mobile/src/core/app/providers/user_role.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/url_image.dart';
 import 'package:hubtsocial_mobile/src/features/user/domain/entities/user.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../../../../core/app/providers/user_provider.dart';
 
 class UserHeaderWidget extends StatelessWidget {
   final User user;
@@ -61,12 +65,6 @@ class UserHeaderWidget extends StatelessWidget {
                               color: context.colorScheme.onPrimary,
                             ),
                           ),
-                          Text(
-                            "TH27.33",
-                            style: context.textTheme.bodyLarge?.copyWith(
-                              color: context.colorScheme.onPrimary,
-                            ),
-                          ),
                         ],
                       ),
                     )
@@ -91,11 +89,10 @@ class UserHeaderWidget extends StatelessWidget {
                     color: context.colorScheme.shadow.withAlpha(128)),
               ],
             ),
-            child: Text(
-              "35.4",
-              style: context.textTheme.headlineMedium?.copyWith(
-                color: context.colorScheme.primary,
-              ),
+            child: Icon(
+              context.read<UserProvider>().mainRole.icon,
+              size: 30.r,
+              color: context.colorScheme.primary,
             ),
           ),
         ),

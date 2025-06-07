@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hubtsocial_mobile/src/features/home/module/data/models/course_model.dart';
 
 class ModuleResponseModel extends Equatable {
-  ModuleResponseModel({
+  const ModuleResponseModel({
     required this.courses,
     required this.year,
   });
@@ -31,7 +31,7 @@ class ModuleResponseModel extends Equatable {
   }
 
   Map<String, dynamic> toJson() => {
-        "courses": courses.map((x) => x?.toJson()).toList(),
+        "courses": courses.map((x) => x.toJson()).toList(),
         "year": year,
       };
 
