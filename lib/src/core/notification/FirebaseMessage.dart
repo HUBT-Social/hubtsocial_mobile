@@ -118,6 +118,17 @@ class FirebaseMessage {
       logger.i('Got a message whilst in the foreground!');
       print('===> FCM foreground message.data: ${message.data}');
 
+      // Check if notification type is blocked
+      final settingsBox = await Hive.openBox('settings');
+      final List<dynamic> blockedTypes =
+          settingsBox.get('blocked_types', defaultValue: []);
+      final notificationType = message.data['type'] ?? 'system';
+
+      if (blockedTypes.contains(notificationType)) {
+        print('Notification type $notificationType is blocked');
+        return;
+      }
+
       if (message.notification != null) {
         logger.i(
             'Message also contained a notification: ${message.notification}');

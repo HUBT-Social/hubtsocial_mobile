@@ -120,18 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.h),
-              child: ElevatedButton(
-                onPressed: () async {
-                  await getIt<TimetableRemoteDataSource>().testNotification();
-                },
-                child: Text('Test Notification'),
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(child: SizedBox(height: 100.h)),
+         
         ],
       ),
     );

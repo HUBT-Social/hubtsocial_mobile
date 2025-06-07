@@ -107,7 +107,7 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
     try {
       //  logger.i('Updating user name for userId: $userId');
 
-      final response = await _dioClient.put<Map<String, dynamic>>(
+      final response = await _dioClient.put<dynamic>(
         EndPoint.uptateName,
         data: {
           'firstName': firstName,
@@ -119,23 +119,90 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
         logger.e(
           'Failed to update user name. Status: ${response.statusCode}, Response: ${response.data}',
         );
-        throw ServerException(
-          message: response.data?['message']?.toString() ??
-              'Failed to update user name. Please try again.',
-          statusCode: response.statusCode?.toString() ?? '400',
-        );
-      }
+        // Handle both String and Map response data for error message
+        String? errorMessage;
+        if (response.data is String) {
+          errorMessage = response.data.toString();
+        } else if (response.data is Map) {
+          errorMessage = response.data?['message']?.toString() ??
+              'Failed to update user name. Please try again.';
+        } else {
+          errorMessage =
+              'Failed to update user name. Unexpected response format.';
+        }
 
-      logger.i('Successfully updated user name');
-      return;
+        throw ServerException(
+          message: errorMessage ?? 'An unknown error occurred',
+          statusCode: response.statusCode?.toString() ?? 'Unknown',
+        );
+      } else {
+        logger.i('Successfully updated user name');
+        return;
+      }
     } on ServerException {
       rethrow;
-    } catch (e, s) {
-      logger.e('Unexpected error while updating user name: $e');
-      logger.d('Stack trace: $s');
+    } on DioException catch (e, s) {
+      // Create a detailed log message for Dio errors
+      final logMessage = 'Dio error while updating user name: ' +
+          '\n  Type: ${e.type}' +
+          '\n  Message: ${e.message ?? 'No message'}' +
+          (e.response != null
+              ? '\n  Response Status: ${e.response?.statusCode}'
+              : '') +
+          (e.response != null ? '\n  Response Data: ${e.response?.data}' : '') +
+          (e.error != null ? '\n  Original Error: ${e.error}' : '');
+
+      logger.e(logMessage, error: e, stackTrace: s);
+
+      // Determine the user-friendly error message and status code
+      String? errorMessage;
+      String? statusCode;
+
+      if (e.response != null) {
+        // Handle errors with a response from the server (e.g., 400, 401, 404, 500)
+        statusCode = e.response?.statusCode?.toString() ?? 'Unknown';
+        // Try to get message from response data, fallback to Dio message or generic
+        if (e.response?.data is Map) {
+          errorMessage = e.response?.data?['message']?.toString() ??
+              e.message ??
+              'Server responded with an error.';
+        } else if (e.response?.data is String) {
+          errorMessage = e.response?.data.toString();
+        } else {
+          errorMessage =
+              e.message ?? 'Server responded with an error (unknown format).';
+        }
+      } else {
+        // Handle Dio errors without a response (e.g., network issues, timeouts, cancellations)
+        statusCode = 'NetworkError'; // Custom status for network/client errors
+        errorMessage = e.message ??
+            'Request failed or network error.'; // Use Dio message or generic
+        // Add more specific messages based on e.type if needed
+        if (e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.receiveTimeout ||
+            e.type == DioExceptionType.sendTimeout) {
+          errorMessage = 'Connection timed out.';
+        } else if (e.type == DioExceptionType.cancel) {
+          errorMessage = 'Request was cancelled.';
+        } else if (e.type == DioExceptionType.unknown) {
+          // For DioErrorType.DEFAULT
+          errorMessage = e.error?.toString() ??
+              'An unknown error occurred during the request.'; // Use original error if available
+        }
+      }
+
+      // Ensure errorMessage and statusCode are not null before throwing
       throw ServerException(
-        message: 'Failed to update user name. Please try again later.',
-        statusCode: '500',
+        message: errorMessage ?? 'An unknown error occurred',
+        statusCode: statusCode ?? 'Unknown',
+      );
+    } catch (e, s) {
+      logger.e('Unexpected error while updating user name: $e',
+          error: e, stackTrace: s);
+      throw ServerException(
+        message:
+            'Failed to update user name. An unexpected client-side error occurred.',
+        statusCode: 'ClientError', // Differentiate from server/network errors
       );
     }
   }

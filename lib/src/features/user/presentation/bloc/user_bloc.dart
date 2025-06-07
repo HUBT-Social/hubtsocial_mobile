@@ -3,12 +3,15 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:logger/logger.dart';
+import 'package:dartz/dartz.dart';
 
 import '../../domain/entities/user.dart';
 import '../../domain/usecases/change_password_usercase.dart';
 import '../../domain/usecases/init_user_usercase.dart';
 import '../../domain/usecases/update_user_usercase.dart';
 import '../../domain/repos/user_repo.dart';
+import '../../data/gender.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';
@@ -20,10 +23,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     required UpdateUserUserCase updateUserProfile,
     required ChangePasswordUserCase changedPassword,
     required UserRepo userRepo,
+    required Logger logger,
   })  : _initUserProfile = initUserProfile,
         _updateUserProfile = updateUserProfile,
         _changedPassword = changedPassword,
         _userRepo = userRepo,
+        _logger = logger,
         super(UserProfileInitial()) {
     on<UserEvent>((event, emit) {
       emit(UserProfileLoading());
@@ -39,18 +44,28 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final UpdateUserUserCase _updateUserProfile;
   final ChangePasswordUserCase _changedPassword;
   final UserRepo _userRepo;
+  final Logger _logger;
 
   Future<void> _updateUserNameHandler(
     UpdateUserNameEvent event,
     Emitter<UserState> emit,
   ) async {
-    final result = await _userRepo.updateUserName(
+    // emit(UserProfileLoading()); // Loading is already handled by the global listener
+    final resultEither = await _userRepo.updateUserName(
+      // userId is likely not needed by the repo impl
       firstName: event.firstName,
       lastName: event.lastName,
     );
-    result.fold(
+
+    resultEither.fold(
       (failure) => emit(UserProfileError(failure.message)),
-      (_) => emit(UpdatedUserProfile()),
+      (_) {
+        // On successful update (Right(void))
+        _logger.i(
+            'Username updated successfully. Dispatching InitUserProfileEvent...');
+        // Dispatch the event to fetch and load the latest user profile
+        add(const InitUserProfileEvent());
+      },
     );
   }
 
@@ -58,12 +73,21 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     UpdateUserAvatarEvent event,
     Emitter<UserState> emit,
   ) async {
-    final result = await _userRepo.updateUserAvatar(
+
+    final resultEither = await _userRepo.updateUserAvatar(
+   
       newImage: event.newImage,
     );
-    result.fold(
+
+    resultEither.fold(
       (failure) => emit(UserProfileError(failure.message)),
-      (_) => emit(UpdatedUserProfile()),
+      (_) {
+        
+        _logger.i(
+            'Avatar updated successfully. Dispatching InitUserProfileEvent...');
+        
+        add(const InitUserProfileEvent());
+      },
     );
   }
 
@@ -71,10 +95,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     UpdateUserProfileEvent event,
     Emitter<UserState> emit,
   ) async {
-    // This handler might not be needed anymore or needs adjustment
-    // depending on how updateUserProfile is intended to be used.
-    // For now, I'll keep it but it might be deprecated.
-    final result = await _updateUserProfile(
+    
+    final resultEither = await _updateUserProfile(
       UpdateProfileParams(
         userId: event.userId,
         fullName: event.fullName,
@@ -83,9 +105,16 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         newImage: event.newImage,
       ),
     );
-    result.fold(
+
+    resultEither.fold(
       (failure) => emit(UserProfileError(failure.message)),
-      (_) => emit(UpdatedUserProfile()),
+      (_) {
+       
+        _logger.i(
+            'Combined profile update successful. Dispatching InitUserProfileEvent...');
+        
+        add(const InitUserProfileEvent());
+      },
     );
   }
 
@@ -93,10 +122,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     InitUserProfileEvent event,
     Emitter<UserState> emit,
   ) async {
+    _logger.i('Fetching initial user profile...');
     final result = await _initUserProfile();
     result.fold(
       (failure) => emit(UserProfileError(failure.message)),
-      (user) => emit(UserProfileLoaded(user)),
+      (user) {
+        _logger.i('Initial user profile fetched: ${user.userName}');
+        emit(UserProfileLoaded(user));
+      },
     );
   }
 
