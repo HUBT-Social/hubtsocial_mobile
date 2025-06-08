@@ -10,8 +10,6 @@ import '../../../../core/local_storage/local_storage_key.dart';
 import '../../../../core/logger/logger.dart';
 import '../models/timetable_info_response_model.dart';
 import '../models/timetable_response_model.dart';
-import '../models/reform_timetable_model.dart';
-import '../timetable_type.dart';
 
 abstract class TimetableRemoteDataSource {
   const TimetableRemoteDataSource();
@@ -22,7 +20,6 @@ abstract class TimetableRemoteDataSource {
 
   Future<void> scheduleNotificationsFromHive();
 
-  Future<void> testNotification();
 }
 
 @LazySingleton(
@@ -193,10 +190,27 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
     try {
       logger.i('Fetching timetable info for id: $timetableId');
 
-      final response = await _dioClient.get(
+      final response = await _dioClient.get<Map<String, dynamic>>(
         EndPoint.timetableInfo,
         queryParameters: {"timetableId": timetableId},
       );
+
+      if (response.statusCode == 401) {
+        logger.w('Unauthorized access while fetching timetable info');
+        throw const ServerException(
+          message: 'Your session has expired. Please login again.',
+          statusCode: '401',
+        );
+      }
+
+      if (response.statusCode == 404) {
+        logger.w('Timetable not found. Id: $timetableId');
+        throw const ServerException(
+          message:
+              'Timetable not found. It may have been deleted or you no longer have access.',
+          statusCode: '404',
+        );
+      }
 
       if (response.statusCode != 200) {
         logger.e(
@@ -244,33 +258,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
       // Don't throw here as this is a background operation
     }
   }
+  
 
-  @override
-  Future<void> testNotification() async {
-    try {
-      logger.i('Sending test notification');
-
-      final now = DateTime.now();
-      final testTimetable = ReformTimetable(
-        id: 'test_${now.millisecondsSinceEpoch}',
-        className: 'GO HOME',
-        startTime: now,
-        endTime: now.add(const Duration(minutes: 1)),
-        subject: 'NGUYỄN THẾ TRƯỜNG DZ',
-        room: 'ĐẠI HỌC KINH DOANH CÔNG NGHỆ',
-        zoomId: '0949101573',
-        type: TimetableType.Study,
-      );
-
-      await _notificationService.showInstantNotification(testTimetable);
-      logger.i('Successfully sent test notification');
-    } catch (e, s) {
-      logger.e('Failed to send test notification: $e');
-      logger.d('Stack trace: $s');
-      throw ServerException(
-        message: 'Failed to send test notification. Please try again later.',
-        statusCode: '500',
-      );
-    }
-  }
+  
 }

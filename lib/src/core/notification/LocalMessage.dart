@@ -116,12 +116,15 @@ class LocalMessage {
       channel.id,
       channel.name,
       channelDescription: channel.description,
-      importance: Importance.high,
+      importance: Importance.max,
       priority: Priority.high,
       playSound: true,
       enableVibration: true,
       showWhen: true,
       icon: '@mipmap/ic_launcher',
+      styleInformation: BigTextStyleInformation(body),
+      fullScreenIntent: true,
+      category: AndroidNotificationCategory.alarm,
     );
 
     final notificationDetails = NotificationDetails(
@@ -130,6 +133,7 @@ class LocalMessage {
         presentAlert: true,
         presentBadge: true,
         presentSound: true,
+        interruptionLevel: InterruptionLevel.timeSensitive,
       ),
     );
 

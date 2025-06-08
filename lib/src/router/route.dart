@@ -45,7 +45,6 @@ enum AppRoute {
 
   // notifications
   notifications('/notifications'),
-  notificationSettings('/notification-settings'),
   // notifications
 
   // menu
@@ -56,7 +55,8 @@ enum AppRoute {
   fullProfile('/menu/profile/fullScreen'),
   editProfile('/menu/profile/edit'),
   teacherevalua('/menu/teacherevaluation'),
-  teacherCode('/menu/teacherCode'),
+  teacherCode('/menu/teacherCode'),  
+  notificationSettings('/menu/notification-settings'),
   // menu
 
   ;

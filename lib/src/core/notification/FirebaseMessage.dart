@@ -29,6 +29,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       title: message.notification?.title,
       body: message.notification?.body,
       time: DateTime.now().toIso8601String(),
+
       isRead: false,
       data: {
         ...message.data,
@@ -124,11 +125,6 @@ class FirebaseMessage {
           settingsBox.get('blocked_types', defaultValue: []);
       final notificationType = message.data['type'] ?? 'system';
 
-      if (blockedTypes.contains(notificationType)) {
-        print('Notification type $notificationType is blocked');
-        return;
-      }
-
       if (message.notification != null) {
         logger.i(
             'Message also contained a notification: ${message.notification}');
@@ -169,8 +165,13 @@ class FirebaseMessage {
         logger.i('Notification already exists: ${notification.id}');
       }
 
-      // Hiển thị local notification
-      _showLocalNotification(message);
+      // Chỉ hiển thị thông báo nếu loại thông báo không bị chặn
+      if (!blockedTypes.contains(notificationType)) {
+        // Hiển thị local notification
+        _showLocalNotification(message);
+      } else {
+        print('Notification type $notificationType is blocked');
+      }
     });
   }
 

@@ -130,16 +130,10 @@ StatefulShellRoute _mainRoute() {
                           FadeTransition(opacity: animation, child: child),
                 ),
               ),
-              GoRoute(
-                path: AppRoute.academicResult.path,
-                pageBuilder: (context, state) => CustomTransitionPage(
-                  key: state.pageKey,
-                  child: const AcademicResultScreen(),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(opacity: animation, child: child),
-                ),
-              ),
+              
+
+
+              
             ],
           ),
         ],
@@ -208,7 +202,7 @@ StatefulShellRoute _mainRoute() {
           ),
         ],
       ),
-
+      
       /// Brach Menu
       StatefulShellBranch(
         // navigatorKey: _shellNavigatorMenu,
@@ -264,6 +258,17 @@ StatefulShellRoute _mainRoute() {
                     },
                   ),
                 ],
+              ),              
+              GoRoute(
+                path: 'notification-settings',
+                pageBuilder: (context, state) => CustomTransitionPage(
+                  key: state.pageKey,
+                  child: NotificationSettingsScreen(
+                  ),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(opacity: animation, child: child),
+                ),
               ),
             ],
           ),

@@ -165,12 +165,6 @@ class NotificationService {
       final List<dynamic> blockedTypes =
           settingsBox.get('blocked_types', defaultValue: []);
 
-      if (blockedTypes.contains(notificationType)) {
-        print(
-            '[NotificationService] Notification type $notificationType is blocked');
-        return;
-      }
-
       // Kiểm tra xem người dùng hiện tại có trong danh sách nhận không
       if (targetUsers != null) {
         final userList = List<String>.from(json.decode(targetUsers));
@@ -208,20 +202,26 @@ class NotificationService {
         logger.i('Notification already exists: ${message.messageId}');
       }
 
-      // Show notification
-      await showNotification(
-        title: message.notification?.title ?? 'New Message',
-        body: message.notification?.body ?? '',
-        payload: json.encode({
-          ...message.data,
-          'groupId': groupId,
-          'isGroupMessage': groupId != null,
-          'isBroadcast': notificationType == 'broadcast',
-          'messageId': message.messageId,
-          'title': message.notification?.title,
-          'body': message.notification?.body,
-        }),
-      );
+      // Chỉ hiển thị thông báo nếu loại thông báo không bị chặn
+      if (!blockedTypes.contains(notificationType)) {
+        // Show notification
+        await showNotification(
+          title: message.notification?.title ?? 'New Message',
+          body: message.notification?.body ?? '',
+          payload: json.encode({
+            ...message.data,
+            'groupId': groupId,
+            'isGroupMessage': groupId != null,
+            'isBroadcast': notificationType == 'broadcast',
+            'messageId': message.messageId,
+            'title': message.notification?.title,
+            'body': message.notification?.body,
+          }),
+        );
+      } else {
+        print(
+            '[NotificationService] Notification type $notificationType is blocked');
+      }
     } catch (e) {
       print('[NotificationService] Error handling message: $e');
       logger.e('Error handling foreground message: $e');

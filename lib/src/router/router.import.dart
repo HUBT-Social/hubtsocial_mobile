@@ -54,7 +54,6 @@ import '../core/injections/injections.dart';
 import '../core/local_storage/local_storage_key.dart';
 import '../core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/features/notification/presentation/screens/notification_settings_screen.dart';
-import 'package:hubtsocial_mobile/src/features/academic_result/screens/academic_result_screen.dart';
 
 part 'router.dart';
 part 'router.main.dart';

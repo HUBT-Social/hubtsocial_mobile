@@ -81,7 +81,7 @@ class TimetableNotificationService {
             // Save notification to Hive
             await notificationsBox.add(notificationModel);
 
-            // Schedule local notification
+            // Schedule local notification with high importance
             await _localMessage.scheduleNotification(
               id: reformTimetable.id.hashCode + 1,
               title: notificationModel.title ?? '',
@@ -96,6 +96,7 @@ class TimetableNotificationService {
           // Schedule notification 15 minutes before class starts
           final notificationReminderTime =
               reformTimetable.startTime!.subtract(const Duration(minutes: 15));
+
           if (notificationReminderTime.isAfter(DateTime.now())) {
             // Create notification model for 15 minutes before
             final String reminderBodyText =
@@ -122,7 +123,7 @@ class TimetableNotificationService {
             // Save reminder to Hive
             await notificationsBox.add(reminderModel);
 
-            // Schedule local notification
+            // Schedule local notification with high importance
             await _localMessage.scheduleNotification(
               id: reformTimetable.id.hashCode + 2,
               title: reminderModel.title ?? '',
