@@ -45,6 +45,7 @@ final GoRouter router = GoRouter(
     // auth
     _authRoute(),
 
+
     GoRoute(
         path: AppRoute.roomChat.path,
         pageBuilder: (context, state) {

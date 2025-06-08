@@ -31,7 +31,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         _selectedImage = File(image.path);
       });
 
-      // Update avatar immediately when image is selected
       final user = context.read<UserProvider>().user;
       if (user != null) {
         context.read<UserBloc>().add(
@@ -99,8 +98,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           AppDialog.showLoadingDialog(message: 'Updating profile...');
         } else if (state is UserProfileLoaded) {
           AppDialog.closeDialog();
-          // UserProvider is updated by the BlocListener on UserProfileLoaded
-          // Show success message and pop for name updates
+
           if (_selectedImage == null) {
             context.showSnackBarMessage('Profile updated successfully');
             Navigator.pop(context);
@@ -127,7 +125,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           title: Text(
             context.loc.edit_profile,
-            style: context.textTheme.titleLarge?.copyWith(color: Colors.white),
           ),
           centerTitle: true,
         ),
@@ -140,7 +137,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: Container(
                 height: greenAreaHeight,
                 decoration: BoxDecoration(
-                  color: Colors.green,
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/background_green.png'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -174,15 +174,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         formKey: _formKey,
                       ),
                       SizedBox(height: 24.h),
-                      ElevatedButton(
-                        onPressed: _updateName,
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(double.infinity, 48.h),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.r),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: _updateName,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: context.colorScheme.primary,
+                            foregroundColor: context.colorScheme.onPrimary,
+                            minimumSize: Size(300.w, 38.h),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24.r),
+                            ),
                           ),
+                          child: Text('Save Changes'),
                         ),
-                        child: Text('Save Changes'),
                       ),
                     ],
                   ),
@@ -213,11 +217,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         onTap: _pickImage,
                         child: CircleAvatar(
                           radius: 16.r,
-                          backgroundColor: Colors.green,
-                          child: const Icon(
+                          backgroundColor: context.colorScheme.onPrimary,
+                          child: Icon(
                             Icons.camera_alt,
                             size: 16,
-                            color: Colors.white,
+                            color: context.colorScheme.onSurface,
                           ),
                         ),
                       ),

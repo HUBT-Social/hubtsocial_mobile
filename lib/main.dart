@@ -44,7 +44,7 @@ void main() async {
     _initNotification(),
   ]);
 
-  // Initialize timetable notification service
+
   final timetableNotificationService = getIt<TimetableNotificationService>();
   await timetableNotificationService.scheduleNotificationsFromHive();
 
@@ -69,26 +69,24 @@ Future<void> initFirebase() async {
   }
 
   const fatalError = true;
-  // Non-async exceptions
+
   FlutterError.onError = (errorDetails) {
     if (fatalError) {
-      // If you want to record a "fatal" exception
+  
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-      // ignore: dead_code
+     
     } else {
-      // If you want to record a "non-fatal" exception
+    
       FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
     }
   };
 
-  // Async exceptions
   PlatformDispatcher.instance.onError = (error, stack) {
     if (fatalError) {
-      // If you want to record a "fatal" exception
+
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      // ignore: dead_code
+
     } else {
-      // If you want to record a "non-fatal" exception
       FirebaseCrashlytics.instance.recordError(error, stack);
     }
     return true;
@@ -101,12 +99,11 @@ Future<void> initFirebase() async {
 
 Future<void> _initNotification() async {
   try {
-    // Initialize FirebaseMessage first
+   
     final firebaseMessage = FirebaseMessage();
     await firebaseMessage.initialize();
     logger.i('Firebase message service initialized');
 
-    // Then initialize NotificationService
     final notificationService = NotificationService();
     if (NavigationService.navigatorKey.currentContext != null) {
       await notificationService
