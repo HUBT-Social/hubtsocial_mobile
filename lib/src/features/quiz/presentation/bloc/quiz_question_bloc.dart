@@ -14,6 +14,7 @@ class QuizQuestionBloc extends Bloc<QuizQuestionEvent, QuizQuestionState> {
     on<AnswerQuestion>(_onAnswerSelected);
     on<NextQuestion>(_onNextQuestion);
     on<JumpToQuestion>(_onJumpToQuestion);
+    on<FinishQuiz>(_onFinished);
   }
 
   Timer? _timer;
@@ -80,6 +81,11 @@ class QuizQuestionBloc extends Bloc<QuizQuestionEvent, QuizQuestionState> {
         answered: state.history[event.index] != null,
       ));
     }
+  }
+
+  void _onFinished(FinishQuiz event, Emitter<QuizQuestionState> emit) {
+    _timer?.cancel();
+    emit(state.copyWith(isFinished: true));
   }
 
   @override

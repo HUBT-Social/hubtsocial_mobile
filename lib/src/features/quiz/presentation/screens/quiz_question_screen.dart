@@ -124,15 +124,31 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
                                   .read<QuizQuestionBloc>()
                                   .add(JumpToQuestion(index - 1))
                               : null,
-                          icon: const Icon(Icons.arrow_back),
+                          icon: Icon(
+                            Icons.arrow_back,
+                            size: 24.r,
+                          ),
                         ),
+                        IconButton(
+                            onPressed: () {
+                              context
+                                  .read<QuizQuestionBloc>()
+                                  .add(FinishQuiz());
+                            },
+                            icon: Icon(
+                              Icons.check,
+                              size: 24.r,
+                            )),
                         IconButton(
                           onPressed: index < questions.length - 1
                               ? () => context
                                   .read<QuizQuestionBloc>()
                                   .add(JumpToQuestion(index + 1))
                               : null,
-                          icon: const Icon(Icons.arrow_forward),
+                          icon: Icon(
+                            Icons.arrow_forward,
+                            size: 24.r,
+                          ),
                         ),
                       ],
                     ),

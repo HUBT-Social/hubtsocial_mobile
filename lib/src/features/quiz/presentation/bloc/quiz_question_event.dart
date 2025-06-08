@@ -37,3 +37,7 @@ class JumpToQuestion extends QuizQuestionEvent {
   @override
   List<Object?> get props => [index];
 }
+
+class FinishQuiz extends QuizQuestionEvent {
+  const FinishQuiz();
+}

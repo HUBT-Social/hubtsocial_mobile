@@ -29,19 +29,24 @@ class QuizInfoQuestion extends StatelessWidget {
           SizedBox(height: 4.h),
           ...item.answers.map(
             (answer) {
-              return Row(
-                spacing: 6.w,
-                children: [
-                  Icon(
-                    Icons.circle,
-                    size: 8.r,
-                    color: context.colorScheme.secondary,
-                  ),
-                  Text(
-                    answer.content.toString(),
-                    style: context.textTheme.bodyMedium,
-                  ),
-                ],
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 4.h),
+                child: Row(
+                  spacing: 6.w,
+                  children: [
+                    Icon(
+                      Icons.circle,
+                      size: 8.r,
+                      color: context.colorScheme.secondary,
+                    ),
+                    Expanded(
+                      child: Text(
+                        answer.content.toString(),
+                        style: context.textTheme.bodyMedium,
+                      ),
+                    ),
+                  ],
+                ),
               );
             },
           ),
