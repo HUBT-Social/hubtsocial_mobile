@@ -121,7 +121,11 @@ class _TimetableScreenState extends State<TimetableScreen> {
           title: context.loc.timetable,
           actions: [
             IconButton(
-              icon: Icon(Icons.refresh),
+              icon: Icon(
+                Icons.refresh,
+                size: 24.r,
+                color: context.colorScheme.onPrimary,
+              ),
               onPressed: () async {
                 context.read<TimetableBloc>().add(const InitTimetableEvent());
               },

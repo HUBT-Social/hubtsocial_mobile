@@ -124,6 +124,23 @@ class _QuizInfoScreenState extends State<QuizInfoScreen> {
                             ),
                           ),
                         SizedBox(height: 12.h),
+                        if (state.quizInfo.major != null)
+                          Text(state.quizInfo.major ?? ""),
+                        if (state.quizInfo.durationMinutes != null)
+                          Text(
+                            "Thời gian làm bài: ${state.quizInfo.durationMinutes ?? 0}phút",
+                            style: context.textTheme.bodyMedium?.copyWith(
+                              color: context.colorScheme.onSurface,
+                            ),
+                          ),
+                        Text(
+                          "số lượng câu hỏi: ${state.quizInfo.questions.length}",
+                          style: context.textTheme.bodyMedium?.copyWith(
+                            color: context.colorScheme.onSurface,
+                          ),
+                        ),
+                        Text(context.loc.credits(state.quizInfo.credits ?? 0)),
+                        SizedBox(height: 12.h),
                         Row(
                           children: [
                             Checkbox(

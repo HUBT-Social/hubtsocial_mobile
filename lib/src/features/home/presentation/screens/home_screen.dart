@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<_FunctionItem> functions = [
+    final List<_FunctionItem> functionsStudent = [
       _FunctionItem(context.loc.revise, Icons.grid_view, Colors.red.shade300,
           () {
         AppRoute.quiz.push(context);
@@ -104,20 +104,23 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.w),
-              child: GridView.count(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                crossAxisSpacing: 6.w,
-                mainAxisSpacing: 3.h,
-                childAspectRatio: 2,
-                children: functions.map((item) => _FunctionCard(item)).toList(),
+          if (context.userProvider.isStudent)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                child: GridView.count(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 6.w,
+                  mainAxisSpacing: 3.h,
+                  childAspectRatio: 2,
+                  children: functionsStudent
+                      .map((item) => _FunctionCard(item))
+                      .toList(),
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

@@ -149,9 +149,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i292.DioClient(gh<_i170.HiveInterface>()));
     gh.singleton<_i924.AuthNotification>(
         () => _i924.AuthNotification(gh<_i292.DioClient>()));
-    gh.lazySingleton<_i250.QuizRemoteDataSource>(() =>
-        _i250.QuizRemoteDataSourceImpl(
-            messaging: gh<_i892.FirebaseMessaging>()));
     gh.lazySingleton<_i953.AuthRemoteDataSource>(
         () => _i953.AuthRemoteDataSourceImpl(
               hiveAuth: gh<_i170.HiveInterface>(),
@@ -166,6 +163,11 @@ extension GetItInjectableX on _i174.GetIt {
             ));
     gh.lazySingleton<_i745.ChatRemoteDataSource>(
         () => _i745.ChatRemoteDataSourceImpl(dioClient: gh<_i292.DioClient>()));
+    gh.lazySingleton<_i250.QuizRemoteDataSource>(
+        () => _i250.QuizRemoteDataSourceImpl(
+              messaging: gh<_i892.FirebaseMessaging>(),
+              dioClient: gh<_i292.DioClient>(),
+            ));
     gh.lazySingleton<_i592.UserProfileRemoteDataSource>(() =>
         _i592.UserProfileRemoteDataSourceImpl(
             dioClient: gh<_i292.DioClient>()));

@@ -48,12 +48,12 @@ class UserProvider extends ChangeNotifier {
 
     if (allRoles.contains(UserRole.admin)) return UserRole.admin;
     if (allRoles.contains(UserRole.teacher)) return UserRole.teacher;
-    if (allRoles.contains(UserRole.user)) return UserRole.user;
+    if (allRoles.contains(UserRole.student)) return UserRole.student;
 
-    return UserRole.none;
+    return UserRole.user;
   }
 
-  bool get isUser => roles.contains(UserRole.user);
+  bool get isStudent => roles.contains(UserRole.student);
   bool get isAdmin => roles.contains(UserRole.admin);
   bool get isTeacher => roles.contains(UserRole.teacher);
 }

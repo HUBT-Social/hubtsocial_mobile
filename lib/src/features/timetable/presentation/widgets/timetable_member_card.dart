@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 
@@ -26,48 +28,52 @@ class _TimetableMemberCardState extends State<TimetableMemberCard> {
       startActionPane: ActionPane(
         motion: const DrawerMotion(),
         children: [
-          SlidableAction(
-            onPressed: (context) {
-              AppRoute.profile.push(context);
-            },
-            backgroundColor: context.colorScheme.primary,
-            foregroundColor: context.colorScheme.onPrimary,
-            icon: Icons.info,
-            label: context.loc.information,
-          ),
-          SlidableAction(
-            onPressed: (context) {
-              context.showSnackBarMessage("Sinh viên đã có mặt");
-            },
-            backgroundColor: context.colorScheme.tertiary,
-            foregroundColor: context.colorScheme.onTertiary,
-            icon: Icons.check,
-            label: context.loc.present,
-          ),
+          if (context.read<UserProvider>().isTeacher)
+            SlidableAction(
+              onPressed: (context) {
+                AppRoute.profile.push(context);
+              },
+              backgroundColor: context.colorScheme.primary,
+              foregroundColor: context.colorScheme.onPrimary,
+              icon: Icons.info,
+              label: context.loc.information,
+            ),
+          if (context.read<UserProvider>().isTeacher)
+            SlidableAction(
+              onPressed: (context) {
+                context.showSnackBarMessage("Sinh viên đã có mặt");
+              },
+              backgroundColor: context.colorScheme.tertiary,
+              foregroundColor: context.colorScheme.onTertiary,
+              icon: Icons.check,
+              label: context.loc.present,
+            ),
         ],
       ),
       endActionPane: ActionPane(
         motion: ScrollMotion(),
         // dismissible: DismissiblePane(onDismissed: () {}),
         children: [
-          SlidableAction(
-            onPressed: (context) {
-              context.showSnackBarMessage("Sinh viên đã vắng mặt");
-            },
-            backgroundColor: context.colorScheme.errorContainer,
-            foregroundColor: context.colorScheme.onErrorContainer,
-            icon: Icons.close,
-            label: context.loc.absent,
-          ),
-          SlidableAction(
-            onPressed: (context) {
-              context.showSnackBarMessage("Sinh viên đã bị cấm thi");
-            },
-            backgroundColor: context.colorScheme.error,
-            foregroundColor: context.colorScheme.onError,
-            icon: Icons.block,
-            label: context.loc.exam_ban,
-          ),
+          if (context.read<UserProvider>().isTeacher)
+            SlidableAction(
+              onPressed: (context) {
+                context.showSnackBarMessage("Sinh viên đã vắng mặt");
+              },
+              backgroundColor: context.colorScheme.errorContainer,
+              foregroundColor: context.colorScheme.onErrorContainer,
+              icon: Icons.close,
+              label: context.loc.absent,
+            ),
+          if (context.read<UserProvider>().isTeacher)
+            SlidableAction(
+              onPressed: (context) {
+                context.showSnackBarMessage("Sinh viên đã bị cấm thi");
+              },
+              backgroundColor: context.colorScheme.error,
+              foregroundColor: context.colorScheme.onError,
+              icon: Icons.block,
+              label: context.loc.exam_ban,
+            ),
         ],
       ),
       child: InkWell(
