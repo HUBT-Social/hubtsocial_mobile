@@ -119,7 +119,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get username_or_email => 'Username or Email';
 
   @override
-  String get do_not_have_an_account => 'Don’t have an account?';
+  String get do_not_have_an_account => 'Don\"t have an account?';
 
   @override
   String get already_have_an_account => 'You already have an account?';
@@ -327,9 +327,24 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String question_count(int value) {
+  String question_count(Object value) {
     return '$value questions';
   }
+
+  @override
+  String get teacherCodeInputTitle => 'Enter Teacher Code';
+
+  @override
+  String get teacherCodeLabel => 'Teacher Code';
+
+  @override
+  String get teacherCodeHint => 'Example: GV001';
+
+  @override
+  String get enterTeacherCodeInstruction => 'Please enter the teacher code to continue';
+
+  @override
+  String get invalidTeacherCode => 'Invalid teacher code!';
 
   @override
   String duration_minutes(int value) {
@@ -444,4 +459,124 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get no_data => 'No data';
+
+  @override
+  String get filter_notifications => 'Filter notifications';
+
+  @override
+  String get mark_all_as_read => 'Mark all as read';
+
+  @override
+  String get no_notifications_in_filter => 'No notifications in this filter';
+
+  @override
+  String get teacherEvaluationTitle => 'Teacher Evaluation';
+
+  @override
+  String get teacherInfoTitle => 'Teacher Information:';
+
+  @override
+  String get teacherNameLabel => 'Teacher Name:';
+
+  @override
+  String get teacherCodeLabelShort => 'Teacher Code:';
+
+  @override
+  String get teacherDepartmentLabel => 'Department:';
+
+  @override
+  String get teacherGenderLabel => 'Gender:';
+
+  @override
+  String get teacherBirthDateLabel => 'Birth Date:';
+
+  @override
+  String get evaluationInstruction => 'Please evaluate the following criteria:';
+
+  @override
+  String get question1 => 'Does the lecturer communicate clearly and understandably?';
+
+  @override
+  String get question2 => 'Is the lecturer enthusiastic and dedicated in teaching?';
+
+  @override
+  String get question3 => 'Are you satisfied with the lecturer\'s teaching methods?';
+
+  @override
+  String get question4 => 'Does the lecturer encourage students to ask questions and participate in discussions?';
+
+  @override
+  String get question5 => 'Does the lecturer provide sufficient materials and useful learning resources?';
+
+  @override
+  String get question6 => 'Does the lecturer evaluate fairly and objectively?';
+
+  @override
+  String get question7 => 'Does the lecturer effectively resolve emerging issues?';
+
+  @override
+  String get question8 => 'Do you feel respected and listened to when interacting with the lecturer?';
+
+  @override
+  String get question9 => 'Overall, are you satisfied with this lecturer?';
+
+  @override
+  String get submitEvaluationButton => 'Submit Evaluation';
+
+  @override
+  String get evaluationSuccessMessage => 'Your evaluation has been successfully submitted!';
+
+  @override
+  String get evaluationErrorMessage => 'Please evaluate all questions.';
+
+  @override
+  String get notificationSettingsTitle => 'Notification Settings';
+
+  @override
+  String get blockedNotificationTypesTitle => 'Block Notifications by Type';
+
+  @override
+  String get blockChatNotifications => 'Block chat notifications';
+
+  @override
+  String get blockTimetableNotifications => 'Block timetable notifications';
+
+  @override
+  String get blockBroadcastNotifications => 'Block general notifications';
+
+  @override
+  String get blockMaintenanceNotifications => 'Block maintenance notifications';
+
+  @override
+  String get blockAcademicWarningNotifications => 'Block academic warning notifications';
+
+  @override
+  String get blockExamNotifications => 'Block exam notifications';
+
+  @override
+  String get blockGroupNotifications => 'Block group notifications';
+
+  @override
+  String get notificationSoundsTitle => 'Notification Sounds';
+
+  @override
+  String get playSoundForChatNotifications => 'Play sound for chat notifications';
+
+  @override
+  String get playSoundForTimetableNotifications => 'Play sound for timetable notifications';
+
+  @override
+  String get playSoundForBroadcastNotifications => 'Play sound for general notifications';
+
+  @override
+  String get playSoundForMaintenanceNotifications => 'Play sound for maintenance notifications';
+
+  @override
+  String get playSoundForAcademicWarningNotifications => 'Play sound for academic warning notifications';
+
+  @override
+  String get playSoundForExamNotifications => 'Play sound for exam notifications';
+
+  @override
+  String get playSoundForGroupNotifications => 'Play sound for group notifications';
 }

@@ -327,9 +327,24 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String question_count(int value) {
+  String question_count(Object value) {
     return '$value 个问题';
   }
+
+  @override
+  String get teacherCodeInputTitle => '输入教师代码';
+
+  @override
+  String get teacherCodeLabel => '教师代码';
+
+  @override
+  String get teacherCodeHint => '示例: GV001';
+
+  @override
+  String get enterTeacherCodeInstruction => '请输入教师代码以继续';
+
+  @override
+  String get invalidTeacherCode => '无效的教师代码！';
 
   @override
   String duration_minutes(int value) {
@@ -444,4 +459,124 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get no_data => '没有数据';
+
+  @override
+  String get filter_notifications => '筛选通知';
+
+  @override
+  String get mark_all_as_read => '全部标记为已读';
+
+  @override
+  String get no_notifications_in_filter => '此筛选器中没有通知';
+
+  @override
+  String get teacherEvaluationTitle => '教师评价';
+
+  @override
+  String get teacherInfoTitle => '教师信息:';
+
+  @override
+  String get teacherNameLabel => '教师姓名:';
+
+  @override
+  String get teacherCodeLabelShort => '教师代码:';
+
+  @override
+  String get teacherDepartmentLabel => '系别:';
+
+  @override
+  String get teacherGenderLabel => '性别:';
+
+  @override
+  String get teacherBirthDateLabel => '出生日期:';
+
+  @override
+  String get evaluationInstruction => '请评估以下标准:';
+
+  @override
+  String get question1 => '讲师是否清晰易懂地传达信息？';
+
+  @override
+  String get question2 => '讲师在教学中是否充满热情和奉献精神？';
+
+  @override
+  String get question3 => '您对讲师的教学方法满意吗？';
+
+  @override
+  String get question4 => '讲师是否鼓励学生提问并参与讨论？';
+
+  @override
+  String get question5 => '讲师是否提供了足够的材料和有用的学习资源？';
+
+  @override
+  String get question6 => '讲师是否公平客观地进行评估？';
+
+  @override
+  String get question7 => '讲师是否有效解决出现的问题？';
+
+  @override
+  String get question8 => '在与讲师互动时，您是否感到受到尊重和倾听？';
+
+  @override
+  String get question9 => '总的来说，您对这位讲师满意吗？';
+
+  @override
+  String get submitEvaluationButton => '提交评价';
+
+  @override
+  String get evaluationSuccessMessage => '您的评价已成功提交！';
+
+  @override
+  String get evaluationErrorMessage => '请评估所有问题。';
+
+  @override
+  String get notificationSettingsTitle => '通知设置';
+
+  @override
+  String get blockedNotificationTypesTitle => '按类型阻止通知';
+
+  @override
+  String get blockChatNotifications => '阻止聊天通知';
+
+  @override
+  String get blockTimetableNotifications => '阻止时间表通知';
+
+  @override
+  String get blockBroadcastNotifications => '阻止一般通知';
+
+  @override
+  String get blockMaintenanceNotifications => '阻止维护通知';
+
+  @override
+  String get blockAcademicWarningNotifications => '阻止学业警告通知';
+
+  @override
+  String get blockExamNotifications => '阻止考试通知';
+
+  @override
+  String get blockGroupNotifications => '阻止群组通知';
+
+  @override
+  String get notificationSoundsTitle => '通知声音';
+
+  @override
+  String get playSoundForChatNotifications => '播放聊天通知声音';
+
+  @override
+  String get playSoundForTimetableNotifications => '播放时间表通知声音';
+
+  @override
+  String get playSoundForBroadcastNotifications => '播放一般通知声音';
+
+  @override
+  String get playSoundForMaintenanceNotifications => '播放维护通知声音';
+
+  @override
+  String get playSoundForAcademicWarningNotifications => '播放学业警告通知声音';
+
+  @override
+  String get playSoundForExamNotifications => '播放考试通知声音';
+
+  @override
+  String get playSoundForGroupNotifications => '播放群组通知声音';
 }

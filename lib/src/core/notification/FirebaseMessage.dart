@@ -23,12 +23,23 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       Hive.registerAdapter(NotificationModelAdapter());
     }
 
+    // Determine the correct time for the notification
+    DateTime notificationTime = DateTime.now();
+    if (message.data['type'] == 'timetable' &&
+        message.data.containsKey('startTime')) {
+      DateTime? startTime = DateTime.tryParse(message.data['startTime']);
+      if (startTime != null) {
+        // For timetable, try to use the start time of the class for sorting purposes in the app's notification list
+        notificationTime = startTime;
+      }
+    }
+
     // Store notification in Hive
     final notification = NotificationModel(
       id: message.messageId ?? DateTime.now().toString(),
       title: message.notification?.title,
       body: message.notification?.body,
-      time: DateTime.now().toIso8601String(),
+      time: notificationTime.toIso8601String(), // Use the determined time
 
       isRead: false,
       data: {
@@ -130,12 +141,34 @@ class FirebaseMessage {
             'Message also contained a notification: ${message.notification}');
       }
 
+      // Determine the correct time for the notification to be displayed/sorted
+      DateTime notificationTime = DateTime.now();
+      if (notificationType == 'timetable' &&
+          message.data.containsKey('startTime')) {
+        DateTime? startTime = DateTime.tryParse(message.data['startTime']);
+        if (startTime != null) {
+          // For timetable, use the class start time
+          notificationTime = startTime;
+        }
+      }
+
+      // Check if the timetable class has already ended (for timetable notifications only)
+      if (notificationType == 'timetable' &&
+          message.data.containsKey('endTime')) {
+        DateTime? endTime = DateTime.tryParse(message.data['endTime']);
+        if (endTime != null && DateTime.now().isAfter(endTime)) {
+          logger.i(
+              'Timetable notification for a class that has already ended. Not saving or showing.');
+          return; // Do not save or show if class has ended
+        }
+      }
+
       // Lưu notification vào Hive với custom data
       final notification = NotificationModel(
         id: message.messageId ?? DateTime.now().toString(),
         title: message.notification?.title,
         body: message.notification?.body,
-        time: DateTime.now().toIso8601String(),
+        time: notificationTime.toIso8601String(), // Use the determined time
         isRead: false,
         data: {
           ...message.data,
@@ -268,6 +301,15 @@ class FirebaseMessage {
       // Đảm bảo thông báo được lưu và box được mở trước khi điều hướng
       final notificationId = data['messageId'] ?? DateTime.now().toString();
 
+      // Determine the correct time for the notification to be displayed/sorted for instant notifications
+      DateTime instantNotificationTime = DateTime.now();
+      if (type == 'timetable' && data.containsKey('startTime')) {
+        DateTime? startTime = DateTime.tryParse(data['startTime']);
+        if (startTime != null) {
+          instantNotificationTime = startTime;
+        }
+      }
+
       // Kiểm tra xem thông báo đã tồn tại chưa
       final box = await Hive.openBox<NotificationModel>('notifications');
       bool notificationExists = false;
@@ -279,13 +321,14 @@ class FirebaseMessage {
         }
       }
 
-      // Chỉ lưu nếu thông báo chưa tồn tại
+      // Only save if notification doesn't exist
       if (!notificationExists) {
         final notification = NotificationModel(
           id: notificationId,
           title: data['title'],
           body: data['body'],
-          time: DateTime.now().toIso8601String(),
+          time:
+              instantNotificationTime.toIso8601String(), // Use determined time
           isRead: false,
           data: {
             ...data,
@@ -338,7 +381,20 @@ class FirebaseMessage {
         'messageId': message.messageId,
         'title': notification.title,
         'body': notification.body,
+        if (!message.data.containsKey('imageUrl') &&
+            message.notification?.android?.imageUrl != null)
+          'imageUrl': message.notification?.android?.imageUrl,
       });
+
+      // Check if timetable class has already ended for foreground instant notifications
+      if (type == 'timetable' && message.data.containsKey('endTime')) {
+        DateTime? endTime = DateTime.tryParse(message.data['endTime']);
+        if (endTime != null && DateTime.now().isAfter(endTime)) {
+          logger.i(
+              'Foreground timetable notification for a class that has already ended. Not showing.');
+          return; // Do not show if class has ended
+        }
+      }
 
       flutterLocalNotificationsPlugin.show(
         notification.hashCode,
@@ -354,6 +410,10 @@ class FirebaseMessage {
             enableVibration: true,
             playSound: true,
             icon: '@mipmap/ic_launcher',
+            fullScreenIntent:
+                type == 'timetable', // Make timetable notifications alarm-like
+            category:
+                type == 'timetable' ? AndroidNotificationCategory.alarm : null,
           ),
         ),
         payload: payload,
@@ -399,13 +459,36 @@ class FirebaseMessage {
     RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
+      // Determine the correct time for the notification
+      DateTime notificationTime = DateTime.now();
+      if (initialMessage.data['type'] == 'timetable' &&
+          initialMessage.data.containsKey('startTime')) {
+        DateTime? startTime =
+            DateTime.tryParse(initialMessage.data['startTime']);
+        if (startTime != null) {
+          notificationTime = startTime;
+        }
+      }
+
+      // Check if the timetable class has already ended
+      if (initialMessage.data['type'] == 'timetable' &&
+          initialMessage.data.containsKey('endTime')) {
+        DateTime? endTime = DateTime.tryParse(initialMessage.data['endTime']);
+        if (endTime != null && DateTime.now().isAfter(endTime)) {
+          logger.i(
+              'Terminated state timetable notification for a class that has already ended. Not saving or navigating.');
+          return; // Do not save or navigate if class has ended
+        }
+      }
+
       // Đảm bảo thông báo được lưu vào Hive trước khi điều hướng
-      await _saveNotificationToHive(initialMessage);
+      await _saveNotificationToHive(initialMessage, time: notificationTime);
       _navigateToNotificationScreen(initialMessage);
     }
   }
 
-  Future<void> _saveNotificationToHive(RemoteMessage message) async {
+  Future<void> _saveNotificationToHive(RemoteMessage message,
+      {DateTime? time}) async {
     try {
       // Initialize Hive
       await Hive.initFlutter();
@@ -429,7 +512,8 @@ class FirebaseMessage {
         id: notificationId,
         title: message.notification?.title,
         body: message.notification?.body,
-        time: DateTime.now().toIso8601String(),
+        time: (time ?? DateTime.now())
+            .toIso8601String(), // Use provided time or current time
         isRead: false,
         data: data,
         type: message.data['type']?.toString(),

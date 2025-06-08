@@ -327,9 +327,24 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String question_count(int value) {
+  String question_count(Object value) {
     return '$value вопросов';
   }
+
+  @override
+  String get teacherCodeInputTitle => 'Введите код преподавателя';
+
+  @override
+  String get teacherCodeLabel => 'Код преподавателя';
+
+  @override
+  String get teacherCodeHint => 'Пример: GV001';
+
+  @override
+  String get enterTeacherCodeInstruction => 'Пожалуйста, введите код преподавателя для продолжения';
+
+  @override
+  String get invalidTeacherCode => 'Неверный код преподавателя!';
 
   @override
   String duration_minutes(int value) {
@@ -444,4 +459,124 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get no_data => 'Нет данных';
+
+  @override
+  String get filter_notifications => 'Фильтр уведомлений';
+
+  @override
+  String get mark_all_as_read => 'Отметить все как прочитанные';
+
+  @override
+  String get no_notifications_in_filter => 'Нет уведомлений в этом фильтре';
+
+  @override
+  String get teacherEvaluationTitle => 'Оценка преподавателя';
+
+  @override
+  String get teacherInfoTitle => 'Информация о преподавателе:';
+
+  @override
+  String get teacherNameLabel => 'Имя преподавателя:';
+
+  @override
+  String get teacherCodeLabelShort => 'Код преподавателя:';
+
+  @override
+  String get teacherDepartmentLabel => 'Кафедра:';
+
+  @override
+  String get teacherGenderLabel => 'Пол:';
+
+  @override
+  String get teacherBirthDateLabel => 'Дата рождения:';
+
+  @override
+  String get evaluationInstruction => 'Пожалуйста, оцените следующие критерии:';
+
+  @override
+  String get question1 => 'Преподаватель объясняет ясно и понятно?';
+
+  @override
+  String get question2 => 'Преподаватель проявляет энтузиазм и преданность в преподавании?';
+
+  @override
+  String get question3 => 'Вы удовлетворены методами преподавания преподавателя?';
+
+  @override
+  String get question4 => 'Преподаватель поощряет студентов задавать вопросы и участвовать в обсуждениях?';
+
+  @override
+  String get question5 => 'Преподаватель предоставляет достаточно материалов и полезных учебных ресурсов?';
+
+  @override
+  String get question6 => 'Преподаватель оценивает справедливо и объективно?';
+
+  @override
+  String get question7 => 'Преподаватель эффективно решает возникающие проблемы?';
+
+  @override
+  String get question8 => 'Вы чувствуете уважение и что вас слушают при взаимодействии с преподавателем?';
+
+  @override
+  String get question9 => 'В целом, вы удовлетворены этим преподавателем?';
+
+  @override
+  String get submitEvaluationButton => 'Отправить оценку';
+
+  @override
+  String get evaluationSuccessMessage => 'Ваша оценка успешно отправлена!';
+
+  @override
+  String get evaluationErrorMessage => 'Пожалуйста, оцените все вопросы.';
+
+  @override
+  String get notificationSettingsTitle => 'Настройки уведомлений';
+
+  @override
+  String get blockedNotificationTypesTitle => 'Блокировать уведомления по типу';
+
+  @override
+  String get blockChatNotifications => 'Блокировать чат-уведомления';
+
+  @override
+  String get blockTimetableNotifications => 'Блокировать уведомления расписания';
+
+  @override
+  String get blockBroadcastNotifications => 'Блокировать общие уведомления';
+
+  @override
+  String get blockMaintenanceNotifications => 'Блокировать уведомления о техническом обслуживании';
+
+  @override
+  String get blockAcademicWarningNotifications => 'Блокировать уведомления об академических предупреждениях';
+
+  @override
+  String get blockExamNotifications => 'Блокировать уведомления об экзаменах';
+
+  @override
+  String get blockGroupNotifications => 'Блокировать групповые уведомления';
+
+  @override
+  String get notificationSoundsTitle => 'Звуки уведомлений';
+
+  @override
+  String get playSoundForChatNotifications => 'Воспроизводить звук для уведомлений чата';
+
+  @override
+  String get playSoundForTimetableNotifications => 'Воспроизводить звук для уведомлений расписания';
+
+  @override
+  String get playSoundForBroadcastNotifications => 'Воспроизводить звук для общих уведомлений';
+
+  @override
+  String get playSoundForMaintenanceNotifications => 'Воспроизводить звук для уведомлений о техническом обслуживании';
+
+  @override
+  String get playSoundForAcademicWarningNotifications => 'Воспроизводить звук для уведомлений об академических предупреждениях';
+
+  @override
+  String get playSoundForExamNotifications => 'Воспроизводить звук для уведомлений об экзаменах';
+
+  @override
+  String get playSoundForGroupNotifications => 'Воспроизводить звук для групповых уведомлений';
 }

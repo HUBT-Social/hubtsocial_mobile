@@ -322,7 +322,7 @@ abstract class AppLocalizations {
   /// No description provided for @do_not_have_an_account.
   ///
   /// In en, this message translates to:
-  /// **'Don’t have an account?'**
+  /// **'Don\"t have an account?'**
   String get do_not_have_an_account;
 
   /// No description provided for @already_have_an_account.
@@ -719,7 +719,37 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'{value} questions'**
-  String question_count(int value);
+  String question_count(Object value);
+
+  /// No description provided for @teacherCodeInputTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Teacher Code'**
+  String get teacherCodeInputTitle;
+
+  /// No description provided for @teacherCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Teacher Code'**
+  String get teacherCodeLabel;
+
+  /// No description provided for @teacherCodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: GV001'**
+  String get teacherCodeHint;
+
+  /// No description provided for @enterTeacherCodeInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the teacher code to continue'**
+  String get enterTeacherCodeInstruction;
+
+  /// No description provided for @invalidTeacherCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid teacher code!'**
+  String get invalidTeacherCode;
 
   /// No description provided for @duration_minutes.
   ///
@@ -936,6 +966,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No data'**
   String get no_data;
+
+  /// No description provided for @filter_notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter notifications'**
+  String get filter_notifications;
+
+  /// No description provided for @mark_all_as_read.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all as read'**
+  String get mark_all_as_read;
+
+  /// No description provided for @no_notifications_in_filter.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications in this filter'**
+  String get no_notifications_in_filter;
+
+  /// No description provided for @teacherEvaluationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Teacher Evaluation'**
+  String get teacherEvaluationTitle;
+
+  /// No description provided for @teacherInfoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Teacher Information:'**
+  String get teacherInfoTitle;
+
+  /// No description provided for @teacherNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Teacher Name:'**
+  String get teacherNameLabel;
+
+  /// No description provided for @teacherCodeLabelShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Teacher Code:'**
+  String get teacherCodeLabelShort;
+
+  /// No description provided for @teacherDepartmentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Department:'**
+  String get teacherDepartmentLabel;
+
+  /// No description provided for @teacherGenderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender:'**
+  String get teacherGenderLabel;
+
+  /// No description provided for @teacherBirthDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Birth Date:'**
+  String get teacherBirthDateLabel;
+
+  /// No description provided for @evaluationInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Please evaluate the following criteria:'**
+  String get evaluationInstruction;
+
+  /// No description provided for @question1.
+  ///
+  /// In en, this message translates to:
+  /// **'Does the lecturer communicate clearly and understandably?'**
+  String get question1;
+
+  /// No description provided for @question2.
+  ///
+  /// In en, this message translates to:
+  /// **'Is the lecturer enthusiastic and dedicated in teaching?'**
+  String get question2;
+
+  /// No description provided for @question3.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you satisfied with the lecturer\'\'s teaching methods?'**
+  String get question3;
+
+  /// No description provided for @question4.
+  ///
+  /// In en, this message translates to:
+  /// **'Does the lecturer encourage students to ask questions and participate in discussions?'**
+  String get question4;
+
+  /// No description provided for @question5.
+  ///
+  /// In en, this message translates to:
+  /// **'Does the lecturer provide sufficient materials and useful learning resources?'**
+  String get question5;
+
+  /// No description provided for @question6.
+  ///
+  /// In en, this message translates to:
+  /// **'Does the lecturer evaluate fairly and objectively?'**
+  String get question6;
+
+  /// No description provided for @question7.
+  ///
+  /// In en, this message translates to:
+  /// **'Does the lecturer effectively resolve emerging issues?'**
+  String get question7;
+
+  /// No description provided for @question8.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you feel respected and listened to when interacting with the lecturer?'**
+  String get question8;
+
+  /// No description provided for @question9.
+  ///
+  /// In en, this message translates to:
+  /// **'Overall, are you satisfied with this lecturer?'**
+  String get question9;
+
+  /// No description provided for @submitEvaluationButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Evaluation'**
+  String get submitEvaluationButton;
+
+  /// No description provided for @evaluationSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your evaluation has been successfully submitted!'**
+  String get evaluationSuccessMessage;
+
+  /// No description provided for @evaluationErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please evaluate all questions.'**
+  String get evaluationErrorMessage;
+
+  /// No description provided for @notificationSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Settings'**
+  String get notificationSettingsTitle;
+
+  /// No description provided for @blockedNotificationTypesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Block Notifications by Type'**
+  String get blockedNotificationTypesTitle;
+
+  /// No description provided for @blockChatNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Block chat notifications'**
+  String get blockChatNotifications;
+
+  /// No description provided for @blockTimetableNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Block timetable notifications'**
+  String get blockTimetableNotifications;
+
+  /// No description provided for @blockBroadcastNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Block general notifications'**
+  String get blockBroadcastNotifications;
+
+  /// No description provided for @blockMaintenanceNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Block maintenance notifications'**
+  String get blockMaintenanceNotifications;
+
+  /// No description provided for @blockAcademicWarningNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Block academic warning notifications'**
+  String get blockAcademicWarningNotifications;
+
+  /// No description provided for @blockExamNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Block exam notifications'**
+  String get blockExamNotifications;
+
+  /// No description provided for @blockGroupNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Block group notifications'**
+  String get blockGroupNotifications;
+
+  /// No description provided for @notificationSoundsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Sounds'**
+  String get notificationSoundsTitle;
+
+  /// No description provided for @playSoundForChatNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Play sound for chat notifications'**
+  String get playSoundForChatNotifications;
+
+  /// No description provided for @playSoundForTimetableNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Play sound for timetable notifications'**
+  String get playSoundForTimetableNotifications;
+
+  /// No description provided for @playSoundForBroadcastNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Play sound for general notifications'**
+  String get playSoundForBroadcastNotifications;
+
+  /// No description provided for @playSoundForMaintenanceNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Play sound for maintenance notifications'**
+  String get playSoundForMaintenanceNotifications;
+
+  /// No description provided for @playSoundForAcademicWarningNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Play sound for academic warning notifications'**
+  String get playSoundForAcademicWarningNotifications;
+
+  /// No description provided for @playSoundForExamNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Play sound for exam notifications'**
+  String get playSoundForExamNotifications;
+
+  /// No description provided for @playSoundForGroupNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Play sound for group notifications'**
+  String get playSoundForGroupNotifications;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

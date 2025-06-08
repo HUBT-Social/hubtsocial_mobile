@@ -327,9 +327,24 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String question_count(int value) {
+  String question_count(Object value) {
     return '$value câu hỏi';
   }
+
+  @override
+  String get teacherCodeInputTitle => 'Nhập mã giảng viên';
+
+  @override
+  String get teacherCodeLabel => 'Mã giảng viên';
+
+  @override
+  String get teacherCodeHint => 'Ví dụ: GV001';
+
+  @override
+  String get enterTeacherCodeInstruction => 'Vui lòng nhập mã giảng viên để tiếp tục';
+
+  @override
+  String get invalidTeacherCode => 'Mã giảng viên không hợp lệ!';
 
   @override
   String duration_minutes(int value) {
@@ -444,4 +459,124 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get no_data => 'Không có dữ liệu';
+
+  @override
+  String get filter_notifications => 'Lọc thông báo';
+
+  @override
+  String get mark_all_as_read => 'Đánh dấu tất cả là đã đọc';
+
+  @override
+  String get no_notifications_in_filter => 'Không có thông báo nào trong bộ lọc này';
+
+  @override
+  String get teacherEvaluationTitle => 'Đánh giá giảng viên';
+
+  @override
+  String get teacherInfoTitle => 'Thông tin giảng viên:';
+
+  @override
+  String get teacherNameLabel => 'Tên giảng viên:';
+
+  @override
+  String get teacherCodeLabelShort => 'Mã giảng viên:';
+
+  @override
+  String get teacherDepartmentLabel => 'Khoa:';
+
+  @override
+  String get teacherGenderLabel => 'Giới tính:';
+
+  @override
+  String get teacherBirthDateLabel => 'Ngày sinh:';
+
+  @override
+  String get evaluationInstruction => 'Vui lòng đánh giá các tiêu chí sau:';
+
+  @override
+  String get question1 => 'Giảng viên có truyền đạt rõ ràng, dễ hiểu không?';
+
+  @override
+  String get question2 => 'Giảng viên có nhiệt tình, tận tâm trong giảng dạy không?';
+
+  @override
+  String get question3 => 'Bạn có hài lòng với phương pháp giảng dạy của giảng viên không?';
+
+  @override
+  String get question4 => 'Giảng viên có khuyến khích sinh viên đặt câu hỏi và tham gia thảo luận không?';
+
+  @override
+  String get question5 => 'Giảng viên có cung cấp đủ tài liệu và nguồn học tập bổ ích không?';
+
+  @override
+  String get question6 => 'Giảng viên có đánh giá công bằng và khách quan không?';
+
+  @override
+  String get question7 => 'Giảng viên có giải quyết các vấn đề phát sinh một cách hiệu quả không?';
+
+  @override
+  String get question8 => 'Bạn có cảm thấy được tôn trọng và lắng nghe khi tương tác với giảng viên không?';
+
+  @override
+  String get question9 => 'Tổng thể, bạn có hài lòng với giảng viên này không?';
+
+  @override
+  String get submitEvaluationButton => 'Gửi đánh giá';
+
+  @override
+  String get evaluationSuccessMessage => 'Đánh giá của bạn đã được gửi thành công!';
+
+  @override
+  String get evaluationErrorMessage => 'Vui lòng đánh giá tất cả các câu hỏi.';
+
+  @override
+  String get notificationSettingsTitle => 'Cài đặt thông báo';
+
+  @override
+  String get blockedNotificationTypesTitle => 'Chặn thông báo theo loại';
+
+  @override
+  String get blockChatNotifications => 'Chặn thông báo chat';
+
+  @override
+  String get blockTimetableNotifications => 'Chặn thông báo lịch học';
+
+  @override
+  String get blockBroadcastNotifications => 'Chặn thông báo chung';
+
+  @override
+  String get blockMaintenanceNotifications => 'Chặn thông báo bảo trì';
+
+  @override
+  String get blockAcademicWarningNotifications => 'Chặn thông báo cảnh báo học tập';
+
+  @override
+  String get blockExamNotifications => 'Chặn thông báo thi cử';
+
+  @override
+  String get blockGroupNotifications => 'Chặn thông báo nhóm';
+
+  @override
+  String get notificationSoundsTitle => 'Âm thanh thông báo';
+
+  @override
+  String get playSoundForChatNotifications => 'Phát âm thanh cho thông báo chat';
+
+  @override
+  String get playSoundForTimetableNotifications => 'Phát âm thanh cho thông báo lịch học';
+
+  @override
+  String get playSoundForBroadcastNotifications => 'Phát âm thanh cho thông báo chung';
+
+  @override
+  String get playSoundForMaintenanceNotifications => 'Phát âm thanh cho thông báo bảo trì';
+
+  @override
+  String get playSoundForAcademicWarningNotifications => 'Phát âm thanh cho thông báo cảnh báo học tập';
+
+  @override
+  String get playSoundForExamNotifications => 'Phát âm thanh cho thông báo thi cử';
+
+  @override
+  String get playSoundForGroupNotifications => 'Phát âm thanh cho thông báo nhóm';
 }
