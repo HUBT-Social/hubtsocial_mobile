@@ -58,8 +58,9 @@ class TimetableNotificationService {
       // Only schedule notifications if we're within the timetable period
       if (now.isAfter(startTime) && now.isBefore(endTime)) {
         for (var timetable in timetableData.reformTimetables) {
-          if (timetable.startTime == null || timetable.endTime == null)
+          if (timetable.startTime == null || timetable.endTime == null) {
             continue;
+          }
 
           // Schedule notification 15 minutes before class starts
           final startNotificationTime =

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hubtsocial_mobile/src/core/api/dio_client.dart';
 import 'package:injectable/injectable.dart';
@@ -9,7 +7,6 @@ import '../../../../core/api/errors/exceptions.dart';
 import '../../../../core/logger/logger.dart';
 import '../models/quiz_info_response_model.dart';
 import '../models/quiz_response_model.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 abstract class QuizRemoteDataSource {
   const QuizRemoteDataSource();

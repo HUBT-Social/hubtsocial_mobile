@@ -105,7 +105,7 @@ class _NotificationSettingsScreenState
             // Generate a Card for each blocked notification type
             ..._blockedTypes.entries.map((entry) {
               return _buildBlockedTypeCard(entry.key, entry.value, context);
-            }).toList(),
+            }),
             SizedBox(height: 50.h), // Added bottom padding
           ],
         ),

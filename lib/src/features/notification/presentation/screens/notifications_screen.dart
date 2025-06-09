@@ -7,7 +7,6 @@ import 'package:hubtsocial_mobile/src/features/notification/model/notification_m
 import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_type_id.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_key.dart';
 import 'package:hubtsocial_mobile/hive/hive_adapters.dart';
-import 'notification_icon.dart';
 import 'notification_detail_screen.dart';
 import 'filter_option.dart';
 import 'package:flutter_svg/flutter_svg.dart';
