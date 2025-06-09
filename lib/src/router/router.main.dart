@@ -130,10 +130,6 @@ StatefulShellRoute _mainRoute() {
                           FadeTransition(opacity: animation, child: child),
                 ),
               ),
-              
-
-
-              
             ],
           ),
         ],
@@ -202,7 +198,7 @@ StatefulShellRoute _mainRoute() {
           ),
         ],
       ),
-      
+
       /// Brach Menu
       StatefulShellBranch(
         // navigatorKey: _shellNavigatorMenu,
@@ -258,13 +254,12 @@ StatefulShellRoute _mainRoute() {
                     },
                   ),
                 ],
-              ),              
+              ),
               GoRoute(
                 path: 'notification-settings',
                 pageBuilder: (context, state) => CustomTransitionPage(
                   key: state.pageKey,
-                  child: NotificationSettingsScreen(
-                  ),
+                  child: NotificationSettingsScreen(),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) =>
                           FadeTransition(opacity: animation, child: child),
@@ -274,13 +269,14 @@ StatefulShellRoute _mainRoute() {
           ),
         ],
       ),
-
-      /// Brach Teacher Evaluation
       StatefulShellBranch(
         routes: [
           GoRoute(
             path: AppRoute.teacherevalua.path,
-            builder: (context, state) => TeacherEvaluationScreen(),
+            builder: (context, state) {
+              final teacher = state.extra as Teacher;
+              return TeacherEvaluationScreen(teacher: teacher);
+            },
           ),
         ],
       ),

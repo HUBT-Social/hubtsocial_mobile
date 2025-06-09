@@ -35,7 +35,7 @@ class NotificationItem extends StatelessWidget {
         color: notification.isRead
             ? context.colorScheme.surface
             : context.colorScheme.primary.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(6.r),
+        borderRadius: BorderRadius.circular(8.r),
         border: Border.all(
           color: context.colorScheme.outline.withOpacity(0.1),
           width: 0.5.w,
@@ -58,19 +58,19 @@ class NotificationItem extends StatelessWidget {
               onTap();
             }
           },
-          borderRadius: BorderRadius.circular(6.r),
+          borderRadius: BorderRadius.circular(8.r),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 8.h),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 14.h),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: 44.r,
-                  height: 44.r,
+                  width: 55.r,
+                  height: 55.r,
                   child:
-                      NotificationIcon(notification: notification, size: 44.r),
+                      NotificationIcon(notification: notification, size: 55.r),
                 ),
-                SizedBox(width: 8.w),
+                SizedBox(width: 12.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,24 +78,24 @@ class NotificationItem extends StatelessWidget {
                     children: [
                       Text(
                         notification.title ?? '',
-                        style: context.textTheme.labelMedium?.copyWith(
+                        style: context.textTheme.titleSmall?.copyWith(
                           color: context.colorScheme.onSurface,
                         ),
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       if (notification.body != null) ...[
-                        SizedBox(height: 1.h),
+                        SizedBox(height: 2.h),
                         Text(
                           notification.body!,
-                          style: context.textTheme.labelSmall?.copyWith(
+                          style: context.textTheme.bodySmall?.copyWith(
                             color: context.colorScheme.outline,
                           ),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
-                      SizedBox(height: 2.h),
+                      SizedBox(height: 4.h),
                       Text(
                         _formatTime(notification.time, context),
                         style: context.textTheme.labelSmall?.copyWith(

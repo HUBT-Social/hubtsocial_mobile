@@ -13,18 +13,6 @@ class NotificationSettingsScreen extends StatefulWidget {
 
 class _NotificationSettingsScreenState
     extends State<NotificationSettingsScreen> {
-  // Map to store the state of notification toggles
-  final Map<String, bool> _notificationStates = {
-    '2_person_notify': true,
-    '2_person_preview': true,
-    'group_notify': true,
-    'schedule_daily': true,
-    'calls_incoming': false,
-    'events_notify': true,
-    'in_app_preview': true,
-    'in_app_vibrate': false,
-  };
-
   // Map to store blocked notification types
   final Map<String, bool> _blockedTypes = {
     'chat': false,
@@ -33,6 +21,7 @@ class _NotificationSettingsScreenState
     'maintenance': false,
     'academic_warning': false,
     'exam': false,
+    'group': false,
   };
 
   @override
@@ -72,12 +61,6 @@ class _NotificationSettingsScreenState
     }
   }
 
-  void _toggleNotification(String key, bool value) {
-    setState(() {
-      _notificationStates[key] = value;
-    });
-  }
-
   void _toggleBlockedType(String type, bool value) {
     setState(() {
       _blockedTypes[type] = value;
@@ -85,197 +68,100 @@ class _NotificationSettingsScreenState
     _saveBlockedTypes();
   }
 
-  Widget _buildNotificationCategory({
-    required String title,
-    required List<Map<String, dynamic>> options,
-  }) {
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-      elevation: 1.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-      child: Padding(
-        padding: EdgeInsets.all(12.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: context.textTheme.titleMedium
-                  ?.copyWith(color: context.colorScheme.primary),
-            ),
-            SizedBox(height: 8.h),
-            Column(
-              children: options.map((option) {
-                final String key = option['key'];
-                final String description = option['description'];
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        description,
-                        style: context.textTheme.labelLarge,
-                      ),
-                    ),
-                    Switch(
-                      value: _notificationStates[key] ?? false,
-                      onChanged: (bool value) {
-                        _toggleNotification(key, value);
-                      },
-                      activeColor: context.colorScheme.primary,
-                    ),
-                  ],
-                );
-              }).toList(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBlockedTypesCategory() {
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-      elevation: 1.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-      child: Padding(
-        padding: EdgeInsets.all(12.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Chặn thông báo theo loại',
-              style: context.textTheme.titleMedium
-                  ?.copyWith(color: context.colorScheme.primary),
-            ),
-            SizedBox(height: 8.h),
-            Column(
-              children: _blockedTypes.entries.map((entry) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        _getTypeDescription(entry.key),
-                        style: context.textTheme.labelLarge,
-                      ),
-                    ),
-                    Switch(
-                      value: entry.value,
-                      onChanged: (bool value) {
-                        _toggleBlockedType(entry.key, value);
-                      },
-                      activeColor: context.colorScheme.primary,
-                    ),
-                  ],
-                );
-              }).toList(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  String _getTypeDescription(String type) {
-    switch (type) {
-      case 'chat':
-        return 'Chặn thông báo chat';
-      case 'timetable':
-        return 'Chặn thông báo lịch học';
-      case 'broadcast':
-        return 'Chặn thông báo phát sóng';
-      case 'maintenance':
-        return 'Chặn thông báo bảo trì';
-      case 'academic_warning':
-        return 'Chặn thông báo cảnh báo học tập';
-      case 'exam':
-        return 'Chặn thông báo thi cử';
-      default:
-        return type;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Notification',
+          context.loc.notificationSettingsTitle,
           style: context.textTheme.headlineMedium
-              ?.copyWith(color: context.colorScheme.onSurface),
+              ?.copyWith(color: context.colorScheme.onPrimary),
+        ),
+        backgroundColor: const Color(0xFF90EE90),
+        elevation: 0,
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              const Color(0xFF90EE90).withOpacity(0.1),
+              Colors.white,
+            ],
+          ),
+        ),
+        child: ListView(
+          children: [
+            SizedBox(height: 50.h), // Added top padding
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              child: Text(
+                context.loc.blockedNotificationTypesTitle,
+                style: context.textTheme.titleLarge
+                    ?.copyWith(color: const Color(0xFF90EE90).withOpacity(0.8)),
+              ),
+            ),
+            // Generate a Card for each blocked notification type
+            ..._blockedTypes.entries.map((entry) {
+              return _buildBlockedTypeCard(entry.key, entry.value, context);
+            }).toList(),
+            SizedBox(height: 50.h), // Added bottom padding
+          ],
         ),
       ),
-      body: ListView(
-        children: [
-          _buildNotificationCategory(
-            title: '2- person conversations',
-            options: [
-              {
-                'key': '2_person_notify',
-                'description':
-                    'Notify new messages from 2-person conversations',
+    );
+  }
+
+  Widget _buildBlockedTypeCard(String type, bool value, BuildContext context) {
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      elevation: 1.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+      color: Colors.white,
+      child: Padding(
+        padding: EdgeInsets.all(12.r),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                _getTypeDescription(type, context),
+                style: context.textTheme.labelLarge
+                    ?.copyWith(color: Colors.black87),
+              ),
+            ),
+            Switch(
+              value: value,
+              onChanged: (bool newValue) {
+                _toggleBlockedType(type, newValue);
               },
-              {
-                'key': '2_person_preview',
-                'description': 'Preview messages from 2-person conversations',
-              },
-            ],
-          ),
-          _buildNotificationCategory(
-            title: 'Group conversations',
-            options: [
-              {
-                'key': 'group_notify',
-                'description':
-                    'Notify new messages from 2-person conversations',
-              },
-            ],
-          ),
-          _buildNotificationCategory(
-            title: 'Schedule',
-            options: [
-              {
-                'key': 'schedule_daily',
-                'description': 'Daily schedule announcement',
-              },
-            ],
-          ),
-          _buildNotificationCategory(
-            title: 'Calls',
-            options: [
-              {
-                'key': 'calls_incoming',
-                'description': 'Notify incoming calls',
-              },
-            ],
-          ),
-          _buildNotificationCategory(
-            title: 'Events',
-            options: [
-              {
-                'key': 'events_notify',
-                'description': 'Thông báo sự kiện gì đó chưa nghĩ ra',
-              },
-            ],
-          ),
-          _buildNotificationCategory(
-            title: 'In-app notifications',
-            options: [
-              {
-                'key': 'in_app_preview',
-                'description': 'Preview new messages inside app',
-              },
-              {
-                'key': 'in_app_vibrate',
-                'description': 'Vibrate inside App when a new message arrives',
-              },
-            ],
-          ),
-          _buildBlockedTypesCategory(),
-        ],
+              activeColor: const Color(0xFF90EE90),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  String _getTypeDescription(String type, BuildContext context) {
+    switch (type) {
+      case 'chat':
+        return context.loc.blockChatNotifications;
+      case 'timetable':
+        return context.loc.blockTimetableNotifications;
+      case 'broadcast':
+        return context.loc.blockBroadcastNotifications;
+      case 'maintenance':
+        return context.loc.blockMaintenanceNotifications;
+      case 'academic_warning':
+        return context.loc.blockAcademicWarningNotifications;
+      case 'exam':
+        return context.loc.blockExamNotifications;
+      case 'group':
+        return context.loc.blockGroupNotifications;
+      default:
+        return type;
+    }
   }
 }

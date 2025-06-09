@@ -327,9 +327,24 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String question_count(int value) {
+  String question_count(Object value) {
     return '$value 問題';
   }
+
+  @override
+  String get teacherCodeInputTitle => '教員コードを入力';
+
+  @override
+  String get teacherCodeLabel => '教員コード';
+
+  @override
+  String get teacherCodeHint => '例: GV001';
+
+  @override
+  String get enterTeacherCodeInstruction => '続行するには教員コードを入力してください';
+
+  @override
+  String get invalidTeacherCode => '無効な教員コードです！';
 
   @override
   String duration_minutes(int value) {
@@ -444,4 +459,124 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get no_data => 'データがありません';
+
+  @override
+  String get filter_notifications => '通知をフィルター';
+
+  @override
+  String get mark_all_as_read => 'すべて既読にする';
+
+  @override
+  String get no_notifications_in_filter => 'このフィルターに通知はありません';
+
+  @override
+  String get teacherEvaluationTitle => '教員評価';
+
+  @override
+  String get teacherInfoTitle => '教員情報:';
+
+  @override
+  String get teacherNameLabel => '教員名:';
+
+  @override
+  String get teacherCodeLabelShort => '教員コード:';
+
+  @override
+  String get teacherDepartmentLabel => '学科:';
+
+  @override
+  String get teacherGenderLabel => '性別:';
+
+  @override
+  String get teacherBirthDateLabel => '生年月日:';
+
+  @override
+  String get evaluationInstruction => '以下の基準を評価してください:';
+
+  @override
+  String get question1 => '講師は明確かつ分かりやすく伝えていますか？';
+
+  @override
+  String get question2 => '講師は熱心で献身的に教えていますか？';
+
+  @override
+  String get question3 => '講師の指導方法に満足していますか？';
+
+  @override
+  String get question4 => '講師は学生に質問を促し、議論に参加させていますか？';
+
+  @override
+  String get question5 => '講師は十分な資料と役立つ学習リソースを提供していますか？';
+
+  @override
+  String get question6 => '講師は公正かつ客観的に評価していますか？';
+
+  @override
+  String get question7 => '講師は発生する問題を効果的に解決していますか？';
+
+  @override
+  String get question8 => '講師との交流において、尊重され、耳を傾けられていると感じますか？';
+
+  @override
+  String get question9 => '全体的に、この講師に満足していますか？';
+
+  @override
+  String get submitEvaluationButton => '評価を送信';
+
+  @override
+  String get evaluationSuccessMessage => '評価が正常に送信されました！';
+
+  @override
+  String get evaluationErrorMessage => 'すべての質問を評価してください。';
+
+  @override
+  String get notificationSettingsTitle => '通知設定';
+
+  @override
+  String get blockedNotificationTypesTitle => '種類別に通知をブロック';
+
+  @override
+  String get blockChatNotifications => 'チャット通知をブロック';
+
+  @override
+  String get blockTimetableNotifications => '時間割通知をブロック';
+
+  @override
+  String get blockBroadcastNotifications => '一般通知をブロック';
+
+  @override
+  String get blockMaintenanceNotifications => 'メンテナンス通知をブロック';
+
+  @override
+  String get blockAcademicWarningNotifications => '学業警告通知をブロック';
+
+  @override
+  String get blockExamNotifications => '試験通知をブロック';
+
+  @override
+  String get blockGroupNotifications => 'グループ通知をブロック';
+
+  @override
+  String get notificationSoundsTitle => '通知音';
+
+  @override
+  String get playSoundForChatNotifications => 'チャット通知の音を再生';
+
+  @override
+  String get playSoundForTimetableNotifications => '時間割通知の音を再生';
+
+  @override
+  String get playSoundForBroadcastNotifications => '一般通知の音を再生';
+
+  @override
+  String get playSoundForMaintenanceNotifications => 'メンテナンス通知の音を再生';
+
+  @override
+  String get playSoundForAcademicWarningNotifications => '学業警告通知の音を再生';
+
+  @override
+  String get playSoundForExamNotifications => '試験通知の音を再生';
+
+  @override
+  String get playSoundForGroupNotifications => 'グループ通知の音を再生';
 }

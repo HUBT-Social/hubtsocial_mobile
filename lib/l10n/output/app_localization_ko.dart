@@ -327,9 +327,24 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String question_count(int value) {
+  String question_count(Object value) {
     return '$value 문제';
   }
+
+  @override
+  String get teacherCodeInputTitle => '교사 코드 입력';
+
+  @override
+  String get teacherCodeLabel => '교사 코드';
+
+  @override
+  String get teacherCodeHint => '예시: GV001';
+
+  @override
+  String get enterTeacherCodeInstruction => '계속하려면 교사 코드를 입력하세요';
+
+  @override
+  String get invalidTeacherCode => '유효하지 않은 교사 코드입니다!';
 
   @override
   String duration_minutes(int value) {
@@ -444,4 +459,124 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get no_data => '데이터가 없습니다';
+
+  @override
+  String get filter_notifications => '알림 필터';
+
+  @override
+  String get mark_all_as_read => '모두 읽음으로 표시';
+
+  @override
+  String get no_notifications_in_filter => '이 필터에 알림이 없습니다';
+
+  @override
+  String get teacherEvaluationTitle => '교사 평가';
+
+  @override
+  String get teacherInfoTitle => '교사 정보:';
+
+  @override
+  String get teacherNameLabel => '교사 이름:';
+
+  @override
+  String get teacherCodeLabelShort => '교사 코드:';
+
+  @override
+  String get teacherDepartmentLabel => '학과:';
+
+  @override
+  String get teacherGenderLabel => '성별:';
+
+  @override
+  String get teacherBirthDateLabel => '생년월일:';
+
+  @override
+  String get evaluationInstruction => '다음 기준을 평가하십시오:';
+
+  @override
+  String get question1 => '강사는 명확하고 이해하기 쉽게 전달합니까?';
+
+  @override
+  String get question2 => '강사는 가르치는 데 열정적이고 헌신적입니까?';
+
+  @override
+  String get question3 => '강사의 교수법에 만족하십니까?';
+
+  @override
+  String get question4 => '강사는 학생들이 질문하고 토론에 참여하도록 격려합니까?';
+
+  @override
+  String get question5 => '강사는 충분한 자료와 유용한 학습 자료를 제공합니까?';
+
+  @override
+  String get question6 => '강사는 공정하고 객관적으로 평가합니까?';
+
+  @override
+  String get question7 => '강사는 발생하는 문제를 효과적으로 해결합니까?';
+
+  @override
+  String get question8 => '강사와 상호 작용할 때 존중받고 경청한다고 느끼십니까?';
+
+  @override
+  String get question9 => '전반적으로 이 강사에게 만족하십니까?';
+
+  @override
+  String get submitEvaluationButton => '평가 제출';
+
+  @override
+  String get evaluationSuccessMessage => '평가가 성공적으로 제출되었습니다!';
+
+  @override
+  String get evaluationErrorMessage => '모든 질문을 평가하십시오.';
+
+  @override
+  String get notificationSettingsTitle => '알림 설정';
+
+  @override
+  String get blockedNotificationTypesTitle => '유형별 알림 차단';
+
+  @override
+  String get blockChatNotifications => '채팅 알림 차단';
+
+  @override
+  String get blockTimetableNotifications => '시간표 알림 차단';
+
+  @override
+  String get blockBroadcastNotifications => '일반 알림 차단';
+
+  @override
+  String get blockMaintenanceNotifications => '유지 보수 알림 차단';
+
+  @override
+  String get blockAcademicWarningNotifications => '학업 경고 알림 차단';
+
+  @override
+  String get blockExamNotifications => '시험 알림 차단';
+
+  @override
+  String get blockGroupNotifications => '그룹 알림 차단';
+
+  @override
+  String get notificationSoundsTitle => '알림 소리';
+
+  @override
+  String get playSoundForChatNotifications => '채팅 알림 소리 재생';
+
+  @override
+  String get playSoundForTimetableNotifications => '시간표 알림 소리 재생';
+
+  @override
+  String get playSoundForBroadcastNotifications => '일반 알림 소리 재생';
+
+  @override
+  String get playSoundForMaintenanceNotifications => '유지 보수 알림 소리 재생';
+
+  @override
+  String get playSoundForAcademicWarningNotifications => '학업 경고 알림 소리 재생';
+
+  @override
+  String get playSoundForExamNotifications => '시험 알림 소리 재생';
+
+  @override
+  String get playSoundForGroupNotifications => '그룹 알림 소리 재생';
 }

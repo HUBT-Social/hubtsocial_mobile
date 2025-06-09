@@ -23,19 +23,20 @@ class NotificationIcon extends StatelessWidget {
     final imageUrl = notification.data?['imageUrl']?.toString();
     final isGroupMessage = notification.data?['isGroupMessage'] == true;
 
-    // Ưu tiên avatarUrl, nếu không có thì lấy imageUrl
-    final String? mainImage = (avatarUrl?.isNotEmpty == true)
-        ? avatarUrl
-        : (imageUrl?.isNotEmpty == true ? imageUrl : null);
+    // Ưu tiên imageUrl, nếu không có thì lấy avatarUrl
+    final String? mainImage = (imageUrl?.isNotEmpty == true) ? imageUrl : null;
 
     if (mainImage != null && mainImage.isNotEmpty) {
       String smallIconPath;
       if (notificationType == 'chat' || notificationType == 'profile') {
-        smallIconPath = isGroupMessage
-            ? AppIcons.notificationGroupChat
-            : AppIcons.notificationChat;
+        smallIconPath = AppIcons.notificationGroupChat;
       } else if (notificationType == 'maintenance') {
         smallIconPath = AppIcons.notificationSystemMaintenance;
+      } else if (notificationType == 'schedule' ||
+          notificationType == 'timetable') {
+        smallIconPath = AppIcons.notificationTimetable;
+      } else if (notificationType == 'exam') {
+        smallIconPath = AppIcons.notificationTimetable;
       } else {
         smallIconPath = AppIcons.notificationAdmin;
       }
@@ -66,17 +67,24 @@ class NotificationIcon extends StatelessWidget {
             right: 0,
             bottom: 0,
             child: Container(
-              width: size * 0.35,
-              height: size * 0.35,
+              width: size * 0.40,
+              height: size * 0.40,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: context.colorScheme.surface,
+                color: Colors.transparent,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 2,
+                    spreadRadius: 1,
+                  ),
+                ],
               ),
               child: Center(
                 child: SvgPicture.asset(
                   smallIconPath,
-                  width: size * 0.35,
-                  height: size * 0.35,
+                  width: size * 0.40,
+                  height: size * 0.40,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -110,9 +118,7 @@ class NotificationIcon extends StatelessWidget {
         imagePath = AppIcons.notificationSystemMaintenance;
         break;
       case 'chat':
-        imagePath = isGroupMessage
-            ? AppIcons.notificationGroupChat
-            : AppIcons.notificationChat;
+        imagePath = AppIcons.notificationGroupChat;
         break;
       default:
         imagePath = AppIcons.notificationAdmin;

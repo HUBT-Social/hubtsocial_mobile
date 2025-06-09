@@ -9,7 +9,7 @@ enum UserRole {
   static UserRole? fromString(String role) {
     switch (role.toUpperCase()) {
       case 'STUDENT':
-        return user;
+        return student;
       case 'ADMIN':
         return admin;
       case 'TEACHER':

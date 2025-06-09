@@ -5,6 +5,7 @@ import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_type_id.dart';
+import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_key.dart';
 import 'package:hubtsocial_mobile/hive/hive_adapters.dart';
 import 'notification_icon.dart';
 import 'notification_detail_screen.dart';
@@ -25,11 +26,13 @@ class NotificationsScreen extends StatefulWidget {
 class _NotificationsState extends State<NotificationsScreen> {
   String _selectedFilter = 'all';
   Box<NotificationModel>? _notificationsBox;
+  List<String> _blockedNotificationTypes = [];
 
   @override
   void initState() {
     super.initState();
     _initializeHive();
+    _loadBlockedNotificationTypes();
   }
 
   Future<void> _initializeHive() async {
@@ -48,6 +51,19 @@ class _NotificationsState extends State<NotificationsScreen> {
     }
   }
 
+  Future<void> _loadBlockedNotificationTypes() async {
+    try {
+      final box = await Hive.openBox('settings');
+      final List<dynamic> blockedTypes =
+          box.get('blocked_types', defaultValue: []);
+      setState(() {
+        _blockedNotificationTypes = List<String>.from(blockedTypes);
+      });
+    } catch (e) {
+      print('Error loading blocked notification types: $e');
+    }
+  }
+
   void _handleNotificationTap(
       BuildContext context, NotificationModel notification) async {
     if (!notification.isRead) {
@@ -60,11 +76,11 @@ class _NotificationsState extends State<NotificationsScreen> {
         '';
 
     if ([
-      'learning_alerts',
-      'academic_warning',
-      'broadcast',
-      'exam',
-      'maintenance'
+      LocalStorageKey.learning_alerts,
+      LocalStorageKey.academic_warning,
+      LocalStorageKey.broadcast,
+      LocalStorageKey.exam,
+      LocalStorageKey.maintenance
     ].contains(type)) {
       Navigator.push(
         context,
@@ -78,10 +94,8 @@ class _NotificationsState extends State<NotificationsScreen> {
 
     if (notification.data != null) {
       switch (type) {
-        case 'chat':
+        case LocalStorageKey.chat:
           final roomId = notification.data!['id']?.toString();
-          // final title = notification.data!['title']?.toString();
-          // final avatarUrl = notification.data!['avatarUrl']?.toString();
           if (roomId != null) {
             AppRoute.roomChat.push(navigatorKey.currentContext!,
                 queryParameters: {"id": roomId});
@@ -90,7 +104,7 @@ class _NotificationsState extends State<NotificationsScreen> {
           }
           break;
 
-        case 'profile':
+        case LocalStorageKey.profile:
           final userId = notification.data!['userId']?.toString();
           if (userId != null) {
             router.go('/profile/$userId');
@@ -99,7 +113,8 @@ class _NotificationsState extends State<NotificationsScreen> {
           }
           break;
 
-        case 'timetable':
+        case LocalStorageKey.schedule:
+        case LocalStorageKey.timeTable:
           router.go('/timetable');
           break;
 
@@ -124,7 +139,7 @@ class _NotificationsState extends State<NotificationsScreen> {
                 color: context.colorScheme.onPrimary,
               ),
               onPressed: () => _showFilterDialog(context),
-              tooltip: 'Lọc thông báo',
+              tooltip: context.loc.filter_notifications,
             ),
             IconButton(
               icon: SvgPicture.asset(
@@ -134,7 +149,7 @@ class _NotificationsState extends State<NotificationsScreen> {
                 color: context.colorScheme.onPrimary,
               ),
               onPressed: () => _markAllAsRead(context),
-              tooltip: 'Đánh dấu tất cả là đã đọc',
+              tooltip: context.loc.mark_all_as_read,
             ),
           ],
         ),
@@ -178,7 +193,7 @@ class _NotificationsState extends State<NotificationsScreen> {
                             color: context.colorScheme.onSurface.withAlpha(192),
                           ),
                           SizedBox(height: 16.h),
-                          Text('Không có thông báo nào trong bộ lọc này',
+                          Text(context.loc.no_notifications_in_filter,
                               style: context.textTheme.bodyLarge?.copyWith(
                                 color: context.colorScheme.onSurface
                                     .withAlpha(192),
@@ -188,17 +203,31 @@ class _NotificationsState extends State<NotificationsScreen> {
                     );
                   }
 
-                  return ListView.builder(
-                    padding: EdgeInsets.zero,
-                    itemCount: filteredNotifications.length,
-                    itemBuilder: (context, index) {
-                      final notification = filteredNotifications[index];
-                      return NotificationItem(
-                        notification: notification,
-                        onTap: () =>
-                            _handleNotificationTap(context, notification),
-                      );
-                    },
+                  return CustomScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    slivers: [
+                      SliverPadding(
+                        padding: EdgeInsets.only(bottom: 100.h),
+                        sliver: SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              if (index >=
+                                  (filteredNotifications.length > 100
+                                      ? 100
+                                      : filteredNotifications.length)) {
+                                return null;
+                              }
+                              final notification = filteredNotifications[index];
+                              return NotificationItem(
+                                notification: notification,
+                                onTap: () => _handleNotificationTap(
+                                    context, notification),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 },
               ),
@@ -208,47 +237,120 @@ class _NotificationsState extends State<NotificationsScreen> {
 
   List<NotificationModel> _filterNotifications(
       List<NotificationModel> notifications) {
-    notifications.sort(
-        (a, b) => DateTime.parse(b.time).compareTo(DateTime.parse(a.time)));
+    List<NotificationModel> filteredList;
 
+    // Step 1: Apply filtering based on selected filter
     switch (_selectedFilter) {
       case 'unread':
-        return notifications.where((n) => !n.isRead).toList();
+        filteredList = notifications.where((n) => !n.isRead).toList();
+        break;
       case 'system':
-        return notifications
+        filteredList = notifications
             .where((n) =>
                 n.data == null ||
-                n.data!['type'] == 'broadcast' ||
+                n.data!['type'] == LocalStorageKey.broadcast ||
                 n.data!['isBroadcast'] == true)
             .toList();
-      case 'chat':
-        return notifications
+        break;
+      case LocalStorageKey.chat:
+        filteredList = notifications
             .where((n) =>
                 n.data != null &&
-                n.data!['type'] == 'chat' &&
+                n.data!['type'] == LocalStorageKey.chat &&
                 n.data!['isBroadcast'] != true)
             .toList();
-      case 'group':
-        return notifications
+        break;
+      case LocalStorageKey.group:
+        filteredList = notifications
             .where((n) => n.data != null && n.data!['isGroupMessage'] == true)
             .toList();
-      case 'schedule':
-        return notifications
+        break;
+      case LocalStorageKey.schedule:
+        filteredList = notifications
             .where((n) =>
                 n.data != null &&
-                (n.data!['type'] == 'timetable' ||
-                    n.data!['type'] == 'schedule'))
+                (n.data!['type'] == LocalStorageKey.schedule ||
+                    n.data!['type'] == LocalStorageKey.timeTable))
             .toList();
-      default:
-        return notifications;
+        break;
+      default: // 'all'
+        filteredList = List.from(notifications); // Create a mutable copy
+        break;
     }
+
+    // Step 2: Filter out blocked notification types
+    filteredList = filteredList.where((n) {
+      final type = n.type?.toLowerCase() ??
+          n.data?['type']?.toString().toLowerCase() ??
+          '';
+      return !_blockedNotificationTypes.contains(type);
+    }).toList();
+
+    // Step 3: Apply custom sorting to the filtered list
+    filteredList.sort((a, b) {
+      // Primary sort: Unread notifications first
+      if (a.isRead && !b.isRead) {
+        return 1; // b (unread) comes before a (read)
+      }
+      if (!a.isRead && b.isRead) {
+        return -1; // a (unread) comes before b (read)
+      }
+
+      // Secondary sort (if read status is the same):
+      // Prioritize non-timetable notifications over timetable (scheduled) notifications
+      bool isTimetableA = a.type == LocalStorageKey.schedule ||
+          a.type == LocalStorageKey.timeTable;
+      bool isTimetableB = b.type == LocalStorageKey.schedule ||
+          b.type == LocalStorageKey.timeTable;
+
+      // If one is timetable and the other is not, put non-timetable first
+      if (isTimetableA && !isTimetableB) {
+        return 1; // b (non-timetable) comes before a (timetable)
+      }
+      if (!isTimetableA && isTimetableB) {
+        return -1; // a (non-timetable) comes before b (timetable)
+      }
+
+      // Tertiary sort (if read status and type category are the same):
+      // Sort by time
+      if (!isTimetableA && !isTimetableB) {
+        // Both are non-timetable: Sort by creation/receive time descending (most recent first)
+        DateTime timeA = DateTime.parse(a.time);
+        DateTime timeB = DateTime.parse(b.time);
+        return timeB.compareTo(timeA);
+      } else {
+        // Both are timetable/schedule: Sort by scheduled start time ascending (earliest class first)
+        DateTime? startTimeA =
+            a.data != null && a.data!.containsKey('startTime')
+                ? DateTime.tryParse(a.data!['startTime'])
+                : null;
+        DateTime? startTimeB =
+            b.data != null && b.data!.containsKey('startTime')
+                ? DateTime.tryParse(b.data!['startTime'])
+                : null;
+
+        // Handle null startTimes gracefully (e.g., put them at the end or compare by creation time)
+        if (startTimeA == null && startTimeB == null) {
+          // If both startTimes are null, fall back to sorting by creation time descending
+          DateTime timeA = DateTime.parse(a.time);
+          DateTime timeB = DateTime.parse(b.time);
+          return timeB.compareTo(timeA);
+        }
+        if (startTimeA == null) return 1; // Null A goes after non-null B
+        if (startTimeB == null) return -1; // Non-null A goes before null B
+
+        return startTimeA.compareTo(startTimeB);
+      }
+    });
+
+    return filteredList;
   }
 
   void _showFilterDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('lọc thông báo'),
+        title: Text(context.loc.filter_notifications),
         contentPadding: EdgeInsets.all(16),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -256,54 +358,54 @@ class _NotificationsState extends State<NotificationsScreen> {
             FilterOption(
               title: context.loc.all,
               icon: Icons.all_inbox,
-              isSelected: _selectedFilter == 'all',
+              isSelected: _selectedFilter == LocalStorageKey.all,
               onTap: () {
-                setState(() => _selectedFilter = 'all');
+                setState(() => _selectedFilter = LocalStorageKey.all);
                 Navigator.pop(context);
               },
             ),
             FilterOption(
               title: context.loc.unread,
               icon: Icons.mark_email_unread,
-              isSelected: _selectedFilter == 'unread',
+              isSelected: _selectedFilter == LocalStorageKey.unread,
               onTap: () {
-                setState(() => _selectedFilter = 'unread');
+                setState(() => _selectedFilter = LocalStorageKey.unread);
                 Navigator.pop(context);
               },
             ),
             FilterOption(
               title: context.loc.system,
               icon: Icons.campaign,
-              isSelected: _selectedFilter == 'system',
+              isSelected: _selectedFilter == LocalStorageKey.system,
               onTap: () {
-                setState(() => _selectedFilter = 'system');
+                setState(() => _selectedFilter = LocalStorageKey.system);
                 Navigator.pop(context);
               },
             ),
             FilterOption(
               title: context.loc.chat,
               icon: Icons.chat_bubble,
-              isSelected: _selectedFilter == 'chat',
+              isSelected: _selectedFilter == LocalStorageKey.chat,
               onTap: () {
-                setState(() => _selectedFilter = 'chat');
+                setState(() => _selectedFilter = LocalStorageKey.chat);
                 Navigator.pop(context);
               },
             ),
             FilterOption(
               title: context.loc.groups,
               icon: Icons.group,
-              isSelected: _selectedFilter == 'group',
+              isSelected: _selectedFilter == LocalStorageKey.group,
               onTap: () {
-                setState(() => _selectedFilter = 'group');
+                setState(() => _selectedFilter = LocalStorageKey.group);
                 Navigator.pop(context);
               },
             ),
             FilterOption(
               title: context.loc.schedule,
               icon: Icons.schedule,
-              isSelected: _selectedFilter == 'schedule',
+              isSelected: _selectedFilter == LocalStorageKey.schedule,
               onTap: () {
-                setState(() => _selectedFilter = 'schedule');
+                setState(() => _selectedFilter = LocalStorageKey.schedule);
                 Navigator.pop(context);
               },
             ),
@@ -323,8 +425,8 @@ class _NotificationsState extends State<NotificationsScreen> {
       }
     }
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Đánh dấu tất cả là đã đọc'),
+      SnackBar(
+        content: Text(context.loc.mark_all_as_read),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -344,57 +446,6 @@ class _NotificationsState extends State<NotificationsScreen> {
       return '${difference.inMinutes} ${context.loc.the_muniest_before}';
     } else {
       return context.loc.just_finished;
-    }
-  }
-
-  Widget buildNotificationAvatar(NotificationModel notification) {
-    final imageUrl = notification.data?['imageUrl'];
-    final avatarUrl = notification.data?['avatarUrl'];
-    final mainImage = imageUrl ?? avatarUrl;
-
-    if (mainImage != null && mainImage.toString().isNotEmpty) {
-      return Stack(
-        children: [
-          ClipOval(
-            child: Image.network(
-              mainImage,
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  width: 50,
-                  height: 50,
-                  color: Colors.grey[200],
-                  child: Icon(Icons.image, color: Colors.grey),
-                );
-              },
-            ),
-          ),
-          Positioned(
-            right: 0,
-            bottom: 0,
-            child: Container(
-              width: 20,
-              height: 20,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 2,
-                    offset: Offset(0, 1),
-                  ),
-                ],
-              ),
-              child: NotificationIcon(notification: notification, size: 16),
-            ),
-          ),
-        ],
-      );
-    } else {
-      return NotificationIcon(notification: notification, size: 50);
     }
   }
 }
