@@ -26,8 +26,9 @@ class EndPoint {
   static String get updateAvatar => "$_user/update-avatar";
   static String get uptateName =>
       "$_user/update/name"; // trong update name này có first name và lastName
-
+  static String get getscore => "$_user/get-score";
   static String get module => "$_user/get-user-courese";
+  static String get getclassinfoscore => "$_user/get-class-info/score";
 
   static String get _chat => "$apiUrl/chat";
   static String get chatView => "$_chat/load-rooms";
@@ -40,4 +41,21 @@ class EndPoint {
   static String get timetableInfo => "$_schooldata/timetable-info";
   static String get questions => "$_schooldata/questions";
   static String get questionsDetail => "$_schooldata/questions-detail";
+
+  static const String classScoreAnalysis = '/api/class-score-analysis';
+
+  static const String authResetPassword = 'auth/reset-password';
+  static const String authInformation = 'auth/information';
+
+  static const String userUpdateUser = 'user/update-user';
+  static const String userChangePassword = 'user/change-password';
+
+  static const String moduleGetModule = 'module/get-module';
+
+  static const String quizGetQuiz = 'quiz/get-quiz';
+  static const String quizGetQuizInfo = 'quiz/get-quiz-info';
+  static const String quizSubmitQuiz = 'quiz/submit-quiz';
+
+  static const String timetableGetTimetable = 'timetable/get-timetable';
+  static const String timetableCheckSchedule = 'timetable/check-schedule';
 }

@@ -437,7 +437,34 @@ class AppLocalizationsKo extends AppLocalizations {
   String get module => '모듈';
 
   @override
-  String get academic_result => '학업 성적';
+  String get academic_result => '학업 결과';
+
+  @override
+  String get total_result => '종합 결과';
+
+  @override
+  String get pending_subjects => '미정 과목';
+
+  @override
+  String get retake_subjects => '재수강 과목';
+
+  @override
+  String get failed_subjects => '낙제 과목';
+
+  @override
+  String get score_analysis => '점수 분석';
+
+  @override
+  String get subject_code => '과목 코드';
+
+  @override
+  String get subject_name => '과목명';
+
+  @override
+  String get credits_short => '학점';
+
+  @override
+  String get score10 => '10점 만점';
 
   @override
   String get pay_tuition => '등록금 납부';

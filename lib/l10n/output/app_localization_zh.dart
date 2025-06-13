@@ -440,6 +440,33 @@ class AppLocalizationsZh extends AppLocalizations {
   String get academic_result => '学业成绩';
 
   @override
+  String get total_result => '总成绩';
+
+  @override
+  String get pending_subjects => '待定科目';
+
+  @override
+  String get retake_subjects => '重修科目';
+
+  @override
+  String get failed_subjects => '不及格科目';
+
+  @override
+  String get score_analysis => '分数分析';
+
+  @override
+  String get subject_code => '科目代码';
+
+  @override
+  String get subject_name => '科目名称';
+
+  @override
+  String get credits_short => '学分';
+
+  @override
+  String get score10 => '10分制';
+
+  @override
   String get pay_tuition => '缴纳学费';
 
   @override

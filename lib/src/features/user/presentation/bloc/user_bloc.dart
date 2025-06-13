@@ -138,7 +138,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     );
     result.fold(
       (failure) => emit(UserProfileError(int.parse(failure.statusCode) == 400
-          ? failure.errorMessage
+          ? failure.message
           : "serverError")),
       (_) => emit(const ChangedPassword()),
     );

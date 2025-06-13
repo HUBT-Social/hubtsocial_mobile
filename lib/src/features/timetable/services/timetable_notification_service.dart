@@ -52,34 +52,64 @@ class TimetableNotificationService {
       await _localMessage.cancelAllNotifications();
 
       final now = DateTime.now();
-      final startTime = timetableData.starttime;
-      final endTime = timetableData.endtime;
+      logger.i('Current local time: $now (isUtc: ${now.isUtc})');
+      
+      final startTime = timetableData.starttime.toLocal();
+      final endTime = timetableData.endtime.toLocal();
+              // final localTimetableStartTime = timetable.startTime!.toLocal();
+          //final localTimetableEndTime = timetable.endTime!.toLocal();
+      logger.i('Timetable period: Start $startTime, End $endTime');
 
       // Only schedule notifications if we're within the timetable period
       if (now.isAfter(startTime) && now.isBefore(endTime)) {
+        logger.i('Currently within timetable period. Proceeding to schedule.');
         for (var timetable in timetableData.reformTimetables) {
           if (timetable.startTime == null || timetable.endTime == null) {
+            logger.w(
+                'Skipping timetable entry due to null start/end time: ${timetable.subject}');
             continue;
           }
 
-          // Schedule notification 15 minutes before class starts
-          final startNotificationTime =
-              timetable.startTime!.subtract(const Duration(minutes: 15));
+          // Convert timetable start and end times to local timezone
+          final localTimetableStartTime = timetable.startTime!.toLocal();
+          final localTimetableEndTime = timetable.endTime!.toLocal();
+         // final localTimetableStartTime = timetable.startTime!;
+         // final localTimetableEndTime = timetable.endTime!;
+          logger.i('  Subject: ${timetable.subject}');
+          logger.i(
+              '    Raw Timetable Start: ${timetable.startTime} (isUtc: ${timetable.startTime!.isUtc})');
+          logger.i(
+              '    Local Timetable Start: $localTimetableStartTime (isUtc: ${localTimetableStartTime.isUtc})');
+          logger.i(
+              '    Raw Timetable End: ${timetable.endTime} (isUtc: ${timetable.endTime!.isUtc})');
+          logger.i(
+              '    Local Timetable End: $localTimetableEndTime (isUtc: ${localTimetableEndTime.isUtc})');
 
-          // Schedule notification 5 minutes before class ends
+          // Schedule notification 30 minutes before class starts
+          final startNotificationTime =
+              localTimetableStartTime.subtract(const Duration(minutes: 30));
+
+          // Schedule notification 30 minutes before class ends
           final endNotificationTime =
-              timetable.endTime!.subtract(const Duration(minutes: 5));
+              localTimetableEndTime.subtract(const Duration(minutes: 30));
+
+          logger.i(
+              '    Start Notification Time: $startNotificationTime (isUtc: ${startNotificationTime.isUtc})');
+          logger.i(
+              '    End Notification Time: $endNotificationTime (isUtc: ${endNotificationTime.isUtc})');
 
           // Only schedule if the notification times are in the future
           if (startNotificationTime.isAfter(now)) {
+            logger.i(
+                '    Scheduling start notification for ${timetable.subject}');
             final startNotificationId = timetable.hashCode;
 
             // Create start notification payload
             final startPayload = jsonEncode({
               'type': LocalStorageKey.schedule,
               'timetableId': timetable.id,
-              'startTime': timetable.startTime!.toIso8601String(),
-              'endTime': timetable.endTime!.toIso8601String(),
+              'startTime': localTimetableStartTime.toIso8601String(),
+              'endTime': localTimetableEndTime.toIso8601String(),
             });
 
             // Schedule the start notification
@@ -87,7 +117,7 @@ class TimetableNotificationService {
               id: startNotificationId,
               title: 'Sắp đến giờ học',
               body:
-                  'Môn ${timetable.subject ?? "Không có tên môn"} sẽ bắt đầu trong 15 phút nữa tại ${timetable.room ?? "Chưa có phòng"}',
+                  'Môn ${timetable.subject ?? "Không có tên môn"} sẽ bắt đầu trong 30 phút nữa tại ${timetable.room ?? "Chưa có phòng"}',
               scheduledDate: startNotificationTime,
               payload: startPayload,
               isAlarmLike: true,
@@ -98,15 +128,15 @@ class TimetableNotificationService {
               id: startNotificationId.toString(),
               title: 'Sắp đến giờ học',
               body:
-                  'Môn ${timetable.subject ?? "Không có tên môn"} sẽ bắt đầu trong 15 phút nữa tại ${timetable.room ?? "Chưa có phòng"}',
+                  'Môn ${timetable.subject ?? "Không có tên môn"} sẽ bắt đầu trong 30 phút nữa tại ${timetable.room ?? "Chưa có phòng"}',
               time: DateTime.now().toIso8601String(),
               isRead: false,
               type: LocalStorageKey.schedule,
               data: {
                 'type': LocalStorageKey.schedule,
                 'timetableId': timetable.id,
-                'startTime': timetable.startTime!.toIso8601String(),
-                'endTime': timetable.endTime!.toIso8601String(),
+                'startTime': localTimetableStartTime.toIso8601String(),
+                'endTime': localTimetableEndTime.toIso8601String(),
                 'subject': timetable.subject,
                 'room': timetable.room,
               },
@@ -116,9 +146,14 @@ class TimetableNotificationService {
                 startNotificationId.toString(), startNotification);
             logger.i(
                 'Đã lên lịch thông báo bắt đầu cho môn ${timetable.subject ?? "Không có tên môn"}');
+          } else {
+            logger.i(
+                '    Start notification time is in the past for ${timetable.subject}. Skipping.');
           }
 
           if (endNotificationTime.isAfter(now)) {
+            logger
+                .i('    Scheduling end notification for ${timetable.subject}');
             final endNotificationId =
                 timetable.hashCode + 1; // Different ID for end notification
 
@@ -126,8 +161,8 @@ class TimetableNotificationService {
             final endPayload = jsonEncode({
               'type': LocalStorageKey.schedule,
               'timetableId': timetable.id,
-              'startTime': timetable.startTime!.toIso8601String(),
-              'endTime': timetable.endTime!.toIso8601String(),
+              'startTime': localTimetableStartTime.toIso8601String(),
+              'endTime': localTimetableEndTime.toIso8601String(),
             });
 
             // Schedule the end notification
@@ -135,7 +170,7 @@ class TimetableNotificationService {
               id: endNotificationId,
               title: 'Sắp hết giờ học',
               body:
-                  'Môn ${timetable.subject ?? "Không có tên môn"} sẽ kết thúc trong 5 phút nữa',
+                  'Môn ${timetable.subject ?? "Không có tên môn"} sẽ kết thúc trong 30 phút nữa',
               scheduledDate: endNotificationTime,
               payload: endPayload,
               isAlarmLike: true,
@@ -146,15 +181,15 @@ class TimetableNotificationService {
               id: endNotificationId.toString(),
               title: 'Sắp hết giờ học',
               body:
-                  'Môn ${timetable.subject ?? "Không có tên môn"} sẽ kết thúc trong 5 phút nữa',
+                  'Môn ${timetable.subject ?? "Không có tên môn"} sẽ kết thúc trong 30 phút nữa',
               time: DateTime.now().toIso8601String(),
               isRead: false,
               type: LocalStorageKey.schedule,
               data: {
                 'type': LocalStorageKey.schedule,
                 'timetableId': timetable.id,
-                'startTime': timetable.startTime!.toIso8601String(),
-                'endTime': timetable.endTime!.toIso8601String(),
+                'startTime': localTimetableStartTime.toIso8601String(),
+                'endTime': localTimetableEndTime.toIso8601String(),
                 'subject': timetable.subject,
                 'room': timetable.room,
               },
@@ -164,10 +199,13 @@ class TimetableNotificationService {
                 endNotificationId.toString(), endNotification);
             logger.i(
                 'Đã lên lịch thông báo kết thúc cho môn ${timetable.subject ?? "Không có tên môn"}');
+          } else {
+            logger.i(
+                '    End notification time is in the past for ${timetable.subject}. Skipping.');
           }
         }
       } else {
-        logger.w('Ngoài thời gian của thời khóa biểu');
+        logger.w('Outside timetable period. Not scheduling notifications.');
       }
     } catch (e, s) {
       logger.e('Lỗi khi lên lịch thông báo thời khóa biểu: $e');

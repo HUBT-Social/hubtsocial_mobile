@@ -437,7 +437,34 @@ class AppLocalizationsRu extends AppLocalizations {
   String get module => 'Модуль';
 
   @override
-  String get academic_result => 'Учебные результаты';
+  String get academic_result => 'Успеваемость';
+
+  @override
+  String get total_result => 'Общий результат';
+
+  @override
+  String get pending_subjects => 'Предметы в ожидании оценки';
+
+  @override
+  String get retake_subjects => 'Пересдача предметов';
+
+  @override
+  String get failed_subjects => 'Несданные предметы';
+
+  @override
+  String get score_analysis => 'Анализ оценок';
+
+  @override
+  String get subject_code => 'Код предмета';
+
+  @override
+  String get subject_name => 'Название предмета';
+
+  @override
+  String get credits_short => 'Кредиты';
+
+  @override
+  String get score10 => 'Оценка (10 баллов)';
 
   @override
   String get pay_tuition => 'Оплата обучения';

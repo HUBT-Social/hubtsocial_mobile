@@ -925,6 +925,60 @@ abstract class AppLocalizations {
   /// **'Academic result'**
   String get academic_result;
 
+  /// No description provided for @total_result.
+  ///
+  /// In en, this message translates to:
+  /// **'Overall result'**
+  String get total_result;
+
+  /// No description provided for @pending_subjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending subjects'**
+  String get pending_subjects;
+
+  /// No description provided for @retake_subjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake subjects'**
+  String get retake_subjects;
+
+  /// No description provided for @failed_subjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed subjects'**
+  String get failed_subjects;
+
+  /// No description provided for @score_analysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Score analysis'**
+  String get score_analysis;
+
+  /// No description provided for @subject_code.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject code'**
+  String get subject_code;
+
+  /// No description provided for @subject_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject name'**
+  String get subject_name;
+
+  /// No description provided for @credits_short.
+  ///
+  /// In en, this message translates to:
+  /// **'Credits'**
+  String get credits_short;
+
+  /// No description provided for @score10.
+  ///
+  /// In en, this message translates to:
+  /// **'Score 10'**
+  String get score10;
+
   /// No description provided for @pay_tuition.
   ///
   /// In en, this message translates to:

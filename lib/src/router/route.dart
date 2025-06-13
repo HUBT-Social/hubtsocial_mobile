@@ -30,6 +30,7 @@ enum AppRoute {
   quizResult('/quiz/info/result'),
   module('/module'),
   academicResult('/academic-result'),
+  classAnalysis('/academic-result/class-analysis'),
   // home
 
   // chat
@@ -55,7 +56,7 @@ enum AppRoute {
   fullProfile('/menu/profile/fullScreen'),
   editProfile('/menu/profile/edit'),
   teacherevalua('/menu/teacherevaluation'),
-  teacherCode('/menu/teacherCode'),  
+  teacherCode('/menu/teacherCode'),
   notificationSettings('/menu/notification-settings'),
   // menu
 

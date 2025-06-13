@@ -440,6 +440,33 @@ class AppLocalizationsJa extends AppLocalizations {
   String get academic_result => '学業成績';
 
   @override
+  String get total_result => '総合結果';
+
+  @override
+  String get pending_subjects => '保留中の科目';
+
+  @override
+  String get retake_subjects => '再履修科目';
+
+  @override
+  String get failed_subjects => '不合格科目';
+
+  @override
+  String get score_analysis => 'スコア分析';
+
+  @override
+  String get subject_code => '科目コード';
+
+  @override
+  String get subject_name => '科目名';
+
+  @override
+  String get credits_short => '単位';
+
+  @override
+  String get score10 => '10段階評価';
+
+  @override
   String get pay_tuition => '授業料の支払い';
 
   @override

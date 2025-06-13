@@ -44,7 +44,6 @@ void main() async {
     _initNotification(),
   ]);
 
-
   final timetableNotificationService = getIt<TimetableNotificationService>();
   await timetableNotificationService.scheduleNotificationsFromHive();
 
@@ -72,20 +71,15 @@ Future<void> initFirebase() async {
 
   FlutterError.onError = (errorDetails) {
     if (fatalError) {
-  
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-     
     } else {
-    
       FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
     }
   };
 
   PlatformDispatcher.instance.onError = (error, stack) {
     if (fatalError) {
-
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-
     } else {
       FirebaseCrashlytics.instance.recordError(error, stack);
     }
@@ -99,7 +93,6 @@ Future<void> initFirebase() async {
 
 Future<void> _initNotification() async {
   try {
-   
     final firebaseMessage = FirebaseMessage();
     await firebaseMessage.initialize();
     logger.i('Firebase message service initialized');
