@@ -10,6 +10,7 @@ import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc
 import 'package:hubtsocial_mobile/src/core/presentation/widget/loading_overlay.dart';
 import 'package:hubtsocial_mobile/src/features/main_wrapper/presentation/widgets/main_app_bar.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/screens/academic_result_chart_screen.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
 
 // Import for CustomAppBar and LoadingOverlay will be added after finding their definitions
 // import 'package:hubtsocial_mobile/src/core/common/widgets/app_bar.dart';
@@ -97,7 +98,7 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
                 Text(
                   'Tổng hợp kết quả',
                   style: context.textTheme.bodyLarge?.copyWith(
-                    color: Colors.white,
+                   color: context.colorScheme.onPrimary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -114,13 +115,13 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
                       Text(
                         'TBC thang điểm 10: ${state.totalAverageScore10.toStringAsFixed(2)}',
                         style: context.textTheme.titleMedium?.copyWith(
-                          color: Colors.white,
+                           color: context.colorScheme.onPrimary,
                         ),
                       ),
                       Text(
                         'Số tín chỉ đã tích luỹ: ${state.totalCreditsAchieved}',
                         style: context.textTheme.titleSmall?.copyWith(
-                          color: Colors.white,
+                          color: context.colorScheme.onPrimary,
                         ),
                       ),
                     ],
@@ -130,7 +131,7 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                     color: context.colorScheme.onPrimary,
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: context.colorScheme.secondary,
@@ -181,7 +182,7 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
         Text(
           '$count',
           style: context.textTheme.titleLarge?.copyWith(
-            color: Colors.white,
+             color: context.colorScheme.onPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -189,7 +190,7 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
           label,
           textAlign: TextAlign.center,
           style: context.textTheme.bodySmall?.copyWith(
-            color: Colors.white70,
+            color: context.colorScheme.onPrimary,
           ),
         ),
       ],
@@ -206,11 +207,8 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
             const SizedBox(width: 8),
             GestureDetector(
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const AcademicResultChartScreen(),
-                  ),
-                );
+              AppRoute.classAnalysis.path;
+              
               },
               child: Text(
                 'Biểu đồ phân tích',

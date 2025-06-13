@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result_bloc.dart';
+import 'package:hubtsocial_mobile/src/features/academic_result/presentation/blocs/academic_result_chart/academic_result_chart_bloc.dart';
+import 'package:hubtsocial_mobile/src/features/academic_result/presentation/screens/academic_result_chart_screen.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/screens/academic_result_screen.dart';
 
 import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/chat_bloc.dart';
