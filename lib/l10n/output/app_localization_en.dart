@@ -440,6 +440,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get academic_result => 'Academic result';
 
   @override
+  String get total_result => 'Overall result';
+
+  @override
+  String get pending_subjects => 'Pending subjects';
+
+  @override
+  String get retake_subjects => 'Retake subjects';
+
+  @override
+  String get failed_subjects => 'Failed subjects';
+
+  @override
+  String get score_analysis => 'Score analysis';
+
+  @override
+  String get subject_code => 'Subject code';
+
+  @override
+  String get subject_name => 'Subject name';
+
+  @override
+  String get credits_short => 'Credits';
+
+  @override
+  String get score10 => 'Score 10';
+
+  @override
   String get pay_tuition => 'Pay tuition';
 
   @override

@@ -91,24 +91,7 @@ class _NotificationSettingsScreenState
             ],
           ),
         ),
-        child: ListView(
-          children: [
-            SizedBox(height: 50.h), // Added top padding
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              child: Text(
-                context.loc.blockedNotificationTypesTitle,
-                style: context.textTheme.titleLarge
-                    ?.copyWith(color: const Color(0xFF90EE90).withOpacity(0.8)),
-              ),
-            ),
-            // Generate a Card for each blocked notification type
-            ..._blockedTypes.entries.map((entry) {
-              return _buildBlockedTypeCard(entry.key, entry.value, context);
-            }).toList(),
-            SizedBox(height: 50.h), // Added bottom padding
-          ],
-        ),
+       
       ),
     );
   }

@@ -1,7 +1,15 @@
 import 'package:equatable/equatable.dart';
+import 'package:dio/dio.dart';
 
 class ServerException extends Equatable implements Exception {
   const ServerException({required this.message, required this.statusCode});
+
+  factory ServerException.fromDioException(DioException dioException) {
+    return ServerException(
+      message: dioException.response?.data['message'] ?? 'Unknown error',
+      statusCode: dioException.response?.statusCode.toString() ?? '500',
+    );
+  }
 
   final String message;
   final String statusCode;

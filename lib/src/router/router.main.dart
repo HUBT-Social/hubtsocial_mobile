@@ -130,6 +130,19 @@ StatefulShellRoute _mainRoute() {
                           FadeTransition(opacity: animation, child: child),
                 ),
               ),
+               GoRoute(
+                path: AppRoute.academicResult.path,
+                pageBuilder: (context, state) => CustomTransitionPage(
+                  key: state.pageKey,
+                  child: BlocProvider(
+                    create: (_) => getIt<AcademicResultBloc>(),
+                    child: const AcademicResultScreen(),
+                  ),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(opacity: animation, child: child),
+                ),
+              ),
             ],
           ),
         ],

@@ -440,6 +440,33 @@ class AppLocalizationsVi extends AppLocalizations {
   String get academic_result => 'Kết quả học tập';
 
   @override
+  String get total_result => 'Tổng hợp kết quả';
+
+  @override
+  String get pending_subjects => 'Môn chờ điểm';
+
+  @override
+  String get retake_subjects => 'Môn thi lại';
+
+  @override
+  String get failed_subjects => 'Môn học lại';
+
+  @override
+  String get score_analysis => 'Biểu đồ phân tích';
+
+  @override
+  String get subject_code => 'Mã học phần';
+
+  @override
+  String get subject_name => 'Tên học phần';
+
+  @override
+  String get credits_short => 'Số tín chỉ';
+
+  @override
+  String get score10 => 'Thang điểm 10';
+
+  @override
   String get pay_tuition => 'Đóng học phí';
 
   @override

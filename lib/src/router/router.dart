@@ -45,7 +45,6 @@ final GoRouter router = GoRouter(
     // auth
     _authRoute(),
 
-
     GoRoute(
         path: AppRoute.roomChat.path,
         pageBuilder: (context, state) {
@@ -106,5 +105,16 @@ final GoRouter router = GoRouter(
               },
               routes: []),
         ]),
+
+    // GoRoute(
+    //   path: AppRoute.academicResult.path,
+    //   builder: (context, state) => const AcademicResultScreen(),
+    //   routes: [
+    //     GoRoute(
+    //       path: 'class-analysis',
+    //       builder: (context, state) => const ClassAnalysisScreen(),
+    //     ),
+    //   ],
+    // ),
   ],
 );

@@ -1,6 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:injectable/injectable.dart';
+import 'package:dio/dio.dart';
+import 'package:hubtsocial_mobile/src/core/api/dio_client.dart';
+import 'package:logger/logger.dart';
 
 @module
 abstract class RegisterModule {
@@ -9,6 +12,12 @@ abstract class RegisterModule {
 
   @LazySingleton()
   FirebaseMessaging get firebaseMessaging => FirebaseMessaging.instance;
+
+  @LazySingleton()
+  Dio get dio => Dio();
+
+  @LazySingleton()
+  Logger get logger => Logger();
 }
 
 class $RegisterModule extends RegisterModule {}
