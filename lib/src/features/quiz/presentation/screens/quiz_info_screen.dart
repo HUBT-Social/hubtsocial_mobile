@@ -35,29 +35,34 @@ class _QuizInfoScreenState extends State<QuizInfoScreen> {
   }
 
   List<QuestionModel> prepareQuestions(List<QuestionModel> originalQuestions) {
-    List<QuestionModel> questions = List.from(originalQuestions);
+    List<QuestionModel> questions =
+        originalQuestions.map((q) => q.copyWith()).toList();
 
     if (_shuffleQuestions) {
       questions.shuffle(_random);
     }
 
     return questions.map((q) {
-      List<AnswerModel> answers = q.answers;
-      var correctAnswer = q.answers[q.correctAnswer ?? 0];
+      final question = q.copyWith(
+        answers: q.answers.map((a) => a.copyWith()).toList(),
+      );
+
+      List<AnswerModel> answers = question.answers;
+      var correctAnswer = question.answers[question.correctAnswer ?? 0];
 
       if (correctAnswer.content == null) {
-        correctAnswer = q.answers[0];
+        correctAnswer = question.answers[0];
       }
 
       if (_shuffleAnswers) {
         answers.shuffle(_random);
       }
 
-      final newCorrectIndex = answers.indexWhere(
+      var newCorrectIndex = answers.indexWhere(
         (a) => a.content?.trim() == correctAnswer.content?.trim(),
       );
 
-      return q.copyWith(
+      return question.copyWith(
         answers: answers,
         correctAnswer: newCorrectIndex,
       );
