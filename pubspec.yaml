@@ -132,8 +132,6 @@ flutter:
     - assets/icons/notification/
     - assets/icons/localizations/
     - assets/icons/menu/
-    - assets/data/
-    - assets/data/quiz/
     - assets/images/background_green.png
 
     - .env.development
