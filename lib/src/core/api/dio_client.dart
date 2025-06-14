@@ -247,8 +247,16 @@ class DioClient {
     }
   }
 
-  /// Refreshes the token using the refresh token
+  /// Cached future to prevent multiple token refresh at the same time
+  Completer<String?>? _refreshTokenCompleter;
+
   Future<String?> _refreshToken(UserTokenModel token) async {
+    if (_refreshTokenCompleter != null) {
+      return _refreshTokenCompleter!.future;
+    }
+
+    _refreshTokenCompleter = Completer<String?>();
+
     try {
       var deviceId = await DeviceId.getUniqueDeviceId();
 
@@ -264,30 +272,31 @@ class DioClient {
       );
 
       if (response.statusCode == 200) {
-        try {
-          final newToken = UserTokenModel.fromMap(response.data!);
-          await _saveToken(newToken);
-          return newToken.accessToken;
-        } catch (e) {
-          logger.e('Error parsing refresh token response: $e');
-          throw FormatException('Failed to parse refresh token response');
-        }
+        final newToken = UserTokenModel.fromMap(response.data!);
+        await _saveToken(newToken);
+        _refreshTokenCompleter!.complete(newToken.accessToken);
+        return newToken.accessToken;
       }
 
       if (response.statusCode == 401) {
         logger.w('Refresh token expired or invalid');
         await _clearToken();
+        _refreshTokenCompleter!.complete(null);
         return null;
       }
 
       logger.e('Failed to refresh token: ${response.statusCode}');
-      return token.accessToken; // Return old token if refresh fails
+      _refreshTokenCompleter!.complete(token.accessToken);
+      return token.accessToken;
     } catch (e) {
       logger.e('Error during token refresh: $e');
       if (e is DioException && e.response?.statusCode == 401) {
         await _clearToken();
       }
-      return token.accessToken; // Return old token if refresh fails
+      _refreshTokenCompleter!.complete(token.accessToken);
+      return token.accessToken;
+    } finally {
+      _refreshTokenCompleter = null;
     }
   }
 
