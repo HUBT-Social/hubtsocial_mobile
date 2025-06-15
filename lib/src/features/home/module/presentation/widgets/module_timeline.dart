@@ -24,75 +24,80 @@ class _ModuleTimelineState extends State<ModuleTimeline> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ListTile(
-          // leading: GestureDetector(
-          //   onTap: () {
-          //     setState(() {
-          //       _isExpanded = !_isExpanded;
-          //     });
-          //   },
-          //   child: AnimatedRotation(
-          //     turns: _isExpanded ? 0.5 : 0.0,
-          //     duration: const Duration(milliseconds: 200),
-          //     child: const Icon(Icons.expand_more),
-          //   ),
-          // ),
-
-          leading: Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                width: 12.w,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  height: _isExpanded ? null : 0,
-                  child: Column(
-                    children: [
-                      Flexible(child: Container()),
-                      Flexible(
-                        child: Container(
-                          color: context.colorScheme.primary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: _expanded,
-                child: Container(
-                  alignment: Alignment.center,
-                  width: 24.r,
-                  height: 24.r,
-                  decoration: BoxDecoration(
-                    color: context.colorScheme.primary,
-                    borderRadius: BorderRadius.circular(100.r),
-                  ),
-                  child: AnimatedRotation(
-                    turns: _isExpanded ? 0.5 : 0.0,
-                    duration: const Duration(milliseconds: 200),
-                    child: _isExpanded
-                        ? Icon(
-                            Icons.remove,
-                            color: context.colorScheme.onPrimary,
-                            size: 18.r,
-                          )
-                        : Icon(
-                            Icons.add,
-                            color: context.colorScheme.onPrimary,
-                            size: 18.r,
-                          ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-
-          title: Text(
-            widget.moduleModel.year ?? 'No Year',
-            style: context.textTheme.titleMedium,
-          ),
+        InkWell(
           onTap: _expanded,
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.w),
+            child: IntrinsicHeight(
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 24.w,
+                    // height: double.infinity,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
+                          width: 12.w,
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            height: _isExpanded ? null : 0,
+                            child: Column(
+                              children: [
+                                Flexible(child: Container()),
+                                Flexible(
+                                  child: Container(
+                                    color: context.colorScheme.primary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: _expanded,
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: 24.r,
+                            height: 24.r,
+                            decoration: BoxDecoration(
+                              color: context.colorScheme.primary,
+                              borderRadius: BorderRadius.circular(100.r),
+                            ),
+                            child: AnimatedRotation(
+                              turns: _isExpanded ? 0.5 : 0.0,
+                              duration: const Duration(milliseconds: 200),
+                              child: _isExpanded
+                                  ? Icon(
+                                      Icons.remove,
+                                      color: context.colorScheme.onPrimary,
+                                      size: 18.r,
+                                    )
+                                  : Icon(
+                                      Icons.add,
+                                      color: context.colorScheme.onPrimary,
+                                      size: 18.r,
+                                    ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 16.w, vertical: 12.h),
+                      child: Text(
+                        widget.moduleModel.year ?? 'No Year',
+                        style: context.textTheme.titleMedium,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
         if (_isExpanded)
           ListView.builder(
@@ -108,8 +113,8 @@ class _ModuleTimelineState extends State<ModuleTimeline> {
         if (_isExpanded)
           Container(
             margin: EdgeInsets.only(
-              left: 16,
-              right: 16,
+              left: 16.w,
+              right: 16.w,
             ),
             child: Row(
               children: [
@@ -123,7 +128,7 @@ class _ModuleTimelineState extends State<ModuleTimeline> {
                         width: 12.w,
                         decoration: BoxDecoration(
                           color: context.colorScheme.primary,
-                          borderRadius: BorderRadius.only(
+                          borderRadius: const BorderRadius.only(
                             bottomLeft: Radius.circular(100),
                             bottomRight: Radius.circular(100),
                           ),
@@ -156,10 +161,7 @@ class CoursesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(
-        left: 16,
-        right: 16,
-      ),
+      margin: EdgeInsets.symmetric(horizontal: 16.w),
       child: IntrinsicHeight(
         child: Row(
           children: [
