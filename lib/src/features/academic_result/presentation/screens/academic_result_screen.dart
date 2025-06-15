@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/core/injections/injections.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/data/models/subject_score_model.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_event.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_state.dart';
-import 'package:hubtsocial_mobile/src/core/presentation/widget/loading_overlay.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 
 // Import for CustomAppBar and LoadingOverlay will be added after finding their definitions
@@ -33,7 +31,16 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Kết quả học tập'),
+        backgroundColor: context.colorScheme.surface,
+        title: Text(
+          context.loc.academic_result,
+          textAlign: TextAlign.center,
+          style: context.textTheme.headlineSmall?.copyWith(
+            color: context.colorScheme.onSurface,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        actions: const [],
       ),
       body: BlocConsumer<AcademicResultBloc, AcademicResultState>(
         listener: (context, state) {
@@ -45,16 +52,17 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
         },
         builder: (context, state) {
           if (state is AcademicResultLoading) {
-            return const LoadingOverlay(loading: true, child: SizedBox());
+            return const Center(child: CircularProgressIndicator());
           } else if (state is AcademicResultLoaded) {
             return SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 12.h),
                   _buildOverallResult(state),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                   _buildScoreTable(state.subjectScores),
+                  SizedBox(height: 100.h),
                 ],
               ),
             );
@@ -70,28 +78,28 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
 
   Widget _buildOverallResult(AcademicResultLoaded state) {
     return Card(
-      color: context.colorScheme.primary.withOpacity(0.9),
-      elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      margin: EdgeInsets.symmetric(horizontal: 16.w),
+      color: context.colorScheme.primary,
+      elevation: 6,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Icon(Icons.emoji_events, color: Colors.yellow.shade700),
-                const SizedBox(width: 8),
+                Icon(Icons.emoji_events,
+                    color: context.colorScheme.onPrimary, size: 36.r),
+                SizedBox(width: 8.w),
                 Text(
                   'Tổng hợp kết quả',
                   style: context.textTheme.bodyLarge?.copyWith(
                     color: context.colorScheme.onPrimary,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -99,15 +107,17 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(height: 4.h),
                       Text(
                         'TBC thang điểm 10: ${state.totalAverageScore10.toStringAsFixed(2)}',
-                        style: context.textTheme.titleMedium?.copyWith(
+                        style: context.textTheme.bodyLarge?.copyWith(
                           color: context.colorScheme.onPrimary,
                         ),
                       ),
+                      SizedBox(height: 8.h),
                       Text(
                         'Số tín chỉ đã tích luỹ: ${state.totalCreditsAchieved}',
-                        style: context.textTheme.titleSmall?.copyWith(
+                        style: context.textTheme.bodyLarge?.copyWith(
                           color: context.colorScheme.onPrimary,
                         ),
                       ),
@@ -115,28 +125,30 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
                   ),
                 ),
                 Container(
-                  width: 80,
-                  height: 80,
+                  width: 68.r,
+                  height: 68.r,
                   decoration: BoxDecoration(
                     color: context.colorScheme.onPrimary,
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: context.colorScheme.secondary,
-                      width: 3,
-                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: context.colorScheme.outline,
+                        blurRadius: 2.r,
+                        offset: Offset(0, 2.h),
+                      ),
+                    ],
                   ),
                   alignment: Alignment.center,
                   child: Text(
                     state.grade,
-                    style: context.textTheme.headlineSmall?.copyWith(
+                    style: context.textTheme.bodyLarge?.copyWith(
                       color: context.colorScheme.primary,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -168,15 +180,14 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
       children: [
         Text(
           '$count',
-          style: context.textTheme.titleLarge?.copyWith(
+          style: context.textTheme.labelLarge?.copyWith(
             color: context.colorScheme.onPrimary,
-            fontWeight: FontWeight.bold,
           ),
         ),
         Text(
           label,
           textAlign: TextAlign.center,
-          style: context.textTheme.bodySmall?.copyWith(
+          style: context.textTheme.labelSmall?.copyWith(
             color: context.colorScheme.onPrimary,
           ),
         ),
@@ -188,65 +199,65 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Icon(Icons.bar_chart, color: context.colorScheme.primary),
-            const SizedBox(width: 8),
-            GestureDetector(
-              onTap: () {
-                AppRoute.classAnalysis.path;
-              },
-              child: Text(
-                'Biểu đồ phân tích',
-                style: context.textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.underline,
-                  color: context.colorScheme.primary,
+        InkWell(
+          onTap: () {
+            AppRoute.classAnalysis.push(context);
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 12.h),
+            width: double.infinity,
+            color: context.colorScheme.surfaceContainerHighest,
+            child: Row(
+              children: [
+                SizedBox(width: 12.w),
+                Icon(Icons.stacked_bar_chart_rounded,
+                    color: context.colorScheme.onPrimaryContainer, size: 24.r),
+                SizedBox(width: 8.w),
+                Text(
+                  'Biểu đồ phân tích',
+                  style: context.textTheme.bodyLarge?.copyWith(
+                    color: context.colorScheme.onPrimaryContainer,
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
-        const SizedBox(height: 16),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300),
-            borderRadius: BorderRadius.circular(8),
+        // SizedBox(height: 12.w),
+        Table(
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          columnWidths: const {
+            0: FlexColumnWidth(2.25),
+            1: FlexColumnWidth(4),
+            2: FlexColumnWidth(1.25),
+            3: FlexColumnWidth(1.5),
+          },
+          border: TableBorder.symmetric(
+            inside:
+                BorderSide(color: context.colorScheme.surfaceContainerHighest),
           ),
-          child: Table(
-            columnWidths: const {
-              0: FlexColumnWidth(2),
-              1: FlexColumnWidth(4),
-              2: FlexColumnWidth(1.5),
-              3: FlexColumnWidth(1.5),
-            },
-            border: TableBorder.symmetric(
-              inside: BorderSide(color: Colors.grey.shade300),
+          children: [
+            TableRow(
+              decoration: BoxDecoration(color: context.colorScheme.primary),
+              children: [
+                _buildTableHeader('Mã học phần', context),
+                _buildTableHeader('Tên học phần', context),
+                _buildTableHeader('Số tín chỉ', context),
+                _buildTableHeader('Thang điểm 10', context),
+              ],
             ),
-            children: [
-              TableRow(
-                decoration: BoxDecoration(
-                    color: context.colorScheme.primary.withOpacity(0.1)),
-                children: [
-                  _buildTableHeader('Mã học phần', context),
-                  _buildTableHeader('Tên học phần', context),
-                  _buildTableHeader('Số tín chỉ', context),
-                  _buildTableHeader('Thang điểm 10', context),
-                ],
-              ),
-              ...subjectScores.map((subject) => TableRow(
-                    children: [
-                      _buildTableCell(subject.subject, context),
-                      _buildTableCell(subject.subject,
-                          context), // Assuming subject name is the same as code for now
-                      _buildTableCell(subject.score4.toStringAsFixed(0),
-                          context), // Assuming score4 is credits
-                      _buildTableCell(
-                          subject.score10.toStringAsFixed(1), context),
-                    ],
-                  )),
-            ],
-          ),
+            ...subjectScores.map((subject) => TableRow(
+                  children: [
+                    _buildTableCell(subject.subject, context),
+                    _buildTableCell(subject.subject,
+                        context), // Assuming subject name is the same as code for now
+                    _buildTableCell(subject.score4.toStringAsFixed(0),
+                        context), // Assuming score4 is credits
+                    _buildTableCell(
+                        subject.score10.toStringAsFixed(1), context),
+                  ],
+                )),
+          ],
         ),
       ],
     );
@@ -254,12 +265,11 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
 
   Widget _buildTableHeader(String text, BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(5.r),
       child: Text(
         text,
-        style: context.textTheme.titleSmall?.copyWith(
-          fontWeight: FontWeight.bold,
-          color: context.colorScheme.primary,
+        style: context.textTheme.labelLarge?.copyWith(
+          color: context.colorScheme.onPrimary,
         ),
         textAlign: TextAlign.center,
       ),
@@ -268,7 +278,7 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
 
   Widget _buildTableCell(String text, BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(5.r),
       child: Text(
         text,
         style: context.textTheme.bodyMedium,

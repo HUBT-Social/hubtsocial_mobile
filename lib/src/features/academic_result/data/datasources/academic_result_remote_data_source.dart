@@ -29,34 +29,6 @@ class AcademicResultRemoteDataSourceImpl
   @override
   Future<List<SubjectScoreModel>> getAcademicResult() async {
     try {
-      //   final response = await _dioClient.get(EndPoint.getScore);
-
-      //   if (response.data is List) {
-      //     return (response.data as List)academic_result_remote_data_source
-      //         .map((e) => SubjectScoreModel.fromJson(e))
-      //         .toList();
-      //   } else if (response.data is Map<String, dynamic>) {
-      //     // If API returns a Map, check for specific error keys or a 'data' key
-      //     if (response.data.containsKey('message')) {
-      //       throw ServerException(
-      //           message: response.data['message'] as String,
-      //           statusCode: 'API_ERROR');
-      //     } else {
-      //       throw ServerException(
-      //           message:
-      //               'Unexpected API response format (Map without data key): ${response.data}',
-      //           statusCode: '500');
-      //     }
-      //   } else {
-      //     throw ServerException(
-      //         message:
-      //             'Unexpected API response format: ${response.data.runtimeType}',
-      //         statusCode: '500');
-      //   }
-      // } on DioException catch (e) {
-      //   throw ServerException.fromDioException(e);
-      // }
-
       final response = await _dioClient.get(EndPoint.getScore);
 
       final statusCode = response.statusCode ?? 400;

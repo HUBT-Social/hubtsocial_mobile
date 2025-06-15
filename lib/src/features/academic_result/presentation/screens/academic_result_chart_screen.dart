@@ -95,7 +95,6 @@ class _AcademicResultChartView extends StatelessWidget {
         title: 'Xuất sắc: ${data.excellent} SV',
         radius: 80,
         titleStyle: context.textTheme.bodySmall?.copyWith(
-          fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
         badgeWidget: _buildBadge('Xuất sắc', Colors.green, data.excellent),
@@ -107,7 +106,6 @@ class _AcademicResultChartView extends StatelessWidget {
         title: 'Giỏi: ${data.good} SV',
         radius: 75,
         titleStyle: context.textTheme.bodySmall?.copyWith(
-          fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
         badgeWidget: _buildBadge('Giỏi', Colors.blue, data.good),
@@ -119,7 +117,6 @@ class _AcademicResultChartView extends StatelessWidget {
         title: 'Khá: ${data.fair} SV',
         radius: 70,
         titleStyle: context.textTheme.bodySmall?.copyWith(
-          fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
         badgeWidget: _buildBadge('Khá', Colors.orange, data.fair),
@@ -131,7 +128,6 @@ class _AcademicResultChartView extends StatelessWidget {
         title: 'Trung bình: ${data.average} SV',
         radius: 65,
         titleStyle: context.textTheme.bodySmall?.copyWith(
-          fontWeight: FontWeight.bold,
           color: Colors.black,
         ),
         badgeWidget: _buildBadge('Trung bình', Colors.yellow, data.average),
@@ -143,7 +139,6 @@ class _AcademicResultChartView extends StatelessWidget {
         title: 'Trung bình yếu: ${data.belowAverage} SV',
         radius: 60,
         titleStyle: context.textTheme.bodySmall?.copyWith(
-          fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
         badgeWidget:
@@ -156,7 +151,6 @@ class _AcademicResultChartView extends StatelessWidget {
         title: 'Kém: ${data.fail} SV',
         radius: 55,
         titleStyle: context.textTheme.bodySmall?.copyWith(
-          fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
         badgeWidget: _buildBadge('Kém', Colors.red, data.fail),
@@ -174,9 +168,7 @@ class _AcademicResultChartView extends StatelessWidget {
           children: [
             Text(
               'Phân bố điểm',
-              style: context.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: context.textTheme.titleMedium?.copyWith(),
             ),
             const SizedBox(height: 16),
             AspectRatio(
