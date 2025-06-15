@@ -71,7 +71,7 @@ class ModuleRemoteDataSourceImpl implements ModuleRemoteDataSource {
     } catch (e, s) {
       logger.e('Unexpected error while fetching module list: $e');
       logger.d('Stack trace: $s');
-      throw ServerException(
+      throw const ServerException(
         message: 'Failed to fetch module list. Please try again later.',
         statusCode: '500',
       );

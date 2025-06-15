@@ -28,7 +28,7 @@ class TimetableBloc extends Bloc<TimetableEvent, TimetableState> {
     Emitter<TimetableState> emit,
   ) async {
     final result = await _fetchTimetable(
-      InitTimetableParams(),
+      const InitTimetableParams(),
     );
     result.fold(
       (failure) {

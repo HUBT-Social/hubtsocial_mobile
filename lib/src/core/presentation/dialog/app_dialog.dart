@@ -81,7 +81,7 @@ sealed class AppDialog {
             SizedBox(height: 20.h),
             child,
             SizedBox(height: 30.h),
-            SizedBox(
+            const SizedBox(
               // width: context.width * 0.8,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

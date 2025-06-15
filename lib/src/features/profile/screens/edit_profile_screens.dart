@@ -136,7 +136,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               right: 0,
               child: Container(
                 height: greenAreaHeight,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/background_green.png'),
                     fit: BoxFit.cover,
@@ -185,7 +185,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               borderRadius: BorderRadius.circular(24.r),
                             ),
                           ),
-                          child: Text('Save Changes'),
+                          child: const Text('Save Changes'),
                         ),
                       ),
                     ],

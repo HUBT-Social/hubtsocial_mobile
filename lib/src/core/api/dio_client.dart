@@ -404,7 +404,7 @@ class _ErrorInterceptor extends Interceptor {
           statusCode: err.response?.statusCode?.toString() ?? '408',
         );
       case DioExceptionType.connectionError:
-        throw ServerException(
+        throw const ServerException(
           message:
               'Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng của bạn.',
           statusCode: '500',
@@ -416,7 +416,7 @@ class _ErrorInterceptor extends Interceptor {
         break;
       default:
         if (err.error?.toString().contains('Failed host lookup') ?? false) {
-          throw ServerException(
+          throw const ServerException(
             message:
                 'Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng của bạn.',
             statusCode: '500',

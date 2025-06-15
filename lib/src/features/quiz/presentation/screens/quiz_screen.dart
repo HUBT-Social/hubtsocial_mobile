@@ -50,7 +50,7 @@ class _QuizScreenState extends State<QuizScreen> {
             fontWeight: FontWeight.w600,
           ),
         ),
-        actions: [],
+        actions: const [],
       ),
       body: BlocConsumer<QuizBloc, QuizState>(
         listener: (_, state) async {

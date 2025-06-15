@@ -129,7 +129,7 @@ class NotificationService {
       // final iOSSettings = IOSInitializationSettings();
 
       // Combined settings
-      final initSettings = InitializationSettings(android: androidSettings);
+      const initSettings = InitializationSettings(android: androidSettings);
 
       // Initialize
       await _localNotifications.initialize(
@@ -168,7 +168,7 @@ class NotificationService {
       // Kiểm tra xem người dùng hiện tại có trong danh sách nhận không
       if (targetUsers != null) {
         final userList = List<String>.from(json.decode(targetUsers));
-        final currentUserId =
+        const currentUserId =
             'GET_CURRENT_USER_ID'; // Thay bằng cách lấy ID người dùng hiện tại
         if (!userList.contains(currentUserId)) {
           return; // Không hiển thị nếu không phải người nhận
@@ -308,7 +308,7 @@ class NotificationService {
       }
 
       // Wait to ensure data is saved
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
     } catch (e) {
       logger.e('Error saving notification to Hive: $e');
     }
@@ -400,7 +400,7 @@ class NotificationService {
           }
 
           // Đợi một chút để đảm bảo dữ liệu được lưu
-          await Future.delayed(Duration(milliseconds: 500));
+          await Future.delayed(const Duration(milliseconds: 500));
 
           _context!.go(AppRoute.notifications.path);
       }

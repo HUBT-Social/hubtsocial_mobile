@@ -41,7 +41,7 @@ StatefulShellRoute _mainRoute() {
                               create: (_) => getIt<QuizBloc>(),
                             ),
                           ],
-                          child: QuizScreen(),
+                          child: const QuizScreen(),
                         ),
                         transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) =>
@@ -83,7 +83,7 @@ StatefulShellRoute _mainRoute() {
                                     // create: (_) => getIt<QuizQuestionBloc>(),
                                   ),
                                 ],
-                                child: QuizQuestionScreen(),
+                                child: const QuizQuestionScreen(),
                               ),
                               transitionsBuilder: (context, animation,
                                       secondaryAnimation, child) =>
@@ -123,14 +123,14 @@ StatefulShellRoute _mainRoute() {
                         create: (_) => getIt<ModuleBloc>(),
                       ),
                     ],
-                    child: ModuleScreen(),
+                    child: const ModuleScreen(),
                   ),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) =>
                           FadeTransition(opacity: animation, child: child),
                 ),
               ),
-               GoRoute(
+              GoRoute(
                 path: AppRoute.academicResult.path,
                 pageBuilder: (context, state) => CustomTransitionPage(
                   key: state.pageKey,
@@ -143,7 +143,7 @@ StatefulShellRoute _mainRoute() {
                           FadeTransition(opacity: animation, child: child),
                 ),
               ),
-               GoRoute(
+              GoRoute(
                 path: AppRoute.classAnalysis.path,
                 pageBuilder: (context, state) => CustomTransitionPage(
                   key: state.pageKey,
@@ -237,7 +237,7 @@ StatefulShellRoute _mainRoute() {
                   create: (_) => getIt<AuthBloc>(),
                 ),
               ],
-              child: MenuScreen(),
+              child: const MenuScreen(),
             ),
             routes: [
               GoRoute(
@@ -285,7 +285,7 @@ StatefulShellRoute _mainRoute() {
                 path: 'notification-settings',
                 pageBuilder: (context, state) => CustomTransitionPage(
                   key: state.pageKey,
-                  child: NotificationSettingsScreen(),
+                  child: const NotificationSettingsScreen(),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) =>
                           FadeTransition(opacity: animation, child: child),

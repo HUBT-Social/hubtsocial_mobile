@@ -156,7 +156,7 @@ class _NotificationsState extends State<NotificationsScreen> {
       body: Container(
         color: context.colorScheme.surface,
         child: _notificationsBox == null
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : ValueListenableBuilder<Box<NotificationModel>>(
                 valueListenable: _notificationsBox!.listenable(),
                 builder: (context, box, _) {
@@ -350,7 +350,7 @@ class _NotificationsState extends State<NotificationsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(context.loc.filter_notifications),
-        contentPadding: EdgeInsets.all(16),
+        contentPadding: const EdgeInsets.all(16),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

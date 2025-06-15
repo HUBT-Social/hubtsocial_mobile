@@ -91,7 +91,7 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
     } catch (e, s) {
       logger.e('Unexpected error while getting user profile: $e');
       logger.d('Stack trace: $s');
-      throw ServerException(
+      throw const ServerException(
         message: 'Failed to get user profile. Please try again later.',
         statusCode: '500',
       );
@@ -193,7 +193,7 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
     } catch (e, s) {
       logger.e('Unexpected error while updating user name: $e',
           error: e, stackTrace: s);
-      throw ServerException(
+      throw const ServerException(
         message:
             'Failed to update user name. An unexpected client-side error occurred.',
         statusCode: 'ClientError', // Differentiate from server/network errors
@@ -255,7 +255,7 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
     } catch (e, s) {
       logger.e('Unexpected error while updating user avatar: $e');
       logger.d('Stack trace: $s');
-      throw ServerException(
+      throw const ServerException(
         message: 'Failed to update user avatar. Please try again later.',
         statusCode: '500',
       );
@@ -330,7 +330,7 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
     } catch (e, s) {
       logger.e('Unexpected error while changing password: $e');
       logger.d('Stack trace: $s');
-      throw ServerException(
+      throw const ServerException(
         message: 'Failed to change password. Please try again later.',
         statusCode: '500',
       );

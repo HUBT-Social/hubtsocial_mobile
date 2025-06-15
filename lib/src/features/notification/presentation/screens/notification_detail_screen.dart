@@ -48,15 +48,15 @@ class NotificationDetailScreen extends StatelessWidget {
       body: Container(
         color: Colors.white,
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               mainImageWidget,
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               // Box thông tin thông báo
               Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.blue.withOpacity(0.05),
                   borderRadius: BorderRadius.circular(16),
@@ -65,20 +65,20 @@ class NotificationDetailScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     NotificationIcon(notification: notification, size: 60),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             notification.title ?? '',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
                           ),
-                          SizedBox(height: 6),
+                          const SizedBox(height: 6),
                           Text(
                             _formatTime(notification.time, context),
                             style: TextStyle(
@@ -92,9 +92,9 @@ class NotificationDetailScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               // Nội dung thông báo
-              Text(
+              const Text(
                 'Nội dung',
                 style: TextStyle(
                   fontSize: 16,
@@ -102,9 +102,9 @@ class NotificationDetailScreen extends StatelessWidget {
                   color: Colors.black87,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.grey[50],
                   borderRadius: BorderRadius.circular(12),
@@ -115,17 +115,17 @@ class NotificationDetailScreen extends StatelessWidget {
                 ),
                 child: Text(
                   notification.body ?? '',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 15,
                     color: Colors.black87,
                     height: 1.5,
                   ),
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               // Hình ảnh (nếu có)
               if (imageUrl != null && imageUrl.toString().isNotEmpty) ...[
-                Text(
+                const Text(
                   'Hình ảnh',
                   style: TextStyle(
                     fontSize: 16,
@@ -133,7 +133,7 @@ class NotificationDetailScreen extends StatelessWidget {
                     color: Colors.black87,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
@@ -146,7 +146,7 @@ class NotificationDetailScreen extends StatelessWidget {
                           color: Colors.grey[200],
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Column(
+                        child: const Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(

@@ -3,7 +3,6 @@ import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:hubtsocial_mobile/src/core/notification/LocalMessage.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_key.dart';
-import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_timetable_model.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/timetable_response_model.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 
@@ -53,11 +52,11 @@ class TimetableNotificationService {
 
       final now = DateTime.now();
       logger.i('Current local time: $now (isUtc: ${now.isUtc})');
-      
+
       final startTime = timetableData.starttime.toLocal();
       final endTime = timetableData.endtime.toLocal();
-              // final localTimetableStartTime = timetable.startTime!.toLocal();
-          //final localTimetableEndTime = timetable.endTime!.toLocal();
+      // final localTimetableStartTime = timetable.startTime!.toLocal();
+      //final localTimetableEndTime = timetable.endTime!.toLocal();
       logger.i('Timetable period: Start $startTime, End $endTime');
 
       // Only schedule notifications if we're within the timetable period
@@ -73,8 +72,8 @@ class TimetableNotificationService {
           // Convert timetable start and end times to local timezone
           final localTimetableStartTime = timetable.startTime!.toLocal();
           final localTimetableEndTime = timetable.endTime!.toLocal();
-         // final localTimetableStartTime = timetable.startTime!;
-         // final localTimetableEndTime = timetable.endTime!;
+          // final localTimetableStartTime = timetable.startTime!;
+          // final localTimetableEndTime = timetable.endTime!;
           logger.i('  Subject: ${timetable.subject}');
           logger.i(
               '    Raw Timetable Start: ${timetable.startTime} (isUtc: ${timetable.startTime!.isUtc})');

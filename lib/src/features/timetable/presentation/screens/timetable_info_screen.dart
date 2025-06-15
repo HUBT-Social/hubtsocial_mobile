@@ -406,9 +406,9 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                                 context.colorScheme.surfaceContainerHighest,
                             backgroundColor:
                                 context.colorScheme.surfaceContainerHighest,
-                            shape: RoundedRectangleBorder(
+                            shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.zero),
-                            collapsedShape: RoundedRectangleBorder(
+                            collapsedShape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.zero),
                             children:
                                 state.timetableInfoModel.studentMembers.map(
@@ -428,7 +428,7 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                         height: 54.h,
                         decoration: BoxDecoration(
                           color: context.colorScheme.surfaceContainerHighest,
-                          borderRadius: BorderRadius.only(
+                          borderRadius: const BorderRadius.only(
                               // topLeft: Radius.circular(24.r),
                               // topRight: Radius.circular(24.r),
                               // bottomLeft: Radius.circular(24.r),
@@ -438,7 +438,7 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                         child: Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                                 // topLeft: Radius.circular(24.r),
                                 // topRight: Radius.circular(24.r),
                                 // bottomLeft: Radius.circular(24.r),
@@ -529,7 +529,7 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                               "id": state.timetableInfoModel.chatRoomId
                             });
                       },
-                      child: Icon(Icons.message),
+                      child: const Icon(Icons.message),
                     ),
                   ),
               ],

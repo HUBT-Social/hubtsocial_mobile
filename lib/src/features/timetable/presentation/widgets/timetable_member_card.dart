@@ -56,7 +56,7 @@ class _TimetableMemberCardState extends State<TimetableMemberCard> {
         ],
       ),
       endActionPane: ActionPane(
-        motion: ScrollMotion(),
+        motion: const ScrollMotion(),
         // dismissible: DismissiblePane(onDismissed: () {}),
         children: [
           if (context.read<UserProvider>().isTeacher)
@@ -104,7 +104,7 @@ class _TimetableMemberCardState extends State<TimetableMemberCard> {
                       size: 48.r,
                     ),
                   Container(
-                    padding: EdgeInsets.all(2),
+                    padding: const EdgeInsets.all(2),
                     height: 14.r,
                     width: 14.r,
                     decoration: BoxDecoration(

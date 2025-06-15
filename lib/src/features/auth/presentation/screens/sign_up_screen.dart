@@ -139,7 +139,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               height: 300.r,
                               width: 300.r,
                               color: context.colorScheme.surface,
-                              child: Text("data"),
+                              child: const Text("data"),
                             ),
                           );
                         });

@@ -47,7 +47,7 @@ void main() async {
   final timetableNotificationService = getIt<TimetableNotificationService>();
   await timetableNotificationService.scheduleNotificationsFromHive();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 bool isInitializedFirebase = false;

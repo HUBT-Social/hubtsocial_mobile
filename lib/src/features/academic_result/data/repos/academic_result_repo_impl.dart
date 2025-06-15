@@ -7,7 +7,6 @@ import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/data/datasources/academic_result_remote_data_source.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/data/models/subject_score_model.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/domain/models/score_distribution_data.dart';
-import 'package:hubtsocial_mobile/src/features/academic_result/domain/repos/academic_result_repo.dart';
 
 abstract class AcademicResultRepo {
   const AcademicResultRepo();

@@ -39,7 +39,7 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
       create: (context) => _bloc,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Kết quả học tập'),
+          title: const Text('Kết quả học tập'),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new),
             onPressed: () {
@@ -98,7 +98,7 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
                 Text(
                   'Tổng hợp kết quả',
                   style: context.textTheme.bodyLarge?.copyWith(
-                   color: context.colorScheme.onPrimary,
+                    color: context.colorScheme.onPrimary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -115,7 +115,7 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
                       Text(
                         'TBC thang điểm 10: ${state.totalAverageScore10.toStringAsFixed(2)}',
                         style: context.textTheme.titleMedium?.copyWith(
-                           color: context.colorScheme.onPrimary,
+                          color: context.colorScheme.onPrimary,
                         ),
                       ),
                       Text(
@@ -131,7 +131,7 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                     color: context.colorScheme.onPrimary,
+                    color: context.colorScheme.onPrimary,
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: context.colorScheme.secondary,
@@ -182,7 +182,7 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
         Text(
           '$count',
           style: context.textTheme.titleLarge?.copyWith(
-             color: context.colorScheme.onPrimary,
+            color: context.colorScheme.onPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -207,8 +207,7 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
             const SizedBox(width: 8),
             GestureDetector(
               onTap: () {
-              AppRoute.classAnalysis.path;
-              
+                AppRoute.classAnalysis.path;
               },
               child: Text(
                 'Biểu đồ phân tích',

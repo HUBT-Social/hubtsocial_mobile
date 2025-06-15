@@ -104,7 +104,7 @@ class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
     } catch (e, s) {
       logger.e('Unexpected error while fetching room chat: $e');
       logger.d('Stack trace: $s');
-      throw ServerException(
+      throw const ServerException(
         message: 'Failed to fetch room chat. Please try again later.',
         statusCode: '500',
       );
@@ -163,7 +163,7 @@ class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
     } catch (e, s) {
       logger.e('Unexpected error while fetching room members: $e');
       logger.d('Stack trace: $s');
-      throw ServerException(
+      throw const ServerException(
         message: 'Failed to fetch room members. Please try again later.',
         statusCode: '500',
       );

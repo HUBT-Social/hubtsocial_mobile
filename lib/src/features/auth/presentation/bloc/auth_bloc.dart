@@ -84,7 +84,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (failure) {
         emit(AuthError(failure.message));
       },
-      (_) => emit(InformationUserSuccess()),
+      (_) => emit(const InformationUserSuccess()),
     );
   }
 
@@ -110,7 +110,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       },
       (response) {
-        emit(SetNewPasswordSuccess());
+        emit(const SetNewPasswordSuccess());
       },
     );
   }
@@ -136,7 +136,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       },
       (response) {
-        emit(VerifyForgotPasswordSuccess());
+        emit(const VerifyForgotPasswordSuccess());
       },
     );
   }
@@ -166,7 +166,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         if (response.requiresTwoFactor!) {
           emit(VerifyTwoFactor(response.maskEmail.toString()));
         } else {
-          emit(SignedIn());
+          emit(const SignedIn());
         }
       },
     );
@@ -193,7 +193,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       },
       (response) {
-        emit(VerifyTwoFactorSuccess());
+        emit(const VerifyTwoFactorSuccess());
       },
     );
   }
@@ -219,7 +219,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       },
       (response) {
-        emit(VerifyEmailSuccess());
+        emit(const VerifyEmailSuccess());
       },
     );
   }
@@ -257,7 +257,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     final result = await _signOut();
     result.fold(
-      (failure) => emit(AuthError("serverError")),
+      (failure) => emit(const AuthError("serverError")),
       (token) => emit(const SignedOut()),
     );
   }

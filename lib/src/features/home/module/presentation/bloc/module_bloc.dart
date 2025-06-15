@@ -26,7 +26,7 @@ class ModuleBloc extends Bloc<ModuleEvent, ModuleState> {
     GetModuleEvent event,
     Emitter<ModuleState> emit,
   ) async {
-    final result = await _getModule(GetModuleParams());
+    final result = await _getModule(const GetModuleParams());
     result.fold((failure) => emit(ModuleLoadedError(failure.message)),
         (response) => emit(ModuleLoaded(response)));
   }

@@ -15,7 +15,7 @@ class ModuleScreen extends StatefulWidget {
 class _ModuleScreenState extends State<ModuleScreen> {
   @override
   void initState() {
-    context.read<ModuleBloc>().add(GetModuleEvent());
+    context.read<ModuleBloc>().add(const GetModuleEvent());
 
     super.initState();
   }
@@ -33,11 +33,11 @@ class _ModuleScreenState extends State<ModuleScreen> {
             fontWeight: FontWeight.w600,
           ),
         ),
-        actions: [],
+        actions: const [],
       ),
       body: RefreshIndicator(
-        onRefresh: () =>
-            Future.sync(() => context.read<ModuleBloc>().add(GetModuleEvent())),
+        onRefresh: () => Future.sync(
+            () => context.read<ModuleBloc>().add(const GetModuleEvent())),
         child: BlocBuilder<ModuleBloc, ModuleState>(
           builder: (context, state) {
             if (state is ModuleLoading) {

@@ -212,7 +212,7 @@ class FirebaseMessage {
     // Initialize flutter_local_notifications
     const androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-    final initSettings = InitializationSettings(android: androidSettings);
+    const initSettings = InitializationSettings(android: androidSettings);
 
     await flutterLocalNotificationsPlugin.initialize(
       initSettings,
@@ -350,7 +350,7 @@ class FirebaseMessage {
       }
 
       // Đợi một chút để đảm bảo dữ liệu được lưu
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       // Điều hướng đến màn thông báo
       router.go(AppRoute.notifications.path);
@@ -541,7 +541,7 @@ class FirebaseMessage {
       }
 
       // Wait to ensure data is saved
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
     } catch (e) {
       logger.e('Error saving terminated state notification: $e');
     }

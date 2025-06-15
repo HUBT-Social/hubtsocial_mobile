@@ -19,11 +19,11 @@ ShellRoute _authRoute() {
     routes: [
       GoRoute(
         path: AppRoute.getStarted.path,
-        builder: (context, state) => GetStartedScreen(),
+        builder: (context, state) => const GetStartedScreen(),
       ),
       GoRoute(
         path: AppRoute.signIn.path,
-        builder: (context, state) => SignInScreen(),
+        builder: (context, state) => const SignInScreen(),
       ),
       GoRoute(
         path: AppRoute.twoFactor.path,
@@ -32,11 +32,11 @@ ShellRoute _authRoute() {
       ),
       GoRoute(
         path: AppRoute.forgotPassword.path,
-        builder: (context, state) => ForgotPasswordScreen(),
+        builder: (context, state) => const ForgotPasswordScreen(),
       ),
       GoRoute(
         path: AppRoute.signUp.path,
-        builder: (context, state) => SignUpScreen(),
+        builder: (context, state) => const SignUpScreen(),
       ),
       GoRoute(
         path: AppRoute.emailVerify.path,
@@ -50,15 +50,15 @@ ShellRoute _authRoute() {
       ),
       GoRoute(
         path: AppRoute.setNewPassword.path,
-        builder: (context, state) => SetNewPasswordScreen(),
+        builder: (context, state) => const SetNewPasswordScreen(),
       ),
       GoRoute(
         path: AppRoute.passwordSuccessful.path,
-        builder: (context, state) => PasswordSuccessfulScreen(),
+        builder: (context, state) => const PasswordSuccessfulScreen(),
       ),
       GoRoute(
         path: AppRoute.signUpInformation.path,
-        builder: (context, state) => SignUpInformationScreen(),
+        builder: (context, state) => const SignUpInformationScreen(),
       ),
     ],
   );

@@ -133,7 +133,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
                             onPressed: () {
                               context
                                   .read<QuizQuestionBloc>()
-                                  .add(FinishQuiz());
+                                  .add(const FinishQuiz());
                             },
                             icon: Icon(
                               Icons.check,

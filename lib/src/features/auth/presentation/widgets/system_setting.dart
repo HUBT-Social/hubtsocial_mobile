@@ -14,7 +14,7 @@ class SystemSetting extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
       child: Column(
         spacing: 6.h,
-        children: [
+        children: const [
           ButtonChangeLocalization(),
           ButtonChangeTheme(),
         ],

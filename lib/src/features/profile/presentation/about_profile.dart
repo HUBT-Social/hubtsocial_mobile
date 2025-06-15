@@ -12,7 +12,7 @@ final class LocalizatioUtils {
     showModalBottomSheet(
       showDragHandle: true,
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
@@ -20,7 +20,7 @@ final class LocalizatioUtils {
       ),
       builder: (context) {
         return Padding(
-          padding: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
           child: SafeArea(
             left: false,
             right: false,
@@ -36,7 +36,7 @@ final class LocalizatioUtils {
                     style: context.textTheme.headlineSmall,
                   ),
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 BlocBuilder<LocalizationBloc, AppLocalizationState>(
                   builder: (context, state) {
                     return ListView.separated(
@@ -89,12 +89,12 @@ final class LocalizatioUtils {
                         );
                       },
                       separatorBuilder: (context, index) {
-                        return SizedBox(height: 12);
+                        return const SizedBox(height: 12);
                       },
                     );
                   },
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
               ],
             ),
           ),

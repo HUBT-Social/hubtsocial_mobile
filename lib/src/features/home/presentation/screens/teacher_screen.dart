@@ -50,7 +50,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: SizedBox(height: 100), // Tăng padding top lên 300
           ),
           SliverToBoxAdapter(
@@ -72,12 +72,12 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                         children: [
                           Text(
                             context.loc.teacherInfoTitle,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           _buildInfoRow(context.loc.teacherNameLabel,
                               widget.teacher.name),
                           _buildInfoRow(context.loc.teacherCodeLabelShort,
@@ -99,7 +99,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                         fontWeight: FontWeight.bold,
                         color: Colors.green[900]),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
@@ -125,7 +125,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                               fontWeight: FontWeight.w600,
                               color: Colors.grey[800]),
                         ),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 12),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: List.generate(5, (starIndex) {
@@ -153,7 +153,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
               childCount: questions.length,
             ),
           ),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: SizedBox(height: 20),
           ),
           SliverToBoxAdapter(
@@ -164,7 +164,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(context.loc.evaluationSuccessMessage),
-                        duration: Duration(seconds: 2),
+                        duration: const Duration(seconds: 2),
                         backgroundColor: Colors.green[600],
                       ),
                     );
@@ -172,7 +172,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(context.loc.evaluationErrorMessage),
-                        duration: Duration(seconds: 2),
+                        duration: const Duration(seconds: 2),
                         backgroundColor: Colors.redAccent,
                       ),
                     );
@@ -180,21 +180,22 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF90EE90), // Màu nút
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                   elevation: 5,
                 ),
                 child: Text(context.loc.submitEvaluationButton,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         color: Colors.white,
                         fontWeight: FontWeight.bold)),
               ),
             ),
           ),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: SizedBox(height: 150),
           ),
           // Khoảng trống dưới cùng
@@ -211,7 +212,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
         children: [
           Text(
             '$label ',
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: Colors.black87),
@@ -219,7 +220,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
           Expanded(
             child: Text(
               value,
-              style: TextStyle(fontSize: 16, color: Colors.black87),
+              style: const TextStyle(fontSize: 16, color: Colors.black87),
             ),
           ),
         ],

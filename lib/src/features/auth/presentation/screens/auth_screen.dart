@@ -21,9 +21,9 @@ class _AuthScreenScreenState extends State<AuthScreen> {
     return Scaffold(
         body: Stack(
       children: [
-        Background(),
+        const Background(),
         widget.child,
-        SafeArea(
+        const SafeArea(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,

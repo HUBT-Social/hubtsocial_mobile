@@ -19,7 +19,6 @@ abstract class TimetableRemoteDataSource {
   Future<TimetableInfoResponseModel> getTimetableInfo(String timetableId);
 
   Future<void> scheduleNotificationsFromHive();
-
 }
 
 @LazySingleton(
@@ -177,7 +176,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
     } catch (e, s) {
       logger.e('Unexpected error while initializing timetable: $e');
       logger.d('Stack trace: $s');
-      throw ServerException(
+      throw const ServerException(
         message: 'Failed to initialize timetable. Please try again later.',
         statusCode: '500',
       );
@@ -239,7 +238,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
     } catch (e, s) {
       logger.e('Unexpected error while getting timetable info: $e');
       logger.d('Stack trace: $s');
-      throw ServerException(
+      throw const ServerException(
         message: 'Failed to get timetable information. Please try again later.',
         statusCode: '500',
       );
@@ -258,7 +257,4 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
       // Don't throw here as this is a background operation
     }
   }
-  
-
-  
 }

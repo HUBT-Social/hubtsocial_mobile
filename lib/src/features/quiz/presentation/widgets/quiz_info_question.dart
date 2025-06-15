@@ -21,7 +21,7 @@ class QuizInfoQuestion extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          LineInMenu(),
+          const LineInMenu(),
           Text(
             "${context.loc.question_value((index + 1).toString())}: ${item.title}",
             style: context.textTheme.bodyLarge,

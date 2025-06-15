@@ -25,9 +25,9 @@ class _ChatCardState extends State<ChatCard> {
   Widget build(BuildContext context) {
     return Slidable(
         key: ValueKey<String>(widget.chatModel.id.toString()),
-        startActionPane: ActionPane(
-          motion: const DrawerMotion(),
-          children: const [
+        startActionPane: const ActionPane(
+          motion: DrawerMotion(),
+          children: [
             SlidableAction(
               onPressed: null,
               backgroundColor: Color(0xFF7BC043),
@@ -46,9 +46,9 @@ class _ChatCardState extends State<ChatCard> {
           ],
         ),
         endActionPane: ActionPane(
-          motion: ScrollMotion(),
+          motion: const ScrollMotion(),
           dismissible: DismissiblePane(onDismissed: () {}),
-          children: [
+          children: const [
             SlidableAction(
               onPressed: null,
               backgroundColor: Color(0xFF0392CF),
@@ -86,7 +86,7 @@ class _ChatCardState extends State<ChatCard> {
                             size: 48.r,
                           ),
                           Container(
-                            padding: EdgeInsets.all(2),
+                            padding: const EdgeInsets.all(2),
                             height: 14.r,
                             width: 14.r,
                             decoration: BoxDecoration(
@@ -166,7 +166,7 @@ class _ChatCardState extends State<ChatCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      SizedBox(),
+                      const SizedBox(),
                       Container(
                         height: 8.r,
                         width: 8.r,

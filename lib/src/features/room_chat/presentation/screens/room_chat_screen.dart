@@ -247,7 +247,7 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
               ),
               chatBackgroundConfig: ChatBackgroundConfiguration(
                 messageTimeIconColor: Colors.red,
-                messageTimeTextStyle: TextStyle(color: Colors.blue),
+                messageTimeTextStyle: const TextStyle(color: Colors.blue),
                 defaultGroupSeparatorConfig: DefaultGroupSeparatorConfiguration(
                   textStyle: context.textTheme.bodySmall?.copyWith(
                     color: context.colorScheme.onSurfaceVariant,

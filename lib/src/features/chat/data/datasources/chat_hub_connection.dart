@@ -122,7 +122,7 @@ class ChatHubConnection {
     _isReconnecting = true;
 
     logger.d("🕒 Waiting 5 seconds to reconnect...");
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 5));
 
     try {
       if (_chatHubConnection.state == HubConnectionState.Disconnected) {

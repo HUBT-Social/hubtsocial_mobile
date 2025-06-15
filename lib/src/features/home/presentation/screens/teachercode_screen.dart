@@ -149,14 +149,14 @@ class TeacherCodeInputScreen extends StatelessWidget {
                           decoration: InputDecoration(
                             labelText: context.loc.teacherCodeLabel,
                             hintText: context.loc.teacherCodeHint,
-                            prefixIcon: Icon(Icons.person_search,
-                                color: const Color(0xFF90EE90)),
+                            prefixIcon: const Icon(Icons.person_search,
+                                color: Color(0xFF90EE90)),
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 20.h, horizontal: 16.w),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12.r),
                               borderSide:
-                                  BorderSide(color: const Color(0xFF90EE90)),
+                                  const BorderSide(color: Color(0xFF90EE90)),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12.r),
@@ -167,7 +167,7 @@ class TeacherCodeInputScreen extends StatelessWidget {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12.r),
                               borderSide:
-                                  BorderSide(color: const Color(0xFF90EE90)),
+                                  const BorderSide(color: Color(0xFF90EE90)),
                             ),
                             filled: true,
                             fillColor: Colors.white,

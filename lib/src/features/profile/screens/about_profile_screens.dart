@@ -12,7 +12,7 @@ final class AboutProfileUtils {
     showModalBottomSheet(
       showDragHandle: true,
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
@@ -22,7 +22,7 @@ final class AboutProfileUtils {
         return Container(
           width: 536,
           height: 498,
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
             top: 12,
             right: 10,
             bottom: 12,
@@ -40,17 +40,18 @@ final class AboutProfileUtils {
                   ),
                 ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Text(
                 context.loc.first_name,
                 style: context.textTheme.labelMedium?.copyWith(
                   color: context.colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   border: Border.all(color: context.colorScheme.outline),
                   borderRadius: BorderRadius.circular(12),
@@ -60,17 +61,18 @@ final class AboutProfileUtils {
                   style: context.textTheme.bodyLarge,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 context.loc.last_name,
                 style: context.textTheme.labelMedium?.copyWith(
                   color: context.colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   border: Border.all(color: context.colorScheme.outline),
                   borderRadius: BorderRadius.circular(12),
@@ -80,17 +82,18 @@ final class AboutProfileUtils {
                   style: context.textTheme.bodyLarge,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 context.loc.gender,
                 style: context.textTheme.labelMedium?.copyWith(
                   color: context.colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   border: Border.all(color: context.colorScheme.outline),
                   borderRadius: BorderRadius.circular(12),
@@ -100,17 +103,18 @@ final class AboutProfileUtils {
                   style: context.textTheme.bodyLarge,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 context.loc.birth_of_date,
                 style: context.textTheme.labelMedium?.copyWith(
                   color: context.colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   border: Border.all(color: context.colorScheme.outline),
                   borderRadius: BorderRadius.circular(12),

@@ -49,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(top: 2, left: 2, right: 12),
+            padding: const EdgeInsets.only(top: 2, left: 2, right: 12),
             child: Container(
               width: 20,
               height: 20,
@@ -86,14 +86,14 @@ class _ProfileScreenState extends State<ProfileScreen>
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Consumer<UserProvider>(
               builder: (context, userProvider, child) {
                 final user = userProvider.user;
 
                 if (user == null) {
                   // Display a loading indicator or a placeholder if user is null
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 // Create a local non-nullable variable
@@ -115,7 +115,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     .showAboutProfileBottomSheet(
                                         navigatorKey.currentContext ?? context),
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 6),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 6),
                                   child: Row(
                                     children: [
                                       Flexible(
@@ -140,9 +141,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 6),
+                              const SizedBox(height: 6),
                               Padding(
-                                padding: EdgeInsets.only(left: 18),
+                                padding: const EdgeInsets.only(left: 18),
                                 child: Text(
                                   '@${nonNullUser.userName}', // Use nonNullUser
                                   style: context.textTheme.labelLarge?.copyWith(
@@ -151,7 +152,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Text(
                                 'status...', // Temporary static text
                                 style: context.textTheme.labelLarge?.copyWith(
@@ -162,7 +163,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             ],
                           ),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         GestureDetector(
                           onTap: () {
                             if (nonNullUser.avatarUrl.isNotEmpty) {
@@ -193,14 +194,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                       ],
                     ),
-                    SizedBox(height: 32),
+                    const SizedBox(height: 32),
                     const ProfileActionButtons(),
                   ],
                 );
               },
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           TabBar(
             controller: _tabController,
             labelColor: context.colorScheme.onSurface,
@@ -217,8 +218,8 @@ class _ProfileScreenState extends State<ProfileScreen>
               controller: _tabController,
               children: [
                 GridView.builder(
-                  padding: EdgeInsets.all(8),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  padding: const EdgeInsets.all(8),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     mainAxisSpacing: 8,
                     crossAxisSpacing: 8,
@@ -242,7 +243,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           BoxShadow(
                             color: context.colorScheme.surface,
                             blurRadius: 4,
-                            offset: Offset(0, 4),
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),

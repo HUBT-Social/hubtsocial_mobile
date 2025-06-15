@@ -16,7 +16,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        SizedBox(),
+        const SizedBox(),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 60.w),
           child: Text(
@@ -28,7 +28,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               shadows: [
                 Shadow(
                   color: context.colorScheme.shadow.withAlpha(92),
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                   blurRadius: 24,
                 ),
               ],
@@ -86,7 +86,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                     ),
                   ),
                 ),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // InkWell(

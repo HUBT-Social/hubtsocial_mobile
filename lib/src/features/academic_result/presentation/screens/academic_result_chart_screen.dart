@@ -195,7 +195,7 @@ class _AcademicResultChartView extends StatelessWidget {
               spacing: 16,
               runSpacing: 8,
               children: showingSections.map((section) {
-                return _buildLegend(section.title!, section.color!);
+                return _buildLegend(section.title, section.color);
               }).toList(),
             ),
           ],

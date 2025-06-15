@@ -7,7 +7,7 @@ part 'receive_chat_state.dart';
 
 @Injectable()
 class ReceiveChatCubit extends Cubit<ReceiveChatState> {
-  ReceiveChatCubit() : super(ReceiveChatInitial(null));
+  ReceiveChatCubit() : super(const ReceiveChatInitial(null));
 
   void receiveMessage(MessageResponseModel message) {
     emit(ReceiveChatUpdate(message));

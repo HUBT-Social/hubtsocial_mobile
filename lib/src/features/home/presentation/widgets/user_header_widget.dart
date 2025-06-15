@@ -25,7 +25,7 @@ class UserHeaderWidget extends StatelessWidget {
             padding: EdgeInsets.only(
                 left: 20.w, top: 12.h, right: 20.w, bottom: 50.h),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
+              gradient: const LinearGradient(
                 colors: [
                   Color(0xff52C755),
                   Color(0xff43B446),
@@ -115,7 +115,7 @@ class UserHeaderShimmer extends StatelessWidget {
             padding: EdgeInsets.only(
                 left: 20.w, top: 12.h, right: 20.w, bottom: 50.h),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
+              gradient: const LinearGradient(
                 colors: [
                   Color(0xff52C755),
                   Color(0xff43B446),
@@ -138,7 +138,7 @@ class UserHeaderShimmer extends StatelessWidget {
                       Container(
                         width: 70.r,
                         height: 70.r,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
                           shape: BoxShape.circle,
                         ),
@@ -206,7 +206,7 @@ class UserHeaderShimmer extends StatelessWidget {
               child: Container(
                 width: 30.w,
                 height: 30.h,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
                 ),

@@ -14,19 +14,19 @@ class _ContainerAuthState extends State<ContainerAuth> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       child: Container(
         width: 320.w,
         padding:
             EdgeInsets.only(right: 12.w, left: 12.w, top: 24.h, bottom: 36.h),
         decoration: BoxDecoration(
           color: context.colorScheme.surface,
-          borderRadius: BorderRadiusDirectional.all(Radius.circular(24)),
+          borderRadius: const BorderRadiusDirectional.all(Radius.circular(24)),
           boxShadow: [
             BoxShadow(
               color: context.colorScheme.shadow.withAlpha(128),
               blurRadius: 4,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ],
         ),

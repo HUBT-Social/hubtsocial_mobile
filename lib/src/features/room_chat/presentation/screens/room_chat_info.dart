@@ -69,7 +69,7 @@ class _RoomChatInfoScreenState extends State<RoomChatInfoScreen> {
                           shape: BoxShape.circle,
                         ),
                       ),
-                      SizedBox(width: 2),
+                      const SizedBox(width: 2),
                       Container(
                         width: 3,
                         height: 3,
@@ -78,7 +78,7 @@ class _RoomChatInfoScreenState extends State<RoomChatInfoScreen> {
                           shape: BoxShape.circle,
                         ),
                       ),
-                      SizedBox(width: 2),
+                      const SizedBox(width: 2),
                       Container(
                         width: 3,
                         height: 3,
@@ -98,7 +98,7 @@ class _RoomChatInfoScreenState extends State<RoomChatInfoScreen> {
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               children: [
                 Consumer<UserProvider>(
@@ -116,7 +116,8 @@ class _RoomChatInfoScreenState extends State<RoomChatInfoScreen> {
                                   AboutProfileUtils.showAboutProfileBottomSheet(
                                       navigatorKey.currentContext ?? context),
                               child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 6),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 6),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -134,9 +135,9 @@ class _RoomChatInfoScreenState extends State<RoomChatInfoScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
                             Padding(
-                              padding: EdgeInsets.only(left: 18),
+                              padding: const EdgeInsets.only(left: 18),
                               child: Text(
                                 '@${user.lastName}',
                                 style: context.textTheme.labelLarge?.copyWith(
@@ -145,7 +146,7 @@ class _RoomChatInfoScreenState extends State<RoomChatInfoScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             // TODO: Implement status feature when User model is updated
                             // ProfileStatus(
                             //   status: user?.status ?? '',
@@ -190,12 +191,12 @@ class _RoomChatInfoScreenState extends State<RoomChatInfoScreen> {
                     );
                   },
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
                 const ProfileActionButtons(),
               ],
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Center(child: Text(context.loc.reply)),
           Center(child: Text(context.loc.repost)),
         ],

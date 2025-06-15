@@ -94,7 +94,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     } catch (e, s) {
       logger.e('Unexpected error while fetching chat list: $e');
       logger.d('Stack trace: $s');
-      throw ServerException(
+      throw const ServerException(
         message: 'Failed to fetch chat list. Please try again later.',
         statusCode: '500',
       );

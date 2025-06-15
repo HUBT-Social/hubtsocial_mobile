@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:hubtsocial_mobile/src/features/academic_result/domain/models/score_distribution_data.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/domain/repos/academic_result_repo.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/blocs/academic_result_chart/academic_result_chart_event.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/blocs/academic_result_chart/academic_result_chart_state.dart';

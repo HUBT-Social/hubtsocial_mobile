@@ -27,7 +27,7 @@ class ProfileActionButtons extends StatelessWidget {
               backgroundColor: context.colorScheme.primary,
               textColor: context.colorScheme.onPrimary),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
         Expanded(
           child: BaseActionButton(
               text: context.loc.share,

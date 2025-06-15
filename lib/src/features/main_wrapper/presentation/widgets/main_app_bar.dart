@@ -24,7 +24,7 @@ class MainAppBar extends StatelessWidget {
       flexibleSpace: Container(
         width: double.infinity,
         padding: EdgeInsets.fromLTRB(20.w, 50.h, 20.w, 100.h),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
               Color(0xff52C755),

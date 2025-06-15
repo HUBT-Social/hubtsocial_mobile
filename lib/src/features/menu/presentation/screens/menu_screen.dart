@@ -37,7 +37,7 @@ class _MenuScreenState extends State<MenuScreen> {
         // controller: scrollController,
         physics: const BouncingScrollPhysics(),
         slivers: [
-          UserCardInMenu(),
+          const UserCardInMenu(),
           SliverToBoxAdapter(child: SizedBox(height: 6.h)),
           SliverToBoxAdapter(
             child: Container(
@@ -61,7 +61,7 @@ class _MenuScreenState extends State<MenuScreen> {
               },
             ),
             label: context.loc.change_theme,
-            iconArrow: Icon(Icons.arrow_drop_down_rounded),
+            iconArrow: const Icon(Icons.arrow_drop_down_rounded),
             onTap: () => ThemeUtils.showThemeBottomSheet(
                 navigatorKey.currentContext ?? context),
           ),
@@ -104,7 +104,7 @@ class _MenuScreenState extends State<MenuScreen> {
             onTap: () => LocalizatioUtils.showLanguageBottomSheet(
                 navigatorKey.currentContext ?? context),
           ),
-          SliverToBoxAdapter(child: LineInMenu()),
+          const SliverToBoxAdapter(child: LineInMenu()),
           ButtonInMenu(
             borderRadiusTop: 12.r,
             borderRadiusBottom: 12.r,
@@ -121,7 +121,7 @@ class _MenuScreenState extends State<MenuScreen> {
               AppRoute.notificationSettings.push(context);
             },
           ),
-          SliverToBoxAdapter(child: LineInMenu()),
+          const SliverToBoxAdapter(child: LineInMenu()),
           ButtonInMenu(
             borderRadiusTop: 12.r,
             icon: Icon(
@@ -171,7 +171,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   context.loc.features_currently_in_development);
             },
           ),
-          SliverToBoxAdapter(child: LineInMenu()),
+          const SliverToBoxAdapter(child: LineInMenu()),
           SliverToBoxAdapter(
             child: InkWell(
               borderRadius: BorderRadius.all(

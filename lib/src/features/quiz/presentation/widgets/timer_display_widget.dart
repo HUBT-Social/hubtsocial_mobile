@@ -40,7 +40,7 @@ class TimerController extends ChangeNotifier {
   void start() {
     if (_isRunning) return;
     _isRunning = true;
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _elapsedSeconds++;
       notifyListeners();
     });

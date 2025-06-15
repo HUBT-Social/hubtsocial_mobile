@@ -103,7 +103,7 @@ final GoRouter router = GoRouter(
                   ),
                 );
               },
-              routes: []),
+              routes: const []),
         ]),
 
     // GoRoute(
