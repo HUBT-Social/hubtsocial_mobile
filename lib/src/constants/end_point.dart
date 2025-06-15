@@ -26,9 +26,9 @@ class EndPoint {
   static String get updateAvatar => "$_user/update-avatar";
   static String get uptateName =>
       "$_user/update/name"; // trong update name này có first name và lastName
-  static String get getscore => "$_user/get-score";
+  static String get getScore => "$_user/get-score";
   static String get module => "$_user/get-user-courese";
-  static String get getclassinfoscore => "$_user/get-class-info/score";
+  static String get getClassInfoScore => "$_user/get-class-info/score";
 
   static String get _chat => "$apiUrl/chat";
   static String get chatView => "$_chat/load-rooms";

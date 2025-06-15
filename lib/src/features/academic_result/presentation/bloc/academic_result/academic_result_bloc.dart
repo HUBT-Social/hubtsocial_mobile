@@ -2,8 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:hubtsocial_mobile/src/features/academic_result/domain/usecases/get_academic_result_usecase.dart';
-import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result_event.dart';
-import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result_state.dart';
+import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_event.dart';
+import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_state.dart';
 
 @injectable
 class AcademicResultBloc
@@ -12,18 +12,23 @@ class AcademicResultBloc
     required GetAcademicResultUseCase getAcademicResult,
   })  : _getAcademicResult = getAcademicResult,
         super(AcademicResultInitial()) {
-    on<GetAcademicResult>(_onGetAcademicResult);
+    on<AcademicResultEvent>((event, emit) {
+      emit(AcademicResultLoading());
+    });
+    on<GetAcademicResultEvent>(_onGetAcademicResult);
   }
 
   final GetAcademicResultUseCase _getAcademicResult;
 
   Future<void> _onGetAcademicResult(
-    GetAcademicResult event,
+    GetAcademicResultEvent event,
     Emitter<AcademicResultState> emit,
   ) async {
     emit(AcademicResultLoading());
 
-    final result = await _getAcademicResult();
+    final result = await _getAcademicResult(
+      GetAcademicResultParams(),
+    );
 
     result.fold(
       (failure) => emit(AcademicResultError(failure)),

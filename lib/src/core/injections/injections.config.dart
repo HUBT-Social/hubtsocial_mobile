@@ -15,20 +15,20 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:hive_ce_flutter/adapters.dart' as _i170;
 import 'package:hubtsocial_mobile/src/core/api/dio_client.dart' as _i292;
 import 'package:hubtsocial_mobile/src/core/injections/module.dart' as _i107;
-import 'package:hubtsocial_mobile/src/features/academic_result/academic_result_module.dart'
-    as _i534;
 import 'package:hubtsocial_mobile/src/features/academic_result/data/datasources/academic_result_remote_data_source.dart'
     as _i499;
 import 'package:hubtsocial_mobile/src/features/academic_result/data/repos/academic_result_repo_impl.dart'
     as _i830;
 import 'package:hubtsocial_mobile/src/features/academic_result/domain/repos/academic_result_repo.dart'
     as _i285;
+import 'package:hubtsocial_mobile/src/features/academic_result/domain/usecases/get_academic_result_chart_usecase.dart'
+    as _i20;
 import 'package:hubtsocial_mobile/src/features/academic_result/domain/usecases/get_academic_result_usecase.dart'
     as _i847;
-import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result_bloc.dart'
-    as _i919;
-import 'package:hubtsocial_mobile/src/features/academic_result/presentation/blocs/academic_result_chart/academic_result_chart_bloc.dart'
-    as _i668;
+import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_bloc.dart'
+    as _i302;
+import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result_chart/academic_result_chart_bloc.dart'
+    as _i529;
 import 'package:hubtsocial_mobile/src/features/auth/data/datasources/auth_remote_data_source.dart'
     as _i953;
 import 'package:hubtsocial_mobile/src/features/auth/data/repos/auth_repo_impl.dart'
@@ -153,7 +153,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final timetableModule = _$TimetableModule();
     final registerModule = _$RegisterModule();
-    final academicResultModule = _$AcademicResultModule();
     gh.factory<_i441.ReceiveChatCubit>(() => _i441.ReceiveChatCubit());
     gh.factory<_i1002.QuizQuestionBloc>(() => _i1002.QuizQuestionBloc());
     gh.singleton<_i536.TimetableNotificationService>(
@@ -163,8 +162,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => registerModule.firebaseMessaging);
     gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
     gh.lazySingleton<_i974.Logger>(() => registerModule.logger);
-    gh.lazySingleton<_i499.AcademicResultRemoteDataSource>(
-        () => academicResultModule.academicResultRemoteDataSource);
     gh.singleton<_i292.DioClient>(
         () => _i292.DioClient(gh<_i170.HiveInterface>()));
     gh.singleton<_i924.AuthNotification>(
@@ -181,9 +178,6 @@ extension GetItInjectableX on _i174.GetIt {
               messaging: gh<_i892.FirebaseMessaging>(),
               dioClient: gh<_i292.DioClient>(),
             ));
-    gh.lazySingleton<_i285.AcademicResultRepo>(() =>
-        _i285.AcademicResultRepoImpl(
-            gh<_i499.AcademicResultRemoteDataSource>()));
     gh.lazySingleton<_i745.ChatRemoteDataSource>(
         () => _i745.ChatRemoteDataSourceImpl(dioClient: gh<_i292.DioClient>()));
     gh.lazySingleton<_i250.QuizRemoteDataSource>(
@@ -196,9 +190,6 @@ extension GetItInjectableX on _i174.GetIt {
             dioClient: gh<_i292.DioClient>()));
     gh.lazySingleton<_i936.AuthRepo>(
         () => _i457.AuthRepoImpl(gh<_i953.AuthRemoteDataSource>()));
-    gh.lazySingleton<_i830.AcademicResultRepo>(() =>
-        _i830.AcademicResultRepoImpl(
-            gh<_i499.AcademicResultRemoteDataSource>()));
     gh.lazySingleton<_i806.TimetableRemoteDataSource>(
         () => _i806.TimetableRemoteDataSourceImpl(
               hiveAuth: gh<_i170.HiveInterface>(),
@@ -215,6 +206,9 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i129.QuizRepoImpl(gh<_i250.QuizRemoteDataSource>()));
     gh.lazySingleton<_i965.ChatRepo>(
         () => _i293.ChatRepoImpl(gh<_i745.ChatRemoteDataSource>()));
+    gh.lazySingleton<_i499.AcademicResultRemoteDataSource>(() =>
+        _i499.AcademicResultRemoteDataSourceImpl(
+            dioClient: gh<_i292.DioClient>()));
     gh.lazySingleton<_i35.FetchQuizUserCase>(
         () => _i35.FetchQuizUserCase(gh<_i13.QuizRepo>()));
     gh.lazySingleton<_i572.GetQuizInfoUserCase>(
@@ -227,10 +221,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i1023.QuizBloc(fetchQuiz: gh<_i35.FetchQuizUserCase>()));
     gh.factory<_i251.QuizInfoBloc>(
         () => _i251.QuizInfoBloc(getQuizInfo: gh<_i572.GetQuizInfoUserCase>()));
-    gh.lazySingleton<_i847.GetAcademicResultUseCase>(
-        () => _i847.GetAcademicResultUseCase(gh<_i285.AcademicResultRepo>()));
-    gh.factory<_i668.AcademicResultChartBloc>(
-        () => _i668.AcademicResultChartBloc(gh<_i285.AcademicResultRepo>()));
     gh.lazySingleton<_i346.ModuleRepo>(
         () => _i18.ModuleRepoImpl(gh<_i254.ModuleRemoteDataSource>()));
     gh.lazySingleton<_i1020.FetchChatUserCase>(
@@ -274,8 +264,9 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i477.InitUserUserCase(gh<_i1042.UserRepo>()));
     gh.lazySingleton<_i925.UpdateUserUserCase>(
         () => _i925.UpdateUserUserCase(gh<_i1042.UserRepo>()));
-    gh.factory<_i919.AcademicResultBloc>(() => _i919.AcademicResultBloc(
-        getAcademicResult: gh<_i847.GetAcademicResultUseCase>()));
+    gh.lazySingleton<_i285.AcademicResultRepo>(() =>
+        _i830.AcademicResultRepoImpl(
+            gh<_i499.AcademicResultRemoteDataSource>()));
     gh.factory<_i249.ModuleBloc>(
         () => _i249.ModuleBloc(getModule: gh<_i411.GetModuleUserCase>()));
     gh.factory<_i715.AuthBloc>(() => _i715.AuthBloc(
@@ -291,6 +282,10 @@ extension GetItInjectableX on _i174.GetIt {
           signOut: gh<_i488.SignOut>(),
           informationUserCase: gh<_i556.InformationUserCase>(),
         ));
+    gh.lazySingleton<_i847.GetAcademicResultUseCase>(
+        () => _i847.GetAcademicResultUseCase(gh<_i285.AcademicResultRepo>()));
+    gh.lazySingleton<_i20.GetAcademicResultChartUseCase>(() =>
+        _i20.GetAcademicResultChartUseCase(gh<_i285.AcademicResultRepo>()));
     gh.factory<_i285.GetRoomChatBloc>(() => _i285.GetRoomChatBloc(
           fetchRoomChat: gh<_i1063.FetchRoomChatUserCase>(),
           getRoomChat: gh<_i892.GetRoomMemberUserCase>(),
@@ -306,6 +301,11 @@ extension GetItInjectableX on _i174.GetIt {
         _i786.TimetableBloc(fetchTimetable: gh<_i753.InitTimetableUserCase>()));
     gh.factory<_i837.TimetableInfoBloc>(() => _i837.TimetableInfoBloc(
         fetchTimetableInfo: gh<_i475.InitTimetableInfoUserCase>()));
+    gh.factory<_i529.AcademicResultChartBloc>(() =>
+        _i529.AcademicResultChartBloc(
+            getAcademicResultChart: gh<_i20.GetAcademicResultChartUseCase>()));
+    gh.factory<_i302.AcademicResultBloc>(() => _i302.AcademicResultBloc(
+        getAcademicResult: gh<_i847.GetAcademicResultUseCase>()));
     return this;
   }
 }
@@ -313,5 +313,3 @@ extension GetItInjectableX on _i174.GetIt {
 class _$TimetableModule extends _i320.TimetableModule {}
 
 class _$RegisterModule extends _i107.RegisterModule {}
-
-class _$AcademicResultModule extends _i534.AcademicResultModule {}

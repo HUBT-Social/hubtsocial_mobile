@@ -47,14 +47,6 @@ class QuizRemoteDataSourceImpl implements QuizRemoteDataSource {
       final statusCode = response.statusCode ?? 400;
       final statusCodeStr = statusCode.toString();
 
-      if (statusCode == 401) {
-        logger.w('Unauthorized access to Quiz list');
-        throw const ServerException(
-          message: 'Your session has expired. Please login again.',
-          statusCode: '401',
-        );
-      }
-
       if (statusCode != 200) {
         logger.e(
           'Failed to fetch Quiz list. Status: $statusCode, Response: ${response.data}',
@@ -99,15 +91,6 @@ class QuizRemoteDataSourceImpl implements QuizRemoteDataSource {
       );
 
       final statusCode = response.statusCode ?? 400;
-      final statusCodeStr = statusCode.toString();
-
-      if (statusCode == 401) {
-        logger.w('Unauthorized access to Quiz details ');
-        throw const ServerException(
-          message: 'Your session has expired. Please login again.',
-          statusCode: '401',
-        );
-      }
 
       if (statusCode != 200) {
         logger.e(

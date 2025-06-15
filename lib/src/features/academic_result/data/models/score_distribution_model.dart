@@ -1,4 +1,4 @@
-class ScoreDistributionData {
+class ScoreDistributionModel {
   final int excellent;
   final int good;
   final int fair;
@@ -6,7 +6,7 @@ class ScoreDistributionData {
   final int belowAverage;
   final int fail;
 
-  ScoreDistributionData({
+  ScoreDistributionModel({
     required this.excellent,
     required this.good,
     required this.fair,
@@ -15,8 +15,8 @@ class ScoreDistributionData {
     required this.fail,
   });
 
-  factory ScoreDistributionData.fromJson(Map<String, dynamic> json) {
-    return ScoreDistributionData(
+  factory ScoreDistributionModel.fromJson(Map<String, dynamic> json) {
+    return ScoreDistributionModel(
       excellent: json['excellent'] as int,
       good: json['good'] as int,
       fair: json['fair'] as int,

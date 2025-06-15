@@ -64,14 +64,6 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
           },
         );
 
-        if (responseCheckVersion.statusCode == 401) {
-          logger.w('Unauthorized access while checking timetable version');
-          throw const ServerException(
-            message: 'Your session has expired. Please login again.',
-            statusCode: '401',
-          );
-        }
-
         if (responseCheckVersion.statusCode != 200) {
           logger.w(
             'Failed to check timetable version. Using cached data. Status: ${responseCheckVersion.statusCode}',
@@ -88,14 +80,6 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         final response = await _dioClient.get<Map<String, dynamic>>(
           EndPoint.timetable,
         );
-
-        if (response.statusCode == 401) {
-          logger.w('Unauthorized access while fetching timetable');
-          throw const ServerException(
-            message: 'Your session has expired. Please login again.',
-            statusCode: '401',
-          );
-        }
 
         if (response.statusCode != 200) {
           logger.e(
@@ -132,14 +116,6 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         final response = await _dioClient.get<Map<String, dynamic>>(
           EndPoint.timetable,
         );
-
-        if (response.statusCode == 401) {
-          logger.w('Unauthorized access while fetching timetable');
-          throw const ServerException(
-            message: 'Your session has expired. Please login again.',
-            statusCode: '401',
-          );
-        }
 
         if (response.statusCode != 200) {
           logger.e(
@@ -193,14 +169,6 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         EndPoint.timetableInfo,
         queryParameters: {"timetableId": timetableId},
       );
-
-      if (response.statusCode == 401) {
-        logger.w('Unauthorized access while fetching timetable info');
-        throw const ServerException(
-          message: 'Your session has expired. Please login again.',
-          statusCode: '401',
-        );
-      }
 
       if (response.statusCode == 404) {
         logger.w('Timetable not found. Id: $timetableId');

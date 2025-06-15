@@ -72,16 +72,12 @@ Future<void> initFirebase() async {
   FlutterError.onError = (errorDetails) {
     if (fatalError) {
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-    } else {
-      FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
     }
   };
 
   PlatformDispatcher.instance.onError = (error, stack) {
     if (fatalError) {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    } else {
-      FirebaseCrashlytics.instance.recordError(error, stack);
     }
     return true;
   };

@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
-import 'package:hubtsocial_mobile/src/features/academic_result/domain/models/score_distribution_data.dart';
-import 'package:hubtsocial_mobile/src/features/academic_result/presentation/blocs/academic_result_chart/academic_result_chart_bloc.dart';
-import 'package:hubtsocial_mobile/src/features/academic_result/presentation/blocs/academic_result_chart/academic_result_chart_event.dart';
-import 'package:hubtsocial_mobile/src/features/academic_result/presentation/blocs/academic_result_chart/academic_result_chart_state.dart';
-import 'package:hubtsocial_mobile/src/core/presentation/widget/loading_overlay.dart';
+import 'package:hubtsocial_mobile/src/features/academic_result/data/models/score_distribution_model.dart';
+import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result_chart/academic_result_chart_bloc.dart';
+
 import 'package:hubtsocial_mobile/src/core/injections/injections.dart';
 
 class AcademicResultChartScreen extends StatelessWidget {
@@ -15,8 +13,8 @@ class AcademicResultChartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<AcademicResultChartBloc>()
-        ..add(const AcademicResultChartEvent.load()),
+      create: (context) =>
+          getIt<AcademicResultChartBloc>()..add(GetAcademicResultChartEvent()),
       child: const _AcademicResultChartView(),
     );
   }
@@ -33,42 +31,44 @@ class _AcademicResultChartView extends StatelessWidget {
       ),
       body: BlocBuilder<AcademicResultChartBloc, AcademicResultChartState>(
         builder: (context, state) {
-          return LoadingOverlay(
-            loading: state.maybeMap(loading: (_) => true, orElse: () => false),
-            child: state.when(
-              initial: () => const SizedBox(),
-              loading: () => const SizedBox(),
-              loaded: (data) => _buildChart(context, data),
-              error: (message) => Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      message,
-                      style: context.textTheme.bodyLarge?.copyWith(
-                        color: context.colorScheme.error,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        context
-                            .read<AcademicResultChartBloc>()
-                            .add(const AcademicResultChartEvent.load());
-                      },
-                      child: const Text('Thử lại'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
+          return Container();
+
+          // return LoadingOverlay(
+          //   loading: state.maybeMap(loading: (_) => true, orElse: () => false),
+          //   child: state.when(
+          //     initial: () => const SizedBox(),
+          //     loading: () => const SizedBox(),
+          //     loaded: (data) => _buildChart(context, data),
+          //     error: (message) => Center(
+          //       child: Column(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           Text(
+          //             message,
+          //             style: context.textTheme.bodyLarge?.copyWith(
+          //               color: context.colorScheme.error,
+          //             ),
+          //           ),
+          //           const SizedBox(height: 16),
+          //           ElevatedButton(
+          //             onPressed: () {
+          //               context
+          //                   .read<AcademicResultChartBloc>()
+          //                   .add(const AcademicResultChartEvent.load());
+          //             },
+          //             child: const Text('Thử lại'),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // );
         },
       ),
     );
   }
 
-  Widget _buildChart(BuildContext context, ScoreDistributionData data) {
+  Widget _buildChart(BuildContext context, ScoreDistributionModel data) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -80,7 +80,7 @@ class _AcademicResultChartView extends StatelessWidget {
     );
   }
 
-  Widget _buildPieChart(BuildContext context, ScoreDistributionData data) {
+  Widget _buildPieChart(BuildContext context, ScoreDistributionModel data) {
     final totalSubjects = data.excellent +
         data.good +
         data.fair +

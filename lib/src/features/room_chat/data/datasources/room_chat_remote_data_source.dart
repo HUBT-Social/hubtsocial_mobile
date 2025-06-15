@@ -58,14 +58,6 @@ class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
       final statusCode = response.statusCode ?? 400;
       final statusCodeStr = statusCode.toString();
 
-      if (statusCode == 401) {
-        logger.w('Unauthorized access to room chat');
-        throw const ServerException(
-          message: 'Your session has expired. Please login again.',
-          statusCode: '401',
-        );
-      }
-
       if (statusCode != 200) {
         logger.e(
           'Failed to fetch room chat. Status: $statusCode, Response: ${response.data}',
@@ -126,15 +118,6 @@ class RoomChatRemoteDataSourceImpl implements RoomChatRemoteDataSource {
       );
 
       final statusCode = response.statusCode ?? 400;
-      final statusCodeStr = statusCode.toString();
-
-      if (statusCode == 401) {
-        logger.w('Unauthorized access to room members');
-        throw const ServerException(
-          message: 'Your session has expired. Please login again.',
-          statusCode: '401',
-        );
-      }
 
       if (statusCode != 200) {
         logger.e(

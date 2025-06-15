@@ -56,14 +56,6 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
         EndPoint.userGetUser,
       );
 
-      if (response.statusCode == 401) {
-        logger.w('Unauthorized access to user profile');
-        throw const ServerException(
-          message: 'Your session has expired. Please login again.',
-          statusCode: '401',
-        );
-      }
-
       if (response.statusCode != 200) {
         logger.e(
           'Failed to get user profile. Status: ${response.statusCode}, Response: ${response.data}',
@@ -295,14 +287,6 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
           'newPassword': newPassword,
         },
       );
-
-      if (response.statusCode == 401) {
-        logger.w('Unauthorized access while changing password');
-        throw const ServerException(
-          message: 'Your session has expired. Please login again.',
-          statusCode: '401',
-        );
-      }
 
       if (response.statusCode == 400) {
         logger.w('Invalid password provided');

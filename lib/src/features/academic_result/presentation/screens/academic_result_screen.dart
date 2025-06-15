@@ -4,12 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/injections/injections.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/data/models/subject_score_model.dart';
-import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result_bloc.dart';
-import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result_event.dart';
-import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result_state.dart';
+import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_bloc.dart';
+import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_event.dart';
+import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_state.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/widget/loading_overlay.dart';
-import 'package:hubtsocial_mobile/src/features/main_wrapper/presentation/widgets/main_app_bar.dart';
-import 'package:hubtsocial_mobile/src/features/academic_result/presentation/screens/academic_result_chart_screen.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 
 // Import for CustomAppBar and LoadingOverlay will be added after finding their definitions
@@ -24,59 +22,48 @@ class AcademicResultScreen extends StatefulWidget {
 }
 
 class _AcademicResultScreenState extends State<AcademicResultScreen> {
-  late AcademicResultBloc _bloc;
-
   @override
   void initState() {
     super.initState();
-    _bloc = getIt<AcademicResultBloc>();
-    _bloc.add(const GetAcademicResult());
+
+    context.read<AcademicResultBloc>().add(const GetAcademicResultEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AcademicResultBloc>(
-      create: (context) => _bloc,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Kết quả học tập'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new),
-            onPressed: () {
-              context.pop();
-            },
-          ),
-        ),
-        body: BlocConsumer<AcademicResultBloc, AcademicResultState>(
-          listener: (context, state) {
-            if (state is AcademicResultError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.failure.message)),
-              );
-            }
-          },
-          builder: (context, state) {
-            if (state is AcademicResultLoading) {
-              return const LoadingOverlay(loading: true, child: SizedBox());
-            } else if (state is AcademicResultLoaded) {
-              return SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildOverallResult(state),
-                    const SizedBox(height: 20),
-                    _buildScoreTable(state.subjectScores),
-                  ],
-                ),
-              );
-            } else if (state is AcademicResultError) {
-              return Center(child: Text('Error: ${state.failure.message}'));
-            } else {
-              return const Center(child: Text('Please fetch data'));
-            }
-          },
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Kết quả học tập'),
+      ),
+      body: BlocConsumer<AcademicResultBloc, AcademicResultState>(
+        listener: (context, state) {
+          if (state is AcademicResultError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.failure.message)),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is AcademicResultLoading) {
+            return const LoadingOverlay(loading: true, child: SizedBox());
+          } else if (state is AcademicResultLoaded) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildOverallResult(state),
+                  const SizedBox(height: 20),
+                  _buildScoreTable(state.subjectScores),
+                ],
+              ),
+            );
+          } else if (state is AcademicResultError) {
+            return Center(child: Text('Error: ${state.failure.message}'));
+          } else {
+            return const Center(child: Text('Please fetch data'));
+          }
+        },
       ),
     );
   }

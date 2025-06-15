@@ -7,6 +7,6 @@ abstract class AcademicResultEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetAcademicResult extends AcademicResultEvent {
-  const GetAcademicResult();
+class GetAcademicResultEvent extends AcademicResultEvent {
+  const GetAcademicResultEvent();
 }
