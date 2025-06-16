@@ -33,7 +33,9 @@ class UserRepoImpl implements UserRepo {
   @override
   ResultFuture<UserModel> getUserByUsername({required String userName}) async {
     try {
-      final result = await _remoteDataSource.initUserProfile();
+      final result = await _remoteDataSource.getUserByUsername(
+        userName: userName,
+      );
 
       return Right(result);
     } on ServerException catch (e) {

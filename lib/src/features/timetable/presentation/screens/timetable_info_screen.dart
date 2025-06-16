@@ -115,12 +115,14 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                                   spacing: 6.w,
                                   children: [
                                     Icon(
-                                      Icons.co_present,
+                                      Icons.token,
                                       color: context.colorScheme.primary,
                                       size: 24.r,
                                     ),
                                     Text(
-                                      "tran hueeehueee",
+                                      context.loc.credits(
+                                          state.timetableInfoModel.creditNum ??
+                                              0),
                                       style: context.textTheme.bodyLarge,
                                     ),
                                   ],
@@ -142,21 +144,6 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                                                   .colorScheme.onPrimary),
                                     ),
                                   ),
-                              ],
-                            ),
-                            Row(
-                              spacing: 6.w,
-                              children: [
-                                Icon(
-                                  Icons.token,
-                                  color: context.colorScheme.primary,
-                                  size: 24.r,
-                                ),
-                                Text(
-                                  context.loc.credits(
-                                      state.timetableInfoModel.creditNum ?? 0),
-                                  style: context.textTheme.bodyLarge,
-                                ),
                               ],
                             ),
                             Row(
@@ -327,7 +314,7 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
                               onTap: (index) {
                                 final teacherleMember = state
                                     .timetableInfoModel.teacherleMembers[index];
-                                AppRoute.profile.push(
+                                AppRoute.userProfileDetails.push(
                                   navigatorKey.currentContext!,
                                   queryParameters: {
                                     "userName": teacherleMember.userName,

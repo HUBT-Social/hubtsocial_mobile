@@ -84,14 +84,12 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                                 Text(
                                   userProfile.fullname,
                                   style: context.textTheme.headlineMedium,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
                                 ),
                                 SizedBox(height: 8.h),
                                 Padding(
                                   padding: EdgeInsets.only(left: 4.w),
                                   child: Text(
-                                    '@${userProfile.userName}',
+                                    userProfile.userName,
                                     style:
                                         context.textTheme.labelLarge?.copyWith(
                                       color:
