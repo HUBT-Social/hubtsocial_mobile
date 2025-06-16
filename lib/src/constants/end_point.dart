@@ -19,23 +19,23 @@ class EndPoint {
   static String get authRefreshToken => "$_auth/refresh-token";
   static String get authDeleteToken => "$_auth/delete-token";
 
-  static String get _user => "$apiUrl/user";
-  static String get userGetUser => _user;
-  static String get informationUser => "$_user/add-info-user";
-  static String get updateFcmToken => "$_user/update/fcm-token";
-  static String get updateAvatar => "$_user/update-avatar";
+  static String get user => "$apiUrl/user";
+  static String get userGetUser => user;
+  static String get informationUser => "$user/add-info-user";
+  static String get updateFcmToken => "$user/update/fcm-token";
+  static String get updateAvatar => "$user/update-avatar";
   static String get uptateName =>
-      "$_user/update/name"; // trong update name này có first name và lastName
-  static String get getScore => "$_user/get-score";
-  static String get module => "$_user/get-user-courese";
-  static String get getClassInfoScore => "$_user/get-class-info/score";
+      "$user/update/name"; // trong update name này có first name và lastName
+  static String get getScore => "$user/get-score";
+  static String get module => "$user/get-user-courese";
+  static String get getClassInfoScore => "$user/get-class-info/score";
 
   static String get _chat => "$apiUrl/chat";
   static String get chatView => "$_chat/load-rooms";
   static String get roomHistory => "$_chat/room/get-history";
   static String get roomInfo => "$_chat/room/info";
 
-  static String get _schooldata => "$_user/schooldata";
+  static String get _schooldata => "$user/schooldata";
   static String get checkVersion => "$_schooldata/check-version";
   static String get timetable => "$_schooldata/timetable";
   static String get timetableInfo => "$_schooldata/timetable-info";

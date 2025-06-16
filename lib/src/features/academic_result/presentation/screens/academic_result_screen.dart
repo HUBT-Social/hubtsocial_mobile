@@ -6,6 +6,7 @@ import 'package:hubtsocial_mobile/src/features/academic_result/data/models/subje
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_event.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_state.dart';
+import 'package:hubtsocial_mobile/src/features/academic_result/presentation/screens/academic_result_chart_screen.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 
 // Import for CustomAppBar and LoadingOverlay will be added after finding their definitions
@@ -89,8 +90,13 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
           children: [
             Row(
               children: [
-                Icon(Icons.emoji_events,
-                    color: context.colorScheme.onPrimary, size: 36.r),
+                Icon(
+                  Icons.emoji_events,
+                  color: Colors.amber, // hoặc Colors.yellow
+                  size: 36.r,
+                ),
+                //Icon(Icons.emoji_events,
+                //color: context.colorScheme.onPrimary, size: 36.r),
                 SizedBox(width: 8.w),
                 Text(
                   'Tổng hợp kết quả',
@@ -201,7 +207,8 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
       children: [
         InkWell(
           onTap: () {
-            AppRoute.classAnalysis.push(context);
+            AcademicResultChartUtils.showAcademicResultChartBottomSheet(
+                context);
           },
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 12.h),

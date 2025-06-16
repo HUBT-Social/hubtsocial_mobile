@@ -282,10 +282,10 @@ extension GetItInjectableX on _i174.GetIt {
           signOut: gh<_i488.SignOut>(),
           informationUserCase: gh<_i556.InformationUserCase>(),
         ));
-    gh.lazySingleton<_i847.GetAcademicResultUseCase>(
-        () => _i847.GetAcademicResultUseCase(gh<_i285.AcademicResultRepo>()));
     gh.lazySingleton<_i20.GetAcademicResultChartUseCase>(() =>
         _i20.GetAcademicResultChartUseCase(gh<_i285.AcademicResultRepo>()));
+    gh.lazySingleton<_i847.GetAcademicResultUseCase>(
+        () => _i847.GetAcademicResultUseCase(gh<_i285.AcademicResultRepo>()));
     gh.factory<_i285.GetRoomChatBloc>(() => _i285.GetRoomChatBloc(
           fetchRoomChat: gh<_i1063.FetchRoomChatUserCase>(),
           getRoomChat: gh<_i892.GetRoomMemberUserCase>(),

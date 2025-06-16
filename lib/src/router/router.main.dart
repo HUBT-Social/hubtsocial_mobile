@@ -143,19 +143,6 @@ StatefulShellRoute _mainRoute() {
                           FadeTransition(opacity: animation, child: child),
                 ),
               ),
-              GoRoute(
-                path: AppRoute.classAnalysis.path,
-                pageBuilder: (context, state) => CustomTransitionPage(
-                  key: state.pageKey,
-                  child: BlocProvider(
-                    create: (_) => getIt<AcademicResultChartBloc>(),
-                    child: const AcademicResultChartScreen(),
-                  ),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(opacity: animation, child: child),
-                ),
-              ),
             ],
           ),
         ],
@@ -259,6 +246,20 @@ StatefulShellRoute _mainRoute() {
                           (context, animation, secondaryAnimation, child) =>
                               FadeTransition(opacity: animation, child: child),
                     ),
+                  ),
+                  GoRoute(
+                    path: 'user-profile-details',
+                    pageBuilder: (context, state) {
+                      final userName =
+                          state.uri.queryParameters['userName'] as String;
+                      return CustomTransitionPage(
+                        key: state.pageKey,
+                        child: OtherUserProfileScreen(userName: userName),
+                        transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) =>
+                            FadeTransition(opacity: animation, child: child),
+                      );
+                    },
                   ),
                   GoRoute(
                     path: 'fullScreen',

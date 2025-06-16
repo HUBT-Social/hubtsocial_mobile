@@ -33,11 +33,9 @@ dependency_overrides:
 dependencies:
   flutter:
     sdk: flutter
- 
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  qr_flutter: ^4.1.0
+  barcode_widget: ^2.0.4
   google_fonts: ^6.2.1
   flutter_launcher_icons: ^0.14.1
   flutter_screenutil: ^5.9.3

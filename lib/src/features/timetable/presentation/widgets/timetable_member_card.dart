@@ -31,7 +31,7 @@ class _TimetableMemberCardState extends State<TimetableMemberCard> {
           if (context.read<UserProvider>().isTeacher)
             SlidableAction(
               onPressed: (context) {
-                AppRoute.profile.push(
+                AppRoute.userProfileDetails.push(
                   context,
                   queryParameters: {
                     "userName": widget.memberModel.userName,
@@ -83,7 +83,7 @@ class _TimetableMemberCardState extends State<TimetableMemberCard> {
       ),
       child: InkWell(
         onTap: () {
-          AppRoute.profile.push(
+          AppRoute.userProfileDetails.push(
             context,
             queryParameters: {
               "userName": widget.memberModel.userName,
