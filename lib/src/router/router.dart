@@ -106,15 +106,37 @@ final GoRouter router = GoRouter(
               routes: const []),
         ]),
 
-    // GoRoute(
-    //   path: AppRoute.academicResult.path,
-    //   builder: (context, state) => const AcademicResultScreen(),
-    //   routes: [
-    //     GoRoute(
-    //       path: 'class-analysis',
-    //       builder: (context, state) => const ClassAnalysisScreen(),
-    //     ),
-    //   ],
-    // ),
+    GoRoute(
+      path: AppRoute.userProfileDetails.path,
+      pageBuilder: (context, state) {
+        final userName = state.uri.queryParameters['userName'] as String;
+        return CustomTransitionPage(
+          key: state.pageKey,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => getIt<ProfileBloc>(),
+              ),
+            ],
+            child: OtherUserProfileScreen(userName: userName),
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              FadeTransition(opacity: animation, child: child),
+        );
+      },
+    ),
+
+    GoRoute(
+      path: AppRoute.teacherevalua.path,
+      builder: (context, state) {
+        final teacher = state.extra as Teacher;
+        return TeacherEvaluationScreen(teacher: teacher);
+      },
+    ),
+
+    GoRoute(
+      path: AppRoute.teacherCode.path,
+      builder: (context, state) => TeacherCodeInputScreen(),
+    ),
   ],
 );

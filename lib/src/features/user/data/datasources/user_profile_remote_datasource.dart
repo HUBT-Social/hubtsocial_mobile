@@ -13,6 +13,10 @@ abstract class UserProfileRemoteDataSource {
 
   Future<UserModel> initUserProfile();
 
+  Future<UserModel> getUserByUsername({
+    required String userName,
+  });
+
   Future<void> updateUserName({
     // required String userId,
     required String firstName,
@@ -54,6 +58,52 @@ class UserProfileRemoteDataSourceImpl extends UserProfileRemoteDataSource {
 
       final response = await _dioClient.get<Map<String, dynamic>>(
         EndPoint.userGetUser,
+      );
+
+      if (response.statusCode != 200) {
+        logger.e(
+          'Failed to get user profile. Status: ${response.statusCode}, Response: ${response.data}',
+        );
+        throw ServerException(
+          message: response.data?['message']?.toString() ??
+              'Failed to get user profile. Please try again.',
+          statusCode: response.statusCode?.toString() ?? '400',
+        );
+      }
+
+      if (response.data == null) {
+        logger.e('Empty response received for user profile');
+        throw const ServerException(
+          message: 'Invalid user profile data received from server.',
+          statusCode: '400',
+        );
+      }
+
+      final userProfile = UserModel.fromMap(response.data!);
+      logger.i('Successfully fetched user profile');
+      return userProfile;
+    } on ServerException {
+      rethrow;
+    } catch (e, s) {
+      logger.e('Unexpected error while getting user profile: $e');
+      logger.d('Stack trace: $s');
+      throw const ServerException(
+        message: 'Failed to get user profile. Please try again later.',
+        statusCode: '500',
+      );
+    }
+  }
+
+  @override
+  Future<UserModel> getUserByUsername({required String userName}) async {
+    try {
+      logger.i('Get user profile');
+
+      final response = await _dioClient.get<Map<String, dynamic>>(
+        EndPoint.userGetUser,
+        queryParameters: {
+          'userName': userName,
+        },
       );
 
       if (response.statusCode != 200) {

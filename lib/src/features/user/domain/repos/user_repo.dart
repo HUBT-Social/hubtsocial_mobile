@@ -1,12 +1,17 @@
 import 'dart:io';
 
 import 'package:hubtsocial_mobile/src/core/utils/typedefs.dart';
+import 'package:hubtsocial_mobile/src/features/user/data/models/user_model.dart';
 import 'package:hubtsocial_mobile/src/features/user/domain/entities/user.dart';
 
 abstract class UserRepo {
   const UserRepo();
 
   ResultFuture<User> initUserProfile();
+
+  ResultFuture<UserModel> getUserByUsername({
+    required String userName,
+  });
 
   ResultFuture<void> updateUserName({
     // required String userId,

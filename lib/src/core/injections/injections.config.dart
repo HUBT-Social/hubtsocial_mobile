@@ -77,6 +77,8 @@ import 'package:hubtsocial_mobile/src/features/home/module/presentation/bloc/mod
     as _i249;
 import 'package:hubtsocial_mobile/src/features/notification/auth/auth_notification.dart'
     as _i924;
+import 'package:hubtsocial_mobile/src/features/profile/presentation/bloc/profile_bloc/profile_bloc.dart'
+    as _i62;
 import 'package:hubtsocial_mobile/src/features/quiz/data/datasources/quiz_remote_data_source.dart'
     as _i250;
 import 'package:hubtsocial_mobile/src/features/quiz/data/repos/quiz_repo_impl.dart'
@@ -131,6 +133,8 @@ import 'package:hubtsocial_mobile/src/features/user/domain/repos/user_repo.dart'
     as _i1042;
 import 'package:hubtsocial_mobile/src/features/user/domain/usecases/change_password_usercase.dart'
     as _i789;
+import 'package:hubtsocial_mobile/src/features/user/domain/usecases/get_user_by_username_usercase.dart'
+    as _i385;
 import 'package:hubtsocial_mobile/src/features/user/domain/usecases/init_user_usercase.dart'
     as _i477;
 import 'package:hubtsocial_mobile/src/features/user/domain/usecases/update_user_usercase.dart'
@@ -264,6 +268,12 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i477.InitUserUserCase(gh<_i1042.UserRepo>()));
     gh.lazySingleton<_i925.UpdateUserUserCase>(
         () => _i925.UpdateUserUserCase(gh<_i1042.UserRepo>()));
+    gh.lazySingleton<_i385.GetUserByUsernameUserCase>(
+        () => _i385.GetUserByUsernameUserCase(gh<_i1042.UserRepo>()));
+    gh.factory<_i62.ProfileBloc>(() => _i62.ProfileBloc(
+          getUserByUsername: gh<_i385.GetUserByUsernameUserCase>(),
+          logger: gh<_i974.Logger>(),
+        ));
     gh.lazySingleton<_i285.AcademicResultRepo>(() =>
         _i830.AcademicResultRepoImpl(
             gh<_i499.AcademicResultRemoteDataSource>()));

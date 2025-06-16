@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:hubtsocial_mobile/src/features/profile/data/models/user_profile_model.dart';
+part of 'profile_bloc.dart';
 
 abstract class ProfileState extends Equatable {
   const ProfileState();
@@ -13,7 +12,7 @@ class ProfileInitial extends ProfileState {}
 class ProfileLoading extends ProfileState {}
 
 class ProfileLoaded extends ProfileState {
-  final UserProfileModel userProfile;
+  final UserModel userProfile;
 
   const ProfileLoaded(this.userProfile);
 

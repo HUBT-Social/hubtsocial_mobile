@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_bloc.dart';
-import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result_chart/academic_result_chart_bloc.dart';
-import 'package:hubtsocial_mobile/src/features/academic_result/presentation/screens/academic_result_chart_screen.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/screens/academic_result_screen.dart';
-import 'package:hubtsocial_mobile/src/features/profile/screens/other_user_profile_screen.dart';
+import 'package:hubtsocial_mobile/src/features/profile/presentation/bloc/profile_bloc/profile_bloc.dart';
+import 'package:hubtsocial_mobile/src/features/profile/presentation/screens/other_user_profile_screen.dart';
 
 import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/chat_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/receive_chat/receive_chat_cubit.dart';
@@ -14,9 +13,9 @@ import 'package:hubtsocial_mobile/src/features/home/module/presentation/bloc/mod
 import 'package:hubtsocial_mobile/src/features/home/module/presentation/screens/module_screen.dart';
 import 'package:hubtsocial_mobile/src/features/home/presentation/screens/teacher_screen.dart';
 import 'package:hubtsocial_mobile/src/features/home/presentation/screens/teachercode_screen.dart';
-import 'package:hubtsocial_mobile/src/features/profile/screens/edit_profile_screens.dart';
-import 'package:hubtsocial_mobile/src/features/profile/screens/full_screens.dart';
-import 'package:hubtsocial_mobile/src/features/profile/screens/profile_screen.dart';
+import 'package:hubtsocial_mobile/src/features/profile/presentation/screens/edit_profile_screens.dart';
+import 'package:hubtsocial_mobile/src/features/profile/presentation/screens/full_screens.dart';
+import 'package:hubtsocial_mobile/src/features/profile/presentation/screens/profile_screen.dart';
 import 'package:hubtsocial_mobile/src/features/quiz/presentation/bloc/quiz_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/quiz/presentation/bloc/quiz_question_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/quiz/presentation/screens/quiz_info_screen.dart';

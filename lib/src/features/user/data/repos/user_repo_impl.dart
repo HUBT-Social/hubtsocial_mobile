@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:hubtsocial_mobile/src/features/user/data/models/user_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/api/errors/exceptions.dart';
@@ -20,6 +21,17 @@ class UserRepoImpl implements UserRepo {
 
   @override
   ResultFuture<User> initUserProfile() async {
+    try {
+      final result = await _remoteDataSource.initUserProfile();
+
+      return Right(result);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    }
+  }
+
+  @override
+  ResultFuture<UserModel> getUserByUsername({required String userName}) async {
     try {
       final result = await _remoteDataSource.initUserProfile();
 

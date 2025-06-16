@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/theme/utils/change_theme_bottom_sheet.dart';
 import 'package:hubtsocial_mobile/src/router/router.import.dart';
-import 'package:provider/provider.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
-import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/profile_action_buttons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hubtsocial_mobile/src/features/profile/domain/bloc/profile_bloc/profile_bloc.dart';
-import 'package:hubtsocial_mobile/src/features/profile/domain/bloc/profile_bloc/profile_event.dart';
-import 'package:hubtsocial_mobile/src/features/profile/domain/bloc/profile_bloc/profile_state.dart';
-import 'package:hubtsocial_mobile/src/features/profile/data/repositories/profile_repository_impl.dart';
-import 'package:dio/dio.dart';
+import 'package:hubtsocial_mobile/src/features/profile/presentation/bloc/profile_bloc/profile_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:barcode_widget/barcode_widget.dart';
-import 'package:hubtsocial_mobile/src/core/injections/injections.dart';
-
-import 'about_profile_screens.dart';
 
 class OtherUserProfileScreen extends StatefulWidget {
   final String? userName;
@@ -30,23 +20,18 @@ class OtherUserProfileScreen extends StatefulWidget {
 
 class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
   // late TabController _tabController;
-  late ProfileBloc _profileBloc;
 
   @override
   void initState() {
+    context.read<ProfileBloc>().add(GetUserProfile(widget.userName ?? ""));
+
     super.initState();
     // _tabController = TabController(length: 3, vsync: this);
-    _profileBloc =
-        ProfileBloc(profileRepository: ProfileRepositoryImpl(getIt<Dio>()));
-    if (widget.userName != null) {
-      _profileBloc.add(GetUserProfile(widget.userName!));
-    }
   }
 
   @override
   void dispose() {
     // _tabController.dispose();
-    _profileBloc.close();
     super.dispose();
   }
 
@@ -61,14 +46,12 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           textAlign: TextAlign.center,
           style: context.textTheme.headlineMedium?.copyWith(
             color: context.colorScheme.onSurface,
-            fontWeight: FontWeight.w700,
           ),
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.w),
+        padding: EdgeInsets.all(16.r),
         child: BlocBuilder<ProfileBloc, ProfileState>(
-          bloc: _profileBloc,
           builder: (context, state) {
             if (state is ProfileLoading) {
               return const Center(child: CircularProgressIndicator());
@@ -79,15 +62,15 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding: EdgeInsets.all(16.w),
+                      padding: EdgeInsets.all(16.r),
                       decoration: BoxDecoration(
                         color: context.colorScheme.surface,
-                        borderRadius: BorderRadius.circular(16.r),
+                        borderRadius: BorderRadius.circular(12.r),
                         boxShadow: [
                           BoxShadow(
-                            color: context.colorScheme.shadow.withOpacity(0.1),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
+                            color: context.colorScheme.shadow.withOpacity(0.3),
+                            blurRadius: 10.r,
+                            offset: Offset(0, 4.h),
                           ),
                         ],
                       ),
@@ -99,15 +82,8 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  userProfile.fullName ?? userProfile.userName,
-                                  style: context.textTheme.headlineMedium
-                                      ?.copyWith(
-                                    fontSize: (context.textTheme.headlineMedium
-                                                ?.fontSize ??
-                                            16) -
-                                        4,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  userProfile.fullname,
+                                  style: context.textTheme.headlineMedium,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 ),
@@ -120,7 +96,6 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                                         context.textTheme.labelLarge?.copyWith(
                                       color:
                                           context.colorScheme.onSurfaceVariant,
-                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                 ),
@@ -129,7 +104,6 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                                   userProfile.email ?? 'No email available',
                                   style: context.textTheme.labelLarge?.copyWith(
                                     color: context.colorScheme.onSurface,
-                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ],
@@ -138,7 +112,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                           SizedBox(width: 16.w),
                           GestureDetector(
                             onTap: () {
-                              if (userProfile.avatarUrl?.isNotEmpty ?? false) {
+                              if (userProfile.avatarUrl.isNotEmpty) {
                                 navigatorKey.currentContext?.push(
                                   AppRoute.fullProfile.path,
                                   extra: {
@@ -153,16 +127,14 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                               child: CircleAvatar(
                                 radius: 48.r,
                                 backgroundImage: (userProfile
-                                            .avatarUrl?.isNotEmpty ??
-                                        false)
-                                    ? NetworkImage(userProfile.avatarUrl!)
+                                        .avatarUrl.isNotEmpty)
+                                    ? NetworkImage(userProfile.avatarUrl)
                                     : const AssetImage(
                                             'assets/images/default_avatar.png')
                                         as ImageProvider,
                                 onBackgroundImageError:
-                                    (exception, stackTrace) =>
-                                        const CircleAvatar(
-                                  radius: 42,
+                                    (exception, stackTrace) => CircleAvatar(
+                                  radius: 42.r,
                                   backgroundImage: AssetImage(
                                       'assets/images/default_avatar.png'),
                                 ),
@@ -177,23 +149,23 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                       child: Column(
                         children: [
                           Container(
-                            padding: EdgeInsets.all(16.w),
+                            padding: EdgeInsets.all(16.r),
                             decoration: BoxDecoration(
                               color: context.colorScheme.surface,
-                              borderRadius: BorderRadius.circular(16.r),
+                              borderRadius: BorderRadius.circular(12.r),
                               boxShadow: [
                                 BoxShadow(
                                   color: context.colorScheme.shadow
-                                      .withOpacity(0.1),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
+                                      .withOpacity(0.3),
+                                  blurRadius: 10.r,
+                                  offset: Offset(0, 4.h),
                                 ),
                               ],
                             ),
                             child: QrImageView(
                               data: userProfile.userName,
                               version: QrVersions.auto,
-                              size: 280.w,
+                              size: 280.r,
                               backgroundColor: context.colorScheme.surface,
                               eyeStyle: QrEyeStyle(
                                 eyeShape: QrEyeShape.square,
@@ -207,16 +179,16 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
                           ),
                           SizedBox(height: 24.h),
                           Container(
-                            padding: EdgeInsets.all(16.w),
+                            padding: EdgeInsets.all(16.r),
                             decoration: BoxDecoration(
                               color: context.colorScheme.surface,
-                              borderRadius: BorderRadius.circular(16.r),
+                              borderRadius: BorderRadius.circular(12.r),
                               boxShadow: [
                                 BoxShadow(
                                   color: context.colorScheme.shadow
-                                      .withOpacity(0.1),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
+                                      .withOpacity(0.3),
+                                  blurRadius: 10.r,
+                                  offset: Offset(0, 4.h),
                                 ),
                               ],
                             ),
@@ -254,11 +226,5 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
       onTap: () => ThemeUtils.showThemeBottomSheet(
           navigatorKey.currentContext ?? context),
     );
-  }
-
-  void getUserProfile() {
-    if (widget.userName != null) {
-      _profileBloc.add(GetUserProfile(widget.userName!));
-    }
   }
 }

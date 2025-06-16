@@ -248,20 +248,6 @@ StatefulShellRoute _mainRoute() {
                     ),
                   ),
                   GoRoute(
-                    path: 'user-profile-details',
-                    pageBuilder: (context, state) {
-                      final userName =
-                          state.uri.queryParameters['userName'] as String;
-                      return CustomTransitionPage(
-                        key: state.pageKey,
-                        child: OtherUserProfileScreen(userName: userName),
-                        transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) =>
-                            FadeTransition(opacity: animation, child: child),
-                      );
-                    },
-                  ),
-                  GoRoute(
                     path: 'fullScreen',
                     pageBuilder: (context, state) {
                       final extra = state.extra as Map<String, dynamic>?;
@@ -293,27 +279,6 @@ StatefulShellRoute _mainRoute() {
                 ),
               ),
             ],
-          ),
-        ],
-      ),
-      StatefulShellBranch(
-        routes: [
-          GoRoute(
-            path: AppRoute.teacherevalua.path,
-            builder: (context, state) {
-              final teacher = state.extra as Teacher;
-              return TeacherEvaluationScreen(teacher: teacher);
-            },
-          ),
-        ],
-      ),
-
-      /// Brach Teacher Evaluation
-      StatefulShellBranch(
-        routes: [
-          GoRoute(
-            path: AppRoute.teacherCode.path,
-            builder: (context, state) => TeacherCodeInputScreen(),
           ),
         ],
       ),

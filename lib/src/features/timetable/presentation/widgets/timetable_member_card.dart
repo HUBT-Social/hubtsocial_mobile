@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hubtsocial_mobile/src/core/app/providers/user_provider.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
+import 'package:hubtsocial_mobile/src/router/router.import.dart';
 
 import '../../../../core/presentation/widget/url_image.dart';
 import '../../data/models/timetable_info_member_model.dart';
@@ -32,7 +33,7 @@ class _TimetableMemberCardState extends State<TimetableMemberCard> {
             SlidableAction(
               onPressed: (context) {
                 AppRoute.userProfileDetails.push(
-                  context,
+                  navigatorKey.currentContext!,
                   queryParameters: {
                     "userName": widget.memberModel.userName,
                   },
