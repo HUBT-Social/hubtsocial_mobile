@@ -65,6 +65,10 @@ import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/chat_bloc.
     as _i359;
 import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/receive_chat/receive_chat_cubit.dart'
     as _i441;
+import 'package:hubtsocial_mobile/src/features/home/module/data/datasources/student_list_remote_data_source.dart'
+    as _i312;
+import 'package:hubtsocial_mobile/src/features/home/module/data/repos/student_list_repository.dart'
+    as _i887;
 import 'package:hubtsocial_mobile/src/features/home/module/data/datasources/module_remote_data_source.dart'
     as _i254;
 import 'package:hubtsocial_mobile/src/features/home/module/data/repos/module_repo_impl.dart'
@@ -75,6 +79,8 @@ import 'package:hubtsocial_mobile/src/features/home/module/domain/usercases/get_
     as _i411;
 import 'package:hubtsocial_mobile/src/features/home/module/presentation/bloc/module_bloc.dart'
     as _i249;
+import 'package:hubtsocial_mobile/src/features/home/presentation/bloc/student_list/student_list_bloc.dart'
+    as _i992;
 import 'package:hubtsocial_mobile/src/features/notification/auth/auth_notification.dart'
     as _i924;
 import 'package:hubtsocial_mobile/src/features/quiz/data/datasources/quiz_remote_data_source.dart'
@@ -160,8 +166,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i170.HiveInterface>(() => registerModule.hive);
     gh.lazySingleton<_i892.FirebaseMessaging>(
         () => registerModule.firebaseMessaging);
-    gh.lazySingleton<_i361.Dio>(() => registerModule.dio());
     gh.lazySingleton<_i974.Logger>(() => registerModule.logger);
+    gh.lazySingleton<_i361.Dio>(() => registerModule.dio());
     gh.singleton<_i292.DioClient>(
         () => _i292.DioClient(gh<_i170.HiveInterface>()));
     gh.singleton<_i924.AuthNotification>(
@@ -180,6 +186,9 @@ extension GetItInjectableX on _i174.GetIt {
             ));
     gh.lazySingleton<_i745.ChatRemoteDataSource>(
         () => _i745.ChatRemoteDataSourceImpl(dioClient: gh<_i292.DioClient>()));
+    gh.lazySingleton<_i312.StudentListRemoteDataSource>(() =>
+        _i312.StudentListRemoteDataSourceImpl(
+            dioClient: gh<_i292.DioClient>()));
     gh.lazySingleton<_i250.QuizRemoteDataSource>(
         () => _i250.QuizRemoteDataSourceImpl(
               messaging: gh<_i892.FirebaseMessaging>(),
@@ -221,6 +230,9 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i1023.QuizBloc(fetchQuiz: gh<_i35.FetchQuizUserCase>()));
     gh.factory<_i251.QuizInfoBloc>(
         () => _i251.QuizInfoBloc(getQuizInfo: gh<_i572.GetQuizInfoUserCase>()));
+    gh.lazySingleton<_i887.StudentListRepository>(() =>
+        _i887.StudentListRepositoryImpl(
+            gh<_i312.StudentListRemoteDataSource>()));
     gh.lazySingleton<_i346.ModuleRepo>(
         () => _i18.ModuleRepoImpl(gh<_i254.ModuleRemoteDataSource>()));
     gh.lazySingleton<_i1020.FetchChatUserCase>(
@@ -282,6 +294,8 @@ extension GetItInjectableX on _i174.GetIt {
           signOut: gh<_i488.SignOut>(),
           informationUserCase: gh<_i556.InformationUserCase>(),
         ));
+    gh.factory<_i992.StudentListBloc>(
+        () => _i992.StudentListBloc(gh<_i887.StudentListRepository>()));
     gh.lazySingleton<_i20.GetAcademicResultChartUseCase>(() =>
         _i20.GetAcademicResultChartUseCase(gh<_i285.AcademicResultRepo>()));
     gh.lazySingleton<_i847.GetAcademicResultUseCase>(

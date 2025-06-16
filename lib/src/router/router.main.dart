@@ -153,6 +153,22 @@ StatefulShellRoute _mainRoute() {
                           FadeTransition(opacity: animation, child: child),
                 ),
               ),
+              GoRoute(
+                path: AppRoute.studentList.path,
+                pageBuilder: (context, state) => CustomTransitionPage(
+                  key: state.pageKey,
+                  child: BlocProvider(
+                    create: (_) => getIt<StudentListBloc>(),
+                    child: StudentListScreen(
+                      initialClassName:
+                          state.uri.queryParameters['className'] ?? '',
+                    ),
+                  ),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(opacity: animation, child: child),
+                ),
+              ),
             ],
           ),
         ],

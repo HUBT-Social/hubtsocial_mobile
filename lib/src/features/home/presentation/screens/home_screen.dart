@@ -39,7 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
         AppRoute.academicResult.push(context);
       }),
       _FunctionItem(
-          context.loc.student_list, Icons.people, Colors.pink.shade200, () {}),
+          context.loc.student_list, Icons.people, Colors.pink.shade200, () {
+        AppRoute.studentList.push(context);
+      }),
       _FunctionItem(
           context.loc.pay_tuition, Icons.attach_money, Colors.green.shade400,
           () {

@@ -15,7 +15,7 @@ abstract class RegisterModule {
   FirebaseMessaging get firebaseMessaging => FirebaseMessaging.instance;
 
   @LazySingleton()
-  Dio get dio {
+  Dio dio() {
     final dio = Dio();
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
