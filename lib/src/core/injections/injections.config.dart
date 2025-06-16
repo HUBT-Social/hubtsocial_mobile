@@ -9,7 +9,6 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:dio/dio.dart' as _i361;
 import 'package:firebase_messaging/firebase_messaging.dart' as _i892;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:hive_ce_flutter/adapters.dart' as _i170;
@@ -67,14 +66,20 @@ import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/receive_ch
     as _i441;
 import 'package:hubtsocial_mobile/src/features/home/module/data/datasources/module_remote_data_source.dart'
     as _i254;
+import 'package:hubtsocial_mobile/src/features/home/module/data/datasources/student_list_remote_data_source.dart'
+    as _i611;
 import 'package:hubtsocial_mobile/src/features/home/module/data/repos/module_repo_impl.dart'
     as _i18;
+import 'package:hubtsocial_mobile/src/features/home/module/data/repos/student_list_repository.dart'
+    as _i548;
 import 'package:hubtsocial_mobile/src/features/home/module/domain/repos/module_repo.dart'
     as _i346;
 import 'package:hubtsocial_mobile/src/features/home/module/domain/usercases/get_module_usercase.dart'
     as _i411;
 import 'package:hubtsocial_mobile/src/features/home/module/presentation/bloc/module_bloc.dart'
     as _i249;
+import 'package:hubtsocial_mobile/src/features/home/presentation/bloc/student_list/student_list_bloc.dart'
+    as _i992;
 import 'package:hubtsocial_mobile/src/features/notification/auth/auth_notification.dart'
     as _i924;
 import 'package:hubtsocial_mobile/src/features/profile/presentation/bloc/profile_bloc/profile_bloc.dart'
@@ -164,7 +169,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i170.HiveInterface>(() => registerModule.hive);
     gh.lazySingleton<_i892.FirebaseMessaging>(
         () => registerModule.firebaseMessaging);
-    gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
     gh.lazySingleton<_i974.Logger>(() => registerModule.logger);
     gh.singleton<_i292.DioClient>(
         () => _i292.DioClient(gh<_i170.HiveInterface>()));
@@ -208,6 +212,9 @@ extension GetItInjectableX on _i174.GetIt {
             ));
     gh.lazySingleton<_i13.QuizRepo>(
         () => _i129.QuizRepoImpl(gh<_i250.QuizRemoteDataSource>()));
+    gh.lazySingleton<_i611.StudentListRemoteDataSource>(() =>
+        _i611.StudentListRemoteDataSourceImpl(
+            dioClient: gh<_i292.DioClient>()));
     gh.lazySingleton<_i965.ChatRepo>(
         () => _i293.ChatRepoImpl(gh<_i745.ChatRemoteDataSource>()));
     gh.lazySingleton<_i499.AcademicResultRemoteDataSource>(() =>
@@ -217,6 +224,9 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i35.FetchQuizUserCase(gh<_i13.QuizRepo>()));
     gh.lazySingleton<_i572.GetQuizInfoUserCase>(
         () => _i572.GetQuizInfoUserCase(gh<_i13.QuizRepo>()));
+    gh.lazySingleton<_i548.StudentListRepository>(() =>
+        _i548.StudentListRepositoryImpl(
+            gh<_i611.StudentListRemoteDataSource>()));
     gh.lazySingleton<_i1042.UserRepo>(
         () => _i674.UserRepoImpl(gh<_i592.UserProfileRemoteDataSource>()));
     gh.lazySingleton<_i113.TimetableRepo>(
@@ -231,6 +241,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i1020.FetchChatUserCase(gh<_i965.ChatRepo>()));
     gh.factory<_i359.ChatBloc>(
         () => _i359.ChatBloc(fetchChat: gh<_i1020.FetchChatUserCase>()));
+    gh.factory<_i992.StudentListBloc>(
+        () => _i992.StudentListBloc(gh<_i548.StudentListRepository>()));
     gh.lazySingleton<_i411.ForgotPasswordUserCase>(
         () => _i411.ForgotPasswordUserCase(gh<_i936.AuthRepo>()));
     gh.lazySingleton<_i556.InformationUserCase>(
@@ -264,12 +276,12 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i892.GetRoomMemberUserCase(gh<_i133.RoomChatRepo>()));
     gh.lazySingleton<_i789.ChangePasswordUserCase>(
         () => _i789.ChangePasswordUserCase(gh<_i1042.UserRepo>()));
+    gh.lazySingleton<_i385.GetUserByUsernameUserCase>(
+        () => _i385.GetUserByUsernameUserCase(gh<_i1042.UserRepo>()));
     gh.lazySingleton<_i477.InitUserUserCase>(
         () => _i477.InitUserUserCase(gh<_i1042.UserRepo>()));
     gh.lazySingleton<_i925.UpdateUserUserCase>(
         () => _i925.UpdateUserUserCase(gh<_i1042.UserRepo>()));
-    gh.lazySingleton<_i385.GetUserByUsernameUserCase>(
-        () => _i385.GetUserByUsernameUserCase(gh<_i1042.UserRepo>()));
     gh.factory<_i62.ProfileBloc>(() => _i62.ProfileBloc(
           getUserByUsername: gh<_i385.GetUserByUsernameUserCase>(),
           logger: gh<_i974.Logger>(),

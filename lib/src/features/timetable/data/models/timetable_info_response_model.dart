@@ -82,8 +82,8 @@ class TimetableInfoResponseModel extends Equatable {
               .map((x) => TimetableInfoMemberModel.fromJson(x))),
       id: json["id"],
       className: json["className"],
-      startTime: _parseUtcToVnTime(json["startTime"]),
-      endTime: _parseUtcToVnTime(json["endTime"]),
+      startTime: DateTime.tryParse(json["startTime"]),
+      endTime: DateTime.tryParse(json["endTime"]),
       subject: json["subject"],
       room: json["room"],
       zoomId: json["zoomID"],
@@ -132,15 +132,4 @@ class TimetableInfoResponseModel extends Equatable {
         courseId,
         type,
       ];
-}
-
-DateTime? _parseUtcToVnTime(String? timeStr) {
-  if (timeStr == null || timeStr.isEmpty) return null;
-
-  try {
-    final utc = DateTime.parse(timeStr).toUtc(); 
-    return utc.add(const Duration(hours: 7));    
-  } catch (_) {
-    return null;
-  }
 }

@@ -29,7 +29,7 @@ class EndPoint {
   static String get getScore => "$user/get-score";
   static String get module => "$user/get-user-courese";
   static String get getClassInfoScore => "$user/get-class-info/score";
-
+  static String get getClassInfo => "$user/get-class-info";
   static String get _chat => "$apiUrl/chat";
   static String get chatView => "$_chat/load-rooms";
   static String get roomHistory => "$_chat/room/get-history";
