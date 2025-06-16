@@ -160,24 +160,19 @@ class _TimetableCardState extends State<TimetableCard> {
                                       Icons.timer_rounded,
                                       color: context.colorScheme.secondary,
                                     ),
-                                    Text(
+                                   Text(
                                       DateFormat.jm().format(
-                                          widget.reformTimetable.startTime ??
-                                              DateTime.now()),
+                                        (widget.reformTimetable.startTime ?? DateTime.now()).toLocal(),
+                                      ),
                                       style: context.textTheme.bodyMedium,
                                     ),
-                                    if (widget.reformTimetable.endTime != null)
-                                      Text(
-                                        "-",
-                                        style: context.textTheme.bodyMedium,
+                                    Text(
+                                      DateFormat.jm().format(
+                                        (widget.reformTimetable.endTime ?? DateTime.now()).toLocal(),
                                       ),
-                                    if (widget.reformTimetable.endTime != null)
-                                      Text(
-                                        DateFormat.jm().format(
-                                            widget.reformTimetable.endTime ??
-                                                DateTime.now()),
-                                        style: context.textTheme.bodyMedium,
-                                      ),
+                                      style: context.textTheme.bodyMedium,
+                                    ),
+                                   
                                   ],
                                 ),
                               ),
