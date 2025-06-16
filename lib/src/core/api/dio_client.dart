@@ -272,6 +272,7 @@ class DioClient {
       );
 
       if (response.statusCode == 200) {
+        logger.i('Token refreshed successfully');
         final newToken = UserTokenModel.fromMap(response.data!);
         await _saveToken(newToken);
         _refreshTokenCompleter!.complete(newToken.accessToken);

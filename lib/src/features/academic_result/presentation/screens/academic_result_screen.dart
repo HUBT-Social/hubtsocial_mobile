@@ -7,6 +7,7 @@ import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_event.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_state.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/screens/academic_result_chart_screen.dart';
+import 'package:hubtsocial_mobile/src/router/router.import.dart';
 
 // Import for CustomAppBar and LoadingOverlay will be added after finding their definitions
 // import 'package:hubtsocial_mobile/src/core/common/widgets/app_bar.dart';
@@ -207,7 +208,7 @@ class _AcademicResultScreenState extends State<AcademicResultScreen> {
         InkWell(
           onTap: () {
             AcademicResultChartUtils.showAcademicResultChartBottomSheet(
-                context);
+                navigatorKey.currentContext!);
           },
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 12.h),

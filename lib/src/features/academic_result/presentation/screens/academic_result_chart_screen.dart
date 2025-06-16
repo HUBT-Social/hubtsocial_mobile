@@ -23,7 +23,7 @@ final class AcademicResultChartUtils {
       ),
       builder: (context) {
         return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.9,
+          // height: ,
           child: BlocProvider(
             create: (context) => getIt<AcademicResultChartBloc>()
               ..add(GetAcademicResultChartEvent()),
