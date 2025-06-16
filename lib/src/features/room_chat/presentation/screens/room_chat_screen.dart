@@ -219,22 +219,23 @@ class _RoomChatScreenState extends State<RoomChatScreen> {
                   ],
                 ),
                 actions: [
-                  IconButton(
-                    tooltip: 'Toggle TypingIndicator',
-                    onPressed: _showHideTypingIndicator,
-                    icon: Icon(
-                      Icons.keyboard,
-                      color: context.colorScheme.onPrimary,
-                    ),
-                  ),
-                  IconButton(
-                    tooltip: 'Room Info',
-                    onPressed: _showRoomInfo,
-                    icon: Icon(
-                      Icons.info_outline_rounded,
-                      color: context.colorScheme.onPrimary,
-                    ),
-                  ),
+                  // IconButton(
+                  //   tooltip: 'Toggle TypingIndicator',
+                  //   onPressed: _showHideTypingIndicator,
+                  //   icon: Icon(
+                  //     Icons.keyboard,
+                  //     color: context.colorScheme.onPrimary,
+                  //   ),
+                  // ),
+                  // IconButton(
+                  //   tooltip: 'Room Info',
+                  //   onPressed: _showRoomInfo,
+                  //   icon: Icon(
+                  //     Icons.info_outline_rounded,
+                  //     color: context.colorScheme.onPrimary,
+                  //   ),
+                  // ),
+
                   // IconButton(
                   //   tooltip: 'Simulate Message receive',
                   //   onPressed: receiveMessage,

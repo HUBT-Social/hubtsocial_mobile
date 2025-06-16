@@ -15,22 +15,6 @@ abstract class RegisterModule {
   FirebaseMessaging get firebaseMessaging => FirebaseMessaging.instance;
 
   @LazySingleton()
-  Dio get dio {
-    final dio = Dio();
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        var tokenBox = Hive.box(LocalStorageKey.token);
-        if (tokenBox.containsKey(LocalStorageKey.userToken)) {
-          UserToken token = tokenBox.get(LocalStorageKey.userToken);
-          options.headers['Authorization'] = 'Bearer ${token.accessToken}';
-        }
-        return handler.next(options);
-      },
-    ));
-    return dio;
-  }
-
-  @LazySingleton()
   Logger get logger => Logger();
 }
 
