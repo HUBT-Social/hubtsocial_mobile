@@ -164,7 +164,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i170.HiveInterface>(() => registerModule.hive);
     gh.lazySingleton<_i892.FirebaseMessaging>(
         () => registerModule.firebaseMessaging);
-    gh.lazySingleton<_i361.Dio>(() => registerModule.dio());
+    gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
     gh.lazySingleton<_i974.Logger>(() => registerModule.logger);
     gh.singleton<_i292.DioClient>(
         () => _i292.DioClient(gh<_i170.HiveInterface>()));
