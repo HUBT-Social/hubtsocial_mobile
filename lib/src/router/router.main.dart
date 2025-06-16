@@ -153,6 +153,17 @@ StatefulShellRoute _mainRoute() {
                           FadeTransition(opacity: animation, child: child),
                 ),
               ),
+              GoRoute(
+                path: AppRoute.teacherEvaluation.path,
+                builder: (context, state) {
+                  final teacher = state.extra as Teacher;
+                  return TeacherEvaluationScreen(teacher: teacher);
+                },
+              ),
+              GoRoute(
+                path: AppRoute.teacherCode.path,
+                builder: (context, state) => TeacherCodeInputScreen(),
+              ),
             ],
           ),
         ],

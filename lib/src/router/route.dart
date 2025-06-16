@@ -57,8 +57,8 @@ enum AppRoute {
   fullProfile('/menu/profile/fullScreen'),
   editProfile('/menu/profile/edit'),
   userProfileDetails('/user-profile-details'),
-  teacherevalua('/menu/teacherevaluation'),
-  teacherCode('/menu/teacherCode'),
+  teacherEvaluation('/teacher-evaluation'),
+  teacherCode('/teacherCode'),
   notificationSettings('/menu/notification-settings'),
   // menu
 

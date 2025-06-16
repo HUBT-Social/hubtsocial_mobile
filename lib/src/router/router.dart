@@ -125,18 +125,5 @@ final GoRouter router = GoRouter(
         );
       },
     ),
-
-    GoRoute(
-      path: AppRoute.teacherevalua.path,
-      builder: (context, state) {
-        final teacher = state.extra as Teacher;
-        return TeacherEvaluationScreen(teacher: teacher);
-      },
-    ),
-
-    GoRoute(
-      path: AppRoute.teacherCode.path,
-      builder: (context, state) => TeacherCodeInputScreen(),
-    ),
   ],
 );
