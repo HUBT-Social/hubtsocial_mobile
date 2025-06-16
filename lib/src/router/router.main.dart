@@ -168,6 +168,8 @@ StatefulShellRoute _mainRoute() {
                       (context, animation, secondaryAnimation, child) =>
                           FadeTransition(opacity: animation, child: child),
                 ),
+              ),
+              GoRoute(
                 path: AppRoute.teacherEvaluation.path,
                 builder: (context, state) {
                   final teacher = state.extra as Teacher;
