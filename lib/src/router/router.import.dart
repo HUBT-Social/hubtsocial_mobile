@@ -7,6 +7,7 @@ import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/screens/academic_result_chart_screen.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/screens/academic_result_screen.dart';
 import 'package:hubtsocial_mobile/src/features/profile/screens/other_user_profile_screen.dart';
+import 'package:hubtsocial_mobile/src/features/home/presentation/screens/tuition_payment_screen.dart';
 
 import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/chat_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/chat/presentation/bloc/receive_chat/receive_chat_cubit.dart';

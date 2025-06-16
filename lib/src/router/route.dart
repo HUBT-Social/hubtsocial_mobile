@@ -31,6 +31,7 @@ enum AppRoute {
   module('/module'),
   academicResult('/academic-result'),
   classAnalysis('/academic-result/class-analysis'),
+  tuitionPayment('/tuition-payment'),
   // home
 
   // chat
