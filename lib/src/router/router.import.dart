@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/bloc/academic_result/academic_result_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/academic_result/presentation/screens/academic_result_screen.dart';
+import 'package:hubtsocial_mobile/src/features/profile/screens/other_user_profile_screen.dart';
+import 'package:hubtsocial_mobile/src/features/home/presentation/screens/tuition_payment_screen.dart';
 import 'package:hubtsocial_mobile/src/features/profile/presentation/bloc/profile_bloc/profile_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/profile/presentation/screens/other_user_profile_screen.dart';
 
