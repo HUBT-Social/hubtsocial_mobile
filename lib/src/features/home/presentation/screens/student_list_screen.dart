@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/main_wrapper/presentation/widgets/main_app_bar.dart';
 import 'package:hubtsocial_mobile/src/features/home/presentation/bloc/student_list/student_list_bloc.dart';
-import 'package:hubtsocial_mobile/src/features/home/module/data/models/student_model.dart';
+import 'package:hubtsocial_mobile/src/features/home/module/data/models/studen_list_model.dart';
 import 'package:shimmer/shimmer.dart';
 
 class StudentListScreen extends StatefulWidget {
@@ -162,7 +162,7 @@ class _StudentListScreenState extends State<StudentListScreen> {
 }
 
 class StudentListItem extends StatelessWidget {
-  final Student student;
+  final StudentListModel student;
 
   const StudentListItem({super.key, required this.student});
 

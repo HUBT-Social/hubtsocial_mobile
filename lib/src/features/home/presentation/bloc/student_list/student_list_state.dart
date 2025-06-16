@@ -12,7 +12,7 @@ class StudentListInitial extends StudentListState {}
 class StudentListLoading extends StudentListState {}
 
 class StudentListLoaded extends StudentListState {
-  final List<Student> students;
+  final List<StudentListModel> students;
 
   const StudentListLoaded(this.students);
 

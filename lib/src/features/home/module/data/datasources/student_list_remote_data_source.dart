@@ -2,14 +2,14 @@ import 'package:injectable/injectable.dart';
 import 'package:hubtsocial_mobile/src/constants/end_point.dart';
 import 'package:hubtsocial_mobile/src/core/api/dio_client.dart';
 import 'package:hubtsocial_mobile/src/core/api/errors/exceptions.dart';
-import 'package:hubtsocial_mobile/src/features/home/module/data/models/student_model.dart';
+import 'package:hubtsocial_mobile/src/features/home/module/data/models/studen_list_model.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'package:dio/dio.dart';
 
 abstract class StudentListRemoteDataSource {
   const StudentListRemoteDataSource();
 
-  Future<List<Student>> getStudentList(String className);
+  Future<List<StudentListModel>> getStudentList(String className);
 }
 
 @LazySingleton(as: StudentListRemoteDataSource)
@@ -20,7 +20,7 @@ class StudentListRemoteDataSourceImpl implements StudentListRemoteDataSource {
   final DioClient _dioClient;
 
   @override
-  Future<List<Student>> getStudentList(String className) async {
+  Future<List<StudentListModel>> getStudentList(String className) async {
     try {
       logger.i('Fetching student list for class: $className');
       final response = await _dioClient.get<List<dynamic>>(
@@ -30,7 +30,7 @@ class StudentListRemoteDataSourceImpl implements StudentListRemoteDataSource {
 
       if (response.statusCode == 200 && response.data != null) {
         return response.data!
-            .map((e) => Student.fromJson(e as Map<String, dynamic>))
+            .map((e) => StudentListModel.fromJson(e as Map<String, dynamic>))
             .toList();
       } else {
         logger.e(

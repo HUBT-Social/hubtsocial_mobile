@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hubtsocial_mobile/src/features/home/module/data/models/student_model.dart';
+import 'package:hubtsocial_mobile/src/features/home/module/data/models/studen_list_model.dart';
 import 'package:hubtsocial_mobile/src/features/home/module/data/repos/student_list_repository.dart';
 import 'package:injectable/injectable.dart';
 
