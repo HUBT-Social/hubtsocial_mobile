@@ -38,8 +38,8 @@ class DioClient {
     return Dio(
       BaseOptions(
         baseUrl: EndPoint.apiUrl,
-        connectTimeout: const Duration(seconds: 600),
-        receiveTimeout: const Duration(seconds: 600),
+        connectTimeout: const Duration(minutes: 15),
+        receiveTimeout: const Duration(minutes: 15),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -264,6 +264,8 @@ class DioClient {
         EndPoint.authRefreshToken,
         data: {"refreshToken": token.refreshToken},
         options: Options(
+          sendTimeout: const Duration(minutes: 15),
+          receiveTimeout: const Duration(minutes: 15),
           headers: {
             'Authorization': 'Bearer ${token.accessToken}',
             'User-Agent': deviceId,

@@ -13,7 +13,7 @@ class TimetableResponseModel extends HiveObject {
   final String versionKey;
   final DateTime starttime;
   final DateTime endtime;
-  final List<ReformTimetable> reformTimetables;
+  late final List<ReformTimetable> reformTimetables;
 
   TimetableResponseModel copyWith({
     required String versionKey,
