@@ -49,8 +49,18 @@ class _TimetableInfoScreenState extends State<TimetableInfoScreen> {
           if (state is TimetableInfoError) {
             return SafeArea(
               child: Center(
-                child:
-                    Text(state.message, style: context.textTheme.titleMedium),
+                child: CustomScrollView(slivers: [
+                  SliverAppBar(
+                    backgroundColor:
+                        context.colorScheme.surfaceContainerHighest,
+                    title: Text(context.loc.timetable),
+                    automaticallyImplyLeading: true,
+                  ),
+                  SliverToBoxAdapter(
+                    child: Text(state.message,
+                        style: context.textTheme.titleMedium),
+                  )
+                ]),
               ),
             );
           }
