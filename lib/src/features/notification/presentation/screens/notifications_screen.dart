@@ -74,6 +74,7 @@ class _NotificationsState extends State<NotificationsScreen> {
         notification.data?['type']?.toString().toLowerCase() ??
         '';
 
+    // Check if it's a system notification type
     if ([
       LocalStorageKey.learning_alerts,
       LocalStorageKey.academic_warning,
@@ -99,6 +100,7 @@ class _NotificationsState extends State<NotificationsScreen> {
       return;
     }
 
+    // For other notification types, check if they have data
     if (notification.data != null) {
       switch (type) {
         case LocalStorageKey.chat:
@@ -132,8 +134,24 @@ class _NotificationsState extends State<NotificationsScreen> {
           break;
 
         default:
-          router.go(AppRoute.notifications.path);
+          // For any other type, show detail screen
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  NotificationDetailScreen(notification: notification),
+            ),
+          );
       }
+    } else {
+      // If no data, show detail screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              NotificationDetailScreen(notification: notification),
+        ),
+      );
     }
   }
 

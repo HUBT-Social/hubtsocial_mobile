@@ -41,9 +41,6 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
     try {
       logger.i('Initializing timetable');
 
-      // Initialize local notifications
-      await _notificationService.scheduleNotificationsFromHive();
-
       if (!Hive.isBoxOpen(LocalStorageKey.timeTable)) {
         await Hive.openBox<TimetableResponseModel>(LocalStorageKey.timeTable);
       }
@@ -106,9 +103,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         await timetableBox.put(
             LocalStorageKey.timeTable, timetableResponseModel);
 
-        // Schedule notifications with new data
-        await _notificationService.scheduleNotificationsFromHive();
-        logger.i('Successfully updated timetable and scheduled notifications');
+        logger.i('Successfully updated timetable');
 
         return timetableResponseModel;
       } else {
@@ -141,9 +136,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         await timetableBox.put(
             LocalStorageKey.timeTable, timetableResponseModel);
 
-        // Schedule notifications with new data
-        await _notificationService.scheduleNotificationsFromHive();
-        logger.i('Successfully fetched timetable and scheduled notifications');
+        logger.i('Successfully fetched timetable');
 
         return timetableResponseModel;
       }
