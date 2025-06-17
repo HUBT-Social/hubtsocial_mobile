@@ -42,7 +42,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
       logger.i('Initializing timetable');
 
       // Initialize local notifications
-      await _notificationService.scheduleNotificationsFromHive();
+      // await _notificationService.scheduleNotificationsFromHive();
 
       if (!Hive.isBoxOpen(LocalStorageKey.timeTable)) {
         await Hive.openBox<TimetableResponseModel>(LocalStorageKey.timeTable);
@@ -100,17 +100,31 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
           );
         }
 
+        oldDataTimetableResponseModel.delete();
+
         final timetableResponseModel =
             TimetableResponseModel.fromMap(response.data!);
-        oldDataTimetableResponseModel.delete();
+
+        final sortReformTimetables = timetableResponseModel.reformTimetables
+            .where((element) => element.startTime != null)
+            .toList()
+          ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
+
+        final sortedTimetableResponseModel = timetableResponseModel.copyWith(
+          versionKey: timetableResponseModel.versionKey,
+          starttime: timetableResponseModel.starttime,
+          endtime: timetableResponseModel.endtime,
+          reformTimetables: sortReformTimetables,
+        );
+
         await timetableBox.put(
-            LocalStorageKey.timeTable, timetableResponseModel);
+            LocalStorageKey.timeTable, sortedTimetableResponseModel);
 
         // Schedule notifications with new data
         await _notificationService.scheduleNotificationsFromHive();
         logger.i('Successfully updated timetable and scheduled notifications');
 
-        return timetableResponseModel;
+        return sortedTimetableResponseModel;
       } else {
         logger.i('No cached timetable found. Fetching new data');
         final response = await _dioClient.get<Map<String, dynamic>>(
@@ -138,14 +152,27 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
 
         final timetableResponseModel =
             TimetableResponseModel.fromMap(response.data!);
+
+        final sortReformTimetables = timetableResponseModel.reformTimetables
+            .where((element) => element.startTime != null)
+            .toList()
+          ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
+
+        final sortedTimetableResponseModel = timetableResponseModel.copyWith(
+          versionKey: timetableResponseModel.versionKey,
+          starttime: timetableResponseModel.starttime,
+          endtime: timetableResponseModel.endtime,
+          reformTimetables: sortReformTimetables,
+        );
+
         await timetableBox.put(
-            LocalStorageKey.timeTable, timetableResponseModel);
+            LocalStorageKey.timeTable, sortedTimetableResponseModel);
 
         // Schedule notifications with new data
         await _notificationService.scheduleNotificationsFromHive();
         logger.i('Successfully fetched timetable and scheduled notifications');
 
-        return timetableResponseModel;
+        return sortedTimetableResponseModel;
       }
     } on ServerException {
       rethrow;
@@ -165,10 +192,19 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
     try {
       logger.i('Fetching timetable info for id: $timetableId');
 
-      final response = await _dioClient.get(
+      final response = await _dioClient.get<Map<String, dynamic>>(
         EndPoint.timetableInfo,
         queryParameters: {"timetableId": timetableId},
       );
+
+      if (response.statusCode == 404) {
+        logger.w('Timetable not found. Id: $timetableId');
+        throw const ServerException(
+          message:
+              'Timetable not found. It may have been deleted or you no longer have access.',
+          statusCode: '404',
+        );
+      }
 
       if (response.statusCode != 200) {
         logger.e(

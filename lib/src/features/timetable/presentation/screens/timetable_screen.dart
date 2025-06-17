@@ -232,7 +232,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
                   valueListenable: _selectedEvents,
                   builder: (context, value, _) {
                     return ListView.builder(
-                      padding: EdgeInsets.only(bottom: 24.h),
+                      padding: EdgeInsets.only(bottom: 100.h),
                       physics: const BouncingScrollPhysics(),
                       itemCount: value.length,
                       itemBuilder: (context, index) {
