@@ -16,7 +16,7 @@ class _NotificationSettingsScreenState
   // Map to store blocked notification types
   final Map<String, bool> _blockedTypes = {
     'chat': false,
-    'timetable': false,
+    'schedule': false,
     'broadcast': false,
     'maintenance': false,
     'academic_warning': false,
@@ -148,7 +148,7 @@ class _NotificationSettingsScreenState
     switch (type) {
       case 'chat':
         return context.loc.blockChatNotifications;
-      case 'timetable':
+      case 'schedule':
         return context.loc.blockTimetableNotifications;
       case 'broadcast':
         return context.loc.blockBroadcastNotifications;

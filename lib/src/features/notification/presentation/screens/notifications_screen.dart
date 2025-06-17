@@ -81,6 +81,14 @@ class _NotificationsState extends State<NotificationsScreen> {
       LocalStorageKey.exam,
       LocalStorageKey.maintenance
     ].contains(type)) {
+      // Mark as read before navigating
+      if (!notification.isRead) {
+        notification.isRead = true;
+        // Save to Hive box
+        final box = await Hive.openBox<NotificationModel>('notifications');
+        await box.put(notification.key, notification);
+        setState(() {}); // Update UI
+      }
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -114,7 +122,13 @@ class _NotificationsState extends State<NotificationsScreen> {
 
         case LocalStorageKey.schedule:
         case LocalStorageKey.timeTable:
-          router.go('/timetable');
+          final classId = notification.data!['classId']?.toString();
+          if (classId != null) {
+            router
+                .pushReplacement('${AppRoute.timetable.path}?classId=$classId');
+          } else {
+            router.pushReplacement(AppRoute.timetable.path);
+          }
           break;
 
         default:
@@ -296,50 +310,28 @@ class _NotificationsState extends State<NotificationsScreen> {
       }
 
       // Secondary sort (if read status is the same):
-      // Prioritize non-timetable notifications over timetable (scheduled) notifications
+      // Sort by time, with timetable notifications using their start time
+      DateTime timeA = DateTime.parse(a.time);
+      DateTime timeB = DateTime.parse(b.time);
+
+      // If both are timetable notifications, use their start times
       bool isTimetableA = a.type == LocalStorageKey.schedule ||
           a.type == LocalStorageKey.timeTable;
       bool isTimetableB = b.type == LocalStorageKey.schedule ||
           b.type == LocalStorageKey.timeTable;
 
-      // If one is timetable and the other is not, put non-timetable first
-      if (isTimetableA && !isTimetableB) {
-        return 1; // b (non-timetable) comes before a (timetable)
-      }
-      if (!isTimetableA && isTimetableB) {
-        return -1; // a (non-timetable) comes before b (timetable)
+      if (isTimetableA && isTimetableB) {
+        DateTime startTimeA = a.data != null && a.data!.containsKey('startTime')
+            ? DateTime.tryParse(a.data!['startTime']) ?? timeA
+            : timeA;
+        DateTime startTimeB = b.data != null && b.data!.containsKey('startTime')
+            ? DateTime.tryParse(b.data!['startTime']) ?? timeB
+            : timeB;
+        return startTimeB.compareTo(startTimeA); // Most recent first
       }
 
-      // Tertiary sort (if read status and type category are the same):
-      // Sort by time
-      if (!isTimetableA && !isTimetableB) {
-        // Both are non-timetable: Sort by creation/receive time descending (most recent first)
-        DateTime timeA = DateTime.parse(a.time);
-        DateTime timeB = DateTime.parse(b.time);
-        return timeB.compareTo(timeA);
-      } else {
-        // Both are timetable/schedule: Sort by scheduled start time ascending (earliest class first)
-        DateTime? startTimeA =
-            a.data != null && a.data!.containsKey('startTime')
-                ? DateTime.tryParse(a.data!['startTime'])
-                : null;
-        DateTime? startTimeB =
-            b.data != null && b.data!.containsKey('startTime')
-                ? DateTime.tryParse(b.data!['startTime'])
-                : null;
-
-        // Handle null startTimes gracefully (e.g., put them at the end or compare by creation time)
-        if (startTimeA == null && startTimeB == null) {
-          // If both startTimes are null, fall back to sorting by creation time descending
-          DateTime timeA = DateTime.parse(a.time);
-          DateTime timeB = DateTime.parse(b.time);
-          return timeB.compareTo(timeA);
-        }
-        if (startTimeA == null) return 1; // Null A goes after non-null B
-        if (startTimeB == null) return -1; // Non-null A goes before null B
-
-        return startTimeA.compareTo(startTimeB);
-      }
+      // For non-timetable or mixed notifications, use regular time
+      return timeB.compareTo(timeA); // Most recent first
     });
 
     return filteredList;

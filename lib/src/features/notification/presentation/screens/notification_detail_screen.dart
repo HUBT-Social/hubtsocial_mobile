@@ -1,16 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 import 'notification_icon.dart';
 
-class NotificationDetailScreen extends StatelessWidget {
+class NotificationDetailScreen extends StatefulWidget {
   final NotificationModel notification;
 
   const NotificationDetailScreen({super.key, required this.notification});
 
   @override
+  State<NotificationDetailScreen> createState() =>
+      _NotificationDetailScreenState();
+}
+
+class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _markAsRead();
+  }
+
+  Future<void> _markAsRead() async {
+    if (!widget.notification.isRead) {
+      widget.notification.isRead = true;
+      final box = await Hive.openBox<NotificationModel>('notifications');
+      await box.put(widget.notification.key, widget.notification);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final type = notification.type?.toLowerCase() ??
-        notification.data?['type']?.toString().toLowerCase() ??
+    final type = widget.notification.type?.toLowerCase() ??
+        widget.notification.data?['type']?.toString().toLowerCase() ??
         '';
     String title = 'Chi tiết thông báo';
 
@@ -33,11 +54,11 @@ class NotificationDetailScreen extends StatelessWidget {
         break;
     }
 
-    final avatarUrl = notification.data?['avatarUrl'];
-    final imageUrl = notification.data?['imageUrl'];
+    final avatarUrl = widget.notification.data?['avatarUrl'];
+    final imageUrl = widget.notification.data?['imageUrl'];
     // Avatar lớn phía trên
     Widget mainImageWidget = Center(
-      child: NotificationIcon(notification: notification, size: 100),
+      child: NotificationIcon(notification: widget.notification, size: 100),
     );
 
     return Scaffold(
@@ -64,14 +85,15 @@ class NotificationDetailScreen extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    NotificationIcon(notification: notification, size: 60),
+                    NotificationIcon(
+                        notification: widget.notification, size: 60),
                     const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            notification.title ?? '',
+                            widget.notification.title ?? '',
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -80,7 +102,7 @@ class NotificationDetailScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            _formatTime(notification.time, context),
+                            _formatTime(widget.notification.time, context),
                             style: TextStyle(
                               fontSize: 13,
                               color: Colors.grey[600],
@@ -114,7 +136,7 @@ class NotificationDetailScreen extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  notification.body ?? '',
+                  widget.notification.body ?? '',
                   style: const TextStyle(
                     fontSize: 15,
                     color: Colors.black87,
