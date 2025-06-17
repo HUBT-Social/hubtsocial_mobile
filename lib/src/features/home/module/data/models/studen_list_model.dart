@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:hubtsocial_mobile/src/features/user/data/gender.dart';
 
 class StudentListModel extends Equatable {
   StudentListModel({
@@ -9,14 +10,14 @@ class StudentListModel extends Equatable {
     required this.fullName,
   });
 
-  final int? gender;
+  final Gender? gender;
   final DateTime? birthDay;
   final String avatarUrl;
   final String userName;
   final String fullName;
 
   StudentListModel copyWith({
-    int? gender,
+    Gender? gender,
     DateTime? birthDay,
     String? avatarUrl,
     String? userName,
@@ -33,7 +34,7 @@ class StudentListModel extends Equatable {
 
   factory StudentListModel.fromJson(Map<String, dynamic> json) {
     return StudentListModel(
-      gender: json["gender"],
+      gender: Gender.values[json["gender"]],
       birthDay: DateTime.tryParse(json["birthDay"] ?? ""),
       avatarUrl: json["avatarUrl"],
       userName: json["userName"],

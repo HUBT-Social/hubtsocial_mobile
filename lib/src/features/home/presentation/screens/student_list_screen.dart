@@ -6,6 +6,8 @@ import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/features/main_wrapper/presentation/widgets/main_app_bar.dart';
 import 'package:hubtsocial_mobile/src/features/home/presentation/bloc/student_list/student_list_bloc.dart';
 import 'package:hubtsocial_mobile/src/features/home/module/data/models/studen_list_model.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
+import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:shimmer/shimmer.dart';
 
 class StudentListScreen extends StatefulWidget {
@@ -28,6 +30,8 @@ class _StudentListScreenState extends State<StudentListScreen> {
       context
           .read<StudentListBloc>()
           .add(GetStudentListEvent(widget.initialClassName));
+    } else {
+      context.read<StudentListBloc>().add(GetStudentListEvent(""));
     }
   }
 
@@ -61,12 +65,12 @@ class _StudentListScreenState extends State<StudentListScreen> {
         ],
         body: Column(
           children: [
+            SizedBox(height: 12.h),
             Container(
-              height: 60.h,
-              margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 0),
+              margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
               decoration: BoxDecoration(
-                color: context.colorScheme.surfaceTint,
+                color: context.colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: Row(
@@ -76,15 +80,16 @@ class _StudentListScreenState extends State<StudentListScreen> {
                       controller: _classController,
                       decoration: InputDecoration(
                         hintText: 'Nhập mã lớp (ví dụ: TH27.33)',
-                        hintStyle: context.textTheme.bodyLarge?.copyWith(
-                          color: context.colorScheme.onPrimary.withOpacity(0.7),
+                        hintStyle: context.textTheme.bodySmall?.copyWith(
+                          color: context.colorScheme.onSurfaceVariant
+                              .withAlpha(192),
                         ),
                         border: InputBorder.none,
                         isDense: true,
                         contentPadding: EdgeInsets.zero,
                       ),
-                      style: context.textTheme.bodyLarge?.copyWith(
-                        color: context.colorScheme.onPrimary,
+                      style: context.textTheme.bodySmall?.copyWith(
+                        color: context.colorScheme.onSurfaceVariant,
                       ),
                       onSubmitted: (value) {
                         if (value.trim().isNotEmpty) {
@@ -172,50 +177,51 @@ class StudentListItem extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius:
-                  BorderRadius.circular(20.r), // Adjust for desired roundness
-              child: CachedNetworkImage(
-                imageUrl: student.avatarUrl,
-                placeholder: (context, url) =>
-                    const CircleAvatar(child: Icon(Icons.person)),
-                errorWidget: (context, url, error) =>
-                    const CircleAvatar(child: Icon(Icons.error)),
-                width: 40.r,
-                height: 40.r,
-                fit: BoxFit.cover,
+      child: InkWell(
+        onTap: () {
+          AppRoute.userProfileDetails
+              .push(navigatorKey.currentContext!, queryParameters: {
+            'userName': student.userName,
+          });
+        },
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius:
+                    BorderRadius.circular(20.r), // Adjust for desired roundness
+                child: CachedNetworkImage(
+                  imageUrl: student.avatarUrl,
+                  placeholder: (context, url) =>
+                      const CircleAvatar(child: Icon(Icons.person)),
+                  errorWidget: (context, url, error) =>
+                      const CircleAvatar(child: Icon(Icons.error)),
+                  width: 40.r,
+                  height: 40.r,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            SizedBox(width: 10.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    student.fullName,
-                    style: context.textTheme.bodyLarge
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    student.userName,
-                    style: context.textTheme.bodyMedium
-                        ?.copyWith(color: context.colorScheme.onSurfaceVariant),
-                  ),
-                ],
+              SizedBox(width: 10.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      student.fullName,
+                      style: context.textTheme.bodyLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      student.userName,
+                      style: context.textTheme.bodyMedium?.copyWith(
+                          color: context.colorScheme.onSurfaceVariant),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.more_horiz),
-              onPressed: () {
-                context.showSnackBarMessage(
-                    'Chi tiết sinh viên ${student.fullName}');
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
