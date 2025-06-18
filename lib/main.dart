@@ -16,6 +16,7 @@ import 'package:hubtsocial_mobile/src/core/app/my_app.dart';
 import 'package:hubtsocial_mobile/src/constants/environment.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/core/notification/NotificationService.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 import 'src/core/injections/injections.dart';
 import 'src/core/logger/logger.dart';
@@ -29,6 +30,7 @@ class NavigationService {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  tz.initializeTimeZones();
   GoRouter.optionURLReflectsImperativeAPIs = true;
 
   await Environment.initialize();

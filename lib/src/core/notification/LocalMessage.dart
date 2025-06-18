@@ -3,11 +3,12 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
+import 'dart:io';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  'high_importance_channel',
-  'High Importance Notifications',
-  description: 'This channel is used for important notifications.',
+  'timetable_channel',
+  'Thông báo lịch học',
+  description: 'Kênh thông báo cho lịch học',
   importance: Importance.max,
   playSound: true,
   enableVibration: true,
@@ -20,39 +21,45 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 class LocalMessage {
   Future<void> initLocalNotifications() async {
-    tz.initializeTimeZones();
-    tz.setLocalLocation(tz.getLocation('Asia/Ho_Chi_Minh'));
-    logger.d('Local timezone set to: ${tz.local.name}');
+    try {
+      tz.initializeTimeZones();
+      tz.setLocalLocation(tz.getLocation('Asia/Ho_Chi_Minh'));
+      logger.i('Đã khởi tạo timezone: ${tz.local.name}');
 
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+      const AndroidInitializationSettings initializationSettingsAndroid =
+          AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    const DarwinInitializationSettings initializationSettingsIOS =
-        DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
+      const DarwinInitializationSettings initializationSettingsIOS =
+          DarwinInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
+      );
 
-    const InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-    );
+      const InitializationSettings initializationSettings =
+          InitializationSettings(
+        android: initializationSettingsAndroid,
+        iOS: initializationSettingsIOS,
+      );
 
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) {
-        // Handle notification tap
-        print('Notification tapped: ${response.payload}');
-      },
-    );
+      await flutterLocalNotificationsPlugin.initialize(
+        initializationSettings,
+        onDidReceiveNotificationResponse: (NotificationResponse response) {
+          final now = DateTime.now();
+          logger.i('Người dùng đã nhấn vào thông báo: ${response.payload}');
+          logger.i('Thời gian thực tế khi nhận notification: $now');
+        },
+      );
 
-    // Create the notification channel
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
+      // Tạo kênh thông báo
+      final AndroidFlutterLocalNotificationsPlugin? androidPlugin =
+          flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>();
+      await androidPlugin?.createNotificationChannel(channel);
+      logger.i('Đã tạo kênh thông báo thành công');
+    } catch (e) {
+      logger.e('Lỗi khi khởi tạo thông báo: $e');
+    }
   }
 
   Future<void> scheduleNotification({
@@ -61,52 +68,55 @@ class LocalMessage {
     required String body,
     required DateTime scheduledDate,
     String? payload,
-    bool isAlarmLike = false,
   }) async {
-    logger.d('Scheduling notification: $title');
-    logger.d(
-        '  Raw scheduledDate: $scheduledDate (isUtc: ${scheduledDate.isUtc})');
-    final tz.TZDateTime scheduledTZDate =
-        tz.TZDateTime.from(scheduledDate, tz.local);
-    logger.d(
-        '  TZDateTime for scheduling: $scheduledTZDate (isUtc: ${scheduledTZDate.isUtc})');
+    try {
+      logger.i('Đang lên lịch thông báo: $title');
+      logger.i('Thời gian lên lịch: $scheduledDate');
 
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduledTZDate,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channelDescription: channel.description,
-          importance: isAlarmLike ? Importance.max : Importance.high,
-          priority: isAlarmLike ? Priority.high : Priority.low,
-          showWhen: true,
-          enableVibration: true,
-          playSound: true,
-          enableLights: true,
-          icon: '@mipmap/ic_launcher',
-          color: Colors.red,
-          fullScreenIntent: isAlarmLike,
-          category: isAlarmLike ? AndroidNotificationCategory.alarm : null,
-          styleInformation: BigTextStyleInformation(body),
+      final location = tz.getLocation('Asia/Ho_Chi_Minh');
+      final tz.TZDateTime scheduledTZDate =
+          tz.TZDateTime.from(scheduledDate, location);
+      logger.i('Thời gian đã chuyển đổi timezone: $scheduledTZDate');
+
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        id,
+        title,
+        body,
+        scheduledTZDate,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            importance: Importance.max,
+            priority: Priority.high,
+            showWhen: true,
+            enableVibration: true,
+            playSound: true,
+            enableLights: true,
+            icon: '@mipmap/ic_launcher',
+            color: Colors.blue,
+            fullScreenIntent: false,
+            category: AndroidNotificationCategory.reminder,
+            styleInformation: BigTextStyleInformation(body),
+          ),
+          iOS: DarwinNotificationDetails(
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
+            interruptionLevel: InterruptionLevel.timeSensitive,
+          ),
         ),
-        iOS: DarwinNotificationDetails(
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-          interruptionLevel: isAlarmLike
-              ? InterruptionLevel.timeSensitive
-              : InterruptionLevel.active,
-        ),
-      ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      payload: payload,
-    );
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        payload: payload,
+      );
+      logger.i('Đã lên lịch thông báo thành công');
+    } catch (e) {
+      logger.e('Lỗi khi lên lịch thông báo: $e');
+      // Không throw để không crash app
+    }
   }
 
   Future<void> showNotification({
@@ -151,12 +161,20 @@ class LocalMessage {
   }
 
   Future<void> cancelNotification(int id) async {
-    await flutterLocalNotificationsPlugin.cancel(id);
-    logger.i('Notification with ID $id cancelled.');
+    try {
+      await flutterLocalNotificationsPlugin.cancel(id);
+      logger.i('Đã hủy thông báo với ID: $id');
+    } catch (e) {
+      logger.e('Lỗi khi hủy thông báo: $e');
+    }
   }
 
   Future<void> cancelAllNotifications() async {
-    await flutterLocalNotificationsPlugin.cancelAll();
-    logger.i('All notifications cancelled.');
+    try {
+      await flutterLocalNotificationsPlugin.cancelAll();
+      logger.i('Đã hủy tất cả thông báo');
+    } catch (e) {
+      logger.e('Lỗi khi hủy tất cả thông báo: $e');
+    }
   }
 }

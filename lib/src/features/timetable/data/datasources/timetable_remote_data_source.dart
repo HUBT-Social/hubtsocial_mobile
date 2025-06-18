@@ -1,6 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/api/dio_client.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_timetable_model.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/data/timetable_type.dart';
 import 'package:injectable/injectable.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/services/timetable_notification_service.dart';
 
@@ -36,13 +38,49 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
   final DioClient _dioClient;
   late final TimetableNotificationService _notificationService;
 
+  Future<TimetableResponseModel> _processTimetableResponse(
+      Map<String, dynamic> data) async {
+    final timetableResponseModel = TimetableResponseModel.fromMap(data);
+
+    final sortReformTimetables = timetableResponseModel.reformTimetables
+        .where((element) => element.startTime != null)
+        .toList()
+      ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
+
+    // Add default timetable entry
+    // final defaultTimetable = ReformTimetable(
+    //   id: '0',
+    //   subject: 'Không rõ',
+    //   room: 'Chưa rõ',
+    //   startTime: DateTime.now()
+    //       .copyWith(hour: 1, minute: 40, second: 0, millisecond: 0),
+    //   endTime: DateTime.now()
+    //       .copyWith(hour: 1, minute: 45, second: 0, millisecond: 0),
+    //   className: 'Không rõ',
+    //   zoomId: 'Chưa rõ',
+    //   type: TimetableType.Study,
+    // );
+    // sortReformTimetables.add(defaultTimetable);
+
+    final sortedTimetableResponseModel = timetableResponseModel.copyWith(
+      versionKey: timetableResponseModel.versionKey,
+      starttime: timetableResponseModel.starttime,
+      endtime: timetableResponseModel.endtime,
+      reformTimetables: sortReformTimetables,
+    );
+
+    final timetableBox =
+        Hive.box<TimetableResponseModel>(LocalStorageKey.timeTable);
+    await timetableBox.put(
+        LocalStorageKey.timeTable, sortedTimetableResponseModel);
+
+    return sortedTimetableResponseModel;
+  }
+
   @override
   Future<TimetableResponseModel> initTimetable() async {
     try {
       logger.i('Initializing timetable');
-
-      // Initialize local notifications
-      await _notificationService.scheduleNotificationsFromHive();
 
       if (!Hive.isBoxOpen(LocalStorageKey.timeTable)) {
         await Hive.openBox<TimetableResponseModel>(LocalStorageKey.timeTable);
@@ -66,8 +104,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
 
         if (responseCheckVersion.statusCode != 200) {
           logger.w(
-            'Failed to check timetable version. Using cached data. Status: ${responseCheckVersion.statusCode}',
-          );
+              'Failed to check timetable version. Using cached data. Status: ${responseCheckVersion.statusCode}');
           return oldDataTimetableResponseModel;
         }
 
@@ -77,14 +114,12 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         }
 
         logger.i('Fetching new timetable data');
-        final response = await _dioClient.get<Map<String, dynamic>>(
-          EndPoint.timetable,
-        );
+        final response =
+            await _dioClient.get<Map<String, dynamic>>(EndPoint.timetable);
 
         if (response.statusCode != 200) {
           logger.e(
-            'Failed to fetch timetable. Status: ${response.statusCode}, Response: ${response.data}',
-          );
+              'Failed to fetch timetable. Status: ${response.statusCode}, Response: ${response.data}');
           throw ServerException(
             message: response.data?['message']?.toString() ??
                 'Failed to fetch timetable. Please try again.',
@@ -101,38 +136,15 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         }
 
         oldDataTimetableResponseModel.delete();
-
-        final timetableResponseModel =
-            TimetableResponseModel.fromMap(response.data!);
-
-        final sortReformTimetables = timetableResponseModel.reformTimetables
-            .where((element) => element.startTime != null)
-            .toList()
-          ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
-
-        final sortedTimetableResponseModel = timetableResponseModel.copyWith(
-          versionKey: timetableResponseModel.versionKey,
-          starttime: timetableResponseModel.starttime,
-          endtime: timetableResponseModel.endtime,
-          reformTimetables: sortReformTimetables,
-        );
-
-        await timetableBox.put(
-            LocalStorageKey.timeTable, sortedTimetableResponseModel);
-
-        logger.i('Successfully updated timetable');
-
-        return sortedTimetableResponseModel;
+        return await _processTimetableResponse(response.data!);
       } else {
         logger.i('No cached timetable found. Fetching new data');
-        final response = await _dioClient.get<Map<String, dynamic>>(
-          EndPoint.timetable,
-        );
+        final response =
+            await _dioClient.get<Map<String, dynamic>>(EndPoint.timetable);
 
         if (response.statusCode != 200) {
           logger.e(
-            'Failed to fetch timetable. Status: ${response.statusCode}, Response: ${response.data}',
-          );
+              'Failed to fetch timetable. Status: ${response.statusCode}, Response: ${response.data}');
           throw ServerException(
             message: response.data?['message']?.toString() ??
                 'Failed to fetch timetable. Please try again.',
@@ -148,27 +160,9 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
           );
         }
 
-        final timetableResponseModel =
-            TimetableResponseModel.fromMap(response.data!);
-
-        final sortReformTimetables = timetableResponseModel.reformTimetables
-            .where((element) => element.startTime != null)
-            .toList()
-          ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
-
-        final sortedTimetableResponseModel = timetableResponseModel.copyWith(
-          versionKey: timetableResponseModel.versionKey,
-          starttime: timetableResponseModel.starttime,
-          endtime: timetableResponseModel.endtime,
-          reformTimetables: sortReformTimetables,
-        );
-
-        await timetableBox.put(
-            LocalStorageKey.timeTable, sortedTimetableResponseModel);
-
-        logger.i('Successfully fetched timetable');
-
-        return sortedTimetableResponseModel;
+        final result = await _processTimetableResponse(response.data!);
+        await _notificationService.scheduleNotificationsFromHive();
+        return result;
       }
     } on ServerException {
       rethrow;
