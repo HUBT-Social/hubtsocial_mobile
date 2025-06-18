@@ -148,6 +148,8 @@ class TimetableNotificationService {
         );
         logger.i(' Đã lên lịch trước 30p: ${lesson.subject}');
         count++;
+      } else if (notifyTime.isBefore(now)) {
+        logger.w('Bỏ qua thông báo trước 30p vì đã qua: $notifyTime');
       }
 
       // 🕒 Đúng giờ học
@@ -183,6 +185,8 @@ class TimetableNotificationService {
         );
         logger.i(' Đã lên lịch đúng giờ: ${lesson.subject}');
         count++;
+      } else if (startTimeVN.isBefore(now)) {
+        logger.w('Bỏ qua thông báo đúng giờ vì đã qua: $startTimeVN');
       }
     } catch (e) {
       logger.e(' Lỗi khi xử lý môn ${lesson.subject}: $e');

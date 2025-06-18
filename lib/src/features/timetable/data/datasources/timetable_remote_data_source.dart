@@ -46,17 +46,17 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         .toList()
       ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
 
-    final defaultTimetable = ReformTimetable(
+    /* final defaultTimetable = ReformTimetable(
       id: '0',
-      subject: 'Không rõ',
-      room: 'Chưa rõ',
-      startTime: DateTime.now().add(const Duration(minutes: 33)),
-      endTime: DateTime.now().add(const Duration(minutes: 37)),
-      className: 'Không rõ',
-      zoomId: 'Chưa rõ',
+      subject: 'Test Notification',
+      room: 'Phòng test',
+      startTime: DateTime.now().add(const Duration(minutes: 10)),
+      endTime: DateTime.now().add(const Duration(minutes: 25)),
+      className: 'Lớp test',
+      zoomId: 'Zoom test',
       type: TimetableType.Study,
     );
-    sortReformTimetables.add(defaultTimetable);
+    sortReformTimetables.add(defaultTimetable);*/
 
     final sortedTimetableResponseModel = timetableResponseModel.copyWith(
       versionKey: timetableResponseModel.versionKey,
