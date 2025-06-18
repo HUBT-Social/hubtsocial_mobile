@@ -17,6 +17,7 @@ import 'package:hubtsocial_mobile/src/constants/environment.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/core/notification/NotificationService.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart';
 
 import 'src/core/injections/injections.dart';
 import 'src/core/logger/logger.dart';
@@ -45,9 +46,6 @@ void main() async {
     DeviceId.setupUniqueDeviceId(),
     _initNotification(),
   ]);
-
-  final timetableNotificationService = getIt<TimetableNotificationService>();
-  await timetableNotificationService.scheduleNotificationsFromHive();
 
   runApp(const MyApp());
 }

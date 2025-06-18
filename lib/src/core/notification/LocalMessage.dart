@@ -4,6 +4,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter/material.dart';
 import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
 import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'timetable_channel',
@@ -22,10 +23,6 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 class LocalMessage {
   Future<void> initLocalNotifications() async {
     try {
-      tz.initializeTimeZones();
-      tz.setLocalLocation(tz.getLocation('Asia/Ho_Chi_Minh'));
-      logger.i('Đã khởi tạo timezone: ${tz.local.name}');
-
       const AndroidInitializationSettings initializationSettingsAndroid =
           AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -70,6 +67,12 @@ class LocalMessage {
     String? payload,
   }) async {
     try {
+      final now = DateTime.now();
+      if (scheduledDate.isBefore(now)) {
+        logger.w('Bỏ qua thông báo vì thời gian đã qua: $scheduledDate');
+        return;
+      }
+
       logger.i('Đang lên lịch thông báo: $title');
       logger.i('Thời gian lên lịch: $scheduledDate');
 
@@ -96,8 +99,8 @@ class LocalMessage {
             enableLights: true,
             icon: '@mipmap/ic_launcher',
             color: Colors.blue,
-            fullScreenIntent: false,
-            category: AndroidNotificationCategory.reminder,
+            fullScreenIntent: true,
+            category: AndroidNotificationCategory.alarm,
             styleInformation: BigTextStyleInformation(body),
           ),
           iOS: DarwinNotificationDetails(
@@ -107,7 +110,7 @@ class LocalMessage {
             interruptionLevel: InterruptionLevel.timeSensitive,
           ),
         ),
-        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         payload: payload,
@@ -115,7 +118,6 @@ class LocalMessage {
       logger.i('Đã lên lịch thông báo thành công');
     } catch (e) {
       logger.e('Lỗi khi lên lịch thông báo: $e');
-      // Không throw để không crash app
     }
   }
 

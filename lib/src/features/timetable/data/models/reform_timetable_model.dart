@@ -49,11 +49,10 @@ class ReformTimetable extends HiveObject {
       id: json["id"],
       className: json["className"],
       startTime: json["startTime"] != null
-          ? DateTime.tryParse(json["startTime"])?.toLocal()
+          ? DateTime.tryParse(json["startTime"])
           : null,
-      endTime: json["endTime"] != null
-          ? DateTime.tryParse(json["endTime"])?.toLocal()
-          : null,
+      endTime:
+          json["endTime"] != null ? DateTime.tryParse(json["endTime"]) : null,
       subject: json["subject"],
       room: json["room"],
       zoomId: json["zoomID"],

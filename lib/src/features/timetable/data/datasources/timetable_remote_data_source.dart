@@ -12,6 +12,7 @@ import '../../../../core/local_storage/local_storage_key.dart';
 import '../../../../core/logger/logger.dart';
 import '../models/timetable_info_response_model.dart';
 import '../models/timetable_response_model.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 abstract class TimetableRemoteDataSource {
   const TimetableRemoteDataSource();
@@ -19,8 +20,6 @@ abstract class TimetableRemoteDataSource {
   Future<TimetableResponseModel> initTimetable();
 
   Future<TimetableInfoResponseModel> getTimetableInfo(String timetableId);
-
-  Future<void> scheduleNotificationsFromHive();
 }
 
 @LazySingleton(
@@ -47,20 +46,17 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         .toList()
       ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
 
-    // Add default timetable entry
-    // final defaultTimetable = ReformTimetable(
-    //   id: '0',
-    //   subject: 'Không rõ',
-    //   room: 'Chưa rõ',
-    //   startTime: DateTime.now()
-    //       .copyWith(hour: 1, minute: 40, second: 0, millisecond: 0),
-    //   endTime: DateTime.now()
-    //       .copyWith(hour: 1, minute: 45, second: 0, millisecond: 0),
-    //   className: 'Không rõ',
-    //   zoomId: 'Chưa rõ',
-    //   type: TimetableType.Study,
-    // );
-    // sortReformTimetables.add(defaultTimetable);
+    final defaultTimetable = ReformTimetable(
+      id: '0',
+      subject: 'Không rõ',
+      room: 'Chưa rõ',
+      startTime: DateTime.now().add(const Duration(minutes: 33)),
+      endTime: DateTime.now().add(const Duration(minutes: 37)),
+      className: 'Không rõ',
+      zoomId: 'Chưa rõ',
+      type: TimetableType.Study,
+    );
+    sortReformTimetables.add(defaultTimetable);
 
     final sortedTimetableResponseModel = timetableResponseModel.copyWith(
       versionKey: timetableResponseModel.versionKey,
@@ -161,7 +157,9 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         }
 
         final result = await _processTimetableResponse(response.data!);
-        await _notificationService.scheduleNotificationsFromHive();
+        await TimetableNotificationService()
+            .scheduleTodayNotificationsFromHive();
+
         return result;
       }
     } on ServerException {
@@ -227,19 +225,6 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         message: 'Failed to get timetable information. Please try again later.',
         statusCode: '500',
       );
-    }
-  }
-
-  @override
-  Future<void> scheduleNotificationsFromHive() async {
-    try {
-      logger.i('Scheduling notifications from Hive');
-      await _notificationService.scheduleNotificationsFromHive();
-      logger.i('Successfully scheduled notifications');
-    } catch (e, s) {
-      logger.e('Failed to schedule notifications: $e');
-      logger.d('Stack trace: $s');
-      // Don't throw here as this is a background operation
     }
   }
 }
