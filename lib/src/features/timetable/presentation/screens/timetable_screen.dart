@@ -35,18 +35,10 @@ class _TimetableScreenState extends State<TimetableScreen> {
   void initState() {
     super.initState();
     // Khởi tạo thời khóa biểu và tạo thông báo
-    _initializeTimetable();
+       context.read<TimetableBloc>().add(const InitTimetableEvent());
+
   }
 
-  Future<void> _initializeTimetable() async {
-    // Gọi event để lấy dữ liệu thời khóa biểu
-    context.read<TimetableBloc>().add(const InitTimetableEvent());
-
-    // Lấy instance của TimetableRemoteDataSource để tạo thông báo
-    final timetableRemoteDataSource = context.read<TimetableRemoteDataSource>();
-    // Tạo thông báo cho thời khóa biểu
-    await timetableRemoteDataSource.scheduleNotificationsFromHive();
-  }
 
   @override
   void dispose() {

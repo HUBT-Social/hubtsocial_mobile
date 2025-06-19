@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/localization/bloc/localization_bloc.dart';
+import 'package:hubtsocial_mobile/src/core/notification/LocalMessage.dart';
 import 'package:hubtsocial_mobile/src/core/presentation/dialog/app_dialog.dart';
 import 'package:hubtsocial_mobile/src/features/menu/presentation/widgets/button_in_menu.dart';
 import 'package:hubtsocial_mobile/src/features/menu/presentation/widgets/line_in_menu.dart';
@@ -260,6 +261,7 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             ),
           ),
+          SliverToBoxAdapter(child: SizedBox(height: 6.h)),
         ],
       ),
     );

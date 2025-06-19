@@ -1,6 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:hubtsocial_mobile/src/core/api/dio_client.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_timetable_model.dart';
+import 'package:hubtsocial_mobile/src/features/timetable/data/timetable_type.dart';
 import 'package:injectable/injectable.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/services/timetable_notification_service.dart';
 
@@ -10,6 +12,7 @@ import '../../../../core/local_storage/local_storage_key.dart';
 import '../../../../core/logger/logger.dart';
 import '../models/timetable_info_response_model.dart';
 import '../models/timetable_response_model.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 abstract class TimetableRemoteDataSource {
   const TimetableRemoteDataSource();
@@ -17,8 +20,6 @@ abstract class TimetableRemoteDataSource {
   Future<TimetableResponseModel> initTimetable();
 
   Future<TimetableInfoResponseModel> getTimetableInfo(String timetableId);
-
-  Future<void> scheduleNotificationsFromHive();
 }
 
 @LazySingleton(
@@ -36,13 +37,53 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
   final DioClient _dioClient;
   late final TimetableNotificationService _notificationService;
 
+  Future<TimetableResponseModel> _processTimetableResponse(
+      Map<String, dynamic> data) async {
+    final timetableResponseModel = TimetableResponseModel.fromMap(data);
+
+    final convertedTimetables =
+        timetableResponseModel.reformTimetables.map((lesson) {
+      return lesson.copyWith(
+        startTime: lesson.startTime,
+        endTime: lesson.endTime,
+      );
+    }).toList();
+
+    final now = DateTime.now().toUtc();
+    final testStartTime = now.add(Duration(minutes: 35));
+
+    final defaultTimetable = ReformTimetable(
+      id: 'test',
+      subject: 'Test Notification',
+      room: 'Phòng test',
+      startTime: testStartTime,
+      endTime: testStartTime.add(const Duration(minutes: 45)),
+      className: 'Lớp test',
+      zoomId: 'Zoom test',
+      type: TimetableType.Study,
+    );
+    convertedTimetables.add(defaultTimetable);
+
+    final sortedTimetableResponseModel = timetableResponseModel.copyWith(
+      versionKey: timetableResponseModel.versionKey,
+      starttime: timetableResponseModel.starttime,
+      endtime: timetableResponseModel.endtime,
+      reformTimetables: convertedTimetables,
+    );
+
+    final timetableBox =
+        Hive.box<TimetableResponseModel>(LocalStorageKey.timeTable);
+    await timetableBox.clear();
+    await timetableBox.put(
+        LocalStorageKey.timeTable, sortedTimetableResponseModel);
+
+    return sortedTimetableResponseModel;
+  }
+
   @override
   Future<TimetableResponseModel> initTimetable() async {
     try {
       logger.i('Initializing timetable');
-
-      // Initialize local notifications
-      await _notificationService.scheduleNotificationsFromHive();
 
       if (!Hive.isBoxOpen(LocalStorageKey.timeTable)) {
         await Hive.openBox<TimetableResponseModel>(LocalStorageKey.timeTable);
@@ -66,8 +107,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
 
         if (responseCheckVersion.statusCode != 200) {
           logger.w(
-            'Failed to check timetable version. Using cached data. Status: ${responseCheckVersion.statusCode}',
-          );
+              'Failed to check timetable version. Using cached data. Status: ${responseCheckVersion.statusCode}');
           return oldDataTimetableResponseModel;
         }
 
@@ -77,14 +117,12 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         }
 
         logger.i('Fetching new timetable data');
-        final response = await _dioClient.get<Map<String, dynamic>>(
-          EndPoint.timetable,
-        );
+        final response =
+            await _dioClient.get<Map<String, dynamic>>(EndPoint.timetable);
 
         if (response.statusCode != 200) {
           logger.e(
-            'Failed to fetch timetable. Status: ${response.statusCode}, Response: ${response.data}',
-          );
+              'Failed to fetch timetable. Status: ${response.statusCode}, Response: ${response.data}');
           throw ServerException(
             message: response.data?['message']?.toString() ??
                 'Failed to fetch timetable. Please try again.',
@@ -101,38 +139,18 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         }
 
         oldDataTimetableResponseModel.delete();
-
-        final timetableResponseModel =
-            TimetableResponseModel.fromMap(response.data!);
-
-        final sortReformTimetables = timetableResponseModel.reformTimetables
-            .where((element) => element.startTime != null)
-            .toList()
-          ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
-
-        final sortedTimetableResponseModel = timetableResponseModel.copyWith(
-          versionKey: timetableResponseModel.versionKey,
-          starttime: timetableResponseModel.starttime,
-          endtime: timetableResponseModel.endtime,
-          reformTimetables: sortReformTimetables,
-        );
-
-        await timetableBox.put(
-            LocalStorageKey.timeTable, sortedTimetableResponseModel);
-
-        logger.i('Successfully updated timetable');
-
-        return sortedTimetableResponseModel;
+        final result = await _processTimetableResponse(response.data!);
+        await TimetableNotificationService()
+            .scheduleTodayAndFutureNotificationsFromHive();
+        return result;
       } else {
         logger.i('No cached timetable found. Fetching new data');
-        final response = await _dioClient.get<Map<String, dynamic>>(
-          EndPoint.timetable,
-        );
+        final response =
+            await _dioClient.get<Map<String, dynamic>>(EndPoint.timetable);
 
         if (response.statusCode != 200) {
           logger.e(
-            'Failed to fetch timetable. Status: ${response.statusCode}, Response: ${response.data}',
-          );
+              'Failed to fetch timetable. Status: ${response.statusCode}, Response: ${response.data}');
           throw ServerException(
             message: response.data?['message']?.toString() ??
                 'Failed to fetch timetable. Please try again.',
@@ -148,27 +166,10 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
           );
         }
 
-        final timetableResponseModel =
-            TimetableResponseModel.fromMap(response.data!);
-
-        final sortReformTimetables = timetableResponseModel.reformTimetables
-            .where((element) => element.startTime != null)
-            .toList()
-          ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
-
-        final sortedTimetableResponseModel = timetableResponseModel.copyWith(
-          versionKey: timetableResponseModel.versionKey,
-          starttime: timetableResponseModel.starttime,
-          endtime: timetableResponseModel.endtime,
-          reformTimetables: sortReformTimetables,
-        );
-
-        await timetableBox.put(
-            LocalStorageKey.timeTable, sortedTimetableResponseModel);
-
-        logger.i('Successfully fetched timetable');
-
-        return sortedTimetableResponseModel;
+        final result = await _processTimetableResponse(response.data!);
+        await TimetableNotificationService()
+            .scheduleTodayAndFutureNotificationsFromHive();
+        return result;
       }
     } on ServerException {
       rethrow;
@@ -233,19 +234,6 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         message: 'Failed to get timetable information. Please try again later.',
         statusCode: '500',
       );
-    }
-  }
-
-  @override
-  Future<void> scheduleNotificationsFromHive() async {
-    try {
-      logger.i('Scheduling notifications from Hive');
-      await _notificationService.scheduleNotificationsFromHive();
-      logger.i('Successfully scheduled notifications');
-    } catch (e, s) {
-      logger.e('Failed to schedule notifications: $e');
-      logger.d('Stack trace: $s');
-      // Don't throw here as this is a background operation
     }
   }
 }

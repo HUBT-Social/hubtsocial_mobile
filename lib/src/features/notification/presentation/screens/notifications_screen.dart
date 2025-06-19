@@ -12,6 +12,7 @@ import 'filter_option.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hubtsocial_mobile/src/features/notification/presentation/screens/notification_item.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:async';
 
 import '../../../main_wrapper/presentation/widgets/main_app_bar.dart';
 
@@ -26,12 +27,22 @@ class _NotificationsState extends State<NotificationsScreen> {
   String _selectedFilter = 'all';
   Box<NotificationModel>? _notificationsBox;
   List<String> _blockedNotificationTypes = [];
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
     _initializeHive();
     _loadBlockedNotificationTypes();
+    _timer = Timer.periodic(Duration(seconds: 30), (timer) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   Future<void> _initializeHive() async {
@@ -234,6 +245,13 @@ class _NotificationsState extends State<NotificationsScreen> {
                     );
                   }
 
+                  final now = DateTime.now();
+                  final filteredList = filteredNotifications.where((n) {
+                    final notificationTime = DateTime.parse(n.time);
+                    return notificationTime.isBefore(now) ||
+                        notificationTime.isAtSameMomentAs(now);
+                  }).toList();
+
                   return CustomScrollView(
                     physics: const BouncingScrollPhysics(),
                     slivers: [
@@ -243,12 +261,12 @@ class _NotificationsState extends State<NotificationsScreen> {
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               if (index >=
-                                  (filteredNotifications.length > 100
+                                  (filteredList.length > 100
                                       ? 100
-                                      : filteredNotifications.length)) {
+                                      : filteredList.length)) {
                                 return null;
                               }
-                              final notification = filteredNotifications[index];
+                              final notification = filteredList[index];
                               return NotificationItem(
                                 notification: notification,
                                 onTap: () => _handleNotificationTap(
@@ -351,6 +369,13 @@ class _NotificationsState extends State<NotificationsScreen> {
       // For non-timetable or mixed notifications, use regular time
       return timeB.compareTo(timeA); // Most recent first
     });
+
+    final now = DateTime.now();
+    filteredList = filteredList.where((n) {
+      final notificationTime = DateTime.parse(n.time);
+      return notificationTime.isBefore(now) ||
+          notificationTime.isAtSameMomentAs(now);
+    }).toList();
 
     return filteredList;
   }
