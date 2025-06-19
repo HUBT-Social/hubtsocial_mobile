@@ -12,6 +12,7 @@ import 'filter_option.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hubtsocial_mobile/src/features/notification/presentation/screens/notification_item.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:async';
 
 import '../../../main_wrapper/presentation/widgets/main_app_bar.dart';
 
@@ -26,12 +27,22 @@ class _NotificationsState extends State<NotificationsScreen> {
   String _selectedFilter = 'all';
   Box<NotificationModel>? _notificationsBox;
   List<String> _blockedNotificationTypes = [];
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
     _initializeHive();
     _loadBlockedNotificationTypes();
+    _timer = Timer.periodic(Duration(seconds: 30), (timer) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   Future<void> _initializeHive() async {
