@@ -19,61 +19,46 @@ class TimetableNotificationService {
     }
   }
 
-  Future<void> scheduleTodayNotificationsFromHive() async {
-    try {
-      await requestNotificationPermission();
-      await _localMessage.initLocalNotifications();
-      await _localMessage.cancelAllNotifications();
+  Future<void> scheduleTodayAndFutureNotificationsFromHive() async {
+    await requestNotificationPermission();
+    await _localMessage.initLocalNotifications();
+    await _localMessage.cancelAllNotifications();
 
-      if (!Hive.isBoxOpen(LocalStorageKey.timeTable)) {
-        await Hive.openBox<TimetableResponseModel>(LocalStorageKey.timeTable);
-      }
-      if (!Hive.isBoxOpen(LocalStorageKey.notification)) {
-        await Hive.openBox<NotificationModel>(LocalStorageKey.notification);
-      }
+    if (!Hive.isBoxOpen(LocalStorageKey.timeTable)) {
+      await Hive.openBox<TimetableResponseModel>(LocalStorageKey.timeTable);
+    }
+    if (!Hive.isBoxOpen(LocalStorageKey.notification)) {
+      await Hive.openBox<NotificationModel>(LocalStorageKey.notification);
+    }
 
-      final timetableBox =
-          Hive.box<TimetableResponseModel>(LocalStorageKey.timeTable);
-      final notificationsBox =
-          Hive.box<NotificationModel>(LocalStorageKey.notification);
-      final timetableData = timetableBox.get(LocalStorageKey.timeTable);
+    final timetableBox =
+        Hive.box<TimetableResponseModel>(LocalStorageKey.timeTable);
+    final notificationsBox =
+        Hive.box<NotificationModel>(LocalStorageKey.notification);
+    final timetableData = timetableBox.get(LocalStorageKey.timeTable);
 
-      if (timetableData == null) {
-        logger.w('Không tìm thấy dữ liệu thời khóa biểu trong Hive');
-        return;
-      }
+    if (timetableData == null) return;
 
-      final location = tz.getLocation('Asia/Ho_Chi_Minh');
-      final tzNow = tz.TZDateTime.now(location);
-      final today = tz.TZDateTime(location, tzNow.year, tzNow.month, tzNow.day);
+    final location = tz.getLocation('Asia/Ho_Chi_Minh');
+    final now = tz.TZDateTime.now(location);
 
-      final todayTimetables = timetableData.reformTimetables.where((lesson) {
-        if (lesson.startTime == null) return false;
-        final startTimeVN = tz.TZDateTime.from(lesson.startTime!, location);
-        return startTimeVN.year == today.year &&
-            startTimeVN.month == today.month &&
-            startTimeVN.day == today.day;
-      }).toList()
-        ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
+    final today = tz.TZDateTime(location, now.year, now.month, now.day);
 
-      logger.i('📅 Tổng số tiết học hôm nay: ${todayTimetables.length}');
+    final todayTimetables = timetableData.reformTimetables.where((lesson) {
+      if (lesson.startTime == null) return false;
+      final startTime = tz.TZDateTime.from(lesson.startTime!, location);
+      return startTime.year == today.year &&
+          startTime.month == today.month &&
+          startTime.day == today.day;
+    }).toList();
 
-      int scheduledCount = 0;
-
-      for (final lesson in todayTimetables) {
-        final result = await _scheduleLessonNotification(
-          lesson: lesson,
-          location: location,
-          now: tzNow,
-          notificationsBox: notificationsBox,
-        );
-        scheduledCount += result;
-      }
-
-      logger.i('✅ Tổng số thông báo đã lên lịch: $scheduledCount');
-    } catch (e, s) {
-      logger.e('❌ Lỗi khi lên lịch thông báo: $e');
-      logger.d(s.toString());
+    for (final lesson in todayTimetables) {
+      await _scheduleLessonNotification(
+        lesson: lesson,
+        location: location,
+        now: now,
+        notificationsBox: notificationsBox,
+      );
     }
   }
 
@@ -86,33 +71,21 @@ class TimetableNotificationService {
     int count = 0;
 
     try {
-      logger.i('📚 Xử lý tiết học: ${lesson.subject}');
-      logger.i('startTime raw (UTC/local?): ${lesson.startTime}');
-
-      // Ensure proper timezone conversion
-      final startTimeVN = lesson.startTime is tz.TZDateTime
-          ? lesson.startTime as tz.TZDateTime
-          : tz.TZDateTime.from(lesson.startTime!, location);
-
-      final notifyTime = startTimeVN.subtract(const Duration(minutes: 30));
+      final tzScheduledDate = tz.TZDateTime.from(lesson.startTime!, location);
+      final notifyTime = tzScheduledDate.subtract(const Duration(minutes: 30));
       final id30m = lesson.id.hashCode;
       final idStart = '${lesson.id}_start'.hashCode;
 
-      logger.i('🎯 startTimeVN: $startTimeVN');
-      logger.i('🔔 notifyTime (trước 30p): $notifyTime');
-      logger.i('🕒 Thời điểm hiện tại (tzNow): $now');
-      logger.i('🕓 DateTime.now(): ${DateTime.now()}');
-
-      // Only schedule if notification time is in the future
       if (notifyTime.isBefore(now)) {
-        logger.w('Bỏ qua thông báo vì thời gian thông báo đã qua: $notifyTime');
+        logger.w(
+            'Bỏ qua thông báo trước 30p của môn: ${lesson.subject} vì thời gian đã qua: $notifyTime');
         return count;
       }
 
       final payload = jsonEncode({
         'type': LocalStorageKey.schedule,
         'timetableId': lesson.id,
-        'startTime': startTimeVN.toIso8601String(),
+        'startTime': tzScheduledDate.toIso8601String(),
         'endTime': lesson.endTime?.toIso8601String(),
       });
 
@@ -122,7 +95,7 @@ class TimetableNotificationService {
           id: id30m,
           title: 'Sắp đến giờ học: ${lesson.subject ?? ''}',
           body:
-              'Lớp: ${lesson.className ?? ''} - Phòng: ${lesson.room ?? ''}\nBắt đầu lúc: ${startTimeVN.hour}:${startTimeVN.minute.toString().padLeft(2, '0')}',
+              'Lớp: ${lesson.className ?? ''} - Phòng: ${lesson.room ?? ''}\nBắt đầu lúc: ${tzScheduledDate.hour}:${tzScheduledDate.minute.toString().padLeft(2, '0')}',
           scheduledDate: notifyTime,
           payload: payload,
         );
@@ -141,7 +114,7 @@ class TimetableNotificationService {
               'timetableId': lesson.id,
               'subject': lesson.subject,
               'room': lesson.room,
-              'startTime': startTimeVN.toIso8601String(),
+              'startTime': tzScheduledDate.toIso8601String(),
               'endTime': lesson.endTime?.toIso8601String(),
             },
           ),
@@ -154,13 +127,13 @@ class TimetableNotificationService {
 
       // 🕒 Đúng giờ học
       if (!notificationsBox.containsKey(idStart.toString()) &&
-          startTimeVN.isAfter(now)) {
+          tzScheduledDate.isAfter(now)) {
         await _localMessage.scheduleNotification(
           id: idStart,
           title: 'Bắt đầu học: ${lesson.subject ?? ''}',
           body:
               'Lớp: ${lesson.className ?? ''} - Phòng: ${lesson.room ?? ''}\nGiờ học bắt đầu!',
-          scheduledDate: startTimeVN,
+          scheduledDate: tzScheduledDate,
           payload: payload,
         );
 
@@ -171,23 +144,26 @@ class TimetableNotificationService {
             title: 'Giờ học bắt đầu',
             body:
                 'Môn ${lesson.subject ?? "Không rõ"} đang bắt đầu tại ${lesson.room ?? "Chưa rõ"}',
-            time: startTimeVN.toIso8601String(),
+            time: tzScheduledDate.toIso8601String(),
             isRead: false,
             type: LocalStorageKey.schedule,
             data: {
               'timetableId': lesson.id,
               'subject': lesson.subject,
               'room': lesson.room,
-              'startTime': startTimeVN.toIso8601String(),
+              'startTime': tzScheduledDate.toIso8601String(),
               'endTime': lesson.endTime?.toIso8601String(),
             },
           ),
         );
         logger.i(' Đã lên lịch đúng giờ: ${lesson.subject}');
         count++;
-      } else if (startTimeVN.isBefore(now)) {
-        logger.w('Bỏ qua thông báo đúng giờ vì đã qua: $startTimeVN');
+      } else if (tzScheduledDate.isBefore(now)) {
+        logger.w('Bỏ qua thông báo đúng giờ vì đã qua: $tzScheduledDate');
       }
+
+      logger.i(
+          'now: $now, testStartTime: $tzScheduledDate, tzScheduledDate: $tzScheduledDate');
     } catch (e) {
       logger.e(' Lỗi khi xử lý môn ${lesson.subject}: $e');
     }

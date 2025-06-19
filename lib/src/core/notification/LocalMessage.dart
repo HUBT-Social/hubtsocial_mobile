@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
@@ -54,6 +55,11 @@ class LocalMessage {
               AndroidFlutterLocalNotificationsPlugin>();
       await androidPlugin?.createNotificationChannel(channel);
       logger.i('Đã tạo kênh thông báo thành công');
+
+      final status = await Permission.notification.status;
+      if (!status.isGranted) {
+        await Permission.notification.request();
+      }
     } catch (e) {
       logger.e('Lỗi khi khởi tạo thông báo: $e');
     }
@@ -66,26 +72,32 @@ class LocalMessage {
     required DateTime scheduledDate,
     String? payload,
   }) async {
+    final location = tz.getLocation('Asia/Ho_Chi_Minh');
+    final now = tz.TZDateTime.now(location);
+
+    // Convert sang tz.TZDateTime
+    final tzScheduledDate = scheduledDate is tz.TZDateTime
+        ? scheduledDate
+        : tz.TZDateTime.from(scheduledDate, location);
+
+    if (tzScheduledDate.isBefore(now)) {
+      logger.i('Bỏ qua thông báo ... vì thời gian đã qua: $tzScheduledDate');
+      return;
+    }
+
+    logger.i('Đang lên lịch thông báo: $title');
+    logger.i('Thời gian lên lịch: $scheduledDate');
+
+    logger.i('Thời gian đã chuyển đổi timezone: $tzScheduledDate');
+    logger.i(
+        'now: $now, scheduledDate: $scheduledDate, tzScheduledDate: $tzScheduledDate');
+
     try {
-      final now = DateTime.now();
-      if (scheduledDate.isBefore(now)) {
-        logger.w('Bỏ qua thông báo vì thời gian đã qua: $scheduledDate');
-        return;
-      }
-
-      logger.i('Đang lên lịch thông báo: $title');
-      logger.i('Thời gian lên lịch: $scheduledDate');
-
-      final location = tz.getLocation('Asia/Ho_Chi_Minh');
-      final tz.TZDateTime scheduledTZDate =
-          tz.TZDateTime.from(scheduledDate, location);
-      logger.i('Thời gian đã chuyển đổi timezone: $scheduledTZDate');
-
       await flutterLocalNotificationsPlugin.zonedSchedule(
         id,
         title,
         body,
-        scheduledTZDate,
+        tzScheduledDate,
         NotificationDetails(
           android: AndroidNotificationDetails(
             channel.id,
@@ -98,27 +110,55 @@ class LocalMessage {
             playSound: true,
             enableLights: true,
             icon: '@mipmap/ic_launcher',
-            color: Colors.blue,
-            fullScreenIntent: true,
-            category: AndroidNotificationCategory.alarm,
+            color: Colors.red,
+            fullScreenIntent: false,
+            category: null,
             styleInformation: BigTextStyleInformation(body),
           ),
           iOS: DarwinNotificationDetails(
-            presentAlert: true,
-            presentBadge: true,
-            presentSound: true,
             interruptionLevel: InterruptionLevel.timeSensitive,
           ),
         ),
-        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         payload: payload,
+        matchDateTimeComponents: DateTimeComponents.dateAndTime,
       );
-      logger.i('Đã lên lịch thông báo thành công');
-    } catch (e) {
-      logger.e('Lỗi khi lên lịch thông báo: $e');
+    } on PlatformException catch (e) {
+      if (e.code == 'exact_alarms_not_permitted') {
+        // Fallback: dùng inexactAllowWhileIdle
+        await flutterLocalNotificationsPlugin.zonedSchedule(
+          id,
+          title,
+          body,
+          tzScheduledDate,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channelDescription: channel.description,
+              importance: Importance.max,
+              priority: Priority.high,
+              showWhen: true,
+              enableVibration: true,
+              playSound: true,
+              enableLights: true,
+              icon: '@mipmap/ic_launcher',
+              color: Colors.red,
+              fullScreenIntent: false,
+              category: null,
+              styleInformation: BigTextStyleInformation(body),
+            ),
+            iOS: DarwinNotificationDetails(
+              interruptionLevel: InterruptionLevel.timeSensitive,
+            ),
+          ),
+          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+          payload: payload,
+          matchDateTimeComponents: DateTimeComponents.dateAndTime,
+        );
+      }
     }
+    logger.i('Đã lên lịch thông báo thành công');
   }
 
   Future<void> showNotification({
@@ -137,8 +177,8 @@ class LocalMessage {
           channel.id,
           channel.name,
           channelDescription: channel.description,
-          importance: isAlarmLike ? Importance.max : Importance.high,
-          priority: isAlarmLike ? Priority.high : Priority.low,
+          importance: Importance.max,
+          priority: Priority.high,
           showWhen: true,
           enableVibration: true,
           playSound: true,

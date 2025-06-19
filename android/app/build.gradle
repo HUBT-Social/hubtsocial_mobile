@@ -23,7 +23,7 @@ android {
       dependencies {
         // Thêm thư viện core library desugaring
          implementation 'androidx.appcompat:appcompat:1.7.0'
-        coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+        coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8

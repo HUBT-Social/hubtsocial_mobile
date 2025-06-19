@@ -234,6 +234,13 @@ class _NotificationsState extends State<NotificationsScreen> {
                     );
                   }
 
+                  final now = DateTime.now();
+                  final filteredList = filteredNotifications.where((n) {
+                    final notificationTime = DateTime.parse(n.time);
+                    return notificationTime.isBefore(now) ||
+                        notificationTime.isAtSameMomentAs(now);
+                  }).toList();
+
                   return CustomScrollView(
                     physics: const BouncingScrollPhysics(),
                     slivers: [
@@ -243,12 +250,12 @@ class _NotificationsState extends State<NotificationsScreen> {
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               if (index >=
-                                  (filteredNotifications.length > 100
+                                  (filteredList.length > 100
                                       ? 100
-                                      : filteredNotifications.length)) {
+                                      : filteredList.length)) {
                                 return null;
                               }
-                              final notification = filteredNotifications[index];
+                              final notification = filteredList[index];
                               return NotificationItem(
                                 notification: notification,
                                 onTap: () => _handleNotificationTap(
@@ -351,6 +358,13 @@ class _NotificationsState extends State<NotificationsScreen> {
       // For non-timetable or mixed notifications, use regular time
       return timeB.compareTo(timeA); // Most recent first
     });
+
+    final now = DateTime.now();
+    filteredList = filteredList.where((n) {
+      final notificationTime = DateTime.parse(n.time);
+      return notificationTime.isBefore(now) ||
+          notificationTime.isAtSameMomentAs(now);
+    }).toList();
 
     return filteredList;
   }

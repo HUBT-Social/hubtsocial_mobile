@@ -41,32 +41,39 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
       Map<String, dynamic> data) async {
     final timetableResponseModel = TimetableResponseModel.fromMap(data);
 
-    final sortReformTimetables = timetableResponseModel.reformTimetables
-        .where((element) => element.startTime != null)
-        .toList()
-      ..sort((a, b) => a.startTime!.compareTo(b.startTime!));
+    final convertedTimetables =
+        timetableResponseModel.reformTimetables.map((lesson) {
+      return lesson.copyWith(
+        startTime: lesson.startTime,
+        endTime: lesson.endTime,
+      );
+    }).toList();
 
-    /* final defaultTimetable = ReformTimetable(
-      id: '0',
+    final now = DateTime.now().toUtc();
+    final testStartTime = now.add(Duration(minutes: 35));
+
+    final defaultTimetable = ReformTimetable(
+      id: 'test',
       subject: 'Test Notification',
       room: 'Phòng test',
-      startTime: DateTime.now().add(const Duration(minutes: 10)),
-      endTime: DateTime.now().add(const Duration(minutes: 25)),
+      startTime: testStartTime,
+      endTime: testStartTime.add(const Duration(minutes: 45)),
       className: 'Lớp test',
       zoomId: 'Zoom test',
       type: TimetableType.Study,
     );
-    sortReformTimetables.add(defaultTimetable);*/
+    convertedTimetables.add(defaultTimetable);
 
     final sortedTimetableResponseModel = timetableResponseModel.copyWith(
       versionKey: timetableResponseModel.versionKey,
       starttime: timetableResponseModel.starttime,
       endtime: timetableResponseModel.endtime,
-      reformTimetables: sortReformTimetables,
+      reformTimetables: convertedTimetables,
     );
 
     final timetableBox =
         Hive.box<TimetableResponseModel>(LocalStorageKey.timeTable);
+    await timetableBox.clear();
     await timetableBox.put(
         LocalStorageKey.timeTable, sortedTimetableResponseModel);
 
@@ -132,7 +139,10 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         }
 
         oldDataTimetableResponseModel.delete();
-        return await _processTimetableResponse(response.data!);
+        final result = await _processTimetableResponse(response.data!);
+        await TimetableNotificationService()
+            .scheduleTodayAndFutureNotificationsFromHive();
+        return result;
       } else {
         logger.i('No cached timetable found. Fetching new data');
         final response =
@@ -158,8 +168,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
 
         final result = await _processTimetableResponse(response.data!);
         await TimetableNotificationService()
-            .scheduleTodayNotificationsFromHive();
-
+            .scheduleTodayAndFutureNotificationsFromHive();
         return result;
       }
     } on ServerException {
