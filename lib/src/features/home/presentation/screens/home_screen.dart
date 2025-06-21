@@ -130,20 +130,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
-              child: ElevatedButton(
-                onPressed: () async {
-                  await NotificationService().showNotification(
-                    title: "Test Local Notification",
-                    body: "This is a test local notification",
-                  );
-                },
-                child: Text('Test Local Notification'),
-              ),
-            ),
-          ),
         ],
       ),
     );
