@@ -184,15 +184,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                         GestureDetector(
                           onTap: () {
                             if (nonNullUser.avatarUrl.isNotEmpty) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => FullScreenImage(
-                                    imageUrl: nonNullUser.avatarUrl,
-                                    heroTag: 'profile-image',
-                                  ),
-                                ),
-                              );
+                              context.push('/profile/full-image', extra: {
+                                'imageUrl': nonNullUser.avatarUrl,
+                                'heroTag': 'profile-image',
+                              });
                             }
                           },
                           child: Hero(

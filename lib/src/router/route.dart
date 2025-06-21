@@ -63,6 +63,7 @@ enum AppRoute {
   notificationSettings('/menu/notification-settings'),
   // menu
 
+  fullImage('/profile/full-image'),
   ;
 
   const AppRoute(this.path);
