@@ -140,8 +140,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
 
         oldDataTimetableResponseModel.delete();
         final result = await _processTimetableResponse(response.data!);
-        await TimetableNotificationService()
-            .scheduleTodayAndFutureNotificationsFromHive();
+        await TimetableNotificationService.scheduleAllTimetableNotifications();
         return result;
       } else {
         logger.i('No cached timetable found. Fetching new data');
@@ -167,8 +166,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
         }
 
         final result = await _processTimetableResponse(response.data!);
-        await TimetableNotificationService()
-            .scheduleTodayAndFutureNotificationsFromHive();
+        await TimetableNotificationService.scheduleAllTimetableNotifications();
         return result;
       }
     } on ServerException {

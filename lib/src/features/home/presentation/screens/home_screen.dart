@@ -7,6 +7,7 @@ import 'package:hubtsocial_mobile/src/features/main_wrapper/presentation/widgets
 
 import '../../../../router/route.dart';
 import '../../../user/presentation/bloc/user_bloc.dart';
+import 'package:hubtsocial_mobile/src/core/notification/NotificationService.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -129,6 +130,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
+              child: ElevatedButton(
+                onPressed: () async {
+                  await NotificationService().showNotification(
+                    title: "Test Local Notification",
+                    body: "This is a test local notification",
+                  );
+                },
+                child: Text('Test Local Notification'),
+              ),
+            ),
+          ),
         ],
       ),
     );

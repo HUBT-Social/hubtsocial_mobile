@@ -1,173 +1,121 @@
-import 'dart:convert';
-import 'package:hive_ce_flutter/adapters.dart';
-import 'package:hubtsocial_mobile/src/core/logger/logger.dart';
-import 'package:hubtsocial_mobile/src/core/notification/LocalMessage.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_key.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_timetable_model.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/timetable_response_model.dart';
-import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class TimetableNotificationService {
-  final LocalMessage _localMessage = LocalMessage();
+  static final FlutterLocalNotificationsPlugin _notificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
-  Future<void> requestNotificationPermission() async {
-    final status = await Permission.notification.status;
-    if (!status.isGranted) {
-      await Permission.notification.request();
-    }
+  static const AndroidNotificationChannel _timetableChannel =
+      AndroidNotificationChannel(
+    'timetable_channel',
+    'Thông báo lịch học',
+    description: 'Kênh thông báo cho lịch học',
+    importance: Importance.max,
+    playSound: true,
+    enableVibration: true,
+    showBadge: true,
+    enableLights: true,
+  );
+
+  /// Gọi hàm này ở main hoặc khi app khởi động
+  static Future<void> initNotification() async {
+    tz.initializeTimeZones();
+    const initializationSettings = InitializationSettings(
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+      iOS: DarwinInitializationSettings(),
+    );
+    await _notificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (response) {},
+    );
+    final androidPlugin =
+        _notificationsPlugin.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+    await androidPlugin?.createNotificationChannel(_timetableChannel);
   }
 
-  Future<void> scheduleTodayAndFutureNotificationsFromHive() async {
-    await requestNotificationPermission();
-    await _localMessage.initLocalNotifications();
-    await _localMessage.cancelAllNotifications();
-
+  /// Lên lịch thông báo trước 30 phút cho tất cả tiết học còn lại trong ngày (hoặc tương lai)
+  static Future<void> scheduleAllTimetableNotifications() async {
     if (!Hive.isBoxOpen(LocalStorageKey.timeTable)) {
       await Hive.openBox<TimetableResponseModel>(LocalStorageKey.timeTable);
     }
-    if (!Hive.isBoxOpen(LocalStorageKey.notification)) {
-      await Hive.openBox<NotificationModel>(LocalStorageKey.notification);
-    }
-
     final timetableBox =
         Hive.box<TimetableResponseModel>(LocalStorageKey.timeTable);
-    final notificationsBox =
-        Hive.box<NotificationModel>(LocalStorageKey.notification);
     final timetableData = timetableBox.get(LocalStorageKey.timeTable);
-
     if (timetableData == null) return;
 
     final location = tz.getLocation('Asia/Ho_Chi_Minh');
     final now = tz.TZDateTime.now(location);
 
-    final today = tz.TZDateTime(location, now.year, now.month, now.day);
-
-    final todayTimetables = timetableData.reformTimetables.where((lesson) {
-      if (lesson.startTime == null) return false;
-      final startTime = tz.TZDateTime.from(lesson.startTime!, location);
-      return startTime.year == today.year &&
-          startTime.month == today.month &&
-          startTime.day == today.day;
-    }).toList();
-
-    for (final lesson in todayTimetables) {
-      await _scheduleLessonNotification(
-        lesson: lesson,
-        location: location,
-        now: now,
-        notificationsBox: notificationsBox,
-      );
-    }
-  }
-
-  Future<int> _scheduleLessonNotification({
-    required ReformTimetable lesson,
-    required tz.Location location,
-    required tz.TZDateTime now,
-    required Box<NotificationModel> notificationsBox,
-  }) async {
-    int count = 0;
-
-    try {
-      final tzScheduledDate = tz.TZDateTime.from(lesson.startTime!, location);
-      final notifyTime = tzScheduledDate.subtract(const Duration(minutes: 30));
-      final id30m = lesson.id.hashCode;
-      final idStart = '${lesson.id}_start'.hashCode;
-
-      if (notifyTime.isBefore(now)) {
-        logger.w(
-            'Bỏ qua thông báo trước 30p của môn: ${lesson.subject} vì thời gian đã qua: $notifyTime');
-        return count;
-      }
-
-      final payload = jsonEncode({
-        'type': LocalStorageKey.schedule,
-        'timetableId': lesson.id,
-        'startTime': tzScheduledDate.toIso8601String(),
-        'endTime': lesson.endTime?.toIso8601String(),
-      });
-
-      if (!notificationsBox.containsKey(id30m.toString()) &&
-          notifyTime.isAfter(now)) {
-        await _localMessage.scheduleNotification(
-          id: id30m,
-          title: 'Sắp đến giờ học: ${lesson.subject ?? ''}',
-          body:
-              'Lớp: ${lesson.className ?? ''} - Phòng: ${lesson.room ?? ''}\nBắt đầu lúc: ${tzScheduledDate.hour}:${tzScheduledDate.minute.toString().padLeft(2, '0')}',
-          scheduledDate: notifyTime,
-          payload: payload,
-        );
-
-        await notificationsBox.put(
-          id30m.toString(),
-          NotificationModel(
-            id: id30m.toString(),
-            title: 'Sắp đến giờ học',
-            body:
-                'Môn ${lesson.subject ?? "Không rõ"} sẽ bắt đầu trong 30 phút tại ${lesson.room ?? "Chưa rõ"}',
-            time: notifyTime.toIso8601String(),
-            isRead: false,
-            type: LocalStorageKey.schedule,
-            data: {
-              'timetableId': lesson.id,
-              'subject': lesson.subject,
-              'room': lesson.room,
-              'startTime': tzScheduledDate.toIso8601String(),
-              'endTime': lesson.endTime?.toIso8601String(),
-            },
+    for (final lesson in timetableData.reformTimetables) {
+      if (lesson.startTime == null) continue;
+      final lessonStart = tz.TZDateTime.from(lesson.startTime!, location);
+      final notifyTime = lessonStart.subtract(const Duration(minutes: 30));
+      if (notifyTime.isAfter(now)) {
+        // Thông báo trước 30 phút
+        final id30m = (lesson.id ?? '').hashCode ^ '30m'.hashCode;
+        final title30m = 'Sắp đến giờ học: ${lesson.subject ?? ''}';
+        final body30m =
+            'Lớp: ${lesson.className ?? ''} - Phòng: ${lesson.room ?? ''}\\nBắt đầu lúc: ${lessonStart.hour}:${lessonStart.minute.toString().padLeft(2, '0')}';
+        await _notificationsPlugin.zonedSchedule(
+          id30m,
+          title30m,
+          body30m,
+          notifyTime,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              _timetableChannel.id,
+              _timetableChannel.name,
+              channelDescription: _timetableChannel.description,
+              importance: Importance.max,
+              priority: Priority.high,
+              playSound: true,
+              enableVibration: true,
+              enableLights: true,
+              icon: '@mipmap/ic_launcher',
+              styleInformation: BigTextStyleInformation(body30m),
+            ),
+            iOS: DarwinNotificationDetails(),
           ),
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          matchDateTimeComponents: DateTimeComponents.dateAndTime,
         );
-        logger.i(' Đã lên lịch trước 30p: ${lesson.subject}');
-        count++;
-      } else if (notifyTime.isBefore(now)) {
-        logger.w('Bỏ qua thông báo trước 30p vì đã qua: $notifyTime');
       }
-
-      // 🕒 Đúng giờ học
-      if (!notificationsBox.containsKey(idStart.toString()) &&
-          tzScheduledDate.isAfter(now)) {
-        await _localMessage.scheduleNotification(
-          id: idStart,
-          title: 'Bắt đầu học: ${lesson.subject ?? ''}',
-          body:
-              'Lớp: ${lesson.className ?? ''} - Phòng: ${lesson.room ?? ''}\nGiờ học bắt đầu!',
-          scheduledDate: tzScheduledDate,
-          payload: payload,
-        );
-
-        await notificationsBox.put(
-          idStart.toString(),
-          NotificationModel(
-            id: idStart.toString(),
-            title: 'Giờ học bắt đầu',
-            body:
-                'Môn ${lesson.subject ?? "Không rõ"} đang bắt đầu tại ${lesson.room ?? "Chưa rõ"}',
-            time: tzScheduledDate.toIso8601String(),
-            isRead: false,
-            type: LocalStorageKey.schedule,
-            data: {
-              'timetableId': lesson.id,
-              'subject': lesson.subject,
-              'room': lesson.room,
-              'startTime': tzScheduledDate.toIso8601String(),
-              'endTime': lesson.endTime?.toIso8601String(),
-            },
+      if (lessonStart.isAfter(now)) {
+        // Thông báo đúng giờ học
+        final idStart = (lesson.id ?? '').hashCode ^ 'start'.hashCode;
+        final titleStart = 'Bắt đầu học: ${lesson.subject ?? ''}';
+        final bodyStart =
+            'Lớp: ${lesson.className ?? ''} - Phòng: ${lesson.room ?? ''}\\nGiờ học bắt đầu!';
+        await _notificationsPlugin.zonedSchedule(
+          idStart,
+          titleStart,
+          bodyStart,
+          lessonStart,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              _timetableChannel.id,
+              _timetableChannel.name,
+              channelDescription: _timetableChannel.description,
+              importance: Importance.max,
+              priority: Priority.high,
+              playSound: true,
+              enableVibration: true,
+              enableLights: true,
+              icon: '@mipmap/ic_launcher',
+              styleInformation: BigTextStyleInformation(bodyStart),
+            ),
+            iOS: DarwinNotificationDetails(),
           ),
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          matchDateTimeComponents: DateTimeComponents.dateAndTime,
         );
-        logger.i(' Đã lên lịch đúng giờ: ${lesson.subject}');
-        count++;
-      } else if (tzScheduledDate.isBefore(now)) {
-        logger.w('Bỏ qua thông báo đúng giờ vì đã qua: $tzScheduledDate');
       }
-
-      logger.i(
-          'now: $now, testStartTime: $tzScheduledDate, tzScheduledDate: $tzScheduledDate');
-    } catch (e) {
-      logger.e(' Lỗi khi xử lý môn ${lesson.subject}: $e');
     }
-
-    return count;
   }
 }
