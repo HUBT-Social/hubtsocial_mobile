@@ -159,7 +159,7 @@ class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
                     ),
                   ),
                   SizedBox(height: 8.h),
-                  Container(
+                  SizedBox(
                     height: 300.h,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
@@ -167,7 +167,7 @@ class _NotificationDetailScreenState extends State<NotificationDetailScreen> {
                         imageUrl: imageUrl,
                         fit: BoxFit.contain,
                         width: double.infinity,
-                        placeholder: (context, url) => Container(
+                        placeholder: (context, url) => SizedBox(
                           height: 200.h,
                           child: Center(child: CircularProgressIndicator()),
                         ),

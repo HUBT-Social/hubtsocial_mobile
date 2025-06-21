@@ -6,13 +6,11 @@ import 'package:hubtsocial_mobile/src/core/theme/utils/change_theme_bottom_sheet
 import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:provider/provider.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
-import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/profile_action_buttons.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'about_profile_screens.dart';
-import 'full_screen_image.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -53,14 +51,14 @@ class _ProfileScreenState extends State<ProfileScreen>
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(top: 2, left: 2, right: 12),
+            padding: EdgeInsets.only(top: 2.h, left: 2.w, right: 12.w),
             child: GestureDetector(
               onTap: () {
                 AppRoute.editProfile.push(context);
               },
               child: Container(
-                width: 32,
-                height: 32,
+                width: 32.r,
+                height: 32.r,
                 decoration: BoxDecoration(
                   color: context.colorScheme.primary,
                   shape: BoxShape.circle,
@@ -72,7 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                     BoxShadow(
                       color: context.colorScheme.shadow.withOpacity(0.15),
                       blurRadius: 8,
-                      offset: Offset(0, 2),
+                      offset: Offset(0, 2.h),
                     ),
                   ],
                 ),
@@ -82,10 +80,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                     children: List.generate(
                       3,
                       (_) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 1),
+                        padding: EdgeInsets.symmetric(horizontal: 1.w),
                         child: Container(
-                          width: 4,
-                          height: 4,
+                          width: 4.r,
+                          height: 4.r,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             shape: BoxShape.circle,
@@ -103,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.r),
             child: Consumer<UserProvider>(
               builder: (context, userProvider, child) {
                 final user = userProvider.user;
@@ -127,29 +125,22 @@ class _ProfileScreenState extends State<ProfileScreen>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               InkWell(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(12.r),
                                 onTap: () => AboutProfileUtils
                                     .showAboutProfileBottomSheet(
                                         navigatorKey.currentContext ?? context),
                                 child: Padding(
                                   padding:
-                                      const EdgeInsets.symmetric(horizontal: 6),
+                                      EdgeInsets.symmetric(horizontal: 6.w),
                                   child: Row(
                                     children: [
                                       Flexible(
                                         child: Text(
                                           nonNullUser
                                               .fullname, // Use nonNullUser
-                                          style: context
-                                              .textTheme.headlineMedium
-                                              ?.copyWith(
-                                            fontSize: (context
-                                                        .textTheme
-                                                        .headlineMedium
-                                                        ?.fontSize ??
-                                                    16) -
-                                                4,
-                                          ),
+                                          style:
+                                              context.textTheme.headlineMedium,
+
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                         ),
@@ -158,9 +149,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 6),
+                              SizedBox(height: 6.h),
                               Padding(
-                                padding: const EdgeInsets.only(left: 18),
+                                padding: EdgeInsets.only(left: 18.w),
                                 child: Text(
                                   '@${nonNullUser.userName}', // Use nonNullUser
                                   style: context.textTheme.labelLarge?.copyWith(
@@ -169,7 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8.h),
                               Text(
                                 'status...', // Temporary static text
                                 style: context.textTheme.labelLarge?.copyWith(
@@ -180,20 +171,23 @@ class _ProfileScreenState extends State<ProfileScreen>
                             ],
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8.w),
                         GestureDetector(
                           onTap: () {
                             if (nonNullUser.avatarUrl.isNotEmpty) {
-                              context.push('/profile/full-image', extra: {
-                                'imageUrl': nonNullUser.avatarUrl,
-                                'heroTag': 'profile-image',
-                              });
+                              navigatorKey.currentContext?.push(
+                                AppRoute.fullProfile.path,
+                                extra: {
+                                  'imageUrl': nonNullUser.avatarUrl,
+                                  'heroTag': 'profile-image',
+                                },
+                              );
                             }
                           },
                           child: Hero(
                             tag: 'profile-image',
                             child: CircleAvatar(
-                              radius: 42,
+                              radius: 42.r,
                               backgroundImage: nonNullUser.avatarUrl.isNotEmpty
                                   ? NetworkImage(nonNullUser.avatarUrl)
                                   : const AssetImage(
@@ -204,7 +198,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                       ],
                     ),
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32.h),
                     Consumer<UserProvider>(
                       builder: (context, userProvider, child) {
                         final user = userProvider.user;
@@ -220,7 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               Container(
                                 padding: EdgeInsets.all(16.w),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: context.colorScheme.surfaceBright,
                                   borderRadius: BorderRadius.circular(16.r),
                                   boxShadow: [
                                     BoxShadow(
@@ -241,16 +235,17 @@ class _ProfileScreenState extends State<ProfileScreen>
                                       data: userName,
                                       version: QrVersions.auto,
                                       size: 180.w,
-                                      backgroundColor: Colors.white,
+                                      backgroundColor:
+                                          context.colorScheme.surface,
                                       eyeStyle: QrEyeStyle(
-                                        eyeShape: QrEyeShape.square,
-                                        color:
-                                            Color(0xFF4CAF50), // xanh lá mắt QR
+                                        eyeShape: QrEyeShape.circle,
+                                        color: context.colorScheme
+                                            .primary, // xanh lá mắt QR
                                       ),
                                       dataModuleStyle: QrDataModuleStyle(
                                         dataModuleShape:
                                             QrDataModuleShape.square,
-                                        color: Colors.black,
+                                        color: context.colorScheme.onSurface,
                                       ),
                                     ),
                                     SizedBox(height: 8.h),
@@ -265,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                               Container(
                                 padding: EdgeInsets.all(16.w),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: context.colorScheme.surfaceBright,
                                   borderRadius: BorderRadius.circular(16.r),
                                   boxShadow: [
                                     BoxShadow(
@@ -278,9 +273,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 child: Column(
                                   children: [
                                     Text('Barcode',
-                                        style: TextStyle(
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.bold)),
+                                        style: context.textTheme.headlineSmall),
                                     SizedBox(height: 12.h),
                                     BarcodeWidget(
                                       barcode: Barcode.code128(),
@@ -288,9 +281,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                                       width: 260.w,
                                       height: 80.h,
                                       drawText: true,
-                                      style: TextStyle(
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w600),
+                                      backgroundColor:
+                                          context.colorScheme.surfaceBright,
+                                      color: context.colorScheme.onSurface,
+                                      style:
+                                          context.textTheme.bodyLarge?.copyWith(
+                                        color: context.colorScheme.onSurface,
+                                      ),
                                     ),
                                   ],
                                 ),

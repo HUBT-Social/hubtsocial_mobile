@@ -12,7 +12,6 @@ import '../../../../core/local_storage/local_storage_key.dart';
 import '../../../../core/logger/logger.dart';
 import '../models/timetable_info_response_model.dart';
 import '../models/timetable_response_model.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 abstract class TimetableRemoteDataSource {
   const TimetableRemoteDataSource();
@@ -30,12 +29,9 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
     required HiveInterface hiveAuth,
     required FirebaseMessaging messaging,
     required DioClient dioClient,
-  }) : _dioClient = dioClient {
-    _notificationService = TimetableNotificationService();
-  }
+  }) : _dioClient = dioClient;
 
   final DioClient _dioClient;
-  late final TimetableNotificationService _notificationService;
 
   Future<TimetableResponseModel> _processTimetableResponse(
       Map<String, dynamic> data) async {

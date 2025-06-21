@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hubtsocial_mobile/src/features/user/data/gender.dart';
 
 class StudentListModel extends Equatable {
-  StudentListModel({
+  const StudentListModel({
     required this.gender,
     required this.birthDay,
     required this.avatarUrl,

@@ -62,8 +62,6 @@ enum AppRoute {
   teacherCode('/teacherCode'),
   notificationSettings('/menu/notification-settings'),
   // menu
-
-  fullImage('/profile/full-image'),
   ;
 
   const AppRoute(this.path);

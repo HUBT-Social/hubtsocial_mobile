@@ -17,13 +17,11 @@ import 'package:hubtsocial_mobile/src/constants/environment.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
 import 'package:hubtsocial_mobile/src/core/notification/NotificationService.dart';
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart';
 
 import 'src/core/injections/injections.dart';
 import 'src/core/logger/logger.dart';
 
 import 'package:hubtsocial_mobile/src/core/notification/FirebaseMessage.dart';
-import 'package:hubtsocial_mobile/src/features/timetable/services/timetable_notification_service.dart';
 
 class NavigationService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hubtsocial_mobile/src/core/extensions/context.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/app_local_storage.dart';
-import 'package:hubtsocial_mobile/src/features/timetable/data/datasources/timetable_remote_data_source.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_timetable_model.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/presentation/bloc/timetable_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -35,10 +34,8 @@ class _TimetableScreenState extends State<TimetableScreen> {
   void initState() {
     super.initState();
     // Khởi tạo thời khóa biểu và tạo thông báo
-       context.read<TimetableBloc>().add(const InitTimetableEvent());
-
+    context.read<TimetableBloc>().add(const InitTimetableEvent());
   }
-
 
   @override
   void dispose() {

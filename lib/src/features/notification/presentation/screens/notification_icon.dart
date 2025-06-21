@@ -55,7 +55,7 @@ class NotificationIcon extends StatelessWidget {
                   width: size,
                   height: size,
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => Container(
+                  placeholder: (context, url) => SizedBox(
                     width: size,
                     height: size,
                     child: Center(
