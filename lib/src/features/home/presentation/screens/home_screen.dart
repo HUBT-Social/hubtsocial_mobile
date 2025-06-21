@@ -7,6 +7,7 @@ import 'package:hubtsocial_mobile/src/features/main_wrapper/presentation/widgets
 
 import '../../../../router/route.dart';
 import '../../../user/presentation/bloc/user_bloc.dart';
+import 'package:hubtsocial_mobile/src/core/notification/NotificationService.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

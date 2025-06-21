@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 import 'package:hubtsocial_mobile/src/constants/assets.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class NotificationIcon extends StatelessWidget {
   final NotificationModel notification;
@@ -39,57 +40,65 @@ class NotificationIcon extends StatelessWidget {
       } else {
         smallIconPath = AppIcons.notificationAdmin;
       }
-      return Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Positioned(
-            left: 0,
-            top: 0,
-            child: ClipOval(
-              child: Image.network(
-                mainImage,
-                width: size,
-                height: size,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
+      return SizedBox(
+        width: size,
+        height: size,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned(
+              left: 0,
+              top: 0,
+              child: ClipOval(
+                child: CachedNetworkImage(
+                  imageUrl: mainImage,
+                  width: size,
+                  height: size,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    width: size,
+                    height: size,
+                    child: Center(
+                        child: CircularProgressIndicator(strokeWidth: 2)),
+                  ),
+                  errorWidget: (context, url, error) => Image.asset(
                     'assets/icons/ic_profile.png',
                     width: size,
                     height: size,
                     fit: BoxFit.contain,
-                  );
-                },
-              ),
-            ),
-          ),
-          Positioned(
-            right: 0,
-            bottom: 0,
-            child: Container(
-              width: size * 0.40,
-              height: size * 0.40,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.transparent,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 2,
-                    spreadRadius: 1,
                   ),
-                ],
-              ),
-              child: Center(
-                child: SvgPicture.asset(
-                  smallIconPath,
-                  width: size * 0.40,
-                  height: size * 0.40,
-                  fit: BoxFit.contain,
                 ),
               ),
             ),
-          ),
-        ],
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: Container(
+                width: size * 0.40,
+                height: size * 0.40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.transparent,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 2,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: SvgPicture.asset(
+                    smallIconPath,
+                    width: size * 0.40,
+                    height: size * 0.40,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       );
     }
 

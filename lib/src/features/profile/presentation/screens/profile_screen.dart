@@ -7,8 +7,12 @@ import 'package:hubtsocial_mobile/src/router/router.import.dart';
 import 'package:provider/provider.dart';
 import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:hubtsocial_mobile/src/features/profile/presentation/widgets/profile_action_buttons.dart';
+import 'package:barcode_widget/barcode_widget.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'about_profile_screens.dart';
+import 'full_screen_image.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -50,34 +54,47 @@ class _ProfileScreenState extends State<ProfileScreen>
         actions: [
           Padding(
             padding: const EdgeInsets.only(top: 2, left: 2, right: 12),
-            child: Container(
-              width: 20,
-              height: 20,
-              decoration: BoxDecoration(
-                color: context.colorScheme.primary,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: context.colorScheme.onPrimary,
-                  width: 2,
+            child: GestureDetector(
+              onTap: () {
+                AppRoute.editProfile.push(context);
+              },
+              child: Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: context.colorScheme.primary,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 2,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: context.colorScheme.shadow.withOpacity(0.15),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
                 ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ...List.generate(3, (_) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 1),
-                      child: Container(
-                        width: 3,
-                        height: 3,
-                        decoration: BoxDecoration(
-                          color: context.colorScheme.onPrimary,
-                          shape: BoxShape.circle,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      3,
+                      (_) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 1),
+                        child: Container(
+                          width: 4,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
                         ),
                       ),
-                    );
-                  }),
-                ],
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -167,14 +184,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                         GestureDetector(
                           onTap: () {
                             if (nonNullUser.avatarUrl.isNotEmpty) {
-                              // Use nonNullUser
-                              navigatorKey.currentContext?.push(
-                                AppRoute.fullProfile.path,
-                                extra: {
-                                  'imageUrl':
-                                      nonNullUser.avatarUrl, // Use nonNullUser
-                                  'heroTag': 'profile-image',
-                                },
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => FullScreenImage(
+                                    imageUrl: nonNullUser.avatarUrl,
+                                    heroTag: 'profile-image',
+                                  ),
+                                ),
                               );
                             }
                           },
@@ -182,10 +199,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                             tag: 'profile-image',
                             child: CircleAvatar(
                               radius: 42,
-                              backgroundImage: nonNullUser
-                                      .avatarUrl.isNotEmpty // Use nonNullUser
-                                  ? NetworkImage(
-                                      nonNullUser.avatarUrl) // Use nonNullUser
+                              backgroundImage: nonNullUser.avatarUrl.isNotEmpty
+                                  ? NetworkImage(nonNullUser.avatarUrl)
                                   : const AssetImage(
                                           'assets/images/default_avatar.png')
                                       as ImageProvider,
@@ -195,64 +210,104 @@ class _ProfileScreenState extends State<ProfileScreen>
                       ],
                     ),
                     const SizedBox(height: 32),
-                    const ProfileActionButtons(),
+                    Consumer<UserProvider>(
+                      builder: (context, userProvider, child) {
+                        final user = userProvider.user;
+                        if (user == null || user.userName.isEmpty) {
+                          return Center(
+                              child: Text('Không có username để tạo mã vạch!'));
+                        }
+                        final userName = user.userName;
+                        return Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(16.w),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16.r),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.08),
+                                      blurRadius: 10.r,
+                                      offset: Offset(0, 4.h),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  children: [
+                                    Text('QR Code',
+                                        style: TextStyle(
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(height: 12.h),
+                                    QrImageView(
+                                      data: userName,
+                                      version: QrVersions.auto,
+                                      size: 180.w,
+                                      backgroundColor: Colors.white,
+                                      eyeStyle: QrEyeStyle(
+                                        eyeShape: QrEyeShape.square,
+                                        color:
+                                            Color(0xFF4CAF50), // xanh lá mắt QR
+                                      ),
+                                      dataModuleStyle: QrDataModuleStyle(
+                                        dataModuleShape:
+                                            QrDataModuleShape.square,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    Text('@$userName',
+                                        style: TextStyle(
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600)),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 32.h),
+                              Container(
+                                padding: EdgeInsets.all(16.w),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16.r),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.08),
+                                      blurRadius: 10.r,
+                                      offset: Offset(0, 4.h),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  children: [
+                                    Text('Barcode',
+                                        style: TextStyle(
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(height: 12.h),
+                                    BarcodeWidget(
+                                      barcode: Barcode.code128(),
+                                      data: userName,
+                                      width: 260.w,
+                                      height: 80.h,
+                                      drawText: true,
+                                      style: TextStyle(
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 );
               },
-            ),
-          ),
-          const SizedBox(height: 16),
-          TabBar(
-            controller: _tabController,
-            labelColor: context.colorScheme.onSurface,
-            unselectedLabelColor: context.colorScheme.onSurface,
-            indicatorColor: context.colorScheme.onSurface,
-            tabs: [
-              Tab(text: context.loc.post),
-              Tab(text: context.loc.reply),
-              Tab(text: context.loc.repost),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                GridView.builder(
-                  padding: const EdgeInsets.all(8),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
-                    childAspectRatio: 110 / 160,
-                  ),
-                  itemCount: 6,
-                  itemBuilder: (context, index) {
-                    final colors = [
-                      const Color(0xFFFFB6B6),
-                      const Color(0xFFFF0000),
-                      const Color(0xFF90EE90),
-                      const Color(0xFF4B0082),
-                      const Color(0xFFFFE4E1),
-                      const Color(0xFFFFDAB9),
-                    ];
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: colors[index],
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: context.colorScheme.surface,
-                            blurRadius: 4,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-                Center(child: Text(context.loc.reply)),
-                Center(child: Text(context.loc.repost)),
-              ],
             ),
           ),
         ],
