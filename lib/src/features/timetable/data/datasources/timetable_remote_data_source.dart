@@ -50,7 +50,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
     }).toList();
 
     final now = DateTime.now().toUtc();
-    final testStartTime = now.add(Duration(minutes: 35));
+    final testStartTime = now.add(Duration(minutes: 2));
 
     final defaultTimetable = ReformTimetable(
       id: 'test',
@@ -60,7 +60,7 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
       endTime: testStartTime.add(const Duration(minutes: 45)),
       className: 'Lớp test',
       zoomId: 'Zoom test',
-      type: TimetableType.Study,
+      type: TimetableType.Exam,
     );
     convertedTimetables.add(defaultTimetable);
 

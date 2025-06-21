@@ -201,7 +201,8 @@ class _NotificationsState extends State<NotificationsScreen> {
         child: _notificationsBox == null
             ? const Center(child: CircularProgressIndicator())
             : ValueListenableBuilder<Box<NotificationModel>>(
-                valueListenable: _notificationsBox!.listenable(),
+                valueListenable:
+                    Hive.box<NotificationModel>('notifications').listenable(),
                 builder: (context, box, _) {
                   if (box.isEmpty) {
                     return Center(

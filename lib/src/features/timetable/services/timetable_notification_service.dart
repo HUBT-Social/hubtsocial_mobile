@@ -3,8 +3,10 @@ import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:hubtsocial_mobile/src/core/local_storage/local_storage_key.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/reform_timetable_model.dart';
 import 'package:hubtsocial_mobile/src/features/timetable/data/models/timetable_response_model.dart';
+import 'package:hubtsocial_mobile/src/router/route.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:hubtsocial_mobile/src/features/notification/model/notification_model.dart';
 
 class TimetableNotificationService {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
@@ -31,7 +33,9 @@ class TimetableNotificationService {
     );
     await _notificationsPlugin.initialize(
       initializationSettings,
-      onDidReceiveNotificationResponse: (response) {},
+      onDidReceiveNotificationResponse: (response) {
+        AppRoute.timetable.path;
+      },
     );
     final androidPlugin =
         _notificationsPlugin.resolvePlatformSpecificImplementation<
@@ -85,6 +89,24 @@ class TimetableNotificationService {
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           matchDateTimeComponents: DateTimeComponents.dateAndTime,
         );
+        // Lưu vào Hive
+        final box = await Hive.openBox<NotificationModel>('notifications');
+        final notification = NotificationModel(
+          id: id30m.toString(),
+          title: title30m,
+          body: body30m,
+          time: notifyTime.toIso8601String(),
+          isRead: false,
+          type: 'schedule',
+          data: {
+            'timetableId': lesson.id,
+            'subject': lesson.subject,
+            'room': lesson.room,
+            'startTime': lesson.startTime?.toIso8601String(),
+            'endTime': lesson.endTime?.toIso8601String(),
+          },
+        );
+        await box.put(notification.id, notification);
       }
       if (lessonStart.isAfter(now)) {
         // Thông báo đúng giờ học
@@ -115,6 +137,24 @@ class TimetableNotificationService {
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           matchDateTimeComponents: DateTimeComponents.dateAndTime,
         );
+        // Lưu vào Hive
+        final box = await Hive.openBox<NotificationModel>('notifications');
+        final notification = NotificationModel(
+          id: idStart.toString(),
+          title: titleStart,
+          body: bodyStart,
+          time: lessonStart.toIso8601String(),
+          isRead: false,
+          type: 'schedule',
+          data: {
+            'timetableId': lesson.id,
+            'subject': lesson.subject,
+            'room': lesson.room,
+            'startTime': lesson.startTime?.toIso8601String(),
+            'endTime': lesson.endTime?.toIso8601String(),
+          },
+        );
+        await box.put(notification.id, notification);
       }
     }
   }
