@@ -46,19 +46,19 @@ class TimetableRemoteDataSourceImpl implements TimetableRemoteDataSource {
     }).toList();
 
     final now = DateTime.now().toUtc();
-    final testStartTime = now.add(Duration(minutes: 2));
+    final testStartTime = now.add(Duration(minutes: 33));
 
-    final defaultTimetable = ReformTimetable(
-      id: 'test',
-      subject: 'Test Notification',
-      room: 'Phòng test',
-      startTime: testStartTime,
-      endTime: testStartTime.add(const Duration(minutes: 45)),
-      className: 'Lớp test',
-      zoomId: 'Zoom test',
-      type: TimetableType.Exam,
-    );
-    convertedTimetables.add(defaultTimetable);
+    // final defaultTimetable = ReformTimetable(
+    //   id: 'test',
+    //   subject: 'Test Notification',
+    //   room: 'Phòng test',
+    //   startTime: testStartTime,
+    //   endTime: testStartTime.add(const Duration(minutes: 45)),
+    //   className: 'Lớp test',
+    //   zoomId: 'Zoom test',
+    //   type: TimetableType.Exam,
+    // );
+    // convertedTimetables.add(defaultTimetable);
 
     final sortedTimetableResponseModel = timetableResponseModel.copyWith(
       versionKey: timetableResponseModel.versionKey,

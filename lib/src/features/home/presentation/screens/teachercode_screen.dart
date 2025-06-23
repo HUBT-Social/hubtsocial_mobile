@@ -96,139 +96,125 @@ class TeacherCodeInputScreen extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(context.loc.teacherCodeInputTitle),
-        backgroundColor: const Color(0xFF90EE90),
+        backgroundColor: const Color.fromARGB(255, 180, 209, 180),
         elevation: 0,
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              const Color(0xFF90EE90).withOpacity(0.1),
-              Colors.white,
-            ],
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(24.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 100.h),
-                Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.r),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(24.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          context.loc.teacherEvaluationTitle,
-                          style: TextStyle(
-                            fontSize: 24.sp,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF90EE90),
-                          ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(24.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 100.h),
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.r),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(24.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        context.loc.teacherEvaluationTitle,
+                        style: TextStyle(
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.bold,
+                          color: const Color.fromARGB(255, 45, 227, 45),
                         ),
-                        SizedBox(height: 8.h),
-                        Text(
-                          context.loc.enterTeacherCodeInstruction,
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: Colors.grey[700],
-                          ),
+                      ),
+                      SizedBox(height: 8.h),
+                      Text(
+                        context.loc.enterTeacherCodeInstruction,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: const Color.fromARGB(255, 17, 17, 17),
                         ),
-                        SizedBox(height: 24.h),
-                        TextField(
-                          controller: _codeController,
-                          decoration: InputDecoration(
-                            labelText: context.loc.teacherCodeLabel,
-                            hintText: context.loc.teacherCodeHint,
-                            prefixIcon: const Icon(Icons.person_search,
-                                color: Color(0xFF90EE90)),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 20.h, horizontal: 16.w),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.r),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFF90EE90)),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.r),
-                              borderSide: BorderSide(
-                                  color:
-                                      const Color(0xFF90EE90).withOpacity(0.5)),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.r),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFF90EE90)),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
+                      ),
+                      SizedBox(height: 24.h),
+                      TextField(
+                        controller: _codeController,
+                        decoration: InputDecoration(
+                          labelText: context.loc.teacherCodeLabel,
+                          hintText: context.loc.teacherCodeHint,
+                          prefixIcon: const Icon(Icons.person_search,
+                              color: Color.fromARGB(255, 48, 243, 48)),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 20.h, horizontal: 16.w),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide:
+                                const BorderSide(color: Color.fromARGB(255, 72, 228, 72)),
                           ),
-                          style: TextStyle(fontSize: 18.sp),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide(
+                                color:
+                                    const Color.fromARGB(255, 59, 226, 59).withOpacity(0.5)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide:
+                                const BorderSide(color: Color.fromARGB(255, 64, 232, 64)),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
                         ),
-                        SizedBox(height: 24.h),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              final enteredCode = _codeController.text.trim();
-                              final teacher = dummyTeachers[enteredCode];
+                        style: TextStyle(fontSize: 18.sp),
+                      ),
+                      SizedBox(height: 24.h),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            final enteredCode = _codeController.text.trim();
+                            final teacher = dummyTeachers[enteredCode];
 
-                              if (teacher != null) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        TeacherEvaluationScreen(
-                                            teacher: teacher),
+                            if (teacher != null) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      TeacherEvaluationScreen(teacher: teacher),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(context.loc.invalidTeacherCode),
+                                  backgroundColor: Colors.red[400],
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.r),
                                   ),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content:
-                                        Text(context.loc.invalidTeacherCode),
-                                    backgroundColor: Colors.red[400],
-                                    behavior: SnackBarBehavior.floating,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.r),
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF90EE90),
-                              padding: EdgeInsets.symmetric(vertical: 16.h),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                              ),
-                              elevation: 2,
+                                ),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(255, 49, 239, 49),
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.r),
                             ),
-                            child: Text(
-                              context.loc.continue_text,
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                            elevation: 2,
+                          ),
+                          child: Text(
+                            context.loc.continue_text,
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

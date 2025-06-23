@@ -75,9 +75,9 @@ class _NotificationSettingsScreenState
         title: Text(
           context.loc.notificationSettingsTitle,
           style: context.textTheme.headlineMedium
-              ?.copyWith(color: context.colorScheme.onPrimary),
+              ?.copyWith(color: context.colorScheme.onSurface),
         ),
-        backgroundColor: const Color(0xFF90EE90),
+        backgroundColor:context.colorScheme.onPrimary,
         elevation: 0,
       ),
       body: Container(
@@ -96,11 +96,11 @@ class _NotificationSettingsScreenState
             SizedBox(height: 50.h), // Added top padding
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              child: Text(
-                context.loc.blockedNotificationTypesTitle,
-                style: context.textTheme.titleLarge
-                    ?.copyWith(color: const Color(0xFF90EE90).withOpacity(0.8)),
-              ),
+              // child: Text(
+              //   // context.loc.blockedNotificationTypesTitle,
+              //   style: context.textTheme.titleLarge
+              //       ?.copyWith(color: const Color.fromARGB(255, 230, 235, 230).withOpacity(0.8)),
+              // ),
             ),
             // Generate a Card for each blocked notification type
             ..._blockedTypes.entries.map((entry) {
@@ -136,7 +136,7 @@ class _NotificationSettingsScreenState
               onChanged: (bool newValue) {
                 _toggleBlockedType(type, newValue);
               },
-              activeColor: const Color(0xFF90EE90),
+              activeColor: const Color.fromARGB(255, 41, 237, 41),
             ),
           ],
         ),
