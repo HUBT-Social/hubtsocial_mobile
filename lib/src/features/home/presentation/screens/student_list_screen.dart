@@ -45,122 +45,118 @@ class _StudentListScreenState extends State<StudentListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          MainAppBar(
-            title: context.loc.student_list,
-            actions: [
-              IconButton(
-                onPressed: () {
-                  context.showSnackBarMessage('Lọc danh sách');
-                },
-                icon: Icon(
-                  Icons.filter_list,
-                  size: 24.r,
-                  color: context.colorScheme.onPrimary,
-                ),
-              ),
-            ],
-          ),
-        ],
-        body: Column(
-          children: [
-            SizedBox(height: 12.h),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-              decoration: BoxDecoration(
-                color: context.colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _classController,
-                      decoration: InputDecoration(
-                        hintText: 'Nhập mã lớp (ví dụ: TH27.33)',
-                        hintStyle: context.textTheme.bodySmall?.copyWith(
-                          color: context.colorScheme.onSurfaceVariant
-                              .withAlpha(192),
-                        ),
-                        border: InputBorder.none,
-                        isDense: true,
-                        contentPadding: EdgeInsets.zero,
+      appBar: AppBar(
+        title: Text(context.loc.student_list),
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {
+        //       context.showSnackBarMessage('Lọc danh sách');
+        //     },
+        //     icon: Icon(
+        //       Icons.filter_list,
+        //       size: 24.r,
+        //       color: context.colorScheme.onSurface,
+        //     ),
+        //   ),
+        // ],
+      ),
+      body: Column(
+        children: [
+          SizedBox(height: 12.h),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+            decoration: BoxDecoration(
+              color: context.colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _classController,
+                    decoration: InputDecoration(
+                      hintText: 'Nhập mã lớp (ví dụ: TH27.33)',
+                      hintStyle: context.textTheme.bodySmall?.copyWith(
+                        color:
+                            context.colorScheme.onSurfaceVariant.withAlpha(192),
                       ),
-                      style: context.textTheme.bodySmall?.copyWith(
-                        color: context.colorScheme.onSurfaceVariant,
-                      ),
-                      onSubmitted: (value) {
-                        if (value.trim().isNotEmpty) {
-                          context
-                              .read<StudentListBloc>()
-                              .add(GetStudentListEvent(value.trim()));
-                        }
-                      },
+                      border: InputBorder.none,
+                      isDense: true,
+                      contentPadding: EdgeInsets.zero,
                     ),
-                  ),
-                  SizedBox(width: 10.w),
-                  GestureDetector(
-                    onTap: () {
-                      if (_classController.text.trim().isNotEmpty) {
-                        context.read<StudentListBloc>().add(
-                            GetStudentListEvent(_classController.text.trim()));
+                    style: context.textTheme.bodySmall?.copyWith(
+                      color: context.colorScheme.onSurfaceVariant,
+                    ),
+                    onSubmitted: (value) {
+                      if (value.trim().isNotEmpty) {
+                        context
+                            .read<StudentListBloc>()
+                            .add(GetStudentListEvent(value.trim()));
                       }
                     },
-                    child: Icon(
-                      Icons.search,
-                      color: context.colorScheme.onPrimary,
-                      size: 24.r,
-                    ),
                   ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: BlocBuilder<StudentListBloc, StudentListState>(
-                builder: (context, state) {
-                  if (state is StudentListLoading) {
-                    return ListView.builder(
-                      padding: EdgeInsets.only(bottom: 80.h),
-                      itemCount: 5, // Shimmer for 5 items
-                      itemBuilder: (context, index) =>
-                          const StudentListItemShimmer(),
-                    );
-                  } else if (state is StudentListLoaded) {
-                    if (state.students.isEmpty) {
-                      return Center(
-                        child: Text(
-                          'Không tìm thấy sinh viên nào cho lớp này.',
-                          style: context.textTheme.bodyLarge,
-                        ),
-                      );
+                ),
+                SizedBox(width: 10.w),
+                GestureDetector(
+                  onTap: () {
+                    if (_classController.text.trim().isNotEmpty) {
+                      context.read<StudentListBloc>().add(
+                          GetStudentListEvent(_classController.text.trim()));
                     }
-                    return ListView.builder(
-                      padding: EdgeInsets.only(bottom: 80.h),
-                      itemCount: state.students.length,
-                      itemBuilder: (context, index) {
-                        final student = state.students[index];
-                        return StudentListItem(student: student);
-                      },
-                    );
-                  } else if (state is StudentListError) {
+                  },
+                  child: Icon(
+                    Icons.search,
+                    color: context.colorScheme.onPrimary,
+                    size: 24.r,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: BlocBuilder<StudentListBloc, StudentListState>(
+              builder: (context, state) {
+                if (state is StudentListLoading) {
+                  return ListView.builder(
+                    padding: EdgeInsets.only(bottom: 80.h),
+                    itemCount: 5, // Shimmer for 5 items
+                    itemBuilder: (context, index) =>
+                        const StudentListItemShimmer(),
+                  );
+                } else if (state is StudentListLoaded) {
+                  if (state.students.isEmpty) {
                     return Center(
                       child: Text(
-                        'Lỗi: ${state.message}',
-                        style: context.textTheme.bodyLarge
-                            ?.copyWith(color: Colors.red),
+                        'Không tìm thấy sinh viên nào cho lớp này.',
+                        style: context.textTheme.bodyLarge,
                       ),
                     );
-                  } else {
-                    // Trạng thái ban đầu: không hiển thị gì cả (trắng)
-                    return const SizedBox.shrink();
                   }
-                },
-              ),
+                  return ListView.builder(
+                    padding: EdgeInsets.only(bottom: 80.h),
+                    itemCount: state.students.length,
+                    itemBuilder: (context, index) {
+                      final student = state.students[index];
+                      return StudentListItem(student: student);
+                    },
+                  );
+                } else if (state is StudentListError) {
+                  return Center(
+                    child: Text(
+                      'Lỗi: ${state.message}',
+                      style: context.textTheme.bodyLarge
+                          ?.copyWith(color: Colors.red),
+                    ),
+                  );
+                } else {
+                  // Trạng thái ban đầu: không hiển thị gì cả (trắng)
+                  return const SizedBox.shrink();
+                }
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
