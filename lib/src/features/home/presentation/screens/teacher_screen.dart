@@ -44,14 +44,14 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.loc.teacherEvaluationTitle),
-        backgroundColor: const Color(0xFF90EE90), // Màu xanh mới
+        backgroundColor: const Color.fromARGB(255, 44, 242, 44), // Màu xanh mới
         elevation: 0,
       ),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
           const SliverToBoxAdapter(
-            child: SizedBox(height: 100), 
+            child: SizedBox(height: 100),
           ),
           SliverToBoxAdapter(
             child: Padding(
@@ -123,7 +123,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                           style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w600,
-                              color: Colors.grey[800]),
+                              color: const Color.fromARGB(255, 18, 18, 18)),
                         ),
                         const SizedBox(height: 12),
                         Row(
@@ -179,7 +179,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF90EE90), // Màu nút
+                  backgroundColor: const Color.fromARGB(255, 44, 242, 44), // Màu nút
                   padding:
                       const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -198,7 +198,6 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
           const SliverToBoxAdapter(
             child: SizedBox(height: 150),
           ),
-          
         ],
       ),
     );
