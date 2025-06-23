@@ -43,7 +43,9 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
     ];
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.loc.teacherEvaluationTitle),
+        title: Text(context.loc.teacherEvaluationTitle,
+            style: context.textTheme.titleLarge
+                ?.copyWith(color: context.colorScheme.onPrimary)),
         backgroundColor: context.colorScheme.primary, // Màu xanh mới
         elevation: 0,
       ),
@@ -72,8 +74,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                         children: [
                           Text(
                             context.loc.teacherInfoTitle,
-                            style: TextStyle(
-                                fontSize: 20,
+                            style: context.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: context.colorScheme.onSurface),
                           ),
@@ -94,8 +95,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                   ),
                   Text(
                     context.loc.evaluationInstruction,
-                    style: TextStyle(
-                        fontSize: 18,
+                    style: context.textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: context.colorScheme.primary),
                   ),
@@ -120,8 +120,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                       children: [
                         Text(
                           questions[index],
-                          style: TextStyle(
-                              fontSize: 17,
+                          style: context.textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.w600,
                               color: context.colorScheme.onSurface),
                         ),
@@ -188,8 +187,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                   elevation: 5,
                 ),
                 child: Text(context.loc.submitEvaluationButton,
-                    style: TextStyle(
-                        fontSize: 18,
+                    style: context.textTheme.bodyLarge?.copyWith(
                         color: context.colorScheme.onPrimary,
                         fontWeight: FontWeight.bold)),
               ),
@@ -211,16 +209,15 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
         children: [
           Text(
             '$label ',
-            style: TextStyle(
-                fontSize: 16,
+            style: context.textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: context.colorScheme.onSurface),
           ),
           Expanded(
             child: Text(
               value,
-              style:
-                  TextStyle(fontSize: 16, color: context.colorScheme.onSurface),
+              style: context.textTheme.bodyLarge
+                  ?.copyWith(color: context.colorScheme.onSurface),
             ),
           ),
         ],

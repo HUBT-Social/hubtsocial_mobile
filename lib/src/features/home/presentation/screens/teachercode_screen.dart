@@ -118,17 +118,15 @@ class TeacherCodeInputScreen extends StatelessWidget {
                     children: [
                       Text(
                         context.loc.teacherEvaluationTitle,
-                        style: TextStyle(
-                          fontSize: 24.sp,
+                        style: context.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: context.colorScheme.onPrimary,
+                          color: context.colorScheme.onSurface,
                         ),
                       ),
                       SizedBox(height: 8.h),
                       Text(
                         context.loc.enterTeacherCodeInstruction,
-                        style: TextStyle(
-                          fontSize: 16.sp,
+                        style: context.textTheme.bodyLarge?.copyWith(
                           color: context.colorScheme.onSurface,
                         ),
                       ),
@@ -161,7 +159,7 @@ class TeacherCodeInputScreen extends StatelessWidget {
                           filled: true,
                           fillColor: context.colorScheme.surface,
                         ),
-                        style: TextStyle(fontSize: 18.sp),
+                        style: context.textTheme.bodyLarge,
                       ),
                       SizedBox(height: 24.h),
                       SizedBox(
@@ -202,8 +200,7 @@ class TeacherCodeInputScreen extends StatelessWidget {
                           ),
                           child: Text(
                             context.loc.continue_text,
-                            style: TextStyle(
-                              fontSize: 18.sp,
+                            style: context.textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: context.colorScheme.onPrimary,
                             ),
