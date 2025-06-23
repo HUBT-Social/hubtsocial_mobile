@@ -44,7 +44,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.loc.teacherEvaluationTitle),
-        backgroundColor: const Color.fromARGB(255, 44, 242, 44), // Màu xanh mới
+        backgroundColor: context.colorScheme.primary, // Màu xanh mới
         elevation: 0,
       ),
       body: CustomScrollView(
@@ -64,7 +64,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12)),
                     margin: const EdgeInsets.only(bottom: 24.0),
-                    color: Colors.white,
+                    color: context.colorScheme.surface,
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
@@ -72,10 +72,10 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                         children: [
                           Text(
                             context.loc.teacherInfoTitle,
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black87),
+                                color: context.colorScheme.onSurface),
                           ),
                           const SizedBox(height: 16),
                           _buildInfoRow(context.loc.teacherNameLabel,
@@ -97,7 +97,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.green[900]),
+                        color: context.colorScheme.primary),
                   ),
                   const SizedBox(height: 16),
                 ],
@@ -123,7 +123,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                           style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w600,
-                              color: const Color.fromARGB(255, 18, 18, 18)),
+                              color: context.colorScheme.onSurface),
                         ),
                         const SizedBox(height: 12),
                         Row(
@@ -134,7 +134,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                                 starIndex < (ratings[index] ?? 0)
                                     ? Icons.star
                                     : Icons.star_border,
-                                color: Colors.amber[700], // Màu sao đẹp hơn
+                                color: context.colorScheme.secondary, // Màu sao
                                 size: 36,
                               ),
                               onPressed: () {
@@ -165,7 +165,7 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                       SnackBar(
                         content: Text(context.loc.evaluationSuccessMessage),
                         duration: const Duration(seconds: 2),
-                        backgroundColor: Colors.green[600],
+                        backgroundColor: context.colorScheme.primary,
                       ),
                     );
                   } else {
@@ -173,13 +173,13 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                       SnackBar(
                         content: Text(context.loc.evaluationErrorMessage),
                         duration: const Duration(seconds: 2),
-                        backgroundColor: Colors.redAccent,
+                        backgroundColor: context.colorScheme.error,
                       ),
                     );
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 44, 242, 44), // Màu nút
+                  backgroundColor: context.colorScheme.primary, // Màu nút
                   padding:
                       const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -188,9 +188,9 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
                   elevation: 5,
                 ),
                 child: Text(context.loc.submitEvaluationButton,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 18,
-                        color: Colors.white,
+                        color: context.colorScheme.onPrimary,
                         fontWeight: FontWeight.bold)),
               ),
             ),
@@ -211,15 +211,16 @@ class _TeacherEvaluationScreenState extends State<TeacherEvaluationScreen> {
         children: [
           Text(
             '$label ',
-            style: const TextStyle(
+            style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Colors.black87),
+                color: context.colorScheme.onSurface),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(fontSize: 16, color: Colors.black87),
+              style:
+                  TextStyle(fontSize: 16, color: context.colorScheme.onSurface),
             ),
           ),
         ],

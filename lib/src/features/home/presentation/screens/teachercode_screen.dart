@@ -96,7 +96,7 @@ class TeacherCodeInputScreen extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(context.loc.teacherCodeInputTitle),
-        backgroundColor: const Color.fromARGB(255, 180, 209, 180),
+        backgroundColor: context.colorScheme.primary,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -121,7 +121,7 @@ class TeacherCodeInputScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.bold,
-                          color: const Color.fromARGB(255, 45, 227, 45),
+                          color: context.colorScheme.onPrimary,
                         ),
                       ),
                       SizedBox(height: 8.h),
@@ -129,7 +129,7 @@ class TeacherCodeInputScreen extends StatelessWidget {
                         context.loc.enterTeacherCodeInstruction,
                         style: TextStyle(
                           fontSize: 16.sp,
-                          color: const Color.fromARGB(255, 17, 17, 17),
+                          color: context.colorScheme.onSurface,
                         ),
                       ),
                       SizedBox(height: 24.h),
@@ -138,28 +138,28 @@ class TeacherCodeInputScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           labelText: context.loc.teacherCodeLabel,
                           hintText: context.loc.teacherCodeHint,
-                          prefixIcon: const Icon(Icons.person_search,
-                              color: Color.fromARGB(255, 48, 243, 48)),
+                          prefixIcon: Icon(Icons.person_search,
+                              color: context.colorScheme.primary),
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 20.h, horizontal: 16.w),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.r),
                             borderSide:
-                                const BorderSide(color: Color.fromARGB(255, 72, 228, 72)),
+                                BorderSide(color: context.colorScheme.primary),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.r),
                             borderSide: BorderSide(
-                                color:
-                                    const Color.fromARGB(255, 59, 226, 59).withOpacity(0.5)),
+                                color: context.colorScheme.primary
+                                    .withOpacity(0.5)),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.r),
                             borderSide:
-                                const BorderSide(color: Color.fromARGB(255, 64, 232, 64)),
+                                BorderSide(color: context.colorScheme.primary),
                           ),
                           filled: true,
-                          fillColor: Colors.white,
+                          fillColor: context.colorScheme.surface,
                         ),
                         style: TextStyle(fontSize: 18.sp),
                       ),
@@ -183,7 +183,7 @@ class TeacherCodeInputScreen extends StatelessWidget {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(context.loc.invalidTeacherCode),
-                                  backgroundColor: Colors.red[400],
+                                  backgroundColor: context.colorScheme.error,
                                   behavior: SnackBarBehavior.floating,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.r),
@@ -193,7 +193,7 @@ class TeacherCodeInputScreen extends StatelessWidget {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(255, 49, 239, 49),
+                            backgroundColor: context.colorScheme.primary,
                             padding: EdgeInsets.symmetric(vertical: 16.h),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.r),
@@ -205,7 +205,7 @@ class TeacherCodeInputScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: context.colorScheme.onPrimary,
                             ),
                           ),
                         ),

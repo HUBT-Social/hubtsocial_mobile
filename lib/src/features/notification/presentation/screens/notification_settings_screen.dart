@@ -75,9 +75,9 @@ class _NotificationSettingsScreenState
         title: Text(
           context.loc.notificationSettingsTitle,
           style: context.textTheme.headlineMedium
-              ?.copyWith(color: context.colorScheme.onSurface),
+              ?.copyWith(color: context.colorScheme.onPrimary),
         ),
-        backgroundColor:context.colorScheme.onPrimary,
+        backgroundColor: context.colorScheme.primary,
         elevation: 0,
       ),
       body: Container(
@@ -86,8 +86,8 @@ class _NotificationSettingsScreenState
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              const Color(0xFF90EE90).withOpacity(0.1),
-              Colors.white,
+              context.colorScheme.primary.withOpacity(0.1),
+              context.colorScheme.surface,
             ],
           ),
         ),
@@ -99,7 +99,7 @@ class _NotificationSettingsScreenState
               // child: Text(
               //   // context.loc.blockedNotificationTypesTitle,
               //   style: context.textTheme.titleLarge
-              //       ?.copyWith(color: const Color.fromARGB(255, 230, 235, 230).withOpacity(0.8)),
+              //       ?.copyWith(color: context.colorScheme.onSurface.withOpacity(0.8)),
               // ),
             ),
             // Generate a Card for each blocked notification type
@@ -118,7 +118,7 @@ class _NotificationSettingsScreenState
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       elevation: 1.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-      color: Colors.white,
+      color: context.colorScheme.surface,
       child: Padding(
         padding: EdgeInsets.all(12.r),
         child: Row(
@@ -128,7 +128,7 @@ class _NotificationSettingsScreenState
               child: Text(
                 _getTypeDescription(type, context),
                 style: context.textTheme.labelLarge
-                    ?.copyWith(color: Colors.black87),
+                    ?.copyWith(color: context.colorScheme.onSurface),
               ),
             ),
             Switch(
@@ -136,7 +136,7 @@ class _NotificationSettingsScreenState
               onChanged: (bool newValue) {
                 _toggleBlockedType(type, newValue);
               },
-              activeColor: const Color.fromARGB(255, 41, 237, 41),
+              activeColor: context.colorScheme.primary,
             ),
           ],
         ),
