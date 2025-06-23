@@ -64,7 +64,7 @@ class TimetableNotificationService {
         final id30m = (lesson.id ?? '').hashCode ^ '30m'.hashCode;
         final title30m = 'Sắp đến giờ học: ${lesson.subject ?? ''}';
         final body30m =
-            'Lớp: ${lesson.className ?? ''} - Phòng: ${lesson.room ?? ''}\\nBắt đầu lúc: ${lessonStart.hour}:${lessonStart.minute.toString().padLeft(2, '0')}';
+            'Lớp: ${lesson.className ?? ''} - Phòng: ${lesson.room ?? ''} Bắt đầu lúc: ${lessonStart.hour}:${lessonStart.minute.toString().padLeft(2, '0')}';
         await _notificationsPlugin.zonedSchedule(
           id30m,
           title30m,
